@@ -470,12 +470,14 @@ namespace CBLT {
 
          // TODO: Copy to clipboard
         if (keyboard.m.ctrl && IsKeyPressed(KEY_C)) {
-
+            return true;
         }
 
         // Paste from clipboard
         if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) {
             std::string clipboard = GetClipboardText();
+
+            if (clipboard.empty()) return false;
 
             // Automatically splits per line
             std::stringstream ss(clipboard);
@@ -492,6 +494,8 @@ namespace CBLT {
             }
 
             cursor.SetAt(cursor.Col(), cursor.Line() + lineIdx - 1);
+
+            return true;
         }
 
         // Go to next file
