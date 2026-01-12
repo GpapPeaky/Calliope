@@ -14,6 +14,41 @@ namespace CBLT {
     
     Console::~Console(void) {}
 
+    void Console::GetCWDContents(void) {
+        cwdContents.clear();
+
+        const std::string cwd = directive.DirectiveFile().CWD();
+
+        // Platform specific directory reading
+        #if defined(_WIN32) || defined(_WIN64) // TODO
+            std::string searchPath = cwd + "\\*.*";
+            WIN32_FIND_DATA fd; 
+            HANDLE hFind = ::FindFirstFile(searchPath.c_str(), &fd); 
+
+            if(hFind != INVALID_HANDLE_VALUE) { 
+                do { 
+                    // read all (real) files in current folder, delete '!' read other 2 default folder . and ..
+                    if(!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                        cwdContents.push_back(std::string(fd.cFileName));
+                    }
+                } while(::FindNextFile(hFind, &fd)); 
+                ::FindClose(hFind); 
+            }
+        #else
+            DIR* dir;
+            struct dirent* ent;
+            if ((dir = opendir (cwd.c_str())) != NULL) {
+                // print all the files and directories within directory
+                while ((ent = readdir (dir)) != NULL) {
+                    if (ent->d_type != DT_DIR) { // Not a directory
+                        cwdContents.push_back(std::string(ent->d_name));
+                    }
+                }
+                closedir (dir);
+            } 
+        #endif
+    }
+
     void Console::Toggle(void) {
         toggled = !toggled;
     }
@@ -133,7 +168,7 @@ namespace CBLT {
                     Color{0, 255, 255, 255}
                 );
 
-                return;
+                break;
             case CursorSymbol::NON_ASCII_HOLLOW_BOX:
                 DrawRectangleLines(
                     cursorX,
@@ -143,7 +178,7 @@ namespace CBLT {
                     Color{0, 255, 255, 255}
                 );
 
-                return;
+                break;
             case CursorSymbol::NON_ASCII_LINE:
                 DrawRectangle(
                     cursorX,
@@ -153,7 +188,7 @@ namespace CBLT {
                     Color{0, 255, 255, 255}
                 );
 
-                return;
+                break;
             case CursorSymbol::NON_ASCII_UNDERSCORE:
                 DrawRectangle(
                     cursorX,
@@ -163,7 +198,22 @@ namespace CBLT {
                     Color{0, 255, 255, 255}
                 );
 
-                return;
+                break;
+        }
+
+        // Draw CWD contents
+        for (UT::i32 i = 0 ; i < cwdContents.size() ; i++) {
+            DrawTextEx(
+                gFont.f,
+                cwdContents[i].c_str(),
+                {
+                    GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX,
+                    directiveFontSize + directiveBottomMargin + (i * (directiveFontSize + 5))
+                },
+                directiveFontSize,
+                0.0f,
+                Color{255, 255, 255, 255}
+            );
         }
     };
 

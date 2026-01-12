@@ -20,7 +20,7 @@ namespace CBLT {
     class File {
         private:
             std::vector<std::string> lines;  // Most elemental storage class of a file/document
-            std::string path;                // File path, will include its name
+            std::string path;                // File path, will include its name and parent folder
             std::string cwd;                 // Current working directory
             UT::b dirty;                     // File's original contents have been changed and have not been saved
         public:

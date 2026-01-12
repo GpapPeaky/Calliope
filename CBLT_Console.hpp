@@ -3,6 +3,11 @@
 #include <string>
 #include <algorithm>
 
+#if defined(_WIN32) || defined(_WIN64)
+    #include <windows.h>
+    #include <fileapi.h>
+#endif
+
 #include "CBLT_Directive.hpp"
 #include "CBLT_Interpolator.hpp"
 
@@ -29,17 +34,21 @@ namespace CBLT {
     // Console class for executing directives
     class Console {
         private:
-            Directive directive;        // Directive to execute
-            DirectiveResult dirRes;     // Directive result
-            UT::b toggled;              // Console is on or off
-            UT::f32 width;              // Console mutable width
-            CursorManager cursor;       // Cursor position inside the directive, only a primary
+            Directive directive;                  // Directive to execute
+            DirectiveResult dirRes;               // Directive result
+            UT::b toggled;                        // Console is on or off
+            UT::f32 width;                        // Console mutable width
+            std::vector<std::string> cwdContents; // Current working directory contents
+            CursorManager cursor;                 // Cursor position inside the directive, only a primary
         public:
             // Constructor
             Console();
             
             // Destructor
             ~Console();
+
+            // Get cwd contents
+            void GetCWDContents(void);
 
             // Toggle the console on or off
             void Toggle(void);

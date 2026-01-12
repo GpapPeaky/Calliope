@@ -35,7 +35,7 @@ namespace CBLT {
             void HandleSpecials(Cursor& cursor);
 
             // Handle input at insert mode
-            void HandleInsert(Cursor& cursor, std::vector<char>& keyQueue);
+            UT::b HandleInsert(Cursor& cursor, std::vector<char>& keyQueue);
 
             // Handle input at console mode
             UT::b HandleConsole(void);

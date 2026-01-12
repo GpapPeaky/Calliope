@@ -5,21 +5,16 @@ namespace CBLT {
     
     Controller::~Controller(void) {}
 
-    void Controller::HandleSelect(void) {
+    void Controller::HandleSelect(void) { // Without using shift, toggle
         Cursor& c = cursorManager.Primary();
 
-        if (keyboard.m.shift) {
-            // Only START selection if not already selecting
-            if (c.GetMode() != CursorMode::SELECT) {
-                c.StartSelection();
-                cursorManager.RemoveSecondaries();
-            }
-            // If already selecting, do nothing - let movement update the selection
-        } else {
-            // Only STOP selection if currently selecting
-            if (c.GetMode() == CursorMode::SELECT) {
-                c.StopSelection();
-            }
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_K) && c.GetMode() != CursorMode::SELECT) {
+            c.StartSelection();
+            cursorManager.RemoveSecondaries();
+        }
+        
+        else if (keyboard.m.ctrl && IsKeyPressed(KEY_K) && c.GetMode() != CursorMode::INSERT) {
+            c.StopSelection();
         }
     }
 
@@ -252,7 +247,7 @@ namespace CBLT {
         }
     }
 
-    void Controller::HandleInsert(Cursor& cursor, std::vector<char>& keyQueue) {        
+    UT::b Controller::HandleInsert(Cursor& cursor, std::vector<char>& keyQueue) {        
         std::string& line = file.GetCurrentLine(cursor.Line());
         
         // Insert the queued input
@@ -307,6 +302,10 @@ namespace CBLT {
                     cursor.Line(),
                     '}'
                 );
+
+                file.SetDirt(true); // Mark file as dirty
+
+                return true;
             }
 
             else if (typed == '(') {
@@ -323,6 +322,10 @@ namespace CBLT {
                     cursor.Line(),
                     ')'
                 );
+
+                file.SetDirt(true); // Mark file as dirty
+
+                return true;
             }
 
             else if (typed == '[') {
@@ -339,6 +342,10 @@ namespace CBLT {
                     cursor.Line(),
                     ']'
                 );
+
+                file.SetDirt(true); // Mark file as dirty
+
+                return true;
             } 
             
             // Normal insert
@@ -353,7 +360,11 @@ namespace CBLT {
             }
 
             file.SetDirt(true); // Mark file as dirty
+            
+            return true;
         }
+
+        return false;
     }
 
     UT::b Controller::HandleShorcuts(Cursor& cursor) {
@@ -380,7 +391,7 @@ namespace CBLT {
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         // Delete current line
-        if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes
+        if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
             SetClipboardText(file.GetCurrentLine(cursor.Line()).c_str());
             
             file.DeleteLine(cursor.Line());
@@ -474,7 +485,7 @@ namespace CBLT {
         }
 
         // Paste from clipboard
-        if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) {
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) { // FIXME: Problematic, jumps too many lines sometimes
             std::string clipboard = GetClipboardText();
 
             if (clipboard.empty()) return false;
@@ -596,6 +607,8 @@ namespace CBLT {
         for(auto& c : cursorManager.activeCursors) {
             // HandleShorcuts();
             CBLT::CursorMode m = c.GetMode();
+
+            HandleSelect(); // Check if we might enter selection
             
             // Handling booleans
             UT::b handledShort;
@@ -609,9 +622,11 @@ namespace CBLT {
                     if (!handledShort) HandleMovement(c);
                     // Shortcuts include letters so it makes sense that we need to omit any leftover I/O's
                     // so they won't spill over to the insert function
-                    if (!handledShort) HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
+                    if (!handledShort) {
+                        HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
+                    }
 
-                    HandleSelect(); // Potential selection entry
+                    // if (!handledInsert) HandleSelect(); // Potential selection entry
 
                     ClampCursor(c); // Safety check
                 
@@ -627,9 +642,7 @@ namespace CBLT {
 
                     break;
                 case CBLT::CursorMode::SELECT:
-                    HandleMovement(c);
-
-                    HandleSelect(); // Potential selection exit
+                    HandleMovement(c); // Selection is limited to the primary cursor either way
 
                     ClampCursor(c);
                 
