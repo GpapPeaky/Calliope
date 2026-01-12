@@ -784,7 +784,7 @@ namespace CBLT {
             float height = (float)gFont.size;
     
             if (width > 0) {
-                DrawRectangleV(pos, { width, height }, Color{ 50, 150, 255, 128 });
+                DrawRectangleV(pos, { width, height }, Color{ 50, 150, 255, 64 });
             }
         }
     }

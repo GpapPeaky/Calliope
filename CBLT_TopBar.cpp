@@ -5,11 +5,16 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     const UT::ui32 topBarSeperatorY = 17;
     const UT::ui32 topBarInfoVerticalShift = 12;
     const UT::ui32 topBarInfoHorizontalShift = 4;
-    const UT::ui32 topBarSecondColumnX = 150;
-    const UT::ui32 topBarCWDFilePathSeperatorX = 300;
-    const UT::ui32 topBarThirdColumnX = 300;
-    const UT::ui32 modeMargin = 200;
-    
+    const UT::ui32 topBarSecondColumnX = 100;
+    const UT::ui32 topBarCWDFilePathSeperatorX = 210;
+    const UT::ui32 topBarThirdColumnX = 220;
+
+    const UT::ui32 filenameLen = MeasureTextEx(gFont.f, fname.c_str(), topBarFontSize, 0.0f).x;
+    // const UT::ui32 CWDLen = MeasureTextEx(gFont.f, cwd.c_str(), topBarFontSize, 0.0f).x;
+
+    const UT::ui32 filenameToModeMargin = 10;
+    const UT::ui32 modePosition = filenameLen + filenameToModeMargin; 
+
     // String to notify the user if the file is dirty (modified/unsaved) or clean (saved)    
     std::string dirtyFile;
     Color dirtyColour;
@@ -19,6 +24,13 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     } else {
         dirtyFile = std::string("clean");
         dirtyColour = {0, 255, 128, 255};
+    }
+
+    std::string modeString;
+    if (mode == 0) {
+        modeString = std::string("INSERT");
+    } else if (mode == 1) {
+        modeString = std::string("SELECT");
     }
     
     // Seperators
@@ -81,13 +93,14 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     // Draw current mode
     DrawTextEx(
         gFont.f,
-        std::to_string(mode).c_str(),
-        {topBarInfoHorizontalShift + topBarThirdColumnX + modeMargin, 0},
-        gFont.size,
+        modeString.c_str(),
+        {topBarInfoHorizontalShift + topBarThirdColumnX + modePosition, 0},
+        topBarFontSize,
         0.0f,
         Color{255, 64, 64, 255}
     );
 
+    // Current file
     DrawTextEx(
         gFont.f,
         fname.c_str(),
@@ -97,6 +110,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         Color{255, 0, 255, 255}
     );
 
+    // CWD
     DrawTextEx(
         gFont.f,
         cwd.c_str(),
