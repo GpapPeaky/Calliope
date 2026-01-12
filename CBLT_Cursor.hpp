@@ -13,12 +13,11 @@
 namespace CBLT {
 
     // Cursor character representation
-    enum class CursorChar {
-        LINE = 124,
-        UNDERSCORE = 95,
-        BRACKET = 93,
-        PERIOD = 46,
-        SLASH = 47,
+    enum class CursorSymbol : UT::i32 {
+        NON_ASCII_UNDERSCORE  = -4,          // Non-ASCII underscore
+        NON_ASCII_LINE        = -3,          // Non-ASCII line
+        NON_ASCII_HOLLOW_BOX  = -2,          // Non-ASCII hollow box
+        NON_ASCII_BOX         = -1,          // Non-ASCII box
     };
 
     // Cursor mode
@@ -50,18 +49,18 @@ namespace CBLT {
             UT::ui32 line;              // Current line the cursor is at
             UT::ui32 selectColumn;      // Initial cursor column at select mode entry
             UT::ui32 selectLine;        // Initial cursor line at select mode entry
-            UT::ui32 charWidth;         // Monospaced font support ONLY!
             CursorMode m;               // Current cursor mode
             std::string fragment;       // Text fragment from current cursor position
-            
         public:
+            UT::ui32 charWidth;         // Monospaced font support ONLY!
+            
             // Constructor
             Cursor(UT::ui32 col, UT::ui32 line);
             
             // Destructor
             ~Cursor(void);
 
-            CursorChar cursorSymbol;    // Cursor symbol to draw
+            CursorSymbol cursorSymbol;    // Cursor symbol to draw
 
             // Get the current column
             UT::ui32 Col(void) const;

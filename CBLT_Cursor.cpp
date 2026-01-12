@@ -6,10 +6,10 @@ namespace CBLT {
         line(ln),
         selectColumn(col),
         selectLine(ln),
-        charWidth(MeasureText("A", CBLT::gFont.size)), // Measure once
-        m(CursorMode::INSERT), // Default
+        m(CursorMode::INSERT),                              // Default
         fragment(""),
-        cursorSymbol(CursorChar::BRACKET)
+        charWidth(MeasureText("A", CBLT::gFont.size)),      // Measure once
+        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX)    // Default
     {}
 
    Cursor::~Cursor(void) {}
@@ -56,8 +56,8 @@ namespace CBLT {
     }
 
     void Cursor::Draw(const std::string& lineText, UT::llui32 cursorId) {
-        int x = GetCursorX(lineText, gFont.size);
-        int y = line * gFont.size;
+        UT::i32 x = GetCursorX(lineText, gFont.size);
+        UT::i32 y = line * gFont.size;
 
         // Draw a transparent rectangle, to show where the cursor is
         DrawRectangle(
@@ -68,34 +68,58 @@ namespace CBLT {
             Color{255, 255, 255, 45}
         );
 
-        const int horizontalFix = 5;
+        const UT::i32 horizontalFix = 2;
 
-        // Primary cursor is vibrant
-        if (cursorId == 0) {
-            DrawTextEx(
-                gFont.f,
-                std::string(1, static_cast<char>(cursorSymbol)).c_str(),
-                {
+        // Hash on the symbol
+        switch (cursorSymbol) {
+            case CursorSymbol::NON_ASCII_BOX:
+                DrawRectangle(
+                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
+                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
+                    charWidth,
+                    gFont.size,
+                    Color{0, 255, 255, 255}
+                );
 
-                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES - horizontalFix,
-                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size
-                },
-                gFont.size,
-                0.0f,
-                Color{255, 0, 128, 255}
-            );
-        } else { // Secondary cursors are dimmer
-            DrawTextEx(
-                gFont.f,
-                std::string(1, static_cast<char>(cursorSymbol)).c_str(),
-                {
-                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES - horizontalFix,
-                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size
-                },
-                gFont.size,
-                0.0f,
-                Color{255, 128, 128, 255}
-            );
+                return;
+            case CursorSymbol::NON_ASCII_HOLLOW_BOX:
+                DrawRectangleLines(
+                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
+                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
+                    charWidth,
+                    gFont.size,
+                    Color{0, 255, 255, 255}
+                );
+
+                return;
+            case CursorSymbol::NON_ASCII_LINE:
+                DrawRectangle(
+                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES - horizontalFix,
+                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
+                    1,
+                    gFont.size,
+                    Color{0, 255, 255, 255}
+                );
+
+                return;
+            case CursorSymbol::NON_ASCII_UNDERSCORE:
+                DrawRectangle(
+                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
+                    y + CBLT::UI::TOP_BAR_HEIGHT + 2 * gFont.size,
+                    charWidth,
+                    1,
+                    Color{0, 255, 255, 255}
+                );
+
+                return;
         }
     }
 

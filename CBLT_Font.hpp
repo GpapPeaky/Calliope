@@ -9,6 +9,9 @@
 namespace CBLT {
     // Editor font
     class EditorFont {
+        private:
+            // Build glyph set for the extended ASCII table, no Unicode
+            std::vector<UT::i32>BuildGlyphSet(void);
         public:
             // Font size
             UT::i32 size;

@@ -111,26 +111,60 @@ namespace CBLT {
         // Draw console cursor
         Cursor& cc = cursor.Primary();
         const std::string& lineText = directive.DirectiveFile().GetCurrentLine(cc.Line());
+        const UT::i32 minorHorizotalFix = 2;
 
         // Compute cursor position inside console
-        UT::f32 cursorX = cc.GetCursorX(lineText, directiveFontSize);
+        UT::f32 cursorX = cc.GetCursorX(lineText, directiveFontSize) + minorHorizotalFix;
         UT::f32 cursorY = DirectiveMargins::directiveMarginFromConsoleY;
         
         // Offset for the console's left edge + margins
         cursorX += GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX;
-        
-        // Draw cursor rectangle
-        DrawTextEx(
-            gFont.f,
-            std::string(1, static_cast<char>(cc.cursorSymbol)).c_str(),
-            {
-                cursorX,
-                cursorY
-            },
-            directiveFontSize,
-            0.0f,
-            Color{0, 255, 255, 255}
-        );
+
+        const UT::i32 horizontalFix = 2;
+
+        // Hash on the symbol
+        switch (cc.cursorSymbol) {
+            case CursorSymbol::NON_ASCII_BOX:
+                DrawRectangle(
+                    cursorX - horizontalFix,
+                    cursorY,
+                    cc.charWidth,
+                    gFont.size,
+                    Color{0, 255, 255, 255}
+                );
+
+                return;
+            case CursorSymbol::NON_ASCII_HOLLOW_BOX:
+                DrawRectangleLines(
+                    cursorX,
+                    cursorY,
+                    cc.charWidth,
+                    gFont.size,
+                    Color{0, 255, 255, 255}
+                );
+
+                return;
+            case CursorSymbol::NON_ASCII_LINE:
+                DrawRectangle(
+                    cursorX,
+                    cursorY,
+                    1,
+                    gFont.size,
+                    Color{0, 255, 255, 255}
+                );
+
+                return;
+            case CursorSymbol::NON_ASCII_UNDERSCORE:
+                DrawRectangle(
+                    cursorX,
+                    cursorY + gFont.size,
+                    cc.charWidth,
+                    1,
+                    Color{0, 255, 255, 255}
+                );
+
+                return;
+        }
     };
 
     void Console::DrawMessage(void) {

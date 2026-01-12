@@ -8,9 +8,38 @@ namespace CBLT {
 
     EditorFont::~EditorFont(void) {}
 
-    void EditorFont::Load(std::string fontName) {
-        this->f = LoadFont(fontName.c_str());
+    std::vector<UT::i32> EditorFont::BuildGlyphSet(void) {
+        std::vector<UT::i32> glyphs;
+    
+        // Basic ASCII
+        for (int i = 32; i < 127; i++)
+            glyphs.push_back(i);
+    
+        // Box Drawing ─ │ ┌ ┐ └ ┘ etc.
+        for (int i = 0x2500; i <= 0x257F; i++)
+            glyphs.push_back(i);
+    
+        // Block Elements ░ ▒ ▓ █
+        for (int i = 0x2580; i <= 0x259F; i++)
+            glyphs.push_back(i);
+    
+        return glyphs;
     }
+
+
+    void EditorFont::Load(std::string fontName) {
+        auto glyphs = BuildGlyphSet();
+    
+        f = LoadFontEx(
+            fontName.c_str(),
+            size,
+            glyphs.data(),
+            glyphs.size()
+        );
+    
+        SetTextureFilter(f.texture, TEXTURE_FILTER_BILINEAR);
+    }
+
 
     std::vector<UT::i32> EditorFont::Utf8ToCodepoints(const std::string& str) {
         std::vector<UT::i32> cps;

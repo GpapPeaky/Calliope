@@ -3,7 +3,7 @@
 int main() {
     CBLT::Win::Init();
 
-    CBLT::gFont.Load("assets/font/GoogleSansCode-Regular.ttf");
+    CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
     CBLT::gFont.size = 23;
 
     // CBLT::Controller ctrl; // Automatically calls the constructor
