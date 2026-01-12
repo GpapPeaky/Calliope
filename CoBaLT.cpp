@@ -26,8 +26,9 @@ int main() {
 
             // Draw open file
             f.Draw();
+            ctrl.DrawSelection(c);
             cm.DrawCursors(f);
-            CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), f.CWD());
+            CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), f.CWD(), (UT::i32)c.GetMode());
             
             if (cnsl.IsOpen()) {
                 cnsl.Draw(f.Name());

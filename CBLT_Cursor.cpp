@@ -4,8 +4,10 @@ namespace CBLT {
     Cursor::Cursor(UT::ui32 col, UT::ui32 ln) :
         column(col),
         line(ln),
-        selectColumn(col),
-        selectLine(ln),
+        startSelectColumn(col),
+        finalSelectColumn(col),
+        startSelectLine(ln),
+        finalSelectLine(ln),
         m(CursorMode::INSERT),                              // Default
         fragment(""),
         charWidth(MeasureText("A", CBLT::gFont.size)),      // Measure once
@@ -121,6 +123,36 @@ namespace CBLT {
 
                 return;
         }
+    }
+
+    void Cursor::StartSelection(void) {
+        startSelectColumn = column;
+        startSelectLine = line;
+
+        m = CursorMode::SELECT;
+    }
+
+    void Cursor::StopSelection(void) {
+        finalSelectColumn = column;
+        finalSelectLine = line;
+
+        m = CursorMode::INSERT;
+    }
+
+    UT::ui32 Cursor::SFCol() const {
+        return finalSelectColumn;
+    }
+
+    UT::ui32 Cursor::SFLine() const {
+        return finalSelectLine;
+    }
+
+    UT::ui32 Cursor::SSCol() const {
+        return startSelectColumn;
+    }
+
+    UT::ui32 Cursor::SSLine() const {
+        return startSelectLine;
     }
 
     UT::ui32 Cursor::GetCursorX(const std::string& lineText, UT::ui32 fontSize){

@@ -7,6 +7,9 @@
 
 #include <cmath>                    // min()/max() ...
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 namespace CBLT {
     // Basic controller and input handling
@@ -73,6 +76,9 @@ namespace CBLT {
 
             // Get identation depth, check for unmatched '{' before the cursor
             UT::ui32 GetIndentation(UT::ui32 line);
+
+            // Draw selected text
+            void DrawSelection(Cursor& c);
 
             // Constructor
             Controller(void);

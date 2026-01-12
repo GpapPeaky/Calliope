@@ -1,6 +1,6 @@
 #include "CBLT_TopBar.hpp"
 
-void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd) {
+void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd, UT::i32 mode) {
     const UT::ui32 topBarFontSize = 25;
     const UT::ui32 topBarSeperatorY = 17;
     const UT::ui32 topBarInfoVerticalShift = 12;
@@ -8,7 +8,8 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     const UT::ui32 topBarSecondColumnX = 150;
     const UT::ui32 topBarCWDFilePathSeperatorX = 300;
     const UT::ui32 topBarThirdColumnX = 300;
-
+    const UT::ui32 modeMargin = 200;
+    
     // String to notify the user if the file is dirty (modified/unsaved) or clean (saved)    
     std::string dirtyFile;
     Color dirtyColour;
@@ -75,6 +76,16 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         topBarFontSize,
         0.0f,
         dirtyColour
+    );
+
+    // Draw current mode
+    DrawTextEx(
+        gFont.f,
+        std::to_string(mode).c_str(),
+        {topBarInfoHorizontalShift + topBarThirdColumnX + modeMargin, 0},
+        gFont.size,
+        0.0f,
+        Color{255, 64, 64, 255}
     );
 
     DrawTextEx(

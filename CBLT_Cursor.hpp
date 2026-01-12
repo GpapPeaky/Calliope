@@ -21,13 +21,13 @@ namespace CBLT {
     };
 
     // Cursor mode
-    enum class CursorMode {
+    enum class CursorMode : UT::i32 {
         INSERT,                 // Insertion mode
         SELECT                  // Selection mode
     }; 
 
     // Cursor direction class
-    enum class CursorDirection {
+    enum class CursorDirection : UT::i32 {
         LEFT,                   // Move left
         RIGHT,                  // Move right
         UP,                     // Move up
@@ -35,7 +35,7 @@ namespace CBLT {
     };
 
     // Characters are defined as one of 3 groups, inWord, space, symbol
-    enum class CharClass {
+    enum class CharClass : UT::i32 {
         INWORD,             // Character can be found inside a word <'a' 'b'>
         WHITESPACE,         // Character is a whitespace char <' '>
         SYMBOL              // Character is a symbol <',' '.' '/'>
@@ -45,14 +45,16 @@ namespace CBLT {
     class Cursor {
 
         private:
-            UT::ui32 column;            // Current column the cursor is at
-            UT::ui32 line;              // Current line the cursor is at
-            UT::ui32 selectColumn;      // Initial cursor column at select mode entry
-            UT::ui32 selectLine;        // Initial cursor line at select mode entry
-            CursorMode m;               // Current cursor mode
-            std::string fragment;       // Text fragment from current cursor position
+            UT::ui32 column;                 // Current column the cursor is at
+            UT::ui32 line;                   // Current line the cursor is at
+            UT::ui32 startSelectColumn;      // Initial cursor column at select mode entry
+            UT::ui32 finalSelectColumn;      // Final cursor column at select mode entry
+            UT::ui32 startSelectLine;        // Initial cursor line at select mode entry
+            UT::ui32 finalSelectLine;        // Final cursor line at select mode entry
+            CursorMode m;                    // Current cursor mode
+            std::string fragment;            // Text fragment from current cursor position
         public:
-            UT::ui32 charWidth;         // Monospaced font support ONLY!
+            UT::ui32 charWidth;              // Monospaced font support ONLY!
             
             // Constructor
             Cursor(UT::ui32 col, UT::ui32 line);
@@ -91,6 +93,24 @@ namespace CBLT {
 
             // Draw cursor
             void Draw(const std::string& lineText, UT::llui32 cursorId);
+
+            // Start selection
+            void StartSelection(void);
+
+            // Stop selection
+            void StopSelection(void);
+
+            // Select final column
+            UT::ui32 SFCol() const;
+
+            // Select final line
+            UT::ui32 SFLine() const;
+
+            // Select start column
+            UT::ui32 SSCol() const;
+
+            // Select start line
+            UT::ui32 SSLine() const;
 
             // Get cursor x in pixels 
             UT::ui32 GetCursorX(const std::string& lineText, UT::ui32 fontSize);

@@ -5,6 +5,24 @@ namespace CBLT {
     
     Controller::~Controller(void) {}
 
+    void Controller::HandleSelect(void) {
+        Cursor& c = cursorManager.Primary();
+
+        if (keyboard.m.shift) {
+            // Only START selection if not already selecting
+            if (c.GetMode() != CursorMode::SELECT) {
+                c.StartSelection();
+                cursorManager.RemoveSecondaries();
+            }
+            // If already selecting, do nothing - let movement update the selection
+        } else {
+            // Only STOP selection if currently selecting
+            if (c.GetMode() == CursorMode::SELECT) {
+                c.StopSelection();
+            }
+        }
+    }
+
     UT::b Controller::HandleSpecialMovement(Cursor& cursor) {
         const UT::ui32 line = cursor.Line();
 
@@ -124,13 +142,13 @@ namespace CBLT {
         if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
             if (cursor.Col() > 0) {
                 std::string& line = file.GetCurrentLine(cursor.Line());
-                int col = cursor.Col();
-                int tabSize = keyboard.tabSize;
+                UT::i32 col = cursor.Col();
+                UT::i32 tabSize = keyboard.tabSize;
         
                 // If previous char is space → delete indentation block
                 if (line.at(col - 1) == ' ') {
-                    int deleteCount = 0;
-                    int startCol = col;
+                    UT::i32 deleteCount = 0;
+                    UT::i32 startCol = col;
         
                     // Walk left while:
                     // still spaces
@@ -363,6 +381,8 @@ namespace CBLT {
 
         // Delete current line
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes
+            SetClipboardText(file.GetCurrentLine(cursor.Line()).c_str());
+            
             file.DeleteLine(cursor.Line());
 
             if (cursor.Line() > 0 && cursor.Line() < file.GetLineCount()) {
@@ -446,6 +466,32 @@ namespace CBLT {
             }
 
             return true;
+        }
+
+         // TODO: Copy to clipboard
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_C)) {
+
+        }
+
+        // Paste from clipboard
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) {
+            std::string clipboard = GetClipboardText();
+
+            // Automatically splits per line
+            std::stringstream ss(clipboard);
+            std::string line;
+            UT::ui32 lineIdx = cursor.Line();
+            std::vector<std::string> lines;
+
+            while (std::getline(ss, line)) {
+                // Remove trailing '\r' if coming from Windows clipboard
+                if (!line.empty() && line.back() == '\r')
+                    line.pop_back();
+
+                file.CreateLine(lineIdx++, line);
+            }
+
+            cursor.SetAt(cursor.Col(), cursor.Line() + lineIdx - 1);
         }
 
         // Go to next file
@@ -559,7 +605,9 @@ namespace CBLT {
                     if (!handledShort) HandleMovement(c);
                     // Shortcuts include letters so it makes sense that we need to omit any leftover I/O's
                     // so they won't spill over to the insert function
-                    if (!handledShort) HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert 
+                    if (!handledShort) HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
+
+                    HandleSelect(); // Potential selection entry
 
                     ClampCursor(c); // Safety check
                 
@@ -575,7 +623,11 @@ namespace CBLT {
 
                     break;
                 case CBLT::CursorMode::SELECT:
-                    // HandleSelect();
+                    HandleMovement(c);
+
+                    HandleSelect(); // Potential selection exit
+
+                    ClampCursor(c);
                 
                     break;
                 default:
@@ -646,4 +698,94 @@ namespace CBLT {
         return depth;
     }
 
+    void Controller::DrawSelection(Cursor& c) {
+        if (c.GetMode() != CursorMode::SELECT)
+            return;
+        
+        UT::ui32 baseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
+        UT::ui32 baseY = UI::TOP_BAR_HEIGHT;
+        
+        // Use CURRENT cursor position as the selection end
+        UT::ui32 startLine = std::min(c.SSLine(), c.Line());
+        UT::ui32 endLine = std::max(c.SSLine(), c.Line());
+        
+        for (UT::ui32 l = startLine; l <= endLine; l++) {
+            const std::string& lineText = file.GetCurrentLine(l);
+            UT::ui32 lineLength = file.GetLineLength(l);
+            
+            UT::ui32 selStart, selEnd;
+    
+            if (l == c.SSLine() && l == c.Line()) {
+                // Single line selection
+                selStart = std::min(c.SSCol(), c.Col());
+                selEnd   = std::max(c.SSCol(), c.Col());
+            } else if (l == c.SSLine()) {
+                // Start line
+                selStart = c.SSCol();
+                selEnd   = lineLength;
+            } else if (l == c.Line()) {
+                // End line (current cursor line)
+                selStart = 0;
+                selEnd   = c.Col();
+            } else {
+                // Middle lines
+                selStart = 0;
+                selEnd   = lineLength;
+            }
+    
+            // Calculate actual pixel positions using the same method as GetCursorX
+            UT::f32 scale = (UT::f32)gFont.size / gFont.f.baseSize;
+            
+            // Calculate X position for selStart
+            UT::ui32 startX = 0;
+            auto cps = CBLT::gFont.Utf8ToCodepoints(lineText);
+            for(size_t i = 0; i < selStart && i < cps.size(); i++) {
+                UT::i32 cp = cps[i];
+                UT::i32 glyphIndex = -1;
+                for(UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
+                    if(gFont.f.glyphs[g].value == cp){
+                        glyphIndex = g;
+                        break;
+                    }
+                }
+                if (glyphIndex >= 0) {
+                    startX += gFont.f.glyphs[glyphIndex].advanceX;
+                } else {
+                    startX += gFont.size / 2;
+                }
+            }
+            startX = (UT::ui32)(startX * scale);
+            
+            // Calculate X position for selEnd
+            UT::ui32 endX = 0;
+            for(size_t i = 0; i < selEnd && i < cps.size(); i++) {
+                UT::i32 cp = cps[i];
+                UT::i32 glyphIndex = -1;
+                for(UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
+                    if(gFont.f.glyphs[g].value == cp){
+                        glyphIndex = g;
+                        break;
+                    }
+                }
+                if (glyphIndex >= 0) {
+                    endX += gFont.f.glyphs[glyphIndex].advanceX;
+                } else {
+                    endX += gFont.size / 2;
+                }
+            }
+            endX = (UT::ui32)(endX * scale);
+    
+            Vector2 pos = {
+                (float)(baseX + startX), 
+                (float)(baseY + l * gFont.size + gFont.size)
+            };
+    
+            float width = (float)(endX - startX);
+            float height = (float)gFont.size;
+    
+            if (width > 0) {
+                DrawRectangleV(pos, { width, height }, Color{ 50, 150, 255, 128 });
+            }
+        }
+    }
 } // CBLT
