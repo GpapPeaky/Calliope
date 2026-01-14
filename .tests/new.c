@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-int selected;
-
 #define EXIT_SUCCESS 1
 
 // 4.6 55.4

@@ -19,34 +19,34 @@ namespace CBLT {
 
         const std::string cwd = directive.DirectiveFile().CWD();
 
-        // Platform specific directory reading
-        #if defined(_WIN32) || defined(_WIN64) // TODO
-            std::string searchPath = cwd + "\\*.*";
-            WIN32_FIND_DATA fd; 
-            HANDLE hFind = ::FindFirstFile(searchPath.c_str(), &fd); 
+        // // Platform specific directory reading
+        // #if defined(_WIN32) || defined(_WIN64) // TODO
+        //     std::string searchPath = cwd + "\\*.*";
+        //     WIN32_FIND_DATA fd; 
+        //     HANDLE hFind = ::FindFirstFile(searchPath.c_str(), &fd); 
 
-            if(hFind != INVALID_HANDLE_VALUE) { 
-                do { 
-                    // read all (real) files in current folder, delete '!' read other 2 default folder . and ..
-                    if(!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                        cwdContents.push_back(std::string(fd.cFileName));
-                    }
-                } while(::FindNextFile(hFind, &fd)); 
-                ::FindClose(hFind); 
-            }
-        #else
-            DIR* dir;
-            struct dirent* ent;
-            if ((dir = opendir (cwd.c_str())) != NULL) {
-                // print all the files and directories within directory
-                while ((ent = readdir (dir)) != NULL) {
-                    if (ent->d_type != DT_DIR) { // Not a directory
-                        cwdContents.push_back(std::string(ent->d_name));
-                    }
-                }
-                closedir (dir);
-            } 
-        #endif
+        //     if(hFind != INVALID_HANDLE_VALUE) { 
+        //         do { 
+        //             // read all (real) files in current folder, delete '!' read other 2 default folder . and ..
+        //             if(!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+        //                 cwdContents.push_back(std::string(fd.cFileName));
+        //             }
+        //         } while(::FindNextFile(hFind, &fd)); 
+        //         ::FindClose(hFind); 
+        //     }
+        // #else
+        //     DIR* dir;
+        //     struct dirent* ent;
+        //     if ((dir = opendir (cwd.c_str())) != NULL) {
+        //         // print all the files and directories within directory
+        //         while ((ent = readdir (dir)) != NULL) {
+        //             if (ent->d_type != DT_DIR) { // Not a directory
+        //                 cwdContents.push_back(std::string(ent->d_name));
+        //             }
+        //         }
+        //         closedir (dir);
+        //     } 
+        // #endif
     }
 
     void Console::Toggle(void) {
@@ -92,7 +92,7 @@ namespace CBLT {
             
             else { // Invalid directive given fallback
                 dr.message = "CBLT_ERR: unkown directive :" + drctv;
-                dr.messageType = ConsoleMessage::ERROR;
+                dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
         } else { // File switch mode

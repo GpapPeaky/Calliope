@@ -3,11 +3,6 @@
 #include <string>
 #include <algorithm>
 
-#if defined(_WIN32) || defined(_WIN64)
-    #include <windows.h>
-    #include <fileapi.h>
-#endif
-
 #include "CBLT_Directive.hpp"
 #include "CBLT_Interpolator.hpp"
 
@@ -16,7 +11,7 @@ namespace CBLT {
     enum class ConsoleMessage {
         NONE = -1,                  // No message to display
         INFO,                       // The console will display info
-        ERROR,                      // The console will display an error
+        DIRECTIVE_ERROR,                      // The console will display an error
         GUIDE                       // The console will display a guide
     };
 
