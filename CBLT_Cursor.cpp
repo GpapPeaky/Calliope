@@ -226,12 +226,7 @@ namespace CBLT {
         }
     
         if (dir == CursorDirection::LEFT) {
-            if (line < 1) { // Safety check
-                SetAt(0, 0);
-                return;
-            }
-
-            if (col <= 0) {
+            if (col <= 0 && line > 0) {
                 SetAt(0, line - 1);
                 return;
             }
@@ -249,6 +244,14 @@ namespace CBLT {
             while (i >= 0 && Classify(lineText[i]) == cc) i--;
     
             SetAt(i + 1, line);
+
+            const UT::i32 newLine = static_cast<UT::i32>(Line());
+
+            if (newLine < 0) { // Safety check
+                SetAt(0, 0);
+                return;
+            }
+            
             return;
         }
     }
