@@ -2,6 +2,7 @@
 
 #include <string>
 #include <algorithm>
+#include <bits/stdc++.h> // For transform to lowercase
 
 #include "CBLT_Directive.hpp"
 #include "CBLT_Interpolator.hpp"

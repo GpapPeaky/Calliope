@@ -84,6 +84,9 @@ namespace CBLT {
             // Return the current working directory
             const std::string& CWD(void) const;
 
+            // Return a string of info relative to the file
+            const std::string Info(void) const;
+
         }; // File class
         
     // Positioning margins

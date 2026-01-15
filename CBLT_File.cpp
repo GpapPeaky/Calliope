@@ -190,4 +190,13 @@ namespace CBLT {
     const std::string& File::CWD(void) const {
         return cwd;
     }
+
+    const std::string File::Info(void) const {
+        std::string info = "File Path: " + path + "\n" +
+               "CWD: " + cwd + "\n" +
+               "Line Count: " + std::to_string(lines.size()) + "\n" +
+               "Dirty: " + (dirty ? "Yes" : "No");
+        
+        return info;
+    }
 }

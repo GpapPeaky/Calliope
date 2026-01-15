@@ -71,7 +71,8 @@ namespace CBLT {
         if (directiveLine[0] == ':') { // Directive mode
             std::string drctv = U::TrimLeadingColon(directiveLine); // Trim
 
-            // Match the remainder
+            // Match the remainder after converting to lowercase
+            std::transform(drctv.begin(), drctv.end(), drctv.begin(), ::tolower);
 
             // Exi
             if (drctv == "e") {
@@ -89,6 +90,24 @@ namespace CBLT {
             else if (drctv == "w") {
                 f.Save();
             } 
+
+            // Help guide
+            else if (drctv == "h") {
+                dr.message = 
+                    "Co.Ba.L.T Console Help Guide:\n"
+                    ":e      - Exit Co.Ba.L.T\n"
+                    ":q      - Save and exit Co.Ba.L.T\n"
+                    ":w      - Save current file\n"
+                    ":i      - Display file info and metadata\n"
+                    ":h      - Display this help guide\n";
+                dr.messageType = ConsoleMessage::GUIDE;
+            }
+
+            // DIsplay file info and metadata
+            else if (drctv == "i") {
+                dr.message = f.Info();
+                dr.messageType = ConsoleMessage::INFO;
+            }
             
             else { // Invalid directive given fallback
                 dr.message = "CBLT_ERR: unkown directive :" + drctv;
@@ -201,20 +220,21 @@ namespace CBLT {
                 break;
         }
 
+        // TODO:
         // Draw CWD contents
-        for (UT::i32 i = 0 ; i < cwdContents.size() ; i++) {
-            DrawTextEx(
-                gFont.f,
-                cwdContents[i].c_str(),
-                {
-                    GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX,
-                    directiveFontSize + directiveBottomMargin + (i * (directiveFontSize + 5))
-                },
-                directiveFontSize,
-                0.0f,
-                Color{255, 255, 255, 255}
-            );
-        }
+        // for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
+        //     DrawTextEx(
+        //         gFont.f,
+        //         cwdContents[i].c_str(),
+        //         {
+        //             GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX,
+        //             (UT::f32)(directiveFontSize + directiveBottomMargin + (i * (directiveFontSize + 5)))
+        //         },
+        //         directiveFontSize,
+        //         0.0f,
+        //         Color{255, 255, 255, 255}
+        //     );
+        // }
     };
 
     void Console::DrawMessage(void) {
@@ -231,40 +251,125 @@ namespace CBLT {
         const UT::i32 msgY = (GetScreenHeight() / 2) - (directiveFontSize / 2);
         const UT::i32 msgW = messageWidth + messageTextHorizontalMargins;
         const UT::i32 msgH = directiveFontSize + messageTextVerticalMargins;
+        
+        UT::f32 textX;
+        UT::f32 textY;
 
-        // Background
-        DrawRectangle(
-            msgX,
-            msgY,
-            msgW,
-            msgH,
-            Color{0, 255, 0, 255}
-        );
+        switch (dirRes.messageType) {
+            case ConsoleMessage::DIRECTIVE_ERROR: {
+                // Background
+                DrawRectangle(
+                    msgX,
+                    msgY,
+                    msgW,
+                    msgH,
+                    Color{0, 255, 0, 255}
+                );
+    
+                // Foreground
+                DrawRectangle(
+                    msgX + 1,
+                    msgY + 1,
+                    msgW - 2,
+                    msgH - 2,
+                    Color{0, 0, 0, 255}
+                );
+    
+                textX = msgX + (msgW - messageWidth) / 2.0f;
+                textY = msgY + (msgH - directiveFontSize) / 2.0f;
+    
+                // Message
+                DrawTextEx(
+                    gFont.f,
+                    dirRes.message.c_str(),
+                    {
+                        textX,
+                        textY
+                    },
+                    directiveFontSize,
+                    0.0f,
+                    Color{255, 0, 128, 255}
+                );
 
-        // Foreground
-        DrawRectangle(
-            msgX + 1,
-            msgY + 1,
-            msgW - 2,
-            msgH - 2,
-            Color{0, 0, 0, 255}
-        );
+                break;
+            }
 
-        const UT::f32 textX = msgX + (msgW - messageWidth) / 2.0f;
-        const UT::f32 textY = msgY + (msgH - directiveFontSize) / 2.0f;
+            case ConsoleMessage::GUIDE: { // FIXME: Larger margins
+                // Background
+                DrawRectangle(
+                    msgX,
+                    msgY,
+                    msgW,
+                    msgH,
+                    Color{0, 255, 0, 255}
+                );
+    
+                // Foreground
+                DrawRectangle(
+                    msgX + 1,
+                    msgY + 1,
+                    msgW - 2,
+                    msgH - 2,
+                    Color{0, 0, 0, 255}
+                );
+    
+                textX = msgX + (msgW - messageWidth) / 2.0f;
+                textY = msgY + (msgH - directiveFontSize) / 2.0f;
+    
+                // Message
+                DrawTextEx(
+                    gFont.f,
+                    dirRes.message.c_str(),
+                    {
+                        textX,
+                        textY
+                    },
+                    directiveFontSize,
+                    0.0f,
+                    Color{0, 255, 255, 255}
+                );
 
-        // Message
-        DrawTextEx(
-            gFont.f,
-            dirRes.message.c_str(),
-            {
-                textX,
-                textY
-            },
-            directiveFontSize,
-            0.0f,
-            Color{255, 0, 128, 255}
-        );
+                break;
+            }
+
+            case ConsoleMessage::INFO: { // FIXME: Larger margins
+                // Background
+                DrawRectangle(
+                    msgX,
+                    msgY,
+                    msgW,
+                    msgH,
+                    Color{0, 255, 0, 255}
+                );
+    
+                // Foreground
+                DrawRectangle(
+                    msgX + 1,
+                    msgY + 1,
+                    msgW - 2,
+                    msgH - 2,
+                    Color{0, 0, 0, 255}
+                );
+    
+                textX = msgX + (msgW - messageWidth) / 2.0f;
+                textY = msgY + (msgH - directiveFontSize) / 2.0f;
+    
+                // Message
+                DrawTextEx(
+                    gFont.f,
+                    dirRes.message.c_str(),
+                    {
+                        textX,
+                        textY
+                    },
+                    directiveFontSize,
+                    0.0f,
+                    Color{0, 255, 255, 255}
+                );
+
+                break;
+            }
+        }
     }
 
     Directive& Console::ConsoleDirective(void) {
