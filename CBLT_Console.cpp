@@ -220,7 +220,7 @@ namespace CBLT {
                 break;
         }
 
-        // TODO:
+        // TODO
         // Draw CWD contents
         // for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
         //     DrawTextEx(

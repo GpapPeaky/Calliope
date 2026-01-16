@@ -3,9 +3,6 @@
 #include "CBLT_Util.hpp"
 
 namespace CBLT {
-
-    // FIXME: This crashes sometimes
-
     // Animation line for interpolation
     typedef struct AnimationLine {
         UT::f32 targetX;            // Where to go at x
