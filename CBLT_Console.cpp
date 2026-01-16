@@ -256,6 +256,7 @@ namespace CBLT {
         UT::f32 textY;
 
         switch (dirRes.messageType) {
+            // Message from console for error
             case ConsoleMessage::DIRECTIVE_ERROR: {
                 // Background
                 DrawRectangle(
@@ -294,6 +295,7 @@ namespace CBLT {
                 break;
             }
 
+            // Message from console for guide
             case ConsoleMessage::GUIDE: { // FIXME: Larger margins
                 // Background
                 DrawRectangle(
@@ -332,6 +334,7 @@ namespace CBLT {
                 break;
             }
 
+            // Message from console for info
             case ConsoleMessage::INFO: { // FIXME: Larger margins
                 // Background
                 DrawRectangle(
