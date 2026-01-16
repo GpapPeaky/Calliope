@@ -858,4 +858,12 @@ namespace CBLT {
     
         return copied;
     }
+
+    const Camera& Controller::GetCamera(void) const {
+        return camera;
+    }
+
+    Camera& Controller::GetCamera(void) {
+        return camera;
+    }
 } // CBLT

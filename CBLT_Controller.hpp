@@ -4,6 +4,7 @@
 #include "CBLT_Keyboard.hpp"        // Keyboard for input
 #include "CBLT_File.hpp"            // Document/File type
 #include "CBLT_Console.hpp"         // Console for directives
+#include "CBLT_Camera.hpp"          // Camera for view offset
 
 #include <cmath>                    // min()/max() ...
 #include <vector>
@@ -19,6 +20,7 @@ namespace CBLT {
             CBLT::Keyboard keyboard;                      // Keyboard
             CBLT::File file;                              // Current open document
             CBLT::Console console;                        // Console
+            CBLT::Camera camera;                          // Camera
 
             // TODO: Finish the handling
 
@@ -82,6 +84,12 @@ namespace CBLT {
 
             // Copy selected text from the primary cursor
             std::string CopySelectedText(void);
+
+            // Get the camera, read only
+            const Camera& GetCamera(void) const;
+
+            // Get the camera, mutable access
+            Camera& GetCamera(void);
 
             // Constructor
             Controller(void);

@@ -2,7 +2,7 @@
 
 void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd, UT::i32 mode) {
     const UT::ui32 topBarFontSize = 25;
-    const UT::ui32 topBarSeperatorY = 17;
+    const UT::ui32 topBarSeperatorY = (UT::ui32)CBLT::UI::TOP_BAR_SEPERATOR_Y;
     const UT::ui32 topBarInfoVerticalShift = 12;
     const UT::ui32 topBarInfoHorizontalShift = 4;
     const UT::ui32 topBarSecondColumnX = 100;

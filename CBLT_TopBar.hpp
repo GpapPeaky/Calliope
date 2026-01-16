@@ -12,5 +12,8 @@ namespace CBLT {
 
         // Top margin from the top bar, or it's width
         const UT::f32 TOP_BAR_HEIGHT = 50.0f;
+
+        // Top bar seperator Y from height
+        const UT::f32 TOP_BAR_SEPERATOR_Y = 17.0f;
     } // UI
 } // CBLT

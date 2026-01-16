@@ -4,7 +4,7 @@
 // TODO: Add camera occlusion
 // TODO: Add tokenization drawing
 
-int main() {
+UT::i32 main() {
     CBLT::Win::Init();
 
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
@@ -27,6 +27,7 @@ int main() {
             CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
             CBLT::File& f = ctrl.GetFile();
+            CBLT::Camera& cam = ctrl.GetCamera();
 
             // Draw open file
             f.Draw();
@@ -39,6 +40,8 @@ int main() {
             }
             
             cnsl.DrawMessage();
+
+            cam.Draw();
 
             DrawFPS(950, 0);
         EndDrawing();
