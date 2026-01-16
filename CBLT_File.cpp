@@ -73,7 +73,7 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(void) const {
+    void File::Draw(Camera& cam) {
         float lineHeight = gFont.size;
     
         for(size_t i = 0; i < lines.size(); i++) {
@@ -81,7 +81,29 @@ namespace CBLT {
                 CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
                 CBLT::UI::TOP_BAR_HEIGHT + i * lineHeight + lineHeight
             };
+
+            // Draw Text/Line seperator
+            DrawLineV(
+                { 
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
+                    CBLT::UI::TOP_BAR_HEIGHT + gFont.size - 6
+                },{ 
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
+                    static_cast<UT::f32>(GetScreenHeight())
+                },
+
+                Color{0, 255, 0, 255}
+            );
     
+            // Check if inside the camera, if not do not draw
+            if (!cam.Contains(
+                (UT::i32)pos.x,
+                (UT::i32)(pos.y - CBLT::UI::TOP_BAR_HEIGHT),
+                GetScreenWidth(),
+                (UT::i32)lineHeight
+            )) continue;
+
+            // Draw the actual line
             DrawTextEx(
                 gFont.f,
                 lines.at(i).c_str(),
@@ -102,19 +124,6 @@ namespace CBLT {
                 gFont.size,
                 0.0f,
                 Color{0, 255, 0, 255}                
-            );
-
-            // Draw Text/Line seperator
-            DrawLineV(
-                { 
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    CBLT::UI::TOP_BAR_HEIGHT + gFont.size - 6
-                },{ 
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    static_cast<UT::f32>(GetScreenHeight())
-                },
-
-                Color{0, 255, 0, 255}
             );
         }
     }

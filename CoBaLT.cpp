@@ -30,7 +30,7 @@ UT::i32 main() {
             CBLT::Camera& cam = ctrl.GetCamera();
 
             // Draw open file
-            f.Draw();
+            f.Draw(cam);
             ctrl.DrawSelection(c);
             cm.DrawCursors(f);
             CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), f.CWD(), (UT::i32)c.GetMode());

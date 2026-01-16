@@ -15,6 +15,8 @@
 
 #include "CBLT_TopBar.hpp"      // for vertical margins
 
+#include "CBLT_Camera.hpp"      // for camera offsets
+
 namespace CBLT {
     // Basic document/file class
     class File {
@@ -43,7 +45,7 @@ namespace CBLT {
             const std::string& GetPath(void) const;
 
             // Draw the document
-            void Draw(void) const;
+            void Draw(Camera& cam);
 
             // Get line count
             UT::ui32 GetLineCount(void) const;
