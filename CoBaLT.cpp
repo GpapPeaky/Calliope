@@ -1,5 +1,9 @@
 #include "includes.hpp"
 
+// TODO: Add file tokenization
+// TODO: Add camera occlusion
+// TODO: Add tokenization drawing
+
 int main() {
     CBLT::Win::Init();
 
