@@ -80,6 +80,9 @@ namespace CBLT {
             // Draw selected text
             void DrawSelection(Cursor& c);
 
+            // Copy selected text from the primary cursor
+            std::string CopySelectedText(void);
+
             // Constructor
             Controller(void);
 

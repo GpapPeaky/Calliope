@@ -255,7 +255,7 @@ namespace CBLT {
             return;
         }
     }
-    
+
     CursorManager::CursorManager() {
         activeCursors.emplace_back(0, 0); // Initialize one cursor at 0,1
         

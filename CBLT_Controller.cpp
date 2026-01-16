@@ -8,13 +8,17 @@ namespace CBLT {
     void Controller::HandleSelect(void) { // Without using shift, toggle
         Cursor& c = cursorManager.Primary();
 
+        // Entry
         if (keyboard.m.ctrl && IsKeyPressed(KEY_K) && c.GetMode() != CursorMode::SELECT) {
             c.StartSelection();
             cursorManager.RemoveSecondaries();
         }
-        
-        else if (keyboard.m.ctrl && IsKeyPressed(KEY_K) && c.GetMode() != CursorMode::INSERT) {
+
+        // Copy and Exit
+        else if (keyboard.m.ctrl && (IsKeyPressed(KEY_K) || IsKeyPressed(KEY_C)) && c.GetMode() != CursorMode::INSERT) {
             c.StopSelection();
+
+            SetClipboardText(CopySelectedText().c_str());
         }
     }
 
@@ -479,13 +483,10 @@ namespace CBLT {
             return true;
         }
 
-         // TODO: Copy to clipboard
-        if (keyboard.m.ctrl && IsKeyPressed(KEY_C)) {
-            return true;
-        }
-
         // Paste from clipboard
-        if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) { // FIXME: Problematic, jumps too many lines sometimes
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) {
+            UT::ui32 linesPasted = 0;
+
             std::string clipboard = GetClipboardText();
 
             if (clipboard.empty()) return false;
@@ -502,9 +503,10 @@ namespace CBLT {
                     line.pop_back();
 
                 file.CreateLine(lineIdx++, line);
+                linesPasted++;
             }
 
-            cursor.SetAt(cursor.Col(), cursor.Line() + lineIdx - 1);
+            cursor.SetAt(cursor.Col(), cursor.Line() + linesPasted - 1);
 
             return true;
         }
@@ -644,6 +646,8 @@ namespace CBLT {
                 case CBLT::CursorMode::SELECT:
                     HandleMovement(c); // Selection is limited to the primary cursor either way
 
+                    // Copy and exit is handled at the start of the update function, see Controller::HandleSelect()
+
                     ClampCursor(c);
                 
                     break;
@@ -715,6 +719,7 @@ namespace CBLT {
         return depth;
     }
 
+    // FIXME: Selection drawing is off when selecting backwards (from a greater line to a lesser one)
     void Controller::DrawSelection(Cursor& c) {
         if (c.GetMode() != CursorMode::SELECT)
             return;
@@ -804,5 +809,53 @@ namespace CBLT {
                 DrawRectangleV(pos, { width, height }, Color{ 50, 150, 255, 64 });
             }
         }
+    }
+
+    std::string Controller::CopySelectedText(void) {
+        Cursor& c = cursorManager.Primary();
+    
+        UT::ui32 sLine = c.SSLine();
+        UT::ui32 sCol  = c.SSCol();
+        UT::ui32 eLine = c.SFLine();
+        UT::ui32 eCol  = c.SFCol();
+    
+        // Normalize selection (handles reverse selection)
+        if (sLine > eLine || (sLine == eLine && sCol > eCol)) {
+            std::swap(sLine, eLine);
+            std::swap(sCol, eCol);
+        }
+    
+        std::string copied;
+    
+        for (UT::ui32 l = sLine; l <= eLine; l++) {
+            const std::string& lineText = file.GetCurrentLine(l);
+            UT::ui32 lineLength = file.GetLineLength(l);
+    
+            UT::ui32 selStart, selEnd;
+    
+            if (l == sLine && l == eLine) {
+                selStart = sCol;
+                selEnd   = eCol;
+            }
+            else if (l == sLine) {
+                selStart = sCol;
+                selEnd   = lineLength;
+            }
+            else if (l == eLine) {
+                selStart = 0;
+                selEnd   = eCol;
+            }
+            else {
+                selStart = 0;
+                selEnd   = lineLength;
+            }
+    
+            copied += lineText.substr(selStart, selEnd - selStart);
+    
+            if (l != eLine)
+                copied += '\n';
+        }
+    
+        return copied;
     }
 } // CBLT

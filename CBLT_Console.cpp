@@ -251,7 +251,7 @@ namespace CBLT {
         const UT::i32 msgY = (GetScreenHeight() / 2) - (directiveFontSize / 2);
         const UT::i32 msgW = messageWidth + messageTextHorizontalMargins;
         const UT::i32 msgH = directiveFontSize + messageTextVerticalMargins;
-        
+
         UT::f32 textX;
         UT::f32 textY;
 
@@ -296,82 +296,96 @@ namespace CBLT {
             }
 
             // Message from console for guide
-            case ConsoleMessage::GUIDE: { // FIXME: Larger margins
+            case ConsoleMessage::GUIDE: {
+                const UT::i32 guideMargin = 50;
+            
+                const UT::i32 guideW = GetScreenWidth()  - guideMargin * 2;
+                const UT::i32 guideH = GetScreenHeight() - guideMargin * 2;
+            
+                const UT::i32 guideX = guideMargin;
+                const UT::i32 guideY = guideMargin;
+            
                 // Background
                 DrawRectangle(
-                    msgX,
-                    msgY,
-                    msgW,
-                    msgH,
+                    guideX,
+                    guideY,
+                    guideW,
+                    guideH,
                     Color{0, 255, 0, 255}
                 );
-    
+            
                 // Foreground
                 DrawRectangle(
-                    msgX + 1,
-                    msgY + 1,
-                    msgW - 2,
-                    msgH - 2,
+                    guideX + 1,
+                    guideY + 1,
+                    guideW - 2,
+                    guideH - 2,
                     Color{0, 0, 0, 255}
                 );
-    
-                textX = msgX + (msgW - messageWidth) / 2.0f;
-                textY = msgY + (msgH - directiveFontSize) / 2.0f;
-    
-                // Message
+            
+                textX = guideX + (guideW - messageWidth) / 2.0f;
+                textY = guideY + (guideH - directiveFontSize) / 2.0f;
+            
                 DrawTextEx(
                     gFont.f,
                     dirRes.message.c_str(),
-                    {
-                        textX,
-                        textY
-                    },
+                    { textX, textY },
                     directiveFontSize,
                     0.0f,
                     Color{0, 255, 255, 255}
                 );
-
+            
                 break;
             }
 
             // Message from console for info
-            case ConsoleMessage::INFO: { // FIXME: Larger margins
+            case ConsoleMessage::INFO: {
+                const UT::i32 infoLines =  dirRes.message.size() / (messageWidth / directiveFontSize) + 1;
+
+                const UT::i32 infoPadding = 45;
+            
+                const UT::i32 textBlockHeight = infoLines * directiveFontSize;
+            
+                const UT::i32 infoW = messageWidth + infoPadding * 2;
+                const UT::i32 infoH = textBlockHeight + infoPadding * 2;
+            
+                const UT::i32 infoX = (GetScreenWidth()  - infoW) / 2;
+                const UT::i32 infoY = (GetScreenHeight() - infoH) / 2;
+            
                 // Background
                 DrawRectangle(
-                    msgX,
-                    msgY,
-                    msgW,
-                    msgH,
+                    infoX,
+                    infoY,
+                    infoW,
+                    infoH,
                     Color{0, 255, 0, 255}
                 );
-    
+            
                 // Foreground
                 DrawRectangle(
-                    msgX + 1,
-                    msgY + 1,
-                    msgW - 2,
-                    msgH - 2,
+                    infoX + 1,
+                    infoY + 1,
+                    infoW - 2,
+                    infoH - 2,
                     Color{0, 0, 0, 255}
                 );
-    
-                textX = msgX + (msgW - messageWidth) / 2.0f;
-                textY = msgY + (msgH - directiveFontSize) / 2.0f;
-    
-                // Message
+            
+                textX = infoX + (infoW - messageWidth) / 2.0f;
+                textY = infoY + (infoH - textBlockHeight) / 2.0f;
+            
                 DrawTextEx(
                     gFont.f,
                     dirRes.message.c_str(),
-                    {
-                        textX,
-                        textY
-                    },
+                    { textX, textY },
                     directiveFontSize,
                     0.0f,
                     Color{0, 255, 255, 255}
                 );
-
+            
                 break;
             }
+            default:
+                break;
         }
     }
 
