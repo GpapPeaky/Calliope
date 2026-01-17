@@ -64,4 +64,11 @@ namespace CBLT {
     UT::i32 Camera::MarginY(void) {
         return clampMarginY;
     }
+
+    CameraOrigin Camera::Origin(void) {
+        return {
+            originX,
+            originY
+        };
+    }
 } // CBLT

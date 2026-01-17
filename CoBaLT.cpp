@@ -31,7 +31,18 @@ UT::i32 main() {
 
             // Draw open file
             cm.DrawCursors(f);
-            f.Draw(cam);
+
+            BeginScissorMode(
+                cam.Origin().x,
+                cam.Origin().y,
+                cam.Width(),
+                cam.Height()
+            );
+
+                f.Draw(cam);
+
+            EndScissorMode();
+
             ctrl.DrawSelection(c);
             CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), f.CWD(), (UT::i32)c.GetMode());
             

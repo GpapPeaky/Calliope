@@ -73,7 +73,7 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(Camera& cam) { // FIXME: No occlusion, file text is drawn too much the left and right
+    void File::Draw(Camera& cam) { // FIXME: file text is drawn too much the left and right
         float lineHeight = gFont.size;
     
         for(size_t i = 0; i < lines.size(); i++) {

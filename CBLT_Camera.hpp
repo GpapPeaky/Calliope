@@ -8,10 +8,16 @@ namespace CBLT {
     typedef struct Offset {
         UT::f32 x;  // X coordinate
         UT::f32 y;  // Y coordinate
-    }Offset;
+    } Offset;
 
     // Global offsets, will increment via camera movement
     extern Offset gOffsets;
+
+    // Just a point type
+    typedef struct CameraOrigin {
+        UT::i32 x;          // X coordinate
+        UT::i32 y;          // Y coordinate
+    } CameraOrigin;
 
     // Offsets:
     //
@@ -63,5 +69,8 @@ namespace CBLT {
             
             // Camera clamp margin Y
             UT::i32 MarginY(void);
+
+            // Origin point of the camera
+            CameraOrigin Origin(void);
     }; // Camera class
 } // CBLT

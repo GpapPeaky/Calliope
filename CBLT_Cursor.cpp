@@ -274,29 +274,41 @@ namespace CBLT {
     }
 
     void Cursor::ClampToCamera(Camera& cam, File& f) {
-        // Clamp vertically
-        UT::i32 camMarginY = cam.MarginY();
-        UT::i32 camHeight  = cam.Height();
-
-        UT::i32 cursorY = static_cast<UT::i32>(line * gFont.size) + CBLT::gOffsets.y;
-
-        if (cursorY < camMarginY) {
-            gOffsets.y += camMarginY - cursorY;
-        } else if (cursorY + gFont.size > camHeight - camMarginY) {
-            gOffsets.y -= (cursorY + gFont.size) - (camHeight - camMarginY);
+        // Vertical clamp
+        const UT::i32 camTop =
+            cam.Origin().y + cam.MarginY();
+    
+        const UT::i32 camBottom =
+            cam.Origin().y + cam.Height() - cam.MarginY();
+    
+        UT::i32 cursorY =
+            static_cast<UT::i32>(line * gFont.size) + CBLT::gOffsets.y;
+    
+        if (cursorY < camTop) {
+            CBLT::gOffsets.y += camTop - cursorY;
         }
-
-        // Clamp horizontally
-        UT::i32 camMarginX = cam.MarginX();
-        UT::i32 camWidth   = cam.Width();
-
-        UT::i32 cursorX = static_cast<UT::i32>(GetCursorX(f.GetCurrentLine(line), gFont.size)) + CBLT::gOffsets.x;
-
-        if (cursorX < camMarginX) {
-            gOffsets.x += camMarginX - cursorX;
-        } else if (cursorX + charWidth > camWidth - camMarginX) {
-            gOffsets.x -= (cursorX + charWidth) - (camWidth - camMarginX);
-        }        
+        else if (cursorY + gFont.size > camBottom) {
+            CBLT::gOffsets.y -= (cursorY + gFont.size) - camBottom;
+        }
+    
+        // Horizontal clamp
+        const UT::i32 camLeft =
+            cam.Origin().x + cam.MarginX();
+    
+        const UT::i32 camRight =
+            cam.Origin().x + cam.Width() - cam.MarginX();
+    
+        UT::i32 cursorX =
+            static_cast<UT::i32>(
+                GetCursorX(f.GetCurrentLine(line), gFont.size)
+            ) + CBLT::gOffsets.x;
+    
+        if (cursorX < camLeft) {
+            CBLT::gOffsets.x += camLeft - cursorX;
+        }
+        else if (cursorX + charWidth > camRight) {
+            CBLT::gOffsets.x -= (cursorX + charWidth) - camRight;
+        }
     }
 
     CursorManager::CursorManager() {
