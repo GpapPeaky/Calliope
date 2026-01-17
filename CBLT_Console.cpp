@@ -156,12 +156,6 @@ namespace CBLT {
             Color{0, 255, 0, 255}
         );
 
-        // Draw directive contents
-        directive.Draw(
-            GetScreenWidth() - width,
-            0
-        );
-
         // Draw console cursor
         Cursor& cc = cursor.Primary();
         const std::string& lineText = directive.DirectiveFile().GetCurrentLine(cc.Line());
@@ -184,7 +178,7 @@ namespace CBLT {
                     cursorY,
                     cc.charWidth,
                     gFont.size,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
                 );
 
                 break;
@@ -194,7 +188,15 @@ namespace CBLT {
                     cursorY,
                     cc.charWidth,
                     gFont.size,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
+                );
+
+                DrawRectangleLines(
+                    cursorX + 1,
+                    cursorY + 1,
+                    cc.charWidth - 2,
+                    gFont.size - 2,
+                    Color{255, 100, 0, 255}
                 );
 
                 break;
@@ -204,7 +206,7 @@ namespace CBLT {
                     cursorY,
                     1,
                     gFont.size,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
                 );
 
                 break;
@@ -214,11 +216,17 @@ namespace CBLT {
                     cursorY + gFont.size,
                     cc.charWidth,
                     1,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
                 );
 
                 break;
         }
+
+        // Draw directive contents
+        directive.Draw(
+            GetScreenWidth() - width,
+            0
+        );
 
         // TODO
         // Draw CWD contents

@@ -11,7 +11,7 @@ namespace CBLT {
         m(CursorMode::INSERT),                              // Default
         fragment(""),
         charWidth(MeasureText("A", CBLT::gFont.size)),      // Measure once
-        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX)    // Default
+        cursorSymbol(CursorSymbol::NON_ASCII_BOX)           // Default
     {}
 
    Cursor::~Cursor(void) {}
@@ -86,11 +86,12 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
                     charWidth,
                     gFont.size,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
                 );
 
                 return;
             case CursorSymbol::NON_ASCII_HOLLOW_BOX:
+                // Outter
                 DrawRectangleLines(
                     x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
@@ -98,7 +99,19 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
                     charWidth,
                     gFont.size,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
+                );
+                
+                // Inner
+                DrawRectangleLines(
+                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES +
+                    1,
+                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size + 1,
+                    charWidth - 2,
+                    gFont.size - 2,
+                    Color{255, 100, 0, 255}
                 );
 
                 return;
@@ -110,7 +123,7 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
                     1,
                     gFont.size,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
                 );
 
                 return;
@@ -122,7 +135,7 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + 2 * gFont.size,
                     charWidth,
                     1,
-                    Color{0, 255, 255, 255}
+                    Color{255, 100, 0, 255}
                 );
 
                 return;
