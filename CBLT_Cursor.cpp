@@ -61,6 +61,10 @@ namespace CBLT {
         UT::i32 x = GetCursorX(lineText, gFont.size);
         UT::i32 y = line * gFont.size;
 
+        // Apply camera offsets
+        x += CBLT::gOffsets.x;
+        y += CBLT::gOffsets.y;
+
         // Draw a transparent rectangle, to show where the cursor is
         DrawRectangle(
             0,
@@ -254,6 +258,32 @@ namespace CBLT {
             
             return;
         }
+    }
+
+    void Cursor::ClampToCamera(Camera& cam, File& f) {
+        // Clamp vertically
+        UT::i32 camMarginY = cam.MarginY();
+        UT::i32 camHeight  = cam.Height();
+
+        UT::i32 cursorY = static_cast<UT::i32>(line * gFont.size) + CBLT::gOffsets.y;
+
+        if (cursorY < camMarginY) {
+            gOffsets.y += camMarginY - cursorY;
+        } else if (cursorY + gFont.size > camHeight - camMarginY) {
+            gOffsets.y -= (cursorY + gFont.size) - (camHeight - camMarginY);
+        }
+
+        // Clamp horizontally
+        UT::i32 camMarginX = cam.MarginX();
+        UT::i32 camWidth   = cam.Width();
+
+        UT::i32 cursorX = static_cast<UT::i32>(GetCursorX(f.GetCurrentLine(line), gFont.size)) + CBLT::gOffsets.x;
+
+        if (cursorX < camMarginX) {
+            gOffsets.x += camMarginX - cursorX;
+        } else if (cursorX + charWidth > camWidth - camMarginX) {
+            gOffsets.x -= (cursorX + charWidth) - (camWidth - camMarginX);
+        }        
     }
 
     CursorManager::CursorManager() {

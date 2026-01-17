@@ -13,13 +13,23 @@ namespace CBLT {
     // Global offsets, will increment via camera movement
     extern Offset gOffsets;
 
+    // Offsets:
+    //
+    // X and Y represent the top-left corner of the camera view
+    // Width and Height represent the size of the camera view
+    //
+    //         X [0, GlyphSize * visible columns]
+    //         Y [0, gFont.size * visible lines]
+
     class Camera {
         private:
             // Origins stay the same
-            UT::i32 originX;    // Camera origin x
-            UT::i32 originY;    // Camera origin y
-            UT::i32 width;      // Camera width
-            UT::i32 height;     // Camera height
+            UT::i32 originX;        // Camera origin x
+            UT::i32 originY;        // Camera origin y
+            UT::i32 clampMarginX;   // Margin x for clamping
+            UT::i32 clampMarginY;   // Margin y for clamping
+            UT::i32 width;          // Camera width
+            UT::i32 height;         // Camera height
         public:
             // Constructor
             Camera(void);
@@ -47,5 +57,11 @@ namespace CBLT {
 
             // Draw the camera rectangle
             void Draw(void);
+    
+            // Camera clamp margin X
+            UT::i32 MarginX(void);
+            
+            // Camera clamp margin Y
+            UT::i32 MarginY(void);
     }; // Camera class
 } // CBLT

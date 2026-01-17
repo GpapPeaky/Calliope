@@ -6,6 +6,8 @@ namespace CBLT {
     Camera::Camera(void) {
         originX = 1;
         originY = CBLT::UI::TOP_BAR_HEIGHT + CBLT::UI::TOP_BAR_SEPERATOR_Y;
+        clampMarginX = 90;
+        clampMarginY = 60;
         width = GetScreenWidth() - 1;
         height = GetScreenHeight() - (CBLT::UI::TOP_BAR_HEIGHT + CBLT::UI::TOP_BAR_SEPERATOR_Y) - 1;
     }
@@ -41,6 +43,25 @@ namespace CBLT {
     }
 
     void Camera::Draw(void) {
+        // Draw file contents inside this box
         DrawRectangleLines(originX, originY, width, height, Color{255, 0, 0, 255});
+
+        // Draw clamping margins
+        // If the cursor moves outside this box, the global offsets move
+        DrawRectangleLines(
+            originX + clampMarginX,
+            originY + clampMarginY,
+            width - (clampMarginX * 2),
+            height - (clampMarginY * 2),
+            Color{0, 0, 255, 255}
+        );
+    }
+
+    UT::i32 Camera::MarginX(void) {
+        return clampMarginX;
+    }
+
+    UT::i32 Camera::MarginY(void) {
+        return clampMarginY;
     }
 } // CBLT

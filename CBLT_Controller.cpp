@@ -628,19 +628,8 @@ namespace CBLT {
                         HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
                     }
 
-                    // if (!handledInsert) HandleSelect(); // Potential selection entry
-
-                    ClampCursor(c); // Safety check
-                
-                    // if(keyboard.CtrlActive()) {
-                        // DrawText("ctrl", 200, 200, 20, BLACK);
-                    // }else if(keyboard.ShiftActive()) {
-                        // DrawText("shift", 200, 200, 20, BLACK);
-                    // }else if(keyboard.AltActive()) {
-                        // DrawText("alt", 200, 200, 20, BLACK);
-                    // }else{
-                        // DrawText("nomod", 200, 200, 20, BLACK);
-                    // }
+                    ClampCursor(c); // Clamp cursor inside file bounds
+                    c.ClampToCamera(camera, file);
 
                     break;
                 case CBLT::CursorMode::SELECT:
@@ -649,6 +638,7 @@ namespace CBLT {
                     // Copy and exit is handled at the start of the update function, see Controller::HandleSelect()
 
                     ClampCursor(c);
+                    c.ClampToCamera(camera, file);
                 
                     break;
                 default:

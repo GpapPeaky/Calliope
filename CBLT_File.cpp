@@ -73,13 +73,14 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(Camera& cam) {
+    void File::Draw(Camera& cam) { // FIXME: No occlusion, file text is drawn too much the left and right
         float lineHeight = gFont.size;
     
         for(size_t i = 0; i < lines.size(); i++) {
             Vector2 pos = {
-                CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                CBLT::UI::TOP_BAR_HEIGHT + i * lineHeight + lineHeight
+                CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES
+                + CBLT::gOffsets.x,
+                CBLT::UI::TOP_BAR_HEIGHT + i * lineHeight + lineHeight + CBLT::gOffsets.y
             };
 
             // Draw Text/Line seperator
@@ -116,7 +117,7 @@ namespace CBLT {
             pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
             pos.y = CBLT::UI::TOP_BAR_HEIGHT + i * lineHeight + lineHeight;
 
-            // Draw line count (display as 1-based for users)
+            // Draw line count
             DrawTextEx(
                 gFont.f,
                 std::to_string(i).c_str(),

@@ -10,6 +10,8 @@
 
 #include "CBLT_TopBar.hpp" // for vertical margins
 
+#include "CBLT_Camera.hpp"
+
 namespace CBLT {
 
     // Cursor character representation
@@ -120,6 +122,9 @@ namespace CBLT {
 
             // Get the distance to a character in the left or right of the cursor and set the cursor there
             void SetToWordBoundary(const std::string& lineText, const CursorDirection dir, File f);
+
+            // Clamp cursor to camera view
+            void ClampToCamera(Camera& cam, File& f);
     }; // Cursor class
 
     class CursorManager {
