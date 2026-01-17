@@ -274,6 +274,9 @@ namespace CBLT {
     }
 
     void Cursor::ClampToCamera(Camera& cam, File& f) {
+        // FIXME: Clamp is applied instantly, needs to be fixed and only apply when needed
+        if (gOffsets.x == 0 && gOffsets.y == 0) return;
+
         // Vertical clamp
         const UT::i32 camTop =
             cam.Origin().y + cam.MarginY();
