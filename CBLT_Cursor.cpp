@@ -68,7 +68,7 @@ namespace CBLT {
         // Draw a transparent rectangle, to show where the cursor is
         DrawRectangle(
             0,
-            y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
+            y + gFont.size,
             GetScreenWidth(),
             gFont.size,
             Color{255, 255, 255, 45}
@@ -83,7 +83,7 @@ namespace CBLT {
                     x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
                     CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
+                    y + gFont.size,
                     charWidth,
                     gFont.size,
                     Color{255, 75, 100 , 255}
@@ -96,7 +96,7 @@ namespace CBLT {
                     x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
                     CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
+                    y + gFont.size,
                     charWidth,
                     gFont.size,
                     Color{255, 75, 100 , 255}
@@ -108,7 +108,7 @@ namespace CBLT {
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
                     CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES +
                     1,
-                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size + 1,
+                    y + gFont.size + 1,
                     charWidth - 2,
                     gFont.size - 2,
                     Color{255, 75, 100 , 255}
@@ -120,7 +120,7 @@ namespace CBLT {
                     x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
                     CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES - horizontalFix,
-                    y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
+                    y + gFont.size,
                     1,
                     gFont.size,
                     Color{255, 75, 100 , 255}
@@ -132,7 +132,7 @@ namespace CBLT {
                     x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
                     CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    y + CBLT::UI::TOP_BAR_HEIGHT + 2 * gFont.size,
+                    y + 2 * gFont.size,
                     charWidth,
                     1,
                     Color{255, 75, 100 , 255}
@@ -274,38 +274,35 @@ namespace CBLT {
     }
 
     void Cursor::ClampToCamera(Camera& cam, File& f) {
-        // FIXME: Clamp is applied instantly, needs to be fixed and only apply when needed
-        if (gOffsets.x == 0 && gOffsets.y == 0) return;
-
-        // Vertical clamp
-        const UT::i32 camTop =
-            cam.Origin().y + cam.MarginY();
-    
-        const UT::i32 camBottom =
-            cam.Origin().y + cam.Height() - cam.MarginY();
-    
-        UT::i32 cursorY =
-            static_cast<UT::i32>(line * gFont.size) + CBLT::gOffsets.y;
-    
+        const UT::i32 camTop = cam.Origin().y + cam.MarginY();
+        const UT::i32 camBottom = cam.Origin().y + cam.Height() - cam.MarginY();
+        const UT::i32 camLeft = cam.Origin().x + cam.MarginX();
+        const UT::i32 camRight = cam.Origin().x + cam.Width() - cam.MarginX();
+        
+        const UT::f32 lineHeight = gFont.size;
+        
+        UT::i32 cursorY = static_cast<UT::i32>(
+            CBLT::UI::TOP_BAR_HEIGHT + line * lineHeight + lineHeight + CBLT::gOffsets.y
+        );
+        
+        UT::i32 cursorX = static_cast<UT::i32>(
+            CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
+            CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
+            CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES * 2 + 
+            GetCursorX(f.GetCurrentLine(line), gFont.size) +
+            CBLT::gOffsets.x
+        );
+        
+        const UT::i32 charWidth = static_cast<UT::i32>(gFont.size);
+        const UT::i32 charHeight = static_cast<UT::i32>(gFont.size);
+        
         if (cursorY < camTop) {
             CBLT::gOffsets.y += camTop - cursorY;
         }
-        else if (cursorY + gFont.size > camBottom) {
-            CBLT::gOffsets.y -= (cursorY + gFont.size) - camBottom;
+        else if (cursorY + charHeight > camBottom) {
+            CBLT::gOffsets.y -= (cursorY + charHeight) - camBottom;
         }
-    
-        // Horizontal clamp
-        const UT::i32 camLeft =
-            cam.Origin().x + cam.MarginX();
-    
-        const UT::i32 camRight =
-            cam.Origin().x + cam.Width() - cam.MarginX();
-    
-        UT::i32 cursorX =
-            static_cast<UT::i32>(
-                GetCursorX(f.GetCurrentLine(line), gFont.size)
-            ) + CBLT::gOffsets.x;
-    
+        
         if (cursorX < camLeft) {
             CBLT::gOffsets.x += camLeft - cursorX;
         }

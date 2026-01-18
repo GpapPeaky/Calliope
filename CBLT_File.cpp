@@ -73,17 +73,20 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(Camera& cam) {
+    void File::Draw(Camera& cam) { // FIXME: Bad when resetting in the X axis, moves a bit too much on the left when resetting
         UT::f32 lineHeight = gFont.size;
+        
+        const UT::f32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
+                                CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
+                                CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
+        const UT::f32 textBaseY = 0.0f;
     
         for(UT::llui32 i = 0; i < lines.size(); i++) {
             Vector2 pos = {
-                CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES
-                + CBLT::gOffsets.x,
-                CBLT::UI::TOP_BAR_HEIGHT + i * lineHeight + lineHeight + CBLT::gOffsets.y
+                textBaseX + CBLT::gOffsets.x,
+                textBaseY + i * lineHeight + lineHeight + CBLT::gOffsets.y
             };
-
-            // Draw Text/Line seperator
+            
             DrawLineV(
                 { 
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
@@ -92,11 +95,16 @@ namespace CBLT {
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
                     static_cast<UT::f32>(GetScreenHeight())
                 },
-
                 Color{0, 255, 0, 255}
             );
+            
+            BeginScissorMode(
+                cam.Origin().x + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI,
+                cam.Origin().y,
+                cam.Width(),
+                cam.Height()
+            );
     
-            // Draw the actual line
             DrawTextEx(
                 gFont.f,
                 lines.at(i).c_str(),
@@ -105,11 +113,18 @@ namespace CBLT {
                 0.0f,
                 Color{0, 255, 0, 255}
             );
-
+            EndScissorMode();
+            
             pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
-            pos.y = CBLT::UI::TOP_BAR_HEIGHT + i * lineHeight + lineHeight;
-
-            // Draw line count
+            pos.y = textBaseY + i * lineHeight + lineHeight + gOffsets.y;
+            
+            BeginScissorMode(
+                cam.Origin().x,
+                cam.Origin().y,
+                cam.Width(),
+                cam.Height()
+            );
+            
             DrawTextEx(
                 gFont.f,
                 std::to_string(i).c_str(),
@@ -118,6 +133,7 @@ namespace CBLT {
                 0.0f,
                 Color{0, 255, 0, 255}                
             );
+            EndScissorMode();
         }
     }
 

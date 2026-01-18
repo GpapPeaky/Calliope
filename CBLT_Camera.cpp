@@ -45,6 +45,9 @@ namespace CBLT {
     void Camera::Draw(void) {
         // Draw file contents inside this box
         DrawRectangleLines(originX, originY, width, height, Color{255, 0, 0, 255});
+        
+        DrawRectangleLines(originX + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI
+            , originY, width, height, Color{0, 255, 255, 255});
 
         // Draw clamping margins
         // If the cursor moves outside this box, the global offsets move

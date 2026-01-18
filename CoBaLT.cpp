@@ -31,18 +31,8 @@ UT::i32 main() {
 
             cm.DrawCursors(f);
             
-            // Occlude render calls inside the camera rectangle.
-            BeginScissorMode(
-                cam.Origin().x,
-                cam.Origin().y,
-                cam.Width(),
-                cam.Height()
-            );
-            
-                // Draw open file
-                f.Draw(cam);
-
-            EndScissorMode();
+            // Draw open file
+            f.Draw(cam);
 
             ctrl.DrawSelection(c);
             CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), f.CWD(), (UT::i32)c.GetMode());

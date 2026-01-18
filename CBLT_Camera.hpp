@@ -2,6 +2,7 @@
 
 #include "CBLT_Util.hpp"
 #include "CBLT_TopBar.hpp" // for screen dimensions
+#include "CBLT_File.hpp"
 
 namespace CBLT {
     // Offset structure for camera
