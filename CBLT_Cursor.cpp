@@ -86,7 +86,7 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
                     charWidth,
                     gFont.size,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 return;
@@ -99,7 +99,7 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
                     charWidth,
                     gFont.size,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
                 
                 // Inner
@@ -111,7 +111,7 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size + 1,
                     charWidth - 2,
                     gFont.size - 2,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 return;
@@ -123,7 +123,7 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + gFont.size,
                     1,
                     gFont.size,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 return;
@@ -135,7 +135,7 @@ namespace CBLT {
                     y + CBLT::UI::TOP_BAR_HEIGHT + 2 * gFont.size,
                     charWidth,
                     1,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 return;

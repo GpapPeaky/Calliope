@@ -178,7 +178,7 @@ namespace CBLT {
                     cursorY,
                     cc.charWidth,
                     gFont.size,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 break;
@@ -188,7 +188,7 @@ namespace CBLT {
                     cursorY,
                     cc.charWidth,
                     gFont.size,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 DrawRectangleLines(
@@ -196,7 +196,7 @@ namespace CBLT {
                     cursorY + 1,
                     cc.charWidth - 2,
                     gFont.size - 2,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 break;
@@ -206,7 +206,7 @@ namespace CBLT {
                     cursorY,
                     1,
                     gFont.size,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 break;
@@ -216,7 +216,7 @@ namespace CBLT {
                     cursorY + gFont.size,
                     cc.charWidth,
                     1,
-                    Color{255, 100, 0, 255}
+                    Color{255, 75, 100 , 255}
                 );
 
                 break;
