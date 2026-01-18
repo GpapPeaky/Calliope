@@ -29,9 +29,8 @@ UT::i32 main() {
             CBLT::File& f = ctrl.GetFile();
             CBLT::Camera& cam = ctrl.GetCamera();
 
-            // Draw open file
             cm.DrawCursors(f);
-
+            
             // Occlude render calls inside the camera rectangle.
             BeginScissorMode(
                 cam.Origin().x,
@@ -39,7 +38,8 @@ UT::i32 main() {
                 cam.Width(),
                 cam.Height()
             );
-
+            
+                // Draw open file
                 f.Draw(cam);
 
             EndScissorMode();
