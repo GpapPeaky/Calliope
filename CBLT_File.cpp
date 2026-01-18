@@ -74,9 +74,9 @@ namespace CBLT {
     }
 
     void File::Draw(Camera& cam) {
-        float lineHeight = gFont.size;
+        UT::f32 lineHeight = gFont.size;
     
-        for(size_t i = 0; i < lines.size(); i++) {
+        for(UT::llui32 i = 0; i < lines.size(); i++) {
             Vector2 pos = {
                 CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES
                 + CBLT::gOffsets.x,
@@ -96,14 +96,6 @@ namespace CBLT {
                 Color{0, 255, 0, 255}
             );
     
-            // Check if inside the camera, if not do not draw
-            if (!cam.Contains(
-                (UT::i32)pos.x,
-                (UT::i32)(pos.y - CBLT::UI::TOP_BAR_HEIGHT),
-                GetScreenWidth(),
-                (UT::i32)lineHeight
-            )) continue;
-
             // Draw the actual line
             DrawTextEx(
                 gFont.f,

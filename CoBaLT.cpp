@@ -32,6 +32,7 @@ UT::i32 main() {
             // Draw open file
             cm.DrawCursors(f);
 
+            // Occlude render calls inside the camera rectangle.
             BeginScissorMode(
                 cam.Origin().x,
                 cam.Origin().y,
