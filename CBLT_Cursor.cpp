@@ -281,33 +281,34 @@ namespace CBLT {
         
         const UT::f32 lineHeight = gFont.size;
         
-        UT::i32 cursorY = static_cast<UT::i32>(
-            CBLT::UI::TOP_BAR_HEIGHT + line * lineHeight + lineHeight + CBLT::gOffsets.y
-        );
+        const UT::i32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
+                                CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
+                                CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES
+                                + 31.0f;
+
+        const UT::i32 textBaseY = CBLT::UI::TOP_BAR_HEIGHT;
         
-        UT::i32 cursorX = static_cast<UT::i32>(
-            CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
-            CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
-            CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES * 2 + 
-            GetCursorX(f.GetCurrentLine(line), gFont.size) +
-            CBLT::gOffsets.x
-        );
+        UT::i32 cursorWorldX = textBaseX + GetCursorX(f.GetCurrentLine(line), gFont.size);
+        UT::i32 cursorWorldY = textBaseY + line * lineHeight + lineHeight;
+        
+        UT::i32 cursorScreenX = cursorWorldX + CBLT::gOffsets.x;
+        UT::i32 cursorScreenY = cursorWorldY + CBLT::gOffsets.y;
         
         const UT::i32 charWidth = static_cast<UT::i32>(gFont.size);
         const UT::i32 charHeight = static_cast<UT::i32>(gFont.size);
         
-        if (cursorY < camTop) {
-            CBLT::gOffsets.y += camTop - cursorY;
+        if (cursorScreenY < camTop) {
+            CBLT::gOffsets.y += camTop - cursorScreenY;
         }
-        else if (cursorY + charHeight > camBottom) {
-            CBLT::gOffsets.y -= (cursorY + charHeight) - camBottom;
+        else if (cursorScreenY + charHeight > camBottom) {
+            CBLT::gOffsets.y -= (cursorScreenY + charHeight) - camBottom;
         }
         
-        if (cursorX < camLeft) {
-            CBLT::gOffsets.x += camLeft - cursorX;
+        if (cursorScreenX < camLeft) {
+            CBLT::gOffsets.x += camLeft - cursorScreenX;
         }
-        else if (cursorX + charWidth > camRight) {
-            CBLT::gOffsets.x -= (cursorX + charWidth) - camRight;
+        else if (cursorScreenX + charWidth > camRight) {
+            CBLT::gOffsets.x -= (cursorScreenX + charWidth) - camRight;
         }
     }
 

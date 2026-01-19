@@ -34,6 +34,18 @@ UT::i32 main() {
             // Draw open file
             f.Draw(cam);
 
+            DrawRectangleLines(
+                0,
+                0,
+                CBLT::gOffsets.x,
+                CBLT::gOffsets.y,
+                WHITE
+            );
+
+            // Draw gOffsets
+            DrawText(std::to_string(CBLT::gOffsets.x).c_str(), 100, 200, 20, WHITE);
+            DrawText(std::to_string(CBLT::gOffsets.y).c_str(), 100, 300, 20, WHITE);
+
             ctrl.DrawSelection(c);
             CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), f.CWD(), (UT::i32)c.GetMode());
             
