@@ -42,10 +42,6 @@ UT::i32 main() {
                 WHITE
             );
 
-            // Draw gOffsets
-            DrawText(std::to_string(CBLT::gOffsets.x).c_str(), 100, 200, 20, WHITE);
-            DrawText(std::to_string(CBLT::gOffsets.y).c_str(), 100, 300, 20, WHITE);
-
             ctrl.DrawSelection(c);
             CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), f.CWD(), (UT::i32)c.GetMode());
             
@@ -55,7 +51,7 @@ UT::i32 main() {
             
             cnsl.DrawMessage();
 
-            cam.Draw();
+            // cam.Draw();
 
             DrawFPS(950, 0);
         EndDrawing();
