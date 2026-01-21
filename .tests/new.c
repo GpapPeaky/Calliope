@@ -30,23 +30,12 @@ const char* __nori_f maridakis () {
     return "POIOS EINAI O MARIDAKIS";
 }
 
+const char* __gay_f stolakas () {
+    return "STOLAKAS EINAI GAY";
+}
+
 // Nigga func
 void BadAss (llui32 size) {
     // Fuckass looking ahh
     fprintf(stdout, "Nice ass bby gril #%d\n", size);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

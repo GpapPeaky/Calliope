@@ -73,7 +73,7 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(Camera& cam) { // FIXME: Bad when resetting in the X axis, moves a bit too much on the left when resetting
+    void File::Draw(Camera& cam) {
         UT::f32 lineHeight = gFont.size;
         
         const UT::f32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
@@ -216,5 +216,18 @@ namespace CBLT {
                "Dirty: " + (dirty ? "Yes" : "No");
         
         return info;
+    }
+
+    void File::AssignExtension(void) {
+        UT::llui32 extPos = path.find_last_of('.');
+
+        std::string extStr = path.substr(extPos);
+
+        // TODO check the extStr and assign the ext enumerator
+        //
+    }
+
+    const FileExtension File::Extension(void) const {
+        return ext;
     }
 }

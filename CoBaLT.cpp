@@ -1,7 +1,6 @@
 #include "includes.hpp"
 
 // TODO: Add file tokenization
-// TODO: Add camera occlusion
 // TODO: Add tokenization drawing
 
 UT::i32 main() {

@@ -17,6 +17,8 @@
 
 #include "CBLT_Camera.hpp"      // for camera offsets
 
+#include "CBLT_FIleExtension.hpp"   // For extensions
+
 namespace CBLT {
     // Basic document/file class
     class File {
@@ -25,6 +27,7 @@ namespace CBLT {
             std::string path;                // File path, will include its name and parent folder
             std::string cwd;                 // Current working directory
             UT::b dirty;                     // File's original contents have been changed and have not been saved
+            FileExtension ext;                // File's extension, required for language support and tokenization
         public:
             // Constructor
             File(void);
@@ -88,6 +91,12 @@ namespace CBLT {
 
             // Return a string of info relative to the file
             const std::string Info(void) const;
+
+            // Assign the extension to the file
+            void AssignExtension(void);
+
+            // Return the extesion of the file
+            const FileExtension Extension(void) const;
 
         }; // File class
         
