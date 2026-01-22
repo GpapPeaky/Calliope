@@ -221,6 +221,7 @@ namespace CBLT {
     void File::AssignExtension(void) {
         UT::llui32 extPos = path.find_last_of('.');
 
+        // We now hold the string '.<ext>'
         std::string extStr = path.substr(extPos);
 
         // TODO check the extStr and assign the ext enumerator
