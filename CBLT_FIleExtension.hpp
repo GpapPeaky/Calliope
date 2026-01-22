@@ -5,26 +5,34 @@
 namespace CBLT {
     // File extension types, for language support and tokenization
     enum class FileExtension {
-        // C / C++
+        //     CoBaLT scripting language (CSL)
+        //
+        // Will most likely use an interpreter and NOT a compiler
+        // so changes are visible in runtime
+        //
+        // It will be used for options for the theme
+        // configurations, preferances and macros 
+
+                ////////////////////////////////////////////   
+        CSL,    //       Cobalt Scripting Language        //
+                ////////////////////////////////////////////
+
+
+
         C,
         CPP,
-    
-        // Systems / Compiled
+        CS,
+        ASM,
+        JAVA,
         RS,
+        D,
         GO,
         ZIG,
         NIM,
         SWIFT,
-        KT,     // Kotlin
-        CS,     // C#
-        D,
-    
-        // JVM
-        JAVA,
+        KT,
         GROOVY,
         SCALA,
-    
-        // Web
         HTML,
         CSS,
         SCSS,
@@ -34,8 +42,6 @@ namespace CBLT {
         TS,
         TSX,
         WASM,
-    
-        // Scripting
         PY,
         RB,
         PHP,
@@ -43,8 +49,6 @@ namespace CBLT {
         LUA,
         SH,
         PS1,
-    
-        // Data / Config
         JSON,
         YAML,
         YML,
@@ -54,20 +58,16 @@ namespace CBLT {
         ENV,
         SQL,
         GRAPHQL,
-    
-        // Docs
         MD,
         RST,
         TXT,
-    
-        // DevOps / Build
+
+        // TODO
         DOCKERFILE,
         MAKEFILE,
         CMAKE,
         BAZEL,
         HCL,
-    
-        // Functional / Academic
         HS,
         ML,
         FSHARP,
@@ -75,36 +75,16 @@ namespace CBLT {
         SCM,
         RKT,
         PROLOG,
-    
-        // Low-level / Hardware
-        ASM,
-        S,
         VHDL,
         VERILOG,
-    
-        // Shaders / Game
         GLSL,
         HLSL,
         WGSL,
         GD,
         GDSHADER,
-    
-        // Other
         PROTO,
         THRIFT,
         ANTLR,
         REGEX,
-
-        // CoBaLT scripting language
-        // 1 language for creating macros
-        // 1 language for editing options
-        // 1 language for pallete editing
-        //
-        // Will most likely use an interpreter and NOT a compiler
-        // so changes are visible in runtime
-
-        CMSL,               // Cobalt Macro Scripting Language
-        COSL,               // Cobalt Option Scripting Language
-        CPSL                // Cobalt Pallete Scripting Language
-    };
+    }; // File extension class
 } // CBLT

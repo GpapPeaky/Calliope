@@ -223,8 +223,183 @@ namespace CBLT {
 
         std::string extStr = path.substr(extPos);
 
-        // TODO check the extStr and assign the ext enumerator
-        //
+        // Cobalt scripting language
+        if (extStr == ".csl") {
+            ext = FileExtension::CSL;
+        }
+
+        // Other
+
+        if (extStr == ".c" || extStr == ".h" || extStr == ".i" || extStr == ".aux") {
+            ext = FileExtension::C;
+        }
+
+        if (extStr == ".cpp" || extStr == ".cc" || extStr == ".cxx" || extStr == ".C" ||
+            extStr == ".CPP" || extStr == ".cp" || extStr == ".c++" ||
+            extStr == ".hpp" || extStr == ".hh" || extStr == ".hxx" || extStr == ".H" ||
+            extStr == ".HPP" || extStr == ".hp" || extStr == ".h++" ||
+            extStr == ".ii" || extStr == ".ixx" || extStr == ".aux") 
+        {
+            ext = FileExtension::CPP;
+        }
+        
+        if (extStr == ".s" || extStr == ".S" || extStr == ".asm" || extStr == ".inc" ||
+            extStr == ".a51" || extStr == ".a80" || extStr == ".a86") 
+        {
+            ext = FileExtension::ASM;
+        }
+        
+        if (extStr == ".java" || extStr == ".jav") {
+            ext = FileExtension::JAVA;
+        }
+        
+        if (extStr == ".rs") {
+            ext = FileExtension::RS;
+        }
+        
+        if (extStr == ".d" || extStr == ".di") {
+            ext = FileExtension::D;
+        }
+
+        if (extStr == ".go") {
+            ext = FileExtension::GO;
+        }
+
+        if (extStr == ".zig") {
+            ext = FileExtension::ZIG;
+        }
+
+        if (extStr == ".nim") {
+            ext = FileExtension::NIM;
+        }
+
+        if (extStr == ".swift") {
+            ext = FileExtension::SWIFT;
+        }
+
+        if (extStr == ".kt" || extStr == ".kts") {
+            ext = FileExtension::KT;
+        }
+        
+        if (extStr == ".groovy") {
+            ext = FileExtension::GROOVY;
+        }
+
+        if (extStr == ".scala") {
+            ext = FileExtension::SCALA;
+        }
+
+        if (extStr == ".html" || extStr == ".htm") {
+            ext = FileExtension::HTML;
+        }
+
+        if (extStr == ".css") {
+            ext = FileExtension::CSS;
+        }
+
+        if (extStr == ".scss") {
+            ext = FileExtension::SCSS;
+        }
+
+        if (extStr == ".less") {
+            ext = FileExtension::LESS;
+        }
+
+        if (extStr == ".js") {
+            ext = FileExtension::JS;
+        }
+
+        if (extStr == ".jsx") {
+            ext = FileExtension::JSX;
+        }
+
+        if (extStr == ".ts") {
+            ext = FileExtension::TS;
+        }
+
+        if (extStr == ".tsx") {
+            ext = FileExtension::TSX;
+        }
+
+        if (extStr == ".wat") {
+            ext = FileExtension::WASM;
+        }
+
+        if (extStr == ".py") {
+            ext = FileExtension::PY;
+        }
+
+        if (extStr == ".rb") {
+            ext = FileExtension::RB;
+        }
+
+        if (extStr == ".php") {
+            ext = FileExtension::PHP;
+        }
+
+        if (extStr == ".pl") {
+            ext = FileExtension::PL;
+        }
+
+        if (extStr == ".lua") {
+            ext = FileExtension::LUA;
+        }
+
+        if (extStr == ".sh") {
+            ext = FileExtension::SH;
+        }
+
+        if (extStr == ".ps1") {
+            ext = FileExtension::PS1;
+        }
+
+        if (extStr == ".json") {
+            ext = FileExtension::JSON;
+        }
+
+        if (extStr == ".yaml") {
+            ext = FileExtension::YAML;
+        }
+
+        if (extStr == ".yml") {
+            ext = FileExtension::YML;
+        }
+
+        if (extStr == ".xml") {
+            ext = FileExtension::XML;
+        }
+
+        if (extStr == ".toml") {
+            ext = FileExtension::TOML;
+        }
+
+        if (extStr == ".ini") {
+            ext = FileExtension::INI;
+        }
+
+        if (extStr == ".env") {
+            ext = FileExtension::ENV;
+        }
+
+        if (extStr == ".sql") {
+            ext = FileExtension::SQL;
+        }
+
+        if (extStr == ".graphql" || extStr == "gql") {
+            ext = FileExtension::GRAPHQL;
+        }
+
+        if (extStr == ".md") {
+            ext = FileExtension::MD;
+        }
+
+        if (extStr == ".rst") {
+            ext = FileExtension::RST;
+        }
+
+        if (extStr == ".txt") {
+            ext = FileExtension::TXT;
+        }
     }
 
     const FileExtension File::Extension(void) const {
