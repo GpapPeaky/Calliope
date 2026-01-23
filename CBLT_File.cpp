@@ -18,7 +18,7 @@ namespace CBLT {
         
         path = fpath;
         cwd = absPath.parent_path().string(); 
-    
+
         std::string line;
 
         while(std::getline(file, line)) {
@@ -110,16 +110,15 @@ namespace CBLT {
                 cam.Width(),
                 cam.Height()
             );
-    
-            // Line num
-            DrawTextEx(
-                gFont.f,
-                lines.at(i).c_str(),
-                pos,
-                gFont.size,
-                0.0f,
-                gPalette.textLines
-            );
+                // File text
+                DrawTextEx(
+                    gFont.f,
+                    lines.at(i).c_str(),
+                    pos,
+                    gFont.size,
+                    0.0f,
+                    gPalette.textLines
+                );
             EndScissorMode();
             
             pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
@@ -131,16 +130,15 @@ namespace CBLT {
                 cam.Width(),
                 cam.Height()
             );
-            
-            // File text
-            DrawTextEx(
-                gFont.f,
-                std::to_string(i).c_str(),
-                pos,
-                gFont.size,
-                0.0f,
-                gPalette.textBase         
-            );
+                // line num
+                DrawTextEx(
+                    gFont.f,
+                    std::to_string(i).c_str(),
+                    pos,
+                    gFont.size,
+                    0.0f,
+                    gPalette.textBase         
+                );
             EndScissorMode();
         }
     }

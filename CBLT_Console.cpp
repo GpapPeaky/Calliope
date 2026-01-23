@@ -14,39 +14,16 @@ namespace CBLT {
     
     Console::~Console(void) {}
 
-    void Console::GetCWDContents(void) {
+    void Console::GetCWDContents(File& f) {
         cwdContents.clear();
 
-        const std::string cwd = directive.DirectiveFile().CWD();
+        const std::string cwd = f.CWD();
 
-        // // Platform specific directory reading
-        // #if defined(_WIN32) || defined(_WIN64) // TODO
-        //     std::string searchPath = cwd + "\\*.*";
-        //     WIN32_FIND_DATA fd; 
-        //     HANDLE hFind = ::FindFirstFile(searchPath.c_str(), &fd); 
+        namespace fs = std::filesystem;
 
-        //     if(hFind != INVALID_HANDLE_VALUE) { 
-        //         do { 
-        //             // read all (real) files in current folder, delete '!' read other 2 default folder . and ..
-        //             if(!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-        //                 cwdContents.push_back(std::string(fd.cFileName));
-        //             }
-        //         } while(::FindNextFile(hFind, &fd)); 
-        //         ::FindClose(hFind); 
-        //     }
-        // #else
-        //     DIR* dir;
-        //     struct dirent* ent;
-        //     if ((dir = opendir (cwd.c_str())) != NULL) {
-        //         // print all the files and directories within directory
-        //         while ((ent = readdir (dir)) != NULL) {
-        //             if (ent->d_type != DT_DIR) { // Not a directory
-        //                 cwdContents.push_back(std::string(ent->d_name));
-        //             }
-        //         }
-        //         closedir (dir);
-        //     } 
-        // #endif
+        for (auto& entry : fs::directory_iterator(cwd)) {
+            cwdContents.push_back(entry.path().filename().string());
+        }
     }
 
     void Console::Toggle(void) {
@@ -228,21 +205,21 @@ namespace CBLT {
             0
         );
 
-        // TODO
         // Draw CWD contents
-        // for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
-        //     DrawTextEx(
-        //         gFont.f,
-        //         cwdContents[i].c_str(),
-        //         {
-        //             GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX,
-        //             (UT::f32)(directiveFontSize + directiveBottomMargin + (i * (directiveFontSize + 5)))
-        //         },
-        //         directiveFontSize,
-        //         0.0f,
-        //         Color{255, 255, 255, 255}
-        //     );
-        // }
+        for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
+            // Calculate colour here
+            DrawTextEx(
+                gFont.f,
+                cwdContents[i].c_str(),
+                {
+                    GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX,
+                    (UT::f32)(directiveFontSize + directiveBottomMargin + (i * (directiveFontSize + 5)))
+                },
+                directiveFontSize,
+                0.0f,
+                Color{255, 255, 255, 255}
+            );
+        }
     };
 
     // TODO: Add message colours in the pallete
@@ -382,17 +359,19 @@ namespace CBLT {
                 textX = infoX + (infoW - messageWidth) / 2.0f;
                 textY = infoY + (infoH - textBlockHeight) / 2.0f;
             
+                // Draw CWD Contents
                 DrawTextEx(
                     gFont.f,
                     dirRes.message.c_str(),
                     { textX, textY },
                     directiveFontSize,
                     0.0f,
-                    Color{0, 255, 255, 255}
+                    Color{255, 128, 64, 255}
                 );
             
                 break;
             }
+
             default:
                 break;
         }

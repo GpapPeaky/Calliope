@@ -2,6 +2,7 @@
 
 #include <string>
 #include <algorithm>
+#include <filesystem>
 #include <bits/stdc++.h> // For transform to lowercase
 
 #include "CBLT_Directive.hpp"
@@ -44,7 +45,7 @@ namespace CBLT {
             ~Console();
 
             // Get cwd contents
-            void GetCWDContents(void);
+            void GetCWDContents(File& f);
 
             // Toggle the console on or off
             void Toggle(void);

@@ -13,6 +13,7 @@ UT::i32 main() {
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
     CBLT::Controller ctrl; // Program controller
     ctrl.GetFile().Load(".tests/new.c");
+    ctrl.GetConsole().GetCWDContents(ctrl.GetFile());
 
     while(!WindowShouldClose()) {
         BeginDrawing();
