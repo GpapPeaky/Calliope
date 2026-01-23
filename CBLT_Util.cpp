@@ -8,9 +8,13 @@ namespace CBLT {
             }
         } // Err
 
-        std::string TrimLeadingColon(std::string& str) {
+        std::string Func::TrimLeadingColon(std::string& str) {
             if (!str.empty() && str[0] == ':') return str.substr(1);
             return str;
+        }
+
+        Color Func::C(Types::ui8 r, Types::ui8 b, Types::ui8 g) {
+            return Color {r, g, b, 255};
         }
 
     } // Utils

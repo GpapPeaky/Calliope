@@ -19,7 +19,7 @@ namespace CBLT {
             }, 
             UI::directiveFontSize,                                         // Make it remain as is for now
             0.0f,
-            Color{255, 255, 255, 255}            
+            gPalette.consoleText 
         );
     }
 

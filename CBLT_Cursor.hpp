@@ -12,6 +12,8 @@
 
 #include "CBLT_Camera.hpp"
 
+#include "CBLT_Palette.hpp"
+
 namespace CBLT {
 
     // Cursor character representation

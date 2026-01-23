@@ -2,6 +2,7 @@
 
 #include "CBLT_Util.hpp"
 #include "CBLT_Font.hpp"
+#include "CBLT_Palette.hpp"
 
 #include "raylib.h"
 

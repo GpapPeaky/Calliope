@@ -796,6 +796,7 @@ namespace CBLT {
             float height = (float)gFont.size;
     
             if (width > 0) {
+                // TODO: Add selection color, always at 64 alpha
                 DrawRectangleV(pos, { width, height }, Color{ 50, 150, 255, 64 });
             }
         }

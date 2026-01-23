@@ -1,4 +1,4 @@
-#include "CBLT_FIleExtension.hpp"
+#include "CBLT_FileExtension.hpp"
 
 namespace CBLT {
      FileExtension AssignExtension(std::string path) {

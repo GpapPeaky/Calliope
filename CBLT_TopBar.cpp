@@ -20,10 +20,10 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     Color dirtyColour;
     if (dirty) {
         dirtyFile = std::string("dirty");
-        dirtyColour = {255, 128, 0, 255};
+        dirtyColour = gPalette.dirty;
     } else {
         dirtyFile = std::string("clean");
-        dirtyColour = {0, 255, 128, 255};
+        dirtyColour = gPalette.clean;
     }
 
     std::string modeString;
@@ -41,7 +41,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         CBLT::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
         static_cast<UT::f32>(GetScreenWidth()),
         CBLT::UI::TOP_BAR_HEIGHT + topBarSeperatorY, 
-        Color{0, 255, 0, 255}
+        gPalette.textSeperators
     );
 
     // Draw vertical seperator for cwd and filepath
@@ -50,7 +50,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         0,
         topBarCWDFilePathSeperatorX,
         CBLT::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
-        Color{0, 255, 0, 255}
+        gPalette.textSeperators
     );
 
     // Draw cursor column and line data
@@ -60,7 +60,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         {topBarInfoHorizontalShift, 0},
         topBarFontSize,
         0.0f,
-        Color{0, 255, 255, 255}
+        gPalette.lineInfo
     );
     
     DrawTextEx(
@@ -69,7 +69,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         {topBarInfoHorizontalShift, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
         topBarFontSize,
         0.0f,
-        Color{0, 255, 255, 255}
+        gPalette.lineInfo
     );
     
     DrawTextEx(
@@ -78,7 +78,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         {topBarInfoHorizontalShift + topBarSecondColumnX, 0},
         topBarFontSize,
         0.0f,
-        Color{0, 255, 255, 255}
+        gPalette.lineInfo
     );
 
     DrawTextEx(
@@ -94,10 +94,10 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     DrawTextEx(
         gFont.f,
         modeString.c_str(),
-        {topBarInfoHorizontalShift + topBarThirdColumnX + modePosition, 0},
+        {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX + modePosition), 0.0f},
         topBarFontSize,
         0.0f,
-        Color{255, 64, 64, 255}
+        gPalette.cursorMode
     );
 
     // Current file
@@ -107,7 +107,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         {topBarInfoHorizontalShift + topBarThirdColumnX, 0},
         topBarFontSize,
         0.0f,
-        Color{255, 0, 255, 255}
+        gPalette.file
     );
 
     // CWD
@@ -117,6 +117,6 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         {topBarInfoHorizontalShift + topBarThirdColumnX, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
         topBarFontSize,
         0.0f,
-        Color{255, 0, 255, 255}
+        gPalette.cwd
     );
 }

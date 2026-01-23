@@ -1,8 +1,9 @@
 #pragma once
 
-#include <string> // for std::string
-
+#include <string>   // for std::string
 #include <iostream> // for console output
+
+#include "raylib.h"
 
 namespace CBLT {
     namespace Utils {
@@ -35,8 +36,14 @@ namespace CBLT {
             const CBLT::Utils::Types::ui32 GRACEFUL_EXIT = 0;
         }
 
-        // Trim the semi colon from a string, used in the console to execute ':' commands
-        std::string TrimLeadingColon(std::string& str); 
+        namespace Func {
+            // Raylib colour constructor thing
+            Color C(Types::ui8 r, Types::ui8 g, Types::ui8 b);
+            
+            // Trim the semi colon from a string, used in the console to execute ':' commands
+            std::string TrimLeadingColon(std::string& str);
+        }
+
 
     } // Utils
 } // CBLT
@@ -49,6 +56,9 @@ namespace CBLT {
 
 // Utility general use definitions, easier access
 #define UDef CBLT::Utils::Def
+
+// Utility functions, easier access
+#define UF CBLT::Utils::Func
 
 // Utility access
 #define U CBLT::Utils

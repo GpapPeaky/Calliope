@@ -6,7 +6,7 @@ typedef long long unsigned int lluint32;
 
 // 4.6 55.4
 lluint3 Point1 = 3;
-lluin32 Point2 2= 3 + Point1;
+lluin32 Point2 = 3 + Point1;
 
 // wow
 const char* __nori_f maridakis ();

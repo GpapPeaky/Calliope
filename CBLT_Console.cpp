@@ -69,7 +69,7 @@ namespace CBLT {
         }
         
         if (directiveLine[0] == ':') { // Directive mode
-            std::string drctv = U::TrimLeadingColon(directiveLine); // Trim
+            std::string drctv = UF::TrimLeadingColon(directiveLine); // Trim
 
             // Match the remainder after converting to lowercase
             std::transform(drctv.begin(), drctv.end(), drctv.begin(), ::tolower);
@@ -125,6 +125,7 @@ namespace CBLT {
         dirRes = dr;
     }    
 
+    // FIXME: Colours are off
     void Console::Draw(std::string cwd) {
         const UT::ui32 directiveFontSize = 20;
         const UT::ui32 directiveBottomMargin = CBLT::DirectiveMargins::directiveMarginFromConsoleY + 5; // 5 + 5 see CBLT_Directive.hpp
@@ -135,7 +136,7 @@ namespace CBLT {
             0,
             width + 1,
             GetScreenHeight(),
-            Color{0, 255, 0, 255}
+            gPalette.consoleBackground
         );
 
         // Foreground rectangle
@@ -144,7 +145,7 @@ namespace CBLT {
             0,
             width,
             GetScreenHeight(),
-            Color{0, 0, 0, 255}
+            gPalette.console
         );
 
         // Directive/CWD contents seperator
@@ -153,7 +154,7 @@ namespace CBLT {
             directiveFontSize + directiveBottomMargin,
             GetScreenWidth(),
             directiveFontSize + directiveBottomMargin,
-            Color{0, 255, 0, 255}
+            gPalette.console
         );
 
         // Draw console cursor
@@ -178,7 +179,7 @@ namespace CBLT {
                     cursorY,
                     cc.charWidth,
                     gFont.size,
-                    Color{255, 75, 100 , 255}
+                    gPalette.consoleCursor
                 );
 
                 break;
@@ -188,7 +189,7 @@ namespace CBLT {
                     cursorY,
                     cc.charWidth,
                     gFont.size,
-                    Color{255, 75, 100 , 255}
+                    gPalette.consoleCursor
                 );
 
                 DrawRectangleLines(
@@ -196,7 +197,7 @@ namespace CBLT {
                     cursorY + 1,
                     cc.charWidth - 2,
                     gFont.size - 2,
-                    Color{255, 75, 100 , 255}
+                    gPalette.consoleCursor
                 );
 
                 break;
@@ -206,7 +207,7 @@ namespace CBLT {
                     cursorY,
                     1,
                     gFont.size,
-                    Color{255, 75, 100 , 255}
+                    gPalette.consoleCursor
                 );
 
                 break;
@@ -216,7 +217,7 @@ namespace CBLT {
                     cursorY + gFont.size,
                     cc.charWidth,
                     1,
-                    Color{255, 75, 100 , 255}
+                    gPalette.consoleCursor
                 );
 
                 break;
@@ -245,6 +246,7 @@ namespace CBLT {
         // }
     };
 
+    // TODO: Add message colours in the pallete
     void Console::DrawMessage(void) {
         // Draw any console messages if any
         if (dirRes.messageType == ConsoleMessage::NONE) return;
@@ -272,7 +274,7 @@ namespace CBLT {
                     msgY,
                     msgW,
                     msgH,
-                    Color{0, 255, 0, 255}
+                    Color{185, 185, 185, 255}
                 );
     
                 // Foreground
@@ -319,7 +321,7 @@ namespace CBLT {
                     guideY,
                     guideW,
                     guideH,
-                    Color{0, 255, 0, 255}
+                    Color{185, 185, 185, 255}
                 );
             
                 // Foreground
@@ -366,7 +368,7 @@ namespace CBLT {
                     infoY,
                     infoW,
                     infoH,
-                    Color{0, 255, 0, 255}
+                    Color{185, 185, 185, 255}
                 );
             
                 // Foreground

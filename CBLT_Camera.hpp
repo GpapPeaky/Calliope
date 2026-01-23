@@ -4,6 +4,8 @@
 #include "CBLT_TopBar.hpp" // for screen dimensions
 #include "CBLT_File.hpp"
 
+#include "CBLT_Palette.hpp"
+
 namespace CBLT {
     // Offset structure for camera
     typedef struct Offset {

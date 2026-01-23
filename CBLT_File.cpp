@@ -85,23 +85,24 @@ namespace CBLT {
                                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
                                 CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
         const UT::f32 textBaseY = 0.0f;
+
+        // Seperator
+        DrawLineV(
+            { 
+                CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
+                CBLT::UI::TOP_BAR_HEIGHT + gFont.size - 6
+            },{ 
+                CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
+                static_cast<UT::f32>(GetScreenHeight())
+            },
+            gPalette.textSeperators
+        );
     
         for(UT::llui32 i = 0; i < lines.size(); i++) {
             Vector2 pos = {
                 textBaseX + CBLT::gOffsets.x,
                 textBaseY + i * lineHeight + lineHeight + CBLT::gOffsets.y
             };
-            
-            DrawLineV(
-                { 
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    CBLT::UI::TOP_BAR_HEIGHT + gFont.size - 6
-                },{ 
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    static_cast<UT::f32>(GetScreenHeight())
-                },
-                Color{0, 255, 0, 255}
-            );
             
             BeginScissorMode(
                 cam.Origin().x + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI,
@@ -110,13 +111,14 @@ namespace CBLT {
                 cam.Height()
             );
     
+            // Line num
             DrawTextEx(
                 gFont.f,
                 lines.at(i).c_str(),
                 pos,
                 gFont.size,
                 0.0f,
-                Color{0, 255, 0, 255}
+                gPalette.textLines
             );
             EndScissorMode();
             
@@ -130,13 +132,14 @@ namespace CBLT {
                 cam.Height()
             );
             
+            // File text
             DrawTextEx(
                 gFont.f,
                 std::to_string(i).c_str(),
                 pos,
                 gFont.size,
                 0.0f,
-                Color{0, 255, 0, 255}                
+                gPalette.textBase         
             );
             EndScissorMode();
         }

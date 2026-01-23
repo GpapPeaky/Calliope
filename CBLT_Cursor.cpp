@@ -71,6 +71,7 @@ namespace CBLT {
             y + gFont.size,
             GetScreenWidth(),
             gFont.size,
+            // TODO: Add cursor position hilight, always at 45 alpha
             Color{255, 255, 255, 45}
         );
 
@@ -86,7 +87,7 @@ namespace CBLT {
                     y + gFont.size,
                     charWidth,
                     gFont.size,
-                    Color{255, 75, 100 , 255}
+                    gPalette.cursor
                 );
 
                 return;
@@ -99,7 +100,7 @@ namespace CBLT {
                     y + gFont.size,
                     charWidth,
                     gFont.size,
-                    Color{255, 75, 100 , 255}
+                    gPalette.cursor
                 );
                 
                 // Inner
@@ -111,7 +112,7 @@ namespace CBLT {
                     y + gFont.size + 1,
                     charWidth - 2,
                     gFont.size - 2,
-                    Color{255, 75, 100 , 255}
+                    gPalette.cursor
                 );
 
                 return;
@@ -123,7 +124,7 @@ namespace CBLT {
                     y + gFont.size,
                     1,
                     gFont.size,
-                    Color{255, 75, 100 , 255}
+                    gPalette.cursor
                 );
 
                 return;
@@ -135,7 +136,7 @@ namespace CBLT {
                     y + 2 * gFont.size,
                     charWidth,
                     1,
-                    Color{255, 75, 100 , 255}
+                    gPalette.cursor
                 );
 
                 return;

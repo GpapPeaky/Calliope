@@ -2,8 +2,8 @@
 
 #include "CBLT_Util.hpp"
 #include "CBLT_Cursor.hpp"
-
 #include "CBLT_File.hpp"
+#include "CBLT_Palette.hpp"
 
 #include <string>
 

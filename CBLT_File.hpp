@@ -2,22 +2,17 @@
 
 #include <vector>               // for std::vector<> ...
 #include <string>               // for std::string ...
-
 #include <fstream>              // File stream
-
 #include <filesystem>           // For CWD
 
 #include "raylib.h"             // for rendering
 
-#include "CBLT_Util.hpp"        // for types
-
-#include "CBLT_Font.hpp"        // for Font global
-
-#include "CBLT_TopBar.hpp"      // for vertical margins
-
-#include "CBLT_Camera.hpp"      // for camera offsets
-
-#include "CBLT_FIleExtension.hpp"   // For extensions
+#include "CBLT_Util.hpp"            // for types
+#include "CBLT_Font.hpp"            // for Font global
+#include "CBLT_TopBar.hpp"          // for vertical margins
+#include "CBLT_Camera.hpp"          // for camera offsets
+#include "CBLT_FileExtension.hpp"   // For extensions
+#include "CBLT_Palette.hpp"
 
 namespace CBLT {
     // Basic document/file class
