@@ -92,9 +92,6 @@ namespace CBLT {
             // Return a string of info relative to the file
             const std::string Info(void) const;
 
-            // Assign the extension to the file
-            void AssignExtension(void);
-
             // Return the extesion of the file
             const FileExtension Extension(void) const;
 

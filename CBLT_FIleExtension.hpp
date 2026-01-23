@@ -2,20 +2,22 @@
 
 #include <string>
 
+#include "CBLT_Util.hpp"
+
 namespace CBLT {
     // File extension types, for language support and tokenization
-    enum class FileExtension {
-        //     CoBaLT scripting language (CSL)
+    enum class FileExtension : UT::ui32 {
+        //     CoBaLT Runtime Script (CRS)
         //
-        // Will most likely use an interpreter and NOT a compiler
+        //  Will most likely use an interpreter and NOT a compiler
         // so changes are visible in runtime
         //
-        // It will be used for options for the theme
+        //  It will be used for options for the theme
         // configurations, preferances and macros 
 
-                ////////////////////////////////////////////   
-        CSL,    //       Cobalt Scripting Language        //
-                ////////////////////////////////////////////
+              ////////////////////////////////////////////   
+        CRS,  //          CoBaLT Runtime Script         //
+              ////////////////////////////////////////////
 
 
 
@@ -75,7 +77,6 @@ namespace CBLT {
         HLSL,
         WGSL,
         GD,
-        // TODO
         GDSHADER,
         PROTO,
         THRIFT,
@@ -85,4 +86,7 @@ namespace CBLT {
 
     // Easier file extension access
     #define EXT(x) FileExtension::x
+
+    // Assign the extension enum the file
+    FileExtension AssignExtension(std::string path);
 } // CBLT
