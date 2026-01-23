@@ -71,7 +71,7 @@ namespace CBLT {
             y + gFont.size,
             GetScreenWidth(),
             gFont.size,
-            // TODO: Add cursor position hilight, always at 45 alpha
+            // TODO: Add cursor position highlight, always at 45 alpha
             Color{255, 255, 255, 45}
         );
 

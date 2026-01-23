@@ -2,11 +2,14 @@
 
 #include <string>   // for std::string
 #include <iostream> // for console output
+#include <cstdlib> // for system(...)
 
 #include "raylib.h"
 
 namespace CBLT {
     namespace Utils {
+        // Cross plafrom function attrib
+        #define __CROSS
         namespace Types {
             typedef unsigned int ui32; // 32 bit unsigned
             typedef long unsigned int lui32; // long unsigned
@@ -34,17 +37,15 @@ namespace CBLT {
 
         namespace Def {
             const CBLT::Utils::Types::ui32 GRACEFUL_EXIT = 0;
-        }
+        } // Def
 
         namespace Func {
             // Raylib colour constructor thing
             Color C(Types::ui8 r, Types::ui8 g, Types::ui8 b);
             
             // Trim the semi colon from a string, used in the console to execute ':' commands
-            std::string TrimLeadingColon(std::string& str);
-        }
-
-
+            std::string TrimLeadingColon(const std::string& str);
+        } // Func
     } // Utils
 } // CBLT
 

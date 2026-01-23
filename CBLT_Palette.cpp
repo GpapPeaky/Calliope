@@ -13,8 +13,8 @@ namespace CBLT {
         lineInfo            = UF::C(0, 255, 255); 
         file                = UF::C(255, 0, 255);
         cwd                 = UF::C(255, 255, 0);
-        cwdDir              = UF::C(64, 128, 255);
-        cwdFile             = UF::C(64, 255, 255);
+        cwdDir              = UF::C(255, 128, 0);
+        cwdFile             = UF::C(255, 255, 0);
         dirty               = UF::C(255, 64, 64);
         clean               = UF::C(64, 255, 64);
         textLines           = UF::C(255, 255, 255);

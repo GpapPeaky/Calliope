@@ -13,13 +13,17 @@ UT::i32 main() {
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
     CBLT::Controller ctrl; // Program controller
 
-    // This function is invoked whenever loading a new file
-    ctrl.GetFile().Load(".tests/new.c");
-    
-    // These functions should be invoked right after a  valid 'cd' directive is executed.
-    // or when calling the system's native file explorer
-    ctrl.FindCWD();
-    ctrl.GetConsole().GetCWDContents(ctrl.CWD());
+    ///////////////
+    // IMPORTANT //
+    ///////////////
+
+        // This function is invoked whenever loading a new file
+        ctrl.GetFile().Load(".tests/new.c");
+        
+        // These functions should be invoked right after a  valid 'cd' directive is executed.
+        // or when calling the system's native file explorer
+        ctrl.FindCWD();
+        ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
     while(!WindowShouldClose()) {
         BeginDrawing();

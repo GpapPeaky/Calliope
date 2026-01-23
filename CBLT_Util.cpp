@@ -8,14 +8,15 @@ namespace CBLT {
             }
         } // Err
 
-        std::string Func::TrimLeadingColon(std::string& str) {
-            if (!str.empty() && str[0] == ':') return str.substr(1);
-            return str;
-        }
+        namespace Func {
+            std::string TrimLeadingColon(const std::string& str) {
+                if (!str.empty() && str[0] == ':') return str.substr(1);
+                return str;
+            }
 
-        Color Func::C(Types::ui8 r, Types::ui8 g, Types::ui8 b) {
-            return Color {r, g, b, 255};
-        }
-
+            Color C(Types::ui8 r, Types::ui8 g, Types::ui8 b) {
+                return Color {r, g, b, 255};
+            }
+        } // Func
     } // Utils
 } // CBLT

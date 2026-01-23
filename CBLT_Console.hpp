@@ -8,14 +8,15 @@
 #include "CBLT_Directive.hpp"
 #include "CBLT_Interpolator.hpp"
 #include "CBLT_CWDContentToken.hpp"
+#include "CBLT_Util.hpp"
 
 namespace CBLT {
     // Different type of messages the console can display
     enum class ConsoleMessage {
-        NONE = -1,                  // No message to display
-        INFO,                       // The console will display info
+        NONE = -1,                            // No message to display
+        INFO,                                 // The console will display info
         DIRECTIVE_ERROR,                      // The console will display an error
-        GUIDE                       // The console will display a guide
+        GUIDE                                 // The console will display a guide
     };
 
     // Results a directive can return
@@ -38,6 +39,7 @@ namespace CBLT {
             UT::f32 width;                              // Console mutable width
             std::vector<CWDContentToken> cwdContents;   // Current working directory contents
             CursorManager cursor;                       // Cursor position inside the directive, only a primary
+            Camera camera;                              // TODO: CWD content camera
         public:
             // Constructor
             Console();

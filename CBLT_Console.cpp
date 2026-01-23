@@ -52,30 +52,47 @@ namespace CBLT {
         }
         
         if (directiveLine[0] == ':') { // Directive mode
-            std::string drctv = UF::TrimLeadingColon(directiveLine); // Trim
+            std::string trimmed = UF::TrimLeadingColon(directiveLine); // Trimmed of ':'
+
+            // Directive / parameter seperator
+            UT::llui32 idx = trimmed.find_first_of(' ');
+            
+            // Parameter (limited to 1)
+            std::string directiveParam; 
+
+            // Only the directive command
+            std::string dir;
+
+            if (idx == std::string::npos) {
+                dir = trimmed;
+                directiveParam = "";
+            } else {
+                dir = trimmed.substr(0, idx);
+                directiveParam = trimmed.substr(idx + 1); // skip the space
+            }
 
             // Match the remainder after converting to lowercase
-            std::transform(drctv.begin(), drctv.end(), drctv.begin(), ::tolower);
+            std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
 
-            // Exi
-            if (drctv == "e") {
+            // Exit
+            if (dir == "e") {
                 exit(EXIT_SUCCESS);
             }
 
             // Save and exit
-            else if (drctv == "q") {
+            else if (dir == "q") {
                 f.Save();
 
                 exit(EXIT_SUCCESS);
             }
 
             // Write to file
-            else if (drctv == "w") {
+            else if (dir == "w") {
                 f.Save();
-            } 
+            }
 
             // Help guide
-            else if (drctv == "h") {
+            else if (dir == "h") {
                 dr.message = 
                     "Co.Ba.L.T Console Help Guide:\n"
                     ":e      - Exit Co.Ba.L.T\n"
@@ -86,14 +103,75 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
-            // DIsplay file info and metadata
-            else if (drctv == "i") {
+            // TODO: Create a directory, check if directory exists
+            else if (dir == "m") {
+                if (directiveParam.empty()) { // No param
+                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE :" + dir;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                } else {
+                    dr.message = "CBLT_DBG: DIRECTORY " + directiveParam + "/ CREATED";
+                    dr.messageType = ConsoleMessage::INFO;
+                }
+            }
+
+            // TODO: Delete a directory, check if directory exists 
+            else if (dir == "d") {
+                if (directiveParam.empty()) { // No param
+                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE :" + dir;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                } else {
+                    dr.message = "CBLT_DBG: DIRECTORY " + directiveParam + "/ DELETED";
+                    dr.messageType = ConsoleMessage::INFO;
+                }
+            }
+
+            // TODO: Create a file, check if file exists
+            else if (dir == "c") {
+                if (directiveParam.empty()) { // No param
+                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE :" + dir;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                } else {
+                    dr.message = "CBLT_DBG: FILE " + directiveParam + " CREATED";
+                    dr.messageType = ConsoleMessage::INFO;
+                }
+            }
+
+            // TODO: Remove a file, check if file exists
+            else if (dir == "r") {
+                if (directiveParam.empty()) { // No param
+                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE :" + dir;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                } else {
+                    dr.message = "CBLT_DBG: FILE " + directiveParam + " REMOVED";
+                    dr.messageType = ConsoleMessage::INFO;
+                }
+            }
+
+            // TODO: Change Directory
+            else if (dir == "cd") {
+                if (directiveParam.empty()) { // No param, does nothing
+                    directive.Clear();
+                    cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
+                    dirRes = dr;
+                } else {
+                    dr.message = "CBLT_DBG: CHANGED TO DIR /" + directiveParam;
+                    dr.messageType = ConsoleMessage::INFO;
+                }
+            }
+
+            // TODO: Open native file explorer to pick a file/folder more easily
+            else if (dir == "o") {
+                // UF::OpenFileExplorer(f.Name());
+            }
+
+            // Display file info and metadata
+            else if (dir == "i") {
                 dr.message = f.Info();
                 dr.messageType = ConsoleMessage::INFO;
             }
             
             else { // Invalid directive given fallback
-                dr.message = "CBLT_ERR: unkown directive :" + drctv;
+                dr.message = "CBLT_ERR: UNKNOWN DIRECTIVE :" + dir;
                 dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
