@@ -17,7 +17,6 @@ namespace CBLT {
         Clear(); // Clear the previous open file
         
         path = fpath;
-        cwd = absPath.parent_path().string(); 
 
         std::string line;
 
@@ -211,13 +210,8 @@ namespace CBLT {
         return path;        
     }
 
-    const std::string& File::CWD(void) const {
-        return cwd;
-    }
-
     const std::string File::Info(void) const {
         std::string info = "File Path: " + path + "\n" +
-               "CWD: " + cwd + "\n" +
                "Line Count: " + std::to_string(lines.size()) + "\n" +
                "Dirty: " + (dirty ? "Yes" : "No");
         

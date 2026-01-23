@@ -850,6 +850,20 @@ namespace CBLT {
         return copied;
     }
 
+    void Controller::FindCWD(void) {
+        namespace fs = std::filesystem;
+        
+        std::string filePathStr = file.Name();
+
+        fs::path filePath = filePathStr;
+
+        cwd = fs::absolute(filePath).parent_path().string();
+    }
+
+    const std::string& Controller::CWD(void) const {
+        return cwd;
+    }
+
     const Camera& Controller::GetCamera(void) const {
         return camera;
     }

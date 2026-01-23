@@ -21,6 +21,7 @@ namespace CBLT {
             CBLT::File file;                              // Current open document
             CBLT::Console console;                        // Console
             CBLT::Camera camera;                          // Camera
+            std::string cwd;                              // Current working directory
 
             // TODO: Finish the handling
 
@@ -90,6 +91,12 @@ namespace CBLT {
 
             // Get the camera, mutable access
             Camera& GetCamera(void);
+
+            // Update CWD
+            void FindCWD(void);
+
+            // Get CWD
+            const std::string& CWD(void) const;
 
             // Constructor
             Controller(void);

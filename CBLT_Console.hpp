@@ -7,6 +7,7 @@
 
 #include "CBLT_Directive.hpp"
 #include "CBLT_Interpolator.hpp"
+#include "CBLT_CWDContentToken.hpp"
 
 namespace CBLT {
     // Different type of messages the console can display
@@ -31,12 +32,12 @@ namespace CBLT {
     // Console class for executing directives
     class Console {
         private:
-            Directive directive;                  // Directive to execute
-            DirectiveResult dirRes;               // Directive result
-            UT::b toggled;                        // Console is on or off
-            UT::f32 width;                        // Console mutable width
-            std::vector<std::string> cwdContents; // Current working directory contents
-            CursorManager cursor;                 // Cursor position inside the directive, only a primary
+            Directive directive;                        // Directive to execute
+            DirectiveResult dirRes;                     // Directive result
+            UT::b toggled;                              // Console is on or off
+            UT::f32 width;                              // Console mutable width
+            std::vector<CWDContentToken> cwdContents;   // Current working directory contents
+            CursorManager cursor;                       // Cursor position inside the directive, only a primary
         public:
             // Constructor
             Console();
@@ -45,7 +46,7 @@ namespace CBLT {
             ~Console();
 
             // Get cwd contents
-            void GetCWDContents(File& f);
+            void GetCWDContents(std::string cwd);
 
             // Toggle the console on or off
             void Toggle(void);

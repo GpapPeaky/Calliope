@@ -20,6 +20,8 @@ namespace CBLT {
             Color lineInfo;             // Top left line info
             Color file;                 // File display colour
             Color cwd;                  // CWD display colour
+            Color cwdDir;               // Console CWD content dir
+            Color cwdFile;              // Console CWD content file
             Color dirty;                // Dirty file
             Color clean;                // Clean file
             Color textLines;            // Text lines

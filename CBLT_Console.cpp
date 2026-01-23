@@ -14,15 +14,21 @@ namespace CBLT {
     
     Console::~Console(void) {}
 
-    void Console::GetCWDContents(File& f) {
+    void Console::GetCWDContents(std::string cwd) {
         cwdContents.clear();
-
-        const std::string cwd = f.CWD();
 
         namespace fs = std::filesystem;
 
         for (auto& entry : fs::directory_iterator(cwd)) {
-            cwdContents.push_back(entry.path().filename().string());
+            if (entry.is_directory()) {
+                cwdContents.push_back(
+                    {gPalette.cwdDir, entry.path().filename().string() + "/"}
+                );
+            } else {
+                cwdContents.push_back(
+                    {gPalette.cwdFile, entry.path().filename().string()}
+                );
+            }
         }
     }
 
@@ -207,17 +213,19 @@ namespace CBLT {
 
         // Draw CWD contents
         for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
+            CWDContentToken current =  cwdContents[i];
+
             // Calculate colour here
             DrawTextEx(
                 gFont.f,
-                cwdContents[i].c_str(),
+                current.n.c_str(),
                 {
                     GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX,
                     (UT::f32)(directiveFontSize + directiveBottomMargin + (i * (directiveFontSize + 5)))
                 },
                 directiveFontSize,
                 0.0f,
-                Color{255, 255, 255, 255}
+                current.c
             );
         }
     };
