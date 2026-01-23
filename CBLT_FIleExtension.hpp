@@ -61,12 +61,6 @@ namespace CBLT {
         MD,
         RST,
         TXT,
-
-        // TODO
-        DOCKERFILE,
-        MAKEFILE,
-        CMAKE,
-        BAZEL,
         HCL,
         HS,
         ML,
@@ -81,10 +75,14 @@ namespace CBLT {
         HLSL,
         WGSL,
         GD,
+        // TODO
         GDSHADER,
         PROTO,
         THRIFT,
         ANTLR,
         REGEX,
     }; // File extension class
+
+    // Easier file extension access
+    #define EXT(x) FileExtension::x
 } // CBLT
