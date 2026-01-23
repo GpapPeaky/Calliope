@@ -125,7 +125,6 @@ namespace CBLT {
         dirRes = dr;
     }    
 
-    // FIXME: Colours are off
     void Console::Draw(std::string cwd) {
         const UT::ui32 directiveFontSize = 20;
         const UT::ui32 directiveBottomMargin = CBLT::DirectiveMargins::directiveMarginFromConsoleY + 5; // 5 + 5 see CBLT_Directive.hpp
@@ -136,7 +135,7 @@ namespace CBLT {
             0,
             width + 1,
             GetScreenHeight(),
-            gPalette.consoleBackground
+            gPalette.console
         );
 
         // Foreground rectangle
@@ -145,7 +144,7 @@ namespace CBLT {
             0,
             width,
             GetScreenHeight(),
-            gPalette.console
+            gPalette.consoleBackground
         );
 
         // Directive/CWD contents seperator

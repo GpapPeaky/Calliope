@@ -13,7 +13,7 @@ namespace CBLT {
             return str;
         }
 
-        Color Func::C(Types::ui8 r, Types::ui8 b, Types::ui8 g) {
+        Color Func::C(Types::ui8 r, Types::ui8 g, Types::ui8 b) {
             return Color {r, g, b, 255};
         }
 
