@@ -102,12 +102,20 @@ namespace CBLT {
                 textBaseX + CBLT::gOffsets.x,
                 textBaseY + i * lineHeight + lineHeight + CBLT::gOffsets.y
             };
-            
+
+            if (!cam.Contains(
+                pos.x,
+                pos.y,
+                (UT::f32)cam.Width(),
+                lineHeight + + UI::TOP_BAR_HEIGHT
+            )) continue; // Skip non visible lines
+
+            // THIS JUST FUCKING CLIPS, DOESN'T REDUCE THE DRAW CALL, LEARNT IT THE HARD WAY, FUCK.
             BeginScissorMode(
                 cam.Origin().x + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI,
                 cam.Origin().y,
                 cam.Width(),
-                cam.Height()
+                cam.Height() + UI::TOP_BAR_HEIGHT
             );
                 // File text
                 DrawTextEx(
@@ -127,7 +135,7 @@ namespace CBLT {
                 cam.Origin().x,
                 cam.Origin().y,
                 cam.Width(),
-                cam.Height()
+                cam.Height() + UI::TOP_BAR_HEIGHT
             );
                 // line num
                 DrawTextEx(

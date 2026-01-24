@@ -25,13 +25,13 @@ namespace CBLT {
     }
 
     UT::b Camera::Contains(UT::f32 x, UT::f32 y, UT::f32 w, UT::f32 h) const {
-        return (x + w > gOffsets.x && x < gOffsets.x + width &&
-                y + h > gOffsets.y && y < gOffsets.y + height);
+        return (x + w > this->originX && x < this->originX + width &&
+                y + h > this->originY && y < this->originY + height);
     }
 
     UT::b Camera::Contains(UT::i32 x, UT::i32 y, UT::i32 w, UT::i32 h) const {
-        return (x + w > gOffsets.x && x < gOffsets.x + width &&
-                y + h > gOffsets.y && y < gOffsets.y + height);
+        return (x + w > this->originX && x < this->originX + width &&
+                y + h > this->originY && y < this->originY + height);
     }
 
     UT::i32 Camera::Width(void) {

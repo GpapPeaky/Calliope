@@ -3,6 +3,8 @@
 // TODO: Add file tokenization
 // TODO: Add tokenization drawing
 
+// FIXME: Performance issues at large files
+
 UT::i32 main() {
     CBLT::Win::Init();
 
@@ -18,7 +20,7 @@ UT::i32 main() {
     ///////////////
 
         // This function is invoked whenever loading a new file
-        ctrl.GetFile().Load(".tests/new.c");
+        ctrl.GetFile().Load(".tests/10k_lines.c");
         
         // These functions should be invoked right after a  valid 'cd' directive is executed.
         // or when calling the system's native file explorer
