@@ -123,7 +123,7 @@ namespace CBLT {
             const CharClass Classify(UT::cui8 c) const;
 
             // Get the distance to a character in the left or right of the cursor and set the cursor there
-            void SetToWordBoundary(const std::string& lineText, const CursorDirection dir, File f);
+            void SetToWordBoundary(const std::string& lineText, const CursorDirection dir, File& f);
 
             // Clamp cursor to camera view
             void ClampToCamera(Camera& cam, File& f);

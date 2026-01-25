@@ -211,7 +211,7 @@ namespace CBLT {
         return CharClass::SYMBOL;
     }
     
-    void Cursor::SetToWordBoundary(const std::string& lineText, CursorDirection dir, File f) {
+    void Cursor::SetToWordBoundary(const std::string& lineText, CursorDirection dir, File& f) {
         // FIXME: Performance issues
         UT::ui32 col  = static_cast<UT::ui32>(Col());
         UT::ui32 line = static_cast<UT::ui32>(Line());
