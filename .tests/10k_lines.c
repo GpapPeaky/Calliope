@@ -59998,4 +59998,3 @@ void func_9999() {
     int x = var_9999 * 2;
     printf("Line 9999: %d\n", x);
 }
-

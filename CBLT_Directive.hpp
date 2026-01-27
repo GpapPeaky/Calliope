@@ -39,6 +39,7 @@ namespace CBLT {
     // Console text margins
     namespace DirectiveMargins {
         const UT::ui32 directiveMarginFromConsoleX = 5; // X coord margin from console
+        const UT::ui32 CWDContentMargin = 10; // X coord margin from console
         const UT::ui32 directiveMarginFromConsoleY = 5; // Y coord margin from console
     } // ConsoleTextMargins
     

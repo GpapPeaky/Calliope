@@ -176,7 +176,11 @@ namespace CBLT {
             }
 
         } else { // File switch mode
-            
+            // for (auto& entry : cwdContents) {
+            //     if (entry.n == directiveLine) {
+            //         f.Load(entry.n);
+            //     }
+            // }
         }
         
         directive.Clear();
@@ -289,22 +293,47 @@ namespace CBLT {
             0
         );
 
+        std::string directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
+
+        UT::ui32 contentCount = 0;
+
         // Draw CWD contents
         for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
-            CWDContentToken current =  cwdContents[i];
+            CWDContentToken current =  cwdContents[i]; // Pre calculated token colour
 
-            // Calculate colour here
+            if (directiveLine.empty() || directiveLine[0] == ':') {
+                DrawTextEx(
+                    gFont.f,
+                    current.n.c_str(),
+                    {
+                        GetScreenWidth() - width + DirectiveMargins::CWDContentMargin,
+                        (UT::f32)(directiveFontSize + directiveBottomMargin + (contentCount * (directiveFontSize + DirectiveMargins::directiveMarginFromConsoleY))) + DirectiveMargins::directiveMarginFromConsoleY
+                    },
+                    directiveFontSize,
+                    0.0f,
+                    current.c
+                );
+    
+                contentCount++;
+
+                continue; // Get the next entry
+            }
+            
+            // FIXME
+            // if not empty or a command-directive it will try and show the matching strings
             DrawTextEx(
                 gFont.f,
                 current.n.c_str(),
                 {
-                    GetScreenWidth() - width + DirectiveMargins::directiveMarginFromConsoleX,
-                    (UT::f32)(directiveFontSize + directiveBottomMargin + (i * (directiveFontSize + 5)))
+                    GetScreenWidth() - width + DirectiveMargins::CWDContentMargin,
+                    (UT::f32)(directiveFontSize + directiveBottomMargin + (contentCount * (directiveFontSize + DirectiveMargins::directiveMarginFromConsoleY))) + DirectiveMargins::directiveMarginFromConsoleY
                 },
                 directiveFontSize,
                 0.0f,
                 current.c
             );
+
+            contentCount++;
         }
     };
 
