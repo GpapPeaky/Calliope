@@ -8,6 +8,10 @@ namespace CBLT {
     // Palette class for changing colours
     class Palette {
         public:
+            Image textBackground;           // Text background image
+            Image CWDContentsBackground;    // CWD list background image
+            Image consoleBackground;        // Console backgorund image
+            Image topBarBackground;         // Top bar Image
 
             Color background;           // Background color
             Color console;              // Console window colour

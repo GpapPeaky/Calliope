@@ -26,6 +26,13 @@ namespace CBLT {
         msgErr              = UF::C(255, 64, 64); 
         msgGuide            = UF::C(64, 255, 64);
         msgInfo             = UF::C(64, 64, 255);
+
+        // Image load        
+
+        textBackground        = LoadImage();
+        CWDContentsBackground = LoadImage();
+        consoleBackground     = LoadImage();
+        topBarBackground      = LoadImage();
     }
 
     Palette::~Palette() {}
