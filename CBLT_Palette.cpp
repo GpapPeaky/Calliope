@@ -19,6 +19,13 @@ namespace CBLT {
         clean               = UF::C(64, 255, 64);
         textLines           = UF::C(255, 255, 255);
         textBase            = UF::C(255, 255, 255);
+        cursorPosHighlight  = cursor;                    cursorPosHighlight.a = 32;
+        selectionColor      = UF::C(50, 150, 255);       selectionColor.a = 32;
+        msgBackground       = UF::C(0, 0, 0); 
+        msgForeground       = UF::C(255, 255, 255); 
+        msgErr              = UF::C(255, 64, 64); 
+        msgGuide            = UF::C(64, 255, 64);
+        msgInfo             = UF::C(64, 64, 255);
     }
 
     Palette::~Palette() {}

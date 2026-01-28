@@ -337,7 +337,6 @@ namespace CBLT {
         }
     };
 
-    // TODO: Add message colours in the pallete
     void Console::DrawMessage(void) {
         // Draw any console messages if any
         if (dirRes.messageType == ConsoleMessage::NONE) return;
@@ -365,7 +364,7 @@ namespace CBLT {
                     msgY,
                     msgW,
                     msgH,
-                    Color{185, 185, 185, 255}
+                    gPalette.msgForeground
                 );
     
                 // Foreground
@@ -374,7 +373,7 @@ namespace CBLT {
                     msgY + 1,
                     msgW - 2,
                     msgH - 2,
-                    Color{0, 0, 0, 255}
+                    gPalette.msgBackground
                 );
     
                 textX = msgX + (msgW - messageWidth) / 2.0f;
@@ -390,7 +389,7 @@ namespace CBLT {
                     },
                     directiveFontSize,
                     0.0f,
-                    Color{255, 0, 128, 255}
+                    gPalette.msgErr
                 );
 
                 break;
@@ -412,7 +411,7 @@ namespace CBLT {
                     guideY,
                     guideW,
                     guideH,
-                    Color{185, 185, 185, 255}
+                    gPalette.msgForeground
                 );
             
                 // Foreground
@@ -421,7 +420,7 @@ namespace CBLT {
                     guideY + 1,
                     guideW - 2,
                     guideH - 2,
-                    Color{0, 0, 0, 255}
+                    gPalette.msgBackground
                 );
             
                 textX = guideX + (guideW - messageWidth) / 2.0f;
@@ -433,7 +432,7 @@ namespace CBLT {
                     { textX, textY },
                     directiveFontSize,
                     0.0f,
-                    Color{0, 255, 255, 255}
+                    gPalette.msgGuide
                 );
             
                 break;
@@ -459,7 +458,7 @@ namespace CBLT {
                     infoY,
                     infoW,
                     infoH,
-                    Color{185, 185, 185, 255}
+                    gPalette.msgForeground
                 );
             
                 // Foreground
@@ -468,20 +467,20 @@ namespace CBLT {
                     infoY + 1,
                     infoW - 2,
                     infoH - 2,
-                    Color{0, 0, 0, 255}
+                    gPalette.msgBackground
                 );
             
                 textX = infoX + (infoW - messageWidth) / 2.0f;
                 textY = infoY + (infoH - textBlockHeight) / 2.0f;
             
-                // Draw CWD Contents
+                // Message
                 DrawTextEx(
                     gFont.f,
                     dirRes.message.c_str(),
                     { textX, textY },
                     directiveFontSize,
                     0.0f,
-                    Color{255, 128, 64, 255}
+                    gPalette.msgInfo
                 );
             
                 break;

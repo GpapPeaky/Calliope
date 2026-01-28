@@ -26,6 +26,13 @@ namespace CBLT {
             Color clean;                // Clean file
             Color textLines;            // Text lines
             Color textBase;             // Text
+            Color cursorPosHighlight;   // Cursor pos highlight box
+            Color selectionColor;       // Select mode colour
+            Color msgBackground;        // Msg box background
+            Color msgForeground;        // Msg box foreground
+            Color msgErr;               // Error msg colour
+            Color msgGuide;             // Gude msg colour
+            Color msgInfo;              // Info msg colour
 
             // Constructor
             Palette();

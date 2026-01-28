@@ -4,12 +4,24 @@ void func_0() {
     int x = var_0 * 2;
     printf("Line 0: %d\n", x);
 }
+    
+int var_1 = 1;
+void func_1() {
+    int x = var_1 * 2;
+    printf("Line 1: %d\n", x);
+}
+
+void func_0() {
+    int x = var_0 * 2;
+    printf("Line 0: %d\n", x);
+}
 
 int var_1 = 1;
 void func_1() {
     int x = var_1 * 2;
     printf("Line 1: %d\n", x);
 }
+
 
 // Hello World!
 
