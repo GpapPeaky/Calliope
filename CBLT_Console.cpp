@@ -40,7 +40,9 @@ namespace CBLT {
         return toggled;
     }
 
-    void Console::Execute(File& f) {
+    void Console::Execute(FileQueue& Q) {
+        File f = Q.Active();
+        
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
 
         std::string directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
@@ -175,7 +177,7 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
-        } else { // File switch mode
+        } else { // File switch mode, automatically adds it into the FileQueue
             // for (auto& entry : cwdContents) {
             //     if (entry.n == directiveLine) {
             //         f.Load(entry.n);

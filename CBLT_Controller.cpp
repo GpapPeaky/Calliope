@@ -513,25 +513,57 @@ namespace CBLT {
 
         // Go to next loaded file
         if (keyboard.m.ctrl && IsKeyPressed(KEY_PERIOD)) {
+            File& oldFile = Q.Active();
+            UT::ui32 currentLine = cursor.Line();
+            
             Q.SetActiveNext();
-
+            
+            File& newFile = Q.Active();
+            UT::ui32 newLineCount = newFile.GetLineCount();
+            
+            if (currentLine >= newLineCount && newLineCount > 0) {
+                cursor.SetAt(0, newLineCount - 1);
+            } else {
+                cursor.SetAt(0, currentLine);
+            }
+        
             return true;
         }
 
         // Go to previous loaded file
         if (keyboard.m.ctrl && IsKeyPressed(KEY_COMMA)) {
+            File& oldFile = Q.Active();
+            UT::ui32 currentLine = cursor.Line();
+            
             Q.SetActivePrev();
-
+            
+            File& newFile = Q.Active();
+            UT::ui32 newLineCount = newFile.GetLineCount();
+            
+            if (currentLine >= newLineCount && newLineCount > 0) {
+                cursor.SetAt(0, newLineCount - 1);
+            } else {
+                cursor.SetAt(0, currentLine);
+            }
+        
             return true;
         }
 
-        // Dequeue from loaded files
-        // TODO: multi file support
+        // Dequeue from loaded files and close current file, doesn't write to file
         if (keyboard.m.ctrl && IsKeyPressed(KEY_Q)) {
             if (Q.Size() > 1) {
                 Q.CloseFile(Q.Index());
+        
+                File& newFile = Q.Active();
+                UT::ui32 newLineCount = newFile.GetLineCount();
+        
+                if (cursor.Line() >= newLineCount && newLineCount > 0) {
+                    cursor.SetAt(0, newLineCount - 1);
+                } else {
+                    cursor.SetAt(0, cursor.Line());
+                }
             }
-
+        
             return true;
         }
 
@@ -574,7 +606,7 @@ namespace CBLT {
 
             // Execute written directive
             if (IsKeyPressed(KEY_ENTER)) {
-                console.Execute(Q.Active());
+                console.Execute(Q);
             }
 
             // Delete

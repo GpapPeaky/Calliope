@@ -34,8 +34,6 @@ UT::i32 main() {
         f.Load(".tests/new.c");
         ctrl.LoadedFileQueue().LoadFileToQueue(f);
 
-
-
         // These functions should be invoked right after a  valid 'cd' directive is executed.
         // or when calling the system's native file explorer
         ctrl.FindCWD();
