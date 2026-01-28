@@ -50,7 +50,7 @@ namespace CBLT {
             , originY, width, height, Color{0, 255, 255, 255});
 
         // Draw clamping margins
-        // If the cursor moves outside this box, the global offsets move
+        // If the cursor moves outside this box, the global offsets move accordingly
         DrawRectangleLines(
             originX + clampMarginX,
             originY + clampMarginY,

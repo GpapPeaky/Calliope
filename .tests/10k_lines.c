@@ -11,6 +11,8 @@ void func_1() {
     printf("Line 1: %d\n", x);
 }
 
+// Hello World!
+
 int var_2 = 2;
 void func_2() {
     int x = var_2 * 2;
