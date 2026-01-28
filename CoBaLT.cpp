@@ -3,8 +3,6 @@
 // TODO: Add file tokenization
 // TODO: Add tokenization drawing
 
-// FIXME: Performance issues at large files
-
 UT::i32 main() {
     CBLT::Win::Init();
 
