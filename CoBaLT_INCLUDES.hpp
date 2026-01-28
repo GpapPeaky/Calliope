@@ -3,3 +3,5 @@
 #include "CBLT_Controller.hpp"
 
 #include "CBLT_Font.hpp"
+
+#include "CBLT_Palette.hpp"

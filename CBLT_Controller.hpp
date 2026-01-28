@@ -5,6 +5,7 @@
 #include "CBLT_File.hpp"            // Document/File type
 #include "CBLT_Console.hpp"         // Console for directives
 #include "CBLT_Camera.hpp"          // Camera for view offset
+#include "CBLT_FileQueue.hpp"
 
 #include <cmath>                    // min()/max() ...
 #include <vector>
@@ -18,7 +19,7 @@ namespace CBLT {
         private:
             CBLT::CursorManager cursorManager;            // Cursor manager
             CBLT::Keyboard keyboard;                      // Keyboard
-            CBLT::File file;                              // Current open document
+            CBLT::FileQueue Q;                            // Current open document
             CBLT::Console console;                        // Console
             CBLT::Camera camera;                          // Camera
             std::string cwd;                              // Current working directory
@@ -97,6 +98,9 @@ namespace CBLT {
 
             // Get CWD
             const std::string& CWD(void) const;
+
+            // Get the file queue
+            FileQueue& LoadedFileQueue(void);
 
             // Constructor
             Controller(void);

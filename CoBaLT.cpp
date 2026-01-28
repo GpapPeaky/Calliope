@@ -19,9 +19,23 @@ UT::i32 main() {
     // IMPORTANT //
     ///////////////
 
-        // This function is invoked whenever loading a new file
-        ctrl.GetFile().Load(".tests/10k_lines.c");
+        // Thes functions are invoked whenever loading a new file onto the loaded file queue
+        CBLT::File f;
+
+        f.Load(".tests/message_passing.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(f);
         
+        f.Load(".tests/5k_lines.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(f);
+        
+        f.Load(".tests/10k_lines.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(f);
+        
+        f.Load(".tests/new.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(f);
+
+
+
         // These functions should be invoked right after a  valid 'cd' directive is executed.
         // or when calling the system's native file explorer
         ctrl.FindCWD();
@@ -30,7 +44,7 @@ UT::i32 main() {
     while(!WindowShouldClose()) {
         BeginDrawing();
 
-            ClearBackground(BLACK);
+            ClearBackground(CBLT::gPalette.background);
 
             ctrl.Update();
 

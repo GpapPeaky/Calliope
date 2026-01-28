@@ -38,6 +38,9 @@ namespace CBLT {
 
         namespace Def {
             const CBLT::Utils::Types::ui32 GRACEFUL_EXIT = 0;
+
+            // Max 4 files can be open inside the queue, if a new one is inserted then it becomes the tail
+            const CBLT::Utils::Types::ui8 MAX_FILE_Q_NODES = 16;
         } // Def
 
         namespace Func {
