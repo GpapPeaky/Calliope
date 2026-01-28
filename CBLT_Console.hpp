@@ -62,7 +62,7 @@ namespace CBLT {
             UT::b IsOpen(void) const ;
 
             // Execute the current directive
-            void Execute(FileQueue& Q);
+            void Execute(FileQueue& Q, std::string& cwd);
 
             // Draw console window, and CWD contents
             void Draw(std::string cwd);

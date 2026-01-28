@@ -40,7 +40,9 @@ namespace CBLT {
         return toggled;
     }
 
-    void Console::Execute(FileQueue& Q) {
+    void Console::Execute(FileQueue& Q, std::string& cwd) {
+        namespace fs = std::filesystem;
+
         File f = Q.Active();
         
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
@@ -149,15 +151,29 @@ namespace CBLT {
                 }
             }
 
-            // TODO: Change Directory
             else if (dir == "cd") {
                 if (directiveParam.empty()) { // No param, does nothing
                     directive.Clear();
                     cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
                     dirRes = dr;
                 } else {
-                    dr.message = "CBLT_LOG: CHANGED TO DIR /" + directiveParam;
-                    dr.messageType = ConsoleMessage::INFO;
+                    fs::path newpath = fs::path(cwd) / directiveParam;
+                    newpath = fs::weakly_canonical(newpath); // Normalize path
+
+                    if (fs::exists(newpath)) {
+                        if (fs::is_directory(newpath)) {
+                            cwd = newpath.string(); // Update the value by reference
+                            GetCWDContents(cwd);    // and get the contents
+                            dr.message = "CBLT_LOG: CHANGED TO DIR /" + cwd;
+                            dr.messageType = ConsoleMessage::INFO;
+                        } else { // Not a directory
+                            dr.message = "CBLT_ERR: NOT A DIRECTORY: " + directiveParam;
+                            dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                        }
+                    } else {
+                        dr.message = "CBLT_ERR: DIRECTORY DOES NOT EXIST: " + directiveParam;
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    }
                 }
             }
 

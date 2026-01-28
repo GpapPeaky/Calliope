@@ -606,7 +606,7 @@ namespace CBLT {
 
             // Execute written directive
             if (IsKeyPressed(KEY_ENTER)) {
-                console.Execute(Q);
+                console.Execute(Q, cwd);
             }
 
             // Delete
