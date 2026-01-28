@@ -317,9 +317,21 @@ namespace CBLT {
 
         // Draw CWD contents
         for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
-            CWDContentToken current =  cwdContents[i]; // Pre calculated token colour
+            CWDContentToken& current =  cwdContents[i]; // Pre calculated token colour
+
+            UT::b toDraw = false;
 
             if (directiveLine.empty() || directiveLine[0] == ':') {
+                // Empty or directive mode -> draw all
+                toDraw = true;
+            } else {
+                // Partial match -> draw only matching entries
+                if (current.n.find(directiveLine) != std::string::npos) {
+                    toDraw = true;
+                }
+            }
+
+            if (toDraw) {
                 DrawTextEx(
                     gFont.f,
                     current.n.c_str(),
@@ -331,27 +343,9 @@ namespace CBLT {
                     0.0f,
                     current.c
                 );
-    
+        
                 contentCount++;
-
-                continue; // Get the next entry
             }
-            
-            // FIXME
-            // if not empty or a command-directive it will try and show the matching strings
-            DrawTextEx(
-                gFont.f,
-                current.n.c_str(),
-                {
-                    GetScreenWidth() - width + DirectiveMargins::CWDContentMargin,
-                    (UT::f32)(directiveFontSize + directiveBottomMargin + (contentCount * (directiveFontSize + DirectiveMargins::directiveMarginFromConsoleY))) + DirectiveMargins::directiveMarginFromConsoleY
-                },
-                directiveFontSize,
-                0.0f,
-                current.c
-            );
-
-            contentCount++;
         }
     };
 

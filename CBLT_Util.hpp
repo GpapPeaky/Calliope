@@ -3,7 +3,6 @@
 #include <string>            // for std::string
 #include <iostream>          // for console output
 #include <cstdlib>           // for system(...)
-#include <algorithm>         // for transform(...)
 
 #include "raylib.h"
 
@@ -49,9 +48,6 @@ namespace CBLT {
             
             // Trim the semi colon from a string, used in the console to execute ':' commands
             std::string TrimLeadingColon(const std::string& str);
-
-            // Check if source matches partially to pattern
-            Types::b PartialMatch(std::string source, std::string pattern);
         } // Func
     } // Utils
 } // CBLT

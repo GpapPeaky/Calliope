@@ -20,19 +20,19 @@ UT::i32 main() {
     ///////////////
 
         // Thes functions are invoked whenever loading a new file onto the loaded file queue
-        CBLT::File f;
+        CBLT::File file;
 
-        f.Load(".tests/message_passing.c");
-        ctrl.LoadedFileQueue().LoadFileToQueue(f);
+        file.Load(".tests/message_passing.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
         
-        f.Load(".tests/5k_lines.c");
-        ctrl.LoadedFileQueue().LoadFileToQueue(f);
+        file.Load(".tests/5k_lines.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
         
-        f.Load(".tests/10k_lines.c");
-        ctrl.LoadedFileQueue().LoadFileToQueue(f);
+        file.Load(".tests/10k_lines.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
         
-        f.Load(".tests/new.c");
-        ctrl.LoadedFileQueue().LoadFileToQueue(f);
+        file.Load(".tests/new.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
 
         // These functions should be invoked right after a  valid 'cd' directive is executed.
         // or when calling the system's native file explorer
@@ -50,7 +50,8 @@ UT::i32 main() {
             CBLT::CursorManager& cm = ctrl.GetCursorManager();
             CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
-            CBLT::File& f = ctrl.GetFile();
+            CBLT::FileQueue& fq = ctrl.LoadedFileQueue();
+            CBLT::File& f = fq.Active();
             CBLT::Camera& cam = ctrl.GetCamera();
 
             cm.DrawCursors(f);
