@@ -21,7 +21,7 @@ namespace CBLT {
         textBase            = UF::C(255, 255, 255);
         cursorPosHighlight  = cursor;                    cursorPosHighlight.a = 32;
         selectionColor      = UF::C(50, 150, 255);       selectionColor.a = 32;
-        msgBackground       = UF::C(0, 0, 0); 
+        msgBackground       = UF::C(0, 0, 0);
         msgForeground       = UF::C(255, 255, 255); 
         msgErr              = UF::C(255, 64, 64); 
         msgGuide            = UF::C(64, 255, 64);
@@ -29,10 +29,10 @@ namespace CBLT {
 
         // Image load        
 
-        textBackground        = LoadImage();
-        CWDContentsBackground = LoadImage();
-        consoleBackground     = LoadImage();
-        topBarBackground      = LoadImage();
+        // img_textBackground        = LoadImage("");
+        // img_CWDContentsBackground = LoadImage("");
+        // img_consoleBackground     = LoadImage("");
+        // img_topBarBackground      = LoadImage("");
     }
 
     Palette::~Palette() {}

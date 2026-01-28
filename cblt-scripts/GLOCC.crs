@@ -1,0 +1,106 @@
+! CBLT is what one would call a 'GlObal Configuration Collector' (GLOCC) that will be instantly read as soon as it is changed so that
+! basically .crs becomes an intrepreted language, parsed line by line , live every either 256K frames or when written
+!
+! Lines that start with '!' are comments
+!
+! CBLT.control                                                      -> Custom controls
+!
+!   CBLT.control.console                                            -> Change Console controls
+!       CBLT.control.console.contextseperator                       -> def: ':' seperator of directive / switch-to-file (stf)
+!
+!       CBLT.control.console.directives                             -> Access directive names
+!           CBLT.control.console.directives.exit                    -> def: 'E'       | Exit CBLT
+!           CBLT.control.console.directives.write                   -> def: 'W'       | Write open file
+!           CBLT.control.console.directives.wexit                   -> def: 'WE'      | write and quit CBLT
+!           CBLT.control.console.directives.wexit                   -> def: 'Q'       | dequeue current loaded file CBLT
+!           CBLT.control.console.directives.wexit                   -> def: 'WQ'      | Write and dequeue loaded file CBLT
+!           CBLT.control.console.directives.help                    -> def: 'H'       | Open manual shows the keybinds
+!           CBLT.control.console.directives.openfileexp             -> def: 'O'       | Open native file explorer
+!           CBLT.control.console.directives.deldir                  -> def: 'D <p>'   | Delete <p> directory
+!           CBLT.control.console.directives.newdir                  -> def: 'M <p>'   | Make a directory named <p>
+!           CBLT.control.console.directives.newfile                 -> def: 'C <p>'   | Create a new file named <p>
+!           CBLT.control.console.directives.delfile                 -> def: 'R <p>'   | Remove file <p>
+!           CBLT.control.console.directives.info                    -> def: 'I <p>'   | File info of a CWD content file <p>, or the current loaded file
+!           CBLT.control.console.directives.gotoline                -> def: 'L <p>'   | Move cursor to line <p>
+!           CBLT.control.console.directives.find                    -> def: 'F <p>'   | Find instance of the string <p> inside the current loaded file
+!           CBLT.control.console.directives.changedir               -> def: 'CD <p>'  | Change cwd
+!           CBLT.control.console.directives.GLOCC                   -> def: 'GLOCC'   | Open the global configuration collector file (GLOCC.crs) file, add to loaded file queue
+!           CBLT.control.console.directives.CLOG                    -> def: 'CLOG'    | Open the console log (CLOG.log) file, add to loaded file queue
+!
+!   CBLT.control.keys                                               -> Keybinds at insert mode
+!       CBLT.control.keys.cursorlead                                -> def: 'KEY_C / KEY_LEFT_ALT / KEY_DOWN'          | Create a leading cursor
+!       CBLT.control.keys.cursortrail                               -> def: 'KEY_LEFT_CONTROL / KEY_LEFT_ALT / KEY_UP' | Create a trailing cursor
+!       CBLT.control.keys.cursorprim                                -> def: 'KEY_LEFT_CONTROL / KEY_P'                 | Remove secondary cursors
+!       
+!       CBLT.control.keys.deline                                    -> def: 'KEY_LEFT_CONTROL / KEY_X'                 | Delete cursor line
+!       CBLT.control.keys.duline                                    -> def: 'KEY_LEFT_CONTROL / KEY_D'                 | Duplicate line
+!       CBLT.control.keys.coline                                    -> def: 'KEY_LEFT_CONTROL / KEY_SLASH'             | Comment out line
+!       CBLT.control.keys.write                                     -> def: 'KEY_LEFT_CONTROL / KEY_S'                 | Write file
+!       CBLT.control.keys.exit                                      -> def: 'KEY_LEFT_CONTROL / KEY_E'                 | Exit CoBaLT
+!       CBLT.control.keys.wexit                                     -> def: 'KEY_LEFT_CONTROL / KEY_W'                 | Write and exit CoBaLT
+!       
+!       CBLT.control.keys.selection                                 -> def: 'KEY_LEFT_CONTROL / KEY_K'                 | Selection mode toggle
+!       CBLT.control.keys.copyclip                                  -> def: 'KEY_LEFT_CONTROL / KEY_C'                 | Copy selected text to clipboard
+!       CBLT.control.keys.pasteclip                                 -> def: 'KEY_LEFT_CONTROL / KEY_V'                 | Paste clipboard contents
+!       
+!       CBLT.control.keys.console                                   -> def: 'KEY_LEFT_CONTROL / KEY_GRAVE'             | Toggle console
+!       CBLT.control.keys.elconsole                                 -> def: 'KEY_LEFT_SHIFT / KEY_LEFT'                | Enlarge console size
+!       CBLT.control.keys.redconsole                                -> def: 'KEY_LEFT_CONTROL / KEY_RIGHT'             | Reduce console size
+!               
+!       CBLT.control.keys.nextfile                                  -> def: 'KEY_LEFT_CONTROL / KEY_PERIOD'            | Go to next loaded file in queue
+!       CBLT.control.keys.prevfile                                  -> def: 'KEY_LEFT_CONTROL / KEY_COMMA'             | Go to previous loaded file in queue
+!       CBLT.control.keys.dqfile                                    -> def: 'KEY_LEFT_CONTROL / KEY_Q'                 | Remove current loaded file from queue
+!       CBLT.control.keys.info                                      -> def: 'KEY_LEFT_CONTROL / KEY_I'                 | Show current loaded file info 
+!       
+!       CBLT.control.keys.manual                                    -> def: 'KEY_LEFT_CONTROL / KEY_H'                 | Open manual shows the keybinds
+!
+! CBLT.codes                                        -> Codes for easier debugging, recored inside the cblt_console_log.log file 
+!   CBLT.codes.err                                  -> Error codes (EPSILON)
+!       CBLT.codes.err.unkowndrctv                  -> def: 'EPSILON 0'  |   '5.00'    | Unknown directive 
+!       CBLT.codes.err.badfilenq                    -> def: 'EPSILON 1'  |   '5.01'    | File enqueue failed
+!
+!       CBLT.codes.err.dirmakenoname                -> def: 'EPSILON 10' |   '5.00'    | No name on directory creation
+!       CBLT.codes.err.dirdelnoname                 -> def: 'EPSILON 11' |   '5.11'    | No name on directory deletion
+!       CBLT.codes.err.dirmakeabsent                -> def: 'EPSILON 12' |   '5.12'    | Directory already exists on creation
+!       CBLT.codes.err.dirdelabsent                 -> def: 'EPSILON 13' |   '5.13'    | Directory doesn't exist for deletion
+!       CBLT.codes.err.changedirnoname              -> def: 'EPSILON 14' |   '5.14'    | No name on directory change
+!       CBLT.codes.err.changedirabsent              -> def: 'EPSILON 15' |   '5.14'    | Directory doesn't exist on directory change
+!
+    TODO: Finish the error codes
+    TODO: Add the error codes where required
+!
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!       CBLT.codes.err.                             -> def: 'EPSILON 20' |   '5.20'    | 
+!
+    TODO: Finish the log codes
+    TODO: Add the codes where required
+!
+!   CBLT.codes.log                                  -> Log codes (LAMDA)
+!       CBLT.codes.log.filedq                       -> def: 'LAMDA 1  | 1.01'  | File dequeued
+!       CBLT.codes.log.filenq                       -> def: 'LAMDA 0  | 1.00'  | File enqueued
+!       CBLT.codes.log.exit                         -> def: 'LAMDA 2  | 1.02'  | Exit
+!       CBLT.codes.log.write                        -> def: 'LAMDA 3  | 1.03'  | Write
+!       CBLT.codes.log.help                         -> def: 'LAMDA 4  | 1.04'  | Help
+!       CBLT.codes.log.openfileexp                  -> def: 'LAMDA 5  | 1.05'  | Open file explorer
+!       CBLT.codes.log.deldir                       -> def: 'LAMDA 6  | 1.06'  | Delete directory
+!       CBLT.codes.log.newdir                       -> def: 'LAMDA 7  | 1.07'  | Make directory
+!       CBLT.codes.log.newfile                      -> def: 'LAMDA 8  | 1.08'  | Create file
+!       CBLT.codes.log.delfile                      -> def: 'LAMDA 9  | 1.09'  | Removed file
+!       CBLT.codes.log.info                         -> def: 'LAMDA 10 | 110'   | Info
+!       CBLT.codes.log.gotoline                     -> def: 'LAMDA 11 | 111'   | Go to line
+!       CBLT.codes.log.find                         -> def: 'LAMDA 12 | 112'   | Find string in file
+!       CBLT.codes.log.changedir                    -> def: 'LAMDA 13 | 113'   | Change CWD
+!
+! CBLT.scripts                                      -> Custom scripts
+!
+! CBLT.palette                                      -> Pallete config
+
+TODO: Finalize the GLOCC object and add its variables where required inside CoBaLT 
+TODO: CoBaLT Runtime Scripts (.crs) will be able to be executed in runtime since we are reading the scripts from the GLOCC.crs file

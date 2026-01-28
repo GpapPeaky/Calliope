@@ -426,8 +426,8 @@ namespace CBLT {
             exit(UDef::GRACEFUL_EXIT);
         }
 
-        // Save and Exit
-        if (keyboard.m.ctrl && IsKeyPressed(KEY_Q)) {
+        // Write and Exit
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_W)) {
             file.Save();
 
             exit(UDef::GRACEFUL_EXIT);
@@ -440,7 +440,7 @@ namespace CBLT {
             return true;
         }
 
-        // Save file contents
+        // Write file contents
         if (keyboard.m.ctrl && IsKeyPressed(KEY_S)) {
             file.Save(); // Automatically cleans the "dirt"
 
@@ -511,16 +511,23 @@ namespace CBLT {
             return true;
         }
 
-        // Go to next file
+        // Go to next loaded file
         // TODO: multi file support
         if (keyboard.m.ctrl && IsKeyPressed(KEY_PERIOD)) {
 
             return true;
         }
 
-        // Go to previous file
+        // Go to previous loaded file
         // TODO: multi file support
         if (keyboard.m.ctrl && IsKeyPressed(KEY_COMMA)) {
+
+            return true;
+        }
+
+        // Dequeue from loaded files
+        // TODO: multi file support
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_Q)) {
 
             return true;
         }

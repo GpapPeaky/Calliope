@@ -80,7 +80,7 @@ namespace CBLT {
             }
 
             // Save and exit
-            else if (dir == "q") {
+            else if (dir == "we") {
                 f.Save();
 
                 exit(EXIT_SUCCESS);
@@ -109,7 +109,7 @@ namespace CBLT {
                     dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
-                    dr.message = "CBLT_DBG: DIRECTORY " + directiveParam + "/ CREATED";
+                    dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ CREATED";
                     dr.messageType = ConsoleMessage::INFO;
                 }
             }
@@ -120,7 +120,7 @@ namespace CBLT {
                     dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
-                    dr.message = "CBLT_DBG: DIRECTORY " + directiveParam + "/ DELETED";
+                    dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ DELETED";
                     dr.messageType = ConsoleMessage::INFO;
                 }
             }
@@ -131,7 +131,7 @@ namespace CBLT {
                     dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
-                    dr.message = "CBLT_DBG: FILE " + directiveParam + " CREATED";
+                    dr.message = "CBLT_LOG: FILE " + directiveParam + " CREATED";
                     dr.messageType = ConsoleMessage::INFO;
                 }
             }
@@ -142,7 +142,7 @@ namespace CBLT {
                     dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
-                    dr.message = "CBLT_DBG: FILE " + directiveParam + " REMOVED";
+                    dr.message = "CBLT_LOG: FILE " + directiveParam + " REMOVED";
                     dr.messageType = ConsoleMessage::INFO;
                 }
             }
@@ -154,7 +154,7 @@ namespace CBLT {
                     cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
                     dirRes = dr;
                 } else {
-                    dr.message = "CBLT_DBG: CHANGED TO DIR /" + directiveParam;
+                    dr.message = "CBLT_LOG: CHANGED TO DIR /" + directiveParam;
                     dr.messageType = ConsoleMessage::INFO;
                 }
             }
