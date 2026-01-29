@@ -19,7 +19,7 @@ namespace CBLT {
 
         namespace fs = std::filesystem;
 
-        for (auto& entry : fs::directory_iterator(cwd)) {
+        for (auto& entry : fs::directory_iterator(fs::u8path(cwd))) {
             if (entry.is_directory()) {
                 cwdContents.push_back(
                     {gPalette.cwdDir, entry.path().filename().string() + "/"}
@@ -164,7 +164,7 @@ namespace CBLT {
                         if (fs::is_directory(newpath)) {
                             cwd = newpath.string(); // Update the value by reference
                             GetCWDContents(cwd);    // and get the contents
-                            dr.message = "CBLT_LOG: CHANGED TO DIR /" + cwd;
+                            dr.message = "CBLT_LOG: CHANGED TO DIR " + cwd + "/";
                             dr.messageType = ConsoleMessage::INFO;
                         } else { // Not a directory
                             dr.message = "CBLT_ERR: NOT A DIRECTORY: " + directiveParam;
@@ -177,9 +177,35 @@ namespace CBLT {
                 }
             }
 
-            // TODO: Open native file explorer to pick a file/folder more easily
+            // Open native file explorer to pick a file/folder more easily
             else if (dir == "o") {
-                // UF::OpenFileExplorer(f.Name());
+                std::string selected = gDialog.OpenFolderPicker();
+
+                if (selected.empty()) { // Invalid directory
+                    dr.message = "CBLT_ERR: INVALID DIR SELECTED";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    dirRes = dr;
+
+                    return; // Early out
+                }
+
+                fs::path p = fs::u8path(selected);
+
+                if (!fs::is_directory(p)) {
+                    dr.message = "CBLT_ERR: NOT A DIRECTORY";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    dirRes = dr;
+                    
+                    return; // Early out
+                }
+
+                cwd = p.string();
+                GetCWDContents(cwd);                                    // and get the contents
+
+                dr.message = "CBLT_LOG: CHANGED TO DIR " + cwd + "/";
+                dr.messageType = ConsoleMessage::INFO;
             }
 
             // Display file info and metadata
