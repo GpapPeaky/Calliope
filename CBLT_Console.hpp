@@ -10,6 +10,8 @@
 #include "CBLT_CWDContentToken.hpp"
 #include "CBLT_Util.hpp"
 
+#include "CBLT_FileQueue.hpp"
+
 namespace CBLT {
     // Different type of messages the console can display
     enum class ConsoleMessage {
@@ -60,7 +62,7 @@ namespace CBLT {
             UT::b IsOpen(void) const ;
 
             // Execute the current directive
-            void Execute(File& f);
+            void Execute(FileQueue& Q, std::string& cwd);
 
             // Draw console window, and CWD contents
             void Draw(std::string cwd);

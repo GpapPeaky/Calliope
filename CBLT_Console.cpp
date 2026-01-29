@@ -40,7 +40,11 @@ namespace CBLT {
         return toggled;
     }
 
-    void Console::Execute(File& f) {
+    void Console::Execute(FileQueue& Q, std::string& cwd) {
+        namespace fs = std::filesystem;
+
+        File f = Q.Active();
+        
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
 
         std::string directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
@@ -147,15 +151,29 @@ namespace CBLT {
                 }
             }
 
-            // TODO: Change Directory
             else if (dir == "cd") {
                 if (directiveParam.empty()) { // No param, does nothing
                     directive.Clear();
                     cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
                     dirRes = dr;
                 } else {
-                    dr.message = "CBLT_LOG: CHANGED TO DIR /" + directiveParam;
-                    dr.messageType = ConsoleMessage::INFO;
+                    fs::path newpath = fs::path(cwd) / directiveParam;
+                    newpath = fs::weakly_canonical(newpath); // Normalize path
+
+                    if (fs::exists(newpath)) {
+                        if (fs::is_directory(newpath)) {
+                            cwd = newpath.string(); // Update the value by reference
+                            GetCWDContents(cwd);    // and get the contents
+                            dr.message = "CBLT_LOG: CHANGED TO DIR /" + cwd;
+                            dr.messageType = ConsoleMessage::INFO;
+                        } else { // Not a directory
+                            dr.message = "CBLT_ERR: NOT A DIRECTORY: " + directiveParam;
+                            dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                        }
+                    } else {
+                        dr.message = "CBLT_ERR: DIRECTORY DOES NOT EXIST: " + directiveParam;
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    }
                 }
             }
 
@@ -175,7 +193,7 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
-        } else { // File switch mode
+        } else { // File switch mode, automatically adds it into the FileQueue
             // for (auto& entry : cwdContents) {
             //     if (entry.n == directiveLine) {
             //         f.Load(entry.n);
@@ -299,9 +317,21 @@ namespace CBLT {
 
         // Draw CWD contents
         for (UT::llui32 i = 0 ; i < cwdContents.size() ; i++) {
-            CWDContentToken current =  cwdContents[i]; // Pre calculated token colour
+            CWDContentToken& current =  cwdContents[i]; // Pre calculated token colour
+
+            UT::b toDraw = false;
 
             if (directiveLine.empty() || directiveLine[0] == ':') {
+                // Empty or directive mode -> draw all
+                toDraw = true;
+            } else {
+                // Partial match -> draw only matching entries
+                if (current.n.find(directiveLine) != std::string::npos) {
+                    toDraw = true;
+                }
+            }
+
+            if (toDraw) {
                 DrawTextEx(
                     gFont.f,
                     current.n.c_str(),
@@ -313,27 +343,9 @@ namespace CBLT {
                     0.0f,
                     current.c
                 );
-    
+        
                 contentCount++;
-
-                continue; // Get the next entry
             }
-            
-            // FIXME
-            // if not empty or a command-directive it will try and show the matching strings
-            DrawTextEx(
-                gFont.f,
-                current.n.c_str(),
-                {
-                    GetScreenWidth() - width + DirectiveMargins::CWDContentMargin,
-                    (UT::f32)(directiveFontSize + directiveBottomMargin + (contentCount * (directiveFontSize + DirectiveMargins::directiveMarginFromConsoleY))) + DirectiveMargins::directiveMarginFromConsoleY
-                },
-                directiveFontSize,
-                0.0f,
-                current.c
-            );
-
-            contentCount++;
         }
     };
 

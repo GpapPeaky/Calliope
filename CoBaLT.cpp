@@ -3,8 +3,6 @@
 // TODO: Add file tokenization
 // TODO: Add tokenization drawing
 
-// FIXME: Performance issues at large files
-
 UT::i32 main() {
     CBLT::Win::Init();
 
@@ -19,9 +17,21 @@ UT::i32 main() {
     // IMPORTANT //
     ///////////////
 
-        // This function is invoked whenever loading a new file
-        ctrl.GetFile().Load(".tests/10k_lines.c");
+        // Thes functions are invoked whenever loading a new file onto the loaded file queue
+        CBLT::File file;
+
+        file.Load(".tests/message_passing.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
         
+        file.Load(".tests/5k_lines.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
+        
+        file.Load(".tests/10k_lines.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
+        
+        file.Load(".tests/new.c");
+        ctrl.LoadedFileQueue().LoadFileToQueue(file);
+
         // These functions should be invoked right after a  valid 'cd' directive is executed.
         // or when calling the system's native file explorer
         ctrl.FindCWD();
@@ -30,7 +40,7 @@ UT::i32 main() {
     while(!WindowShouldClose()) {
         BeginDrawing();
 
-            ClearBackground(BLACK);
+            ClearBackground(CBLT::gPalette.background);
 
             ctrl.Update();
 
@@ -38,7 +48,8 @@ UT::i32 main() {
             CBLT::CursorManager& cm = ctrl.GetCursorManager();
             CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
-            CBLT::File& f = ctrl.GetFile();
+            CBLT::FileQueue& fq = ctrl.LoadedFileQueue();
+            CBLT::File& f = fq.Active();
             CBLT::Camera& cam = ctrl.GetCamera();
 
             cm.DrawCursors(f);

@@ -3,7 +3,6 @@
 #include <string>            // for std::string
 #include <iostream>          // for console output
 #include <cstdlib>           // for system(...)
-#include <algorithm>         // for transform(...)
 
 #include "raylib.h"
 
@@ -38,6 +37,9 @@ namespace CBLT {
 
         namespace Def {
             const CBLT::Utils::Types::ui32 GRACEFUL_EXIT = 0;
+
+            // Max 4 files can be open inside the queue, if a new one is inserted then it becomes the tail
+            const CBLT::Utils::Types::ui8 MAX_FILE_Q_NODES = 16;
         } // Def
 
         namespace Func {
@@ -46,9 +48,6 @@ namespace CBLT {
             
             // Trim the semi colon from a string, used in the console to execute ':' commands
             std::string TrimLeadingColon(const std::string& str);
-
-            // Check if source matches partially to pattern
-            Types::b PartialMatch(std::string source, std::string pattern);
         } // Func
     } // Utils
 } // CBLT
