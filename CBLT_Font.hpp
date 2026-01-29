@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "raylib.h"
+#include "CBLT_raylib.hpp"
 
 namespace CBLT {
     // Editor font

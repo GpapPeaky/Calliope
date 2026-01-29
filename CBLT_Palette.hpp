@@ -2,7 +2,7 @@
 
 #include "CBLT_Util.hpp"
 
-#include "raylib.h"
+#include "CBLT_raylib.hpp"
 
 namespace CBLT {
     // Palette class for changing colours

@@ -4,7 +4,7 @@
 #include <iostream>          // for console output
 #include <cstdlib>           // for system(...)
 
-#include "raylib.h"
+#include "CBLT_raylib.hpp"
 
 namespace CBLT {
     namespace Utils {

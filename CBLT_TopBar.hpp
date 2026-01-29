@@ -4,7 +4,7 @@
 #include "CBLT_Font.hpp"
 #include "CBLT_Palette.hpp"
 
-#include "raylib.h"
+#include "CBLT_raylib.hpp"
 
 namespace CBLT {
     namespace UI {

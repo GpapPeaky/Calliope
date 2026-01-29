@@ -8,6 +8,9 @@
 
 namespace CBLT {
     class Dialog {
+        private:
+            // Run a command based on the OS
+            __CROSS std::string RunCommand(const std::string& com);
         // Constructor
         public:
             Dialog(void);

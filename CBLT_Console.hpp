@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CBLT_Dialog.hpp"
+
 #include <string>
 #include <algorithm>
 #include <filesystem>
@@ -10,7 +12,6 @@
 #include "CBLT_CWDContentToken.hpp"
 #include "CBLT_Util.hpp"
 #include "CBLT_FileQueue.hpp"
-#include "CBLT_Dialog.hpp"
 
 namespace CBLT {
     // Different type of messages the console can display

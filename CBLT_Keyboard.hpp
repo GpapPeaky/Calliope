@@ -1,6 +1,6 @@
 #pragma once
 
-#include "raylib.h"
+#include "CBLT_raylib.hpp"
 
 #include "CBLT_Util.hpp" // Types
 

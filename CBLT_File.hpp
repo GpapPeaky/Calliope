@@ -5,7 +5,7 @@
 #include <fstream>              // File stream
 #include <filesystem>           // For CWD
 
-#include "raylib.h"             // for rendering
+#include "CBLT_raylib.hpp"             // for rendering
 
 #include "CBLT_Util.hpp"            // for types
 #include "CBLT_Font.hpp"            // for Font global
