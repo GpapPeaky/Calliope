@@ -5,25 +5,29 @@ TARGET = CoBaLT.exe
 RAYLIB_PATH = C:/raylib/raylib/src   # adjust if needed
 
 # Compiler and linker flags
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -I$(RAYLIB_PATH)
-LDFLAGS  = -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm
+CXXFLAGS = -std=c++17 -Wall -Wextra -O3 -I$(RAYLIB_PATH)
+LDFLAGS  = -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm -lcomdlg32 -lole32
 
 # Source files and object folder
-SRCS   = $(wildcard *.cpp)
-SRCS   += CBLT_tinyfiledialogs.c
-OBJDIR = obj
-OBJS   = $(SRCS:%.cpp=$(OBJDIR)/%.o)
-OBJS   += CBLT_tinyfiledialogs.o
+CPP_SRCS = $(wildcard *.cpp)
+C_SRCS   = CBLT_tinyfiledialogs.c
 
-# Target
+OBJDIR = obj
+CPP_OBJS = $(CPP_SRCS:%.cpp=$(OBJDIR)/%.o)
+C_OBJS   = $(C_SRCS:%.c=$(OBJDIR)/%.o)
+
+OBJS = $(CPP_OBJS) $(C_OBJS)
+
 $(TARGET): $(OBJS)
 	$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
 
-# Compile .cpp -> obj/*.o
 $(OBJDIR)/%.o: %.cpp
 	@mkdir -p $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean
+$(OBJDIR)/%.o: %.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
 	rm -rf $(OBJDIR) $(TARGET)

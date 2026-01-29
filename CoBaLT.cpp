@@ -13,6 +13,14 @@ UT::i32 main() {
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
     CBLT::Controller ctrl; // Program controller
 
+    tinyfd_messageBox(
+        "test",
+        "tinyfiledialogs works!",
+        "ok",
+        "info",
+        1
+    );
+
     ///////////////
     // IMPORTANT //
     ///////////////

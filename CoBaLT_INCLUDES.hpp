@@ -5,3 +5,5 @@
 #include "CBLT_Font.hpp"
 
 #include "CBLT_Palette.hpp"
+
+#include "CBLT_Dialog.hpp"
