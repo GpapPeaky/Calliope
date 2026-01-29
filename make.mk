@@ -10,8 +10,10 @@ LDFLAGS  = -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm
 
 # Source files and object folder
 SRCS   = $(wildcard *.cpp)
+SRCS   += CBLT_tinyfiledialogs.c
 OBJDIR = obj
 OBJS   = $(SRCS:%.cpp=$(OBJDIR)/%.o)
+OBJS   += CBLT_tinyfiledialogs.o
 
 # Target
 $(TARGET): $(OBJS)
