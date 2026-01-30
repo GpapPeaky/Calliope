@@ -58,4 +58,27 @@ namespace CBLT {
     const std::vector<File>& FileQueue::GetLoadedFiles(void) const {
         return loadedFiles;
     }
+
+    void FileQueue::Draw(void) {
+        UT::ui32 index = 0;
+        static UT::i32 fontSize = 20;
+
+        for (index = 0 ; index < Size() ; index++) {
+            Color c = gPalette.fileQueueEntry;
+
+            if (index == activeIndex) {
+                c = gPalette.currentFile;
+            }
+            
+            std::string construct = "[" + std::to_string(index) + "] " + std::string(loadedFiles[index].Name());
+
+            DrawText(
+                construct.c_str(),
+                index * 400,
+                GetScreenHeight() - fontSize,
+                fontSize,
+                c 
+            );
+        }
+    }
 } // CBLT

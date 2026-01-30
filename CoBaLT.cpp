@@ -71,6 +71,8 @@ UT::i32 main() {
             if (cnsl.IsOpen()) {
                 cnsl.Draw(f.Name());
             }
+
+            fq.Draw();
             
             cnsl.DrawMessage();
 

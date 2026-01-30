@@ -40,5 +40,8 @@ namespace CBLT {
 
             // Get the file queue
             const std::vector<File>& GetLoadedFiles(void) const ;
+
+            // Draw the file queue at the bottom of the screen
+            void Draw(void);
     }; // File queue class
 } // CBLT
