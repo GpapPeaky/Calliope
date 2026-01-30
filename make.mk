@@ -13,7 +13,7 @@ CPP_SRCS_COMMON := $(filter-out CBLT_Dialog_Win32.cpp CBLT_Dialog_Linux.cpp CBLT
 # Platform-specific sources
 ifeq ($(OS),Windows_NT)
     CPP_SRCS_PLATFORM := CBLT_Dialog_Win32.cpp
-    LDFLAGS := -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm
+    LDFLAGS := -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm -lole32 -lshell32 -luuid
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)

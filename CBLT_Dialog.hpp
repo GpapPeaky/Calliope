@@ -1,12 +1,15 @@
 #pragma once
 
-#include "CBLT_Util.hpp"
+// #include "CBLT_Util.hpp" // Raylib being included absolutely destroyed everything
 
 #include <string>
 #include <iostream>
 #include <filesystem>
 
 namespace CBLT {
+
+    // Cross platform function
+    #define __CROSS
     class Dialog {
         private:
             // Run a command based on the OS
