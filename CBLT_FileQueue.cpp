@@ -2,6 +2,7 @@
 
 namespace CBLT {
     void FileQueue::LoadFileToQueue(const File& f) {
+        // FIXME: Add a validation check here
         loadedFiles.push_back(f);
         activeIndex = Size() - 1;
     }

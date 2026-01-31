@@ -226,20 +226,23 @@ namespace CBLT {
             }
 
         } else { // Directive file-switch context
+            // FIXME: Works but needs some tinkering
             for (auto& entry : cwdContents) {
                 if (entry.n == directiveLine) {
-                    f.Load(entry.n);
-
-                    Q.SetActiveNext();
+                    f.Load(entry.n); // Load the new file
+                    
+                    Q.LoadFileToQueue(f); // Add it to the queue
                 } else { // File not fount for file-switch
                     dr.message = "CBLT_ERR: UNKNOWN FILE TO SWITCH TO " + directiveLine;
+                    std::cout << entry.n << "\n";
+                    std::cout << directiveLine << "\n";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     dirRes = dr;
                     
                     directive.Clear();
 
-                    return;
+                    continue;
                 }
             }
         }

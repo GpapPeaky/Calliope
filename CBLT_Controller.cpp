@@ -596,7 +596,7 @@ namespace CBLT {
         console.Update();           // Update console
 
         // Console handling
-        if (console.IsOpen()) {
+        if (console.IsOpen()) { // FIXME: Backspace bugs out sometimes
             UT::b handleConsole = HandleConsole(); // Input
 
             if (handleConsole) return; // Input handled, return

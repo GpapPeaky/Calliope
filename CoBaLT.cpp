@@ -20,13 +20,7 @@ UT::i32 main() {
         // Thes functions are invoked whenever loading a new file onto the loaded file queue
         CBLT::File file;
 
-        file.Load(".tests/editor.c");
-        ctrl.LoadedFileQueue().LoadFileToQueue(file);
-        
-        file.Load(".tests/5k_lines.c");
-        ctrl.LoadedFileQueue().LoadFileToQueue(file);
-        
-        file.Load(".tests/10k_lines.c");
+        file.Load("./_Entry"); // Place holder for now
         ctrl.LoadedFileQueue().LoadFileToQueue(file);
         
         // These functions should be invoked right after a  valid 'cd' directive is executed.
