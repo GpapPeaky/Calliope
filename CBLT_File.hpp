@@ -73,7 +73,7 @@ namespace CBLT {
             std::string& GetCurrentLine(UT::ui32 line);
 
             // Get if the file is dirty or not
-            const UT::b Dirt(void) const;
+            UT::b Dirt(void) const;
 
             // Set the dirt to true or false
             void SetDirt(UT::b stat);
@@ -85,7 +85,7 @@ namespace CBLT {
             const std::string Info(void) const;
 
             // Return the extesion of the file
-            const FileExtension Extension(void) const;
+            FileExtension Extension(void) const;
 
         }; // File class
         

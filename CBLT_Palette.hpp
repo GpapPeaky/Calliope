@@ -23,8 +23,6 @@ namespace CBLT {
             Color textSeperators;       // Text seperators
             Color lineInfo;             // Top left line info
             Color file;                 // File display colour
-            Color fileQueueEntry;       // File in queue display colour
-            Color currentFile;          // Current file in queue display colour
             Color cwd;                  // CWD display colour
             Color cwdDir;               // Console CWD content dir
             Color cwdFile;              // Console CWD content file
@@ -39,6 +37,8 @@ namespace CBLT {
             Color msgErr;               // Error msg colour
             Color msgGuide;             // Gude msg colour
             Color msgInfo;              // Info msg colour
+            Color fileQueueEntry;       // File in queue display colour
+            Color currentFile;          // Current file in queue display colour
 
             // Constructor
             Palette(void);

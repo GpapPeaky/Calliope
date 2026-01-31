@@ -47,7 +47,7 @@ namespace CBLT {
             Color C(Types::ui8 r, Types::ui8 g, Types::ui8 b);
             
             // Trim the semi colon from a string, used in the console to execute ':' commands
-            std::string TrimLeadingColon(const std::string& str);
+            std::string TrimLeadingAt(const std::string& str);
         } // Func
     } // Utils
 } // CBLT

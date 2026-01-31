@@ -198,7 +198,7 @@ namespace CBLT {
         return (UT::ui32)(width * scale);
     }
 
-    const CharClass Cursor::Classify(UT::cui8 c) const {
+    CharClass Cursor::Classify(UT::cui8 c) const {
         if (c == ' ' || c == '\n') {
             return CharClass::WHITESPACE;
         }

@@ -124,7 +124,7 @@ namespace CBLT {
                     pos,
                     gFont.size,
                     0.0f,
-                    gPalette.textLines
+                    gPalette.textBase
                 );
             EndScissorMode();
             
@@ -144,7 +144,7 @@ namespace CBLT {
                     pos,
                     gFont.size,
                     0.0f,
-                    gPalette.textBase         
+                    gPalette.textLines         
                 );
             EndScissorMode();
         }
@@ -206,7 +206,7 @@ namespace CBLT {
         return lines.at(line);
     }
 
-    const UT::b File::Dirt(void) const {
+    UT::b File::Dirt(void) const {
         return dirty;
     }
 
@@ -226,7 +226,7 @@ namespace CBLT {
         return info;
     }
 
-    const FileExtension File::Extension(void) const {
+    FileExtension File::Extension(void) const {
         return ext;
     }
 }

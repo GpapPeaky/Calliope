@@ -66,7 +66,7 @@ namespace CBLT {
             void Execute(FileQueue& Q, std::string& cwd);
 
             // Draw console window, and CWD contents
-            void Draw(std::string cwd);
+            void Draw(void);
 
             // Draw message returned by the console
             void DrawMessage(void);

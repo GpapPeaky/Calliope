@@ -69,7 +69,7 @@ UT::i32 main() {
             CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), ctrl.CWD(), (UT::i32)c.GetMode());
             
             if (cnsl.IsOpen()) {
-                cnsl.Draw(f.Name());
+                cnsl.Draw();
             }
 
             fq.Draw();

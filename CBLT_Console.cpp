@@ -55,8 +55,8 @@ namespace CBLT {
             return; // Nothing to show
         }
         
-        if (directiveLine[0] == ':') { // Directive mode
-            std::string trimmed = UF::TrimLeadingColon(directiveLine); // Trimmed of ':'
+        if (directiveLine[0] == '@') { // Directive command context
+            std::string trimmed = UF::TrimLeadingAt(directiveLine); // Trimmed of '@'
 
             // Directive / parameter seperator
             UT::llui32 idx = trimmed.find_first_of(' ');
@@ -99,18 +99,24 @@ namespace CBLT {
             else if (dir == "h") {
                 dr.message = 
                     "Co.Ba.L.T Console Help Guide:\n"
-                    ":e      - Exit Co.Ba.L.T\n"
-                    ":q      - Save and exit Co.Ba.L.T\n"
-                    ":w      - Save current file\n"
-                    ":i      - Display file info and metadata\n"
-                    ":h      - Display this help guide\n";
+                    "@e      - Exit Co.Ba.L.T\n"
+                    "@we     - Write and exit Co.Ba.L.T\n"
+                    "@w      - Write current file\n"
+                    "@i      - Display file info and metadata\n"
+                    "@h      - Display this help guide\n"
+                    "@m      - Create a directory\n"
+                    "@d      - Delete a directory\n"
+                    "@c      - Create a file\n"
+                    "@r      - Delete a file\n"
+                    "@cd     - Change diretory\n"
+                    "@o      - Open native folder picker\n";
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
             // TODO: Create a directory, check if directory exists
             else if (dir == "m") {
                 if (directiveParam.empty()) { // No param
-                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE :" + dir;
+                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ CREATED";
@@ -121,7 +127,7 @@ namespace CBLT {
             // TODO: Delete a directory, check if directory exists 
             else if (dir == "d") {
                 if (directiveParam.empty()) { // No param
-                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE :" + dir;
+                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ DELETED";
@@ -132,7 +138,7 @@ namespace CBLT {
             // TODO: Create a file, check if file exists
             else if (dir == "c") {
                 if (directiveParam.empty()) { // No param
-                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE :" + dir;
+                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     dr.message = "CBLT_LOG: FILE " + directiveParam + " CREATED";
@@ -143,7 +149,7 @@ namespace CBLT {
             // TODO: Remove a file, check if file exists
             else if (dir == "r") {
                 if (directiveParam.empty()) { // No param
-                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE :" + dir;
+                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     dr.message = "CBLT_LOG: FILE " + directiveParam + " REMOVED";
@@ -215,16 +221,25 @@ namespace CBLT {
             }
             
             else { // Invalid directive given fallback
-                dr.message = "CBLT_ERR: UNKNOWN DIRECTIVE :" + dir;
+                dr.message = "CBLT_ERR: UNKNOWN DIRECTIVE @" + dir;
                 dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
-        } else { // File switch mode, automatically adds it into the FileQueue
-            // for (auto& entry : cwdContents) {
-            //     if (entry.n == directiveLine) {
-            //         f.Load(entry.n);
-            //     }
-            // }
+        } else { // Directive file-switch context
+            for (auto& entry : cwdContents) {
+                if (entry.n == directiveLine) {
+                    f.Load(entry.n);
+
+                    Q.SetActiveNext();
+                } else { // File not fount for file-switch
+                    dr.message = "CBLT_ERR: UNKNOWN FILE TO SWITCH TO " + directiveLine;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    dirRes = dr;
+
+                    return;
+                }
+            }
         }
         
         directive.Clear();
@@ -234,7 +249,7 @@ namespace CBLT {
         dirRes = dr;
     }    
 
-    void Console::Draw(std::string cwd) {
+    void Console::Draw(void) {
         const UT::ui32 directiveFontSize = 20;
         const UT::ui32 directiveBottomMargin = CBLT::DirectiveMargins::directiveMarginFromConsoleY + 5; // 5 + 5 see CBLT_Directive.hpp
         
@@ -347,7 +362,7 @@ namespace CBLT {
 
             UT::b toDraw = false;
 
-            if (directiveLine.empty() || directiveLine[0] == ':') {
+            if (directiveLine.empty() || directiveLine[0] == '@') {
                 // Empty or directive mode -> draw all
                 toDraw = true;
             } else {
