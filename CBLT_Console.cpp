@@ -236,6 +236,8 @@ namespace CBLT {
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     dirRes = dr;
+                    
+                    directive.Clear();
 
                     return;
                 }

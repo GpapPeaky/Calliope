@@ -39,6 +39,7 @@ namespace CBLT {
             Color msgInfo;              // Info msg colour
             Color fileQueueEntry;       // File in queue display colour
             Color currentFile;          // Current file in queue display colour
+            Color fileQueueColour;      // File queue background colour
 
             // Constructor
             Palette(void);

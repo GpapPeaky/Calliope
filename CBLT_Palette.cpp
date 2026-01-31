@@ -8,8 +8,8 @@ namespace CBLT {
         console             = UF::C(255, 255, 255);
         consoleText         = UF::C(255, 255, 255);
         consoleBackground   = UF::C(0, 0, 0);
-        consoleCursor       = UF::C(32, 32, 32);
-        cursor              = UF::C(32, 32, 32);
+        consoleCursor       = UF::C(0, 255, 255);
+        cursor              = UF::C(0, 255, 255);
         cursorMode          = UF::C(0, 255, 0);
         textSeperators      = UF::C(255, 255, 255);
         lineInfo            = UF::C(0, 255, 255); 
@@ -36,6 +36,8 @@ namespace CBLT {
         
         fileQueueEntry      = UF::C(64, 64, 64);
         currentFile         = UF::C(192, 192, 192);
+
+        fileQueueColour     = UF::C(0, 0, 0); 
 
         // Image load        
 

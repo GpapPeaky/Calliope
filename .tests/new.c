@@ -39,3 +39,6 @@ void BadAss (llui32 size) {
     // Fuckass looking ahh
     fprintf(stdout, "Nice ass bby gril #%d\n", size);
 }
+
+// Stolakas likes men
+// Gae
