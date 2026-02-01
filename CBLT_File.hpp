@@ -20,6 +20,7 @@ namespace CBLT {
         private:
             std::vector<std::string> lines;  // Most elemental storage class of a file/document
             std::string path;                // File path, will include its name and parent folder
+            std::string name;                // Only the name
             // fixme: Maybe move CWD to controller, makes more sense
             UT::b dirty;                     // File's original contents have been changed and have not been saved
             FileExtension ext;               // File's extension, required for language support and tokenization
@@ -27,8 +28,11 @@ namespace CBLT {
             // Constructor
             File(void);
 
+            // Destructor
+            ~File(void);
+
             // Load file from name
-            UT::b Load(const std::string& fpath);
+            UT::b Load(const std::string& fpath, const std::string& cwd);
             
             // Save file
             UT::b Save(void);

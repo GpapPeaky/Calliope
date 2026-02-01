@@ -96,7 +96,7 @@ namespace CBLT {
             void Right(void);
 
             // Draw cursor
-            void Draw(const std::string& lineText, UT::llui32 cursorId);
+            void Draw(const std::string& lineText);
 
             // Start selection
             void StartSelection(void);

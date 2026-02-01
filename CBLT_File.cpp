@@ -1,39 +1,38 @@
 #include "CBLT_File.hpp"
 
 namespace CBLT {
-    File::File() {
+    File::File(void) {
         lines.emplace_back("");
     }
+
+    File::~File(void) {}
         
-    UT::b File::Load(const std::string& fpath) {
+    UT::b File::Load(const std::string& fpath, const std::string& cwd) {
         namespace fs = std::filesystem;
-
-        std::ifstream file(fpath);
-        if(!file.is_open())
-            return false;
-
-        fs::path absPath = fs::absolute(fpath);
     
-        Clear(); // Clear the previous open file
-        
-        path = fpath;
-
+        fs::path fullPath = fs::path(cwd) / fpath;
+        fullPath = fs::absolute(fullPath);
+    
+        std::ifstream file(fullPath);
+        if (!file.is_open())
+            return false;
+    
+        Clear();
+    
+        path = fullPath.string();
+        name = fpath; // File name
+    
         std::string line;
-
-        while(std::getline(file, line)) {
+        while (std::getline(file, line)) {
             lines.push_back(line);
         }
     
-        if(lines.empty())
+        if (lines.empty())
             lines.emplace_back("");
     
-        // Assign the extension enum to the file
-        // in order to hash the keyword set 
-        // more easily.
         ext = AssignExtension(path);
-
         dirty = false;
-
+    
         return true;
     }
             
@@ -215,13 +214,15 @@ namespace CBLT {
     }
 
     const std::string& File::Name(void) const {
-        return path;        
+        return name;
     }
 
     const std::string File::Info(void) const {
-        std::string info = "File Path: " + path + "\n" +
-               "Line Count: " + std::to_string(lines.size()) + "\n" +
-               "Dirty: " + (dirty ? "Yes" : "No");
+        std::string info = 
+            "File Path:  " + path + "\n" +
+            "File Name:  " + name + "\n" +
+            "Line Count: " + std::to_string(lines.size()) + "\n" +
+            "Dirty:      " + (dirty ? "Yes" : "No");
         
         return info;
     }

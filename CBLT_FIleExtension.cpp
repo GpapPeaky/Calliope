@@ -3,11 +3,16 @@
 namespace CBLT {
      FileExtension AssignExtension(std::string path) {
         UT::llui32 extPos = path.find_last_of('.');
+        FileExtension ext;
+
+        if (extPos == std::string::npos) {
+            ext = EXT(TXT); // No extension, handle the file as a normal .txt
+
+            return ext;
+        }
 
         // We now hold the string '.<ext>'
         std::string extStr = path.substr(extPos);
-
-        FileExtension ext;
 
         // Cobalt scripting language
         if (extStr == ".crs") {

@@ -33,7 +33,7 @@ namespace CBLT {
             UT::b HandleSpecialMovement(Cursor& cursor);
 
             // Handle indentation
-            UT::b HandleIndentation(File& file, Cursor& cursor);
+            UT::b HandleIndentation(Cursor& cursor);
 
             // Handle presses like TAB, RETURN and BACKSPACE
             void HandleSpecials(Cursor& cursor);
@@ -93,8 +93,8 @@ namespace CBLT {
             // Get the camera, mutable access
             Camera& GetCamera(void);
 
-            // Update CWD
-            void FindCWD(void);
+            // Initialise CWD
+            void InitCWD(const std::string& p);
 
             // Get CWD
             const std::string& CWD(void) const;

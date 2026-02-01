@@ -43,7 +43,7 @@ namespace CBLT {
     void Console::Execute(FileQueue& Q, std::string& cwd) {
         namespace fs = std::filesystem;
 
-        File f = Q.Active();
+        File* f = Q.Active();
         
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
 
@@ -85,14 +85,14 @@ namespace CBLT {
 
             // Save and exit
             else if (dir == "we") {
-                f.Save();
+                if (f) f->Save();
 
                 exit(EXIT_SUCCESS);
             }
 
             // Write to file
             else if (dir == "w") {
-                f.Save();
+                if (f) f->Save();
             }
 
             // Help guide
@@ -150,7 +150,7 @@ namespace CBLT {
                     fs::path filepath = dirpath / directiveParam.c_str();
                     std::ofstream newfile(filepath); // Specify file
 
-                    if(fs::exists(filepath)) {
+                    if(!newfile.is_open()) {
                         dr.message = "CBLT_ERR: FILE " + directiveParam + " ALREADY EXISTS";
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
@@ -163,8 +163,10 @@ namespace CBLT {
 
                     // Load the new file
                     File F;
-                    F.Load(filepath.string());
+                    F.Load(directiveParam, cwd);
                     Q.LoadFileToQueue(F);
+
+                    GetCWDContents(cwd); // Update
 
                     dr.message = "CBLT_LOG: FILE " + directiveParam + " CREATED";
                     dr.messageType = ConsoleMessage::INFO;
@@ -241,8 +243,13 @@ namespace CBLT {
 
             // Display file info and metadata
             else if (dir == "i") {
-                dr.message = f.Info();
-                dr.messageType = ConsoleMessage::INFO;
+                if (f) {
+                    dr.message = f->Info();
+                    dr.messageType = ConsoleMessage::INFO;
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                }
             }
             
             else { // Invalid directive given fallback
@@ -254,9 +261,10 @@ namespace CBLT {
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
                 if (entry.n == directiveLine) {
-                    f.Load(entry.n); // Load the new file
+                    File fileswitch;               // New file object
+                    fileswitch.Load(entry.n, cwd);      // Load the new file
                     
-                    Q.LoadFileToQueue(f); // Add it to the queue
+                    Q.LoadFileToQueue(fileswitch); // Add it to the queue
 
                     dr.message = "CBLT_LOG: SWITCHED TO " + directiveLine;
                     dr.messageType = ConsoleMessage::INFO;

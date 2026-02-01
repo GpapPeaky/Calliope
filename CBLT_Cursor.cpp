@@ -57,7 +57,7 @@ namespace CBLT {
         this->column += 1;
     }
 
-    void Cursor::Draw(const std::string& lineText, UT::llui32 cursorId) {
+    void Cursor::Draw(const std::string& lineText) {
         UT::i32 x = GetCursorX(lineText, gFont.size);
         UT::i32 y = line * gFont.size;
 
@@ -347,7 +347,7 @@ namespace CBLT {
     void CursorManager::DrawCursors(CBLT::File& openFile) {
         for (UT::llui32 i = 0 ; i < activeCursors.size() ; i++) {
             const std::string& lineText = openFile.GetCurrentLine(activeCursors[i].Line());
-            activeCursors[i].Draw(lineText, i);
+            activeCursors[i].Draw(lineText);
         }
     }
 
@@ -372,7 +372,7 @@ namespace CBLT {
     
         // Add cursors down (lead)
         if (requestLead) {
-            Cursor base = activeCursors[0];
+            Cursor base = activeCursors.at(0);
             for (auto& c : activeCursors)
                 if (c.Line() > base.Line())
                     base = c;
@@ -385,7 +385,7 @@ namespace CBLT {
     
         // Add cursors up (trail)
         if (requestTrail) {
-            Cursor base = activeCursors[0];
+            Cursor base = activeCursors.at(0);
             for (auto& c : activeCursors) {
                 if (c.Line() < base.Line())
                     base = c;
@@ -400,10 +400,10 @@ namespace CBLT {
     }
 
     Cursor& CursorManager::Primary() {
-        return activeCursors[0];
+        return activeCursors.at(0);
     }
 
     const Cursor CursorManager::Primary() const {
-        return activeCursors[0];
+        return activeCursors.at(0);
     }
 } // CBLT

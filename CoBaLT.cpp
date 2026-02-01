@@ -13,20 +13,12 @@ UT::i32 main() {
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
     CBLT::Controller ctrl; // Program controller
 
-    ///////////////
-    // IMPORTANT //
-    ///////////////
+    ctrl.InitCWD("C:/"); // Called only once so we do not crash
+    ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
-        // Thes functions are invoked whenever loading a new file onto the loaded file queue
-        CBLT::File file;
-
-        file.Load("./_Entry"); // Place holder for now
-        ctrl.LoadedFileQueue().LoadFileToQueue(file);
-        
-        // These functions should be invoked right after a  valid 'cd' directive is executed.
-        // or when calling the system's native file explorer
-        ctrl.FindCWD();
-        ctrl.GetConsole().GetCWDContents(ctrl.CWD());
+    UT::ui32 currentFileLineCount; 
+    UT::b currentFileDirt; 
+    std::string currentFileName;
 
     while(!WindowShouldClose()) {
         BeginDrawing();
@@ -40,13 +32,21 @@ UT::i32 main() {
             CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
             CBLT::FileQueue& fq = ctrl.LoadedFileQueue();
-            CBLT::File& f = fq.Active();
+            CBLT::File* f = fq.Active();
             CBLT::Camera& cam = ctrl.GetCamera();
 
-            cm.DrawCursors(f);
-            
             // Draw open file
-            f.Draw(cam);
+            if (f) {
+                cm.DrawCursors(*f);
+                f->Draw(cam);
+                currentFileLineCount = f->GetLineCount();
+                currentFileDirt      = f->Dirt();
+                currentFileName      = f->Name();
+            } else { // Safety
+                currentFileLineCount = 0;
+                currentFileDirt      = false;
+                currentFileName      = "";
+            }
 
             DrawRectangleLines(
                 0,
@@ -57,14 +57,16 @@ UT::i32 main() {
             );
 
             ctrl.DrawSelection(c);
-            CBLT::UI::Draw(c.Col(), c.Line(), f.GetLineCount(), f.Dirt(), f.Name(), ctrl.CWD(), (UT::i32)c.GetMode());
+            CBLT::UI::Draw(c.Col(), c.Line(), currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD(), (UT::i32)c.GetMode());
             
             if (cnsl.IsOpen()) {
                 cnsl.Draw();
             }
 
-            fq.Draw();
-            
+            if (fq.Size() > 0) {
+                fq.Draw();
+            }
+
             cnsl.DrawMessage();
 
             // cam.Draw();
