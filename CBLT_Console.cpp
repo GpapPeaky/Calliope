@@ -104,10 +104,10 @@ namespace CBLT {
                     "@w      - Write current file\n"
                     "@i      - Display file info and metadata\n"
                     "@h      - Display this help guide\n"
-                    "@m      - Create a directory\n"
-                    "@d      - Delete a directory\n"
                     "@c      - Create a file\n"
                     "@r      - Delete a file\n"
+                    "@m      - Create a directory\n"
+                    "@d      - Delete a directory\n"
                     "@cd     - Change diretory\n"
                     "@o      - Open native folder picker\n";
                 dr.messageType = ConsoleMessage::GUIDE;
@@ -135,12 +135,37 @@ namespace CBLT {
                 }
             }
 
-            // TODO: Create a file, check if file exists
+            // Create a file
             else if (dir == "c") {
                 if (directiveParam.empty()) { // No param
                     dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
+                    fs::path dirpath{cwd.c_str()};
+                    
+                    if (!fs::exists(dirpath)) {
+                        fs::create_directory(dirpath);
+                    }
+
+                    fs::path filepath = dirpath / directiveParam.c_str();
+                    std::ofstream newfile(filepath); // Specify file
+
+                    if(fs::exists(filepath)) {
+                        dr.message = "CBLT_ERR: FILE " + directiveParam + " ALREADY EXISTS";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        dirRes = dr;
+
+                        directive.Clear();
+
+                        return; // Early exit
+                    }
+
+                    // Load the new file
+                    File F;
+                    F.Load(filepath.string());
+                    Q.LoadFileToQueue(F);
+
                     dr.message = "CBLT_LOG: FILE " + directiveParam + " CREATED";
                     dr.messageType = ConsoleMessage::INFO;
                 }
@@ -225,6 +250,7 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
+        // FIXME: Problematic file-switch context, laods again the previous loaded file?
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
                 if (entry.n == directiveLine) {
@@ -238,6 +264,8 @@ namespace CBLT {
                     dirRes = dr;
 
                     directive.Clear();
+
+                    cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
                     
                     return; // Early exit
                 }
@@ -257,7 +285,7 @@ namespace CBLT {
         cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
 
         dirRes = dr;
-    }    
+    }
 
     void Console::Draw(void) {
         const UT::ui32 directiveFontSize = 20;
