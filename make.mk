@@ -1,6 +1,15 @@
 CXX = g++
 TARGET = CoBaLT.exe
 
+# Release
+RELEASE_DIR = release
+DLL_TARGET  = CoBaLT.dll
+IMPLIB      = libCoBaLT.dll.a
+DLL_CXXFLAGS = -fPIC
+DLL_LDFLAGS  = -shared \
+               -Wl,--export-all-symbols \
+               -Wl,--out-implib,$(RELEASE_DIR)/$(IMPLIB)
+
 # Path to your locally compiled raylib
 RAYLIB_PATH = C:/raylib/raylib/src   # ADJUST IF NEEDED!
 
@@ -43,9 +52,17 @@ $(OBJDIR)/%.o: %.cpp
 	@mkdir -p $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+$(RELEASE_DIR)/$(DLL_TARGET): $(OBJS)
+	@mkdir -p $(RELEASE_DIR)
+	$(CXX) $(OBJS) $(DLL_LDFLAGS) -o $@ $(LDFLAGS)
+
 # $(OBJDIR)/%.o: %.c
 # 	@mkdir -p $(OBJDIR)
 # 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJDIR) $(TARGET)
+
+# Release
+rel: CXXFLAGS += $(DLL_CXXFLAGS)
+rel: clean $(RELEASE_DIR)/$(DLL_TARGET)

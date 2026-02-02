@@ -71,7 +71,7 @@ UT::i32 main() {
 
             // cam.Draw();
 
-            DrawFPS(950, 0);
+            // DrawFPS(950, 0);
         EndDrawing();
     }
 
