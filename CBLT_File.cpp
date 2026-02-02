@@ -36,7 +36,7 @@ namespace CBLT {
         return true;
     }
             
-    UT::b File::Save(void) {
+    UT::b File::Save(void) {  // FIXME: Cannot write to file where path is not utf8/utf16 encoded, if seen as ASCII it simply ignores it
         if(path.empty())
             return false;
     
@@ -218,8 +218,6 @@ namespace CBLT {
     }
 
     const std::string File::Info(void) const {
-        fs::file_status = 
-
         std::string info = 
             "File Path:  " + path + "\n" +
             "File Name:  " + name + "\n" +

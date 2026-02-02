@@ -2,6 +2,7 @@
 
 // TODO: Add file tokenization
 // TODO: Add tokenization drawing
+// TODO: Fix the path field of the file, std::string is ASCII we require utf8 or utf16 
 
 UT::i32 main() {
     CBLT::Win::Init();
