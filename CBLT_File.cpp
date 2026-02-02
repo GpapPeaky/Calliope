@@ -218,9 +218,12 @@ namespace CBLT {
     }
 
     const std::string File::Info(void) const {
+        fs::file_status = 
+
         std::string info = 
             "File Path:  " + path + "\n" +
             "File Name:  " + name + "\n" +
+            "File Status: \n" +
             "Line Count: " + std::to_string(lines.size()) + "\n" +
             "Dirty:      " + (dirty ? "Yes" : "No");
         

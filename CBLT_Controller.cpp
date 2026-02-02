@@ -473,6 +473,15 @@ namespace CBLT {
             return true;
         }
 
+        // Current file info
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_I)) {
+            // Call the console to execute the directive
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = "@i";
+            console.Execute(Q, cwd);
+
+            return true;
+        }
+
         // Comment out/in line
         if (keyboard.m.ctrl && IsKeyPressed(KEY_SLASH)) {
             std::string& line = Q.Active()->GetCurrentLine(cursor.Line()); 

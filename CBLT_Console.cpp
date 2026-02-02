@@ -55,7 +55,7 @@ namespace CBLT {
             return; // Nothing to show
         }
         
-        if (directiveLine[0] == '@') { // Directive command context
+        if (directiveLine.at(0) == '@') { // Directive command context
             std::string trimmed = UF::TrimLeadingAt(directiveLine); // Trimmed of '@'
 
             // Directive / parameter seperator
