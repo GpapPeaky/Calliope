@@ -36,7 +36,7 @@ namespace CBLT {
         return true;
     }
             
-    UT::b File::Save(void) {  // FIXME: Cannot write to file where path is not utf8/utf16 encoded, if seen as ASCII it simply ignores it
+    UT::b File::Save(void) {
         if(path.empty())
             return false;
     
