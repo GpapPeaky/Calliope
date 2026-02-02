@@ -113,26 +113,78 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
-            // TODO: Create a directory, check if directory exists
+            // Create a directory, check if directory exists
             else if (dir == "m") {
-                if (directiveParam.empty()) { // No param
+                if (directiveParam.empty()) {
                     dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
-                    dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ CREATED";
-                    dr.messageType = ConsoleMessage::INFO;
+                    fs::path dirpath = fs::path(cwd) / directiveParam;
+                
+                    if (fs::exists(dirpath)) {
+                        dr.message = "CBLT_ERR: DIRECTORY " + directiveParam + " ALREADY EXISTS";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    } else if (fs::create_directory(dirpath)) {
+                        dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ CREATED";
+                        dr.messageType = ConsoleMessage::INFO;
+                
+                        GetCWDContents(cwd);
+                    } else {
+                        dr.message = "CBLT_ERR: COULD NOT CREATE DIRECTORY " + directiveParam;
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    }
                 }
+                
+                dirRes = dr;
+
+                directive.Clear();
+                
+                return;
             }
 
-            // TODO: Delete a directory, check if directory exists 
+            // Delete a directory, check if directory exists 
             else if (dir == "d") {
-                if (directiveParam.empty()) { // No param
+                if (directiveParam.empty()) {
                     dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
-                    dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ DELETED";
-                    dr.messageType = ConsoleMessage::INFO;
+                    fs::path dirpath = fs::path(cwd) / directiveParam;
+                    std::error_code ec;
+            
+                    if (!fs::exists(dirpath)) {
+                        dr.message = "CBLT_ERR: DIRECTORY " + directiveParam + " NOT FOUND";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    }
+                    else if (!fs::is_directory(dirpath)) {
+                        dr.message = "CBLT_ERR: " + directiveParam + " IS NOT A DIRECTORY";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    }
+                    else {
+                        std::uintmax_t removed = fs::remove_all(dirpath, ec);
+            
+                        if (ec) {
+                            dr.message = "CBLT_ERR: " + std::string(ec.message());
+                            dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                        } 
+                        else if (removed == 0) {
+                            dr.message = "CBLT_ERR: FAILED TO DELETE DIRECTORY " + directiveParam;
+                            dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                        }
+                        else {
+                            dr.message = "CBLT_LOG: DIRECTORY " + directiveParam +
+                                        "/ DELETED (" + std::to_string(removed) + " items)";
+                            dr.messageType = ConsoleMessage::INFO;
+            
+                            GetCWDContents(cwd);
+                        }
+                    }
                 }
+            
+                dirRes = dr;
+
+                directive.Clear();
+                
+                return;
             }
 
             // Create a file
@@ -173,14 +225,64 @@ namespace CBLT {
                 }
             }
 
-            // TODO: Remove a file, check if file exists
+            // Remove a file, check if file exists
             else if (dir == "r") {
                 if (directiveParam.empty()) { // No param
                     dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE @" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
-                    dr.message = "CBLT_LOG: FILE " + directiveParam + " REMOVED";
-                    dr.messageType = ConsoleMessage::INFO;
+                    fs::path dirpath(cwd.c_str());
+                    
+                    if (!fs::exists(dirpath)) {
+                        dr.message = "CBLT_ERR: INVALID PATH";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                        
+                        dirRes = dr;
+
+                        directive.Clear();
+
+                        return;
+                    }
+                    
+                    fs::path filepath = dirpath / directiveParam.c_str();
+                    
+                    if (!fs::exists(filepath)) {
+                        dr.message = "CBLT_ERR: FILE " + directiveParam + " NOT FOUND";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        dirRes = dr;
+
+                        directive.Clear();
+
+                        return;
+                    }
+
+                    // Proceed to delete
+                    if (fs::remove(filepath.string().c_str())) { // Success
+                        dr.message = "CBLT_LOG: FILE " + directiveParam + " REMOVED";
+                        dr.messageType = ConsoleMessage::INFO;
+                        
+                        // Note: If the file is in the queue and it is saved
+                        // It will reappear in the next GetCWD(...) call!
+                        // else it can be closed by removing it from the queue
+
+                        GetCWDContents(cwd);
+
+                        dirRes = dr;
+
+                        directive.Clear();
+
+                        return;
+                    } else { // Failed
+                        dr.message = "CBLT_ERR: FILE " + directiveParam + " COULDN'T BE REMOVED";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                        
+                        dirRes = dr;
+
+                        directive.Clear();
+
+                        return;
+                    }
                 }
             }
 
