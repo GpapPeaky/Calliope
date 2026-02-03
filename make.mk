@@ -1,4 +1,6 @@
-CXX = g++
+#64 bit compiler, for the 64 bit .dlls
+CXX = x86_64-w64-mingw32-g++
+
 TARGET = CoBaLT.exe
 
 # Release

@@ -233,7 +233,7 @@ CoBaLT maintains a queue of open files:
 
 ## Building and Installation
 
->You can personally build this project in git bash by typing sh scripts/make.mk or by executing make -f make.mk in the root diretory.
+>You can personally build this project in git bash by typing sh scripts/make.mk or by executing make -f make.mk in the root directory, but please make sure you are using a 64bit compiler and raylib is also compiled by a 64bit compiler.
 
 ---
 
