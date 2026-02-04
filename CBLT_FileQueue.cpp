@@ -2,7 +2,7 @@
 
 namespace CBLT {
     void FileQueue::LoadFileToQueue(const File& f) {
-        loadedFiles.push_back(std::move(f));
+        loadedFiles.push_back(f);
         activeIndex = Size() - 1;
     }
 

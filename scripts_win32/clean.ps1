@@ -1,0 +1,1 @@
+make -f makeWin32.mk clean

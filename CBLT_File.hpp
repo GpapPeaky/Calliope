@@ -96,6 +96,15 @@ namespace CBLT {
 
     }; // File class
 
+    // No file loaded!
+    extern File gNAF;
+
+    // Initialize the Not Active File fallback file
+    void InitNAF(void);
+        
+    // Check if a file is the NAF file
+    UT::b IsNAF(std::string filename);
+
     // Positioning margins
     namespace FileMargins {
         namespace Text {

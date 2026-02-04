@@ -1,6 +1,30 @@
 #include "CBLT_File.hpp"
 
 namespace CBLT {
+    File gNAF;
+
+    void InitNAF(void) {
+        const UT::ui32 nameSize = rand() % 256;
+        std::string NAFname;
+        
+        for (unsigned int i = 0; i < nameSize; i++) {
+            char c = 32 + (rand() % (127 - 32)); // random printable ASCII
+            NAFname.push_back(c);
+        }
+        
+        gNAF.SetName(NAFname);
+
+        std::cout << "CBLT_LOG: NAFname: " <<  NAFname << "\n";
+    }
+
+    UT::b IsNAF(std::string filename) {
+        if (filename == gNAF.Name()) {
+            return true;
+        }
+
+        return false;
+    }
+
     File::File(void) {
         lines.emplace_back("");
     }
