@@ -2,7 +2,7 @@
 
 namespace CBLT {
     void FileQueue::LoadFileToQueue(const File& f) {
-        loadedFiles.push_back(f);
+        loadedFiles.push_back(std::move(f));
         activeIndex = Size() - 1;
     }
 
@@ -35,18 +35,18 @@ namespace CBLT {
         }
     }
 
-    File* FileQueue::Active(void) {
+    File& FileQueue::Active(void) {
         if(Size() > 0)
-            return &loadedFiles.at(activeIndex);
+            return loadedFiles.at(activeIndex);
 
-        return nullptr;
+        return CBLT::gNAF;
     }
 
-    const File* FileQueue::Active(void) const {
+    const File& FileQueue::Active(void) const {
         if(Size() > 0)
-            return &loadedFiles.at(activeIndex);
-
-        return nullptr;
+            return loadedFiles.at(activeIndex);
+    
+        return CBLT::gNAF;    
     }
 
     UT::llui32 FileQueue::Index(void) const  {

@@ -19,7 +19,7 @@ namespace CBLT {
 
         namespace fs = std::filesystem;
 
-        for (auto& entry : fs::directory_iterator(fs::u8path(cwd))) {
+        for (auto& entry : fs::directory_iterator(fs::path(cwd))) {
             if (entry.is_directory()) {
                 cwdContents.push_back(
                     {gPalette.cwdDir, entry.path().filename().string() + "/"}
@@ -43,7 +43,7 @@ namespace CBLT {
     void Console::Execute(FileQueue& Q, std::string& cwd) {
         namespace fs = std::filesystem;
 
-        File* f = Q.Active();
+        File f = Q.Active();
         
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
 
@@ -85,14 +85,14 @@ namespace CBLT {
 
             // Save and exit
             else if (dir == "we") {
-                if (f) f->Save();
+                if (Q.Size() > 0) f.Save();
 
                 exit(EXIT_SUCCESS);
             }
 
             // Write to file
             else if (dir == "w") {
-                if (f) f->Save();
+                if (Q.Size() > 0) f.Save();
             }
 
             // Help guide
@@ -325,7 +325,7 @@ namespace CBLT {
                     return; // Early out
                 }
 
-                fs::path p = fs::u8path(selected);
+                fs::path p = fs::path(selected);
 
                 if (!fs::is_directory(p)) {
                     dr.message = "CBLT_ERR: NOT A DIRECTORY";
@@ -345,8 +345,8 @@ namespace CBLT {
 
             // Display file info and metadata
             else if (dir == "i") {
-                if (f) {
-                    dr.message = f->Info();
+                if (Q.Size() > 0) {
+                    dr.message = f.Info();
                     dr.messageType = ConsoleMessage::INFO;
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE";
@@ -359,14 +359,13 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
-        // FIXME: Problematic file-switch context, laods again the previous loaded file?
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
                 if (entry.n == directiveLine) {
-                    File fileswitch;               // New file object
-                    fileswitch.Load(entry.n, cwd);      // Load the new file
-                    
-                    Q.LoadFileToQueue(fileswitch); // Add it to the queue
+                    File F;
+                    F.Load(entry.n, cwd);
+
+                    Q.LoadFileToQueue(F); // Add it to the queue
 
                     dr.message = "CBLT_LOG: SWITCHED TO " + directiveLine;
                     dr.messageType = ConsoleMessage::INFO;

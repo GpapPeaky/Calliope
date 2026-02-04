@@ -88,11 +88,14 @@ namespace CBLT {
             // Return a string of info relative to the file
             const std::string Info(void) const;
 
+            // Set the file name to something else
+            void SetName(std::string name);
+
             // Return the extesion of the file
             FileExtension Extension(void) const;
 
-        }; // File class
-        
+    }; // File class
+
     // Positioning margins
     namespace FileMargins {
         namespace Text {

@@ -1,27 +1,25 @@
-#64 bit compiler, for the 64 bit .dlls
-CXX = x86_64-w64-mingw32-g++
+# For god's sake do not compile ANYTHING inside Git-bash, fucks up PATH, STDLIB and appearantly C Runtime and DLL comp.
 
+# 64-bit MinGW
+CXX = x86_64-w64-mingw32-g++
 TARGET = CoBaLT.exe
 
-# Release
+# Release DLL
 RELEASE_DIR = release
 DLL_TARGET  = CoBaLT.dll
 IMPLIB      = libCoBaLT.dll.a
-DLL_CXXFLAGS = -fPIC
-DLL_LDFLAGS  = -shared \
-               -Wl,--export-all-symbols \
-               -Wl,--out-implib,$(RELEASE_DIR)/$(IMPLIB)
+DLL_LDFLAGS = -shared -Wl,--export-all-symbols -Wl,--out-implib,$(RELEASE_DIR)/$(IMPLIB)
 
-# Path to your locally compiled raylib
-RAYLIB_PATH = C:/raylib/raylib/src   # ADJUST IF NEEDED!
+# Raylib path
+RAYLIB_PATH = C:/raylib/raylib/src
 
-# Compiler and linker flags
-CXXFLAGS = -std=c++17 -Wall -Wextra -O3 -I$(RAYLIB_PATH)
+# Compiler flags
+CXXFLAGS = -std=c++23 -Wall -Wextra -O2 -I$(RAYLIB_PATH)
 
 # Common source files
 CPP_SRCS_COMMON := $(filter-out CBLT_Dialog_Win32.cpp CBLT_Dialog_Linux.cpp CBLT_Dialog_MacOS.cpp, $(wildcard *.cpp))
 
-# Platform-specific sources
+# Platform-specific
 ifeq ($(OS),Windows_NT)
     CPP_SRCS_PLATFORM := CBLT_Dialog_Win32.cpp
     LDFLAGS := -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm -lole32 -lshell32 -luuid
@@ -33,38 +31,38 @@ else
     endif
     ifeq ($(UNAME_S),Darwin)
         CPP_SRCS_PLATFORM := CBLT_Dialog_MacOS.cpp
-        LDFLAGS := -L$(RAYLIB_PATH) -lraylib \
-                   -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+        LDFLAGS := -L$(RAYLIB_PATH) -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
     endif
 endif
 
-# All sources
 CPP_SRCS := $(CPP_SRCS_COMMON) $(CPP_SRCS_PLATFORM)
-
-# Objects
 OBJDIR := obj
 CPP_OBJS := $(CPP_SRCS:%.cpp=$(OBJDIR)/%.o)
 OBJS := $(CPP_OBJS)
 
+# Default target
+all: $(TARGET)
 
+# Build executable
 $(TARGET): $(OBJS)
+	@if not exist $(OBJDIR) mkdir $(OBJDIR)
 	$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
 
+# Compile object files
 $(OBJDIR)/%.o: %.cpp
-	@mkdir -p $(OBJDIR)
+	@if not exist $(OBJDIR) mkdir $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Build DLL
 $(RELEASE_DIR)/$(DLL_TARGET): $(OBJS)
-	@mkdir -p $(RELEASE_DIR)
+	@if not exist $(RELEASE_DIR) mkdir $(RELEASE_DIR)
 	$(CXX) $(OBJS) $(DLL_LDFLAGS) -o $@ $(LDFLAGS)
 
-# $(OBJDIR)/%.o: %.c
-# 	@mkdir -p $(OBJDIR)
-# 	$(CC) $(CFLAGS) -c $< -o $@
-
+# Clean
 clean:
-	rm -rf $(OBJDIR) $(TARGET)
+	@if exist $(OBJDIR) rmdir /s /q $(OBJDIR)
+	@if exist $(TARGET) del /q $(TARGET)
+	@if exist $(RELEASE_DIR) rmdir /s /q $(RELEASE_DIR)
 
-# Release
-rel: CXXFLAGS += $(DLL_CXXFLAGS)
+# Release target
 rel: clean $(RELEASE_DIR)/$(DLL_TARGET)

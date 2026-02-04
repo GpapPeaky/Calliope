@@ -26,11 +26,11 @@ namespace CBLT {
         const UT::ui32 line = cursor.Line();
 
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT))) {
-            cursor.SetToWordBoundary(Q.Active()->GetCurrentLine(line), CursorDirection::RIGHT, *Q.Active());
+            cursor.SetToWordBoundary(Q.Active().GetCurrentLine(line), CursorDirection::RIGHT, Q.Active());
 
             return true;
         } else if (keyboard.m.ctrl && (IsKeyPressed(KEY_LEFT) || IsKeyPressedRepeat(KEY_LEFT))) {
-            cursor.SetToWordBoundary(Q.Active()->GetCurrentLine(line), CursorDirection::LEFT, *Q.Active());
+            cursor.SetToWordBoundary(Q.Active().GetCurrentLine(line), CursorDirection::LEFT, Q.Active());
         
             return true;
         }
@@ -39,28 +39,29 @@ namespace CBLT {
     }
 
     void Controller::HandleMovement(Cursor& cursor, File* fileOverride) {
-        File* f = fileOverride ? fileOverride : Q.Active(); // Override if required
+        File f = fileOverride ? *fileOverride : Q.Active(); // Override if required
 
+        
         // We need to check specifics AND THEN check for general key presses
         if (HandleSpecialMovement(cursor)) return; // Already handled movement, via LCtrl, skip applying any more movement
         
         const UT::ui32 line = cursor.Line();
         const UT::ui32 col  = cursor.Col();
-        const UT::ui32 len  = f->GetLineLength(line);
-    
+        const UT::ui32 len  = f.GetLineLength(line);
+        
         if (IsKeyPressed(KEY_LEFT) || IsKeyPressedRepeat(KEY_LEFT)) {
             if (col > 0) {
                 cursor.Left();
             } else if (line > 0) {
                 cursor.SetAt(
-                    f->GetLineLength(line - 1),
+                    f.GetLineLength(line - 1),
                     line - 1
                 );
             }
         } else if (IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT)) {
-            if (col < f->GetLineLength(line)) {
+            if (col < f.GetLineLength(line)) {
                 cursor.Right();
-            } else if (line + 1 < f->GetLineCount()) {
+            } else if (line + 1 < f.GetLineCount()) {
                 cursor.SetAt(0, line + 1);
             }
         } else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
@@ -68,7 +69,7 @@ namespace CBLT {
                 UT::ui32 newLine = line - 1;
                 UT::ui32 newCol  = std::min(
                     col,
-                    f->GetLineLength(newLine)
+                    f.GetLineLength(newLine)
                 );
           
                 cursor.SetAt(newCol, newLine);
@@ -76,25 +77,25 @@ namespace CBLT {
                 UT::ui32 newLine = line - 1;
                 UT::ui32 newCol  = std::max(
                     col,
-                    f->GetLineLength(newLine)
+                    f.GetLineLength(newLine)
                 );
           
                 cursor.SetAt(newCol, newLine);
             }
         } else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
-            if (line + 1 < f->GetLineCount() && col != len + 1) {
+            if (line + 1 < f.GetLineCount() && col != len + 1) {
                 UT::ui32 newLine = line + 1;
                 UT::ui32 newCol  = std::min(
                     col,
-                    f->GetLineLength(newLine)
+                    f.GetLineLength(newLine)
                 );
           
                 cursor.SetAt(newCol, newLine);
-            } else if (line + 1 < f->GetLineCount()) {
+            } else if (line + 1 < f.GetLineCount()) {
                 UT::ui32 newLine = line + 1;
                 UT::ui32 newCol  = std::max(
                     col,
-                    f->GetLineLength(newLine)
+                    f.GetLineLength(newLine)
                 );
           
                 cursor.SetAt(newCol, newLine);
@@ -105,7 +106,7 @@ namespace CBLT {
     UT::b Controller::HandleIndentation(Cursor& cursor) {
         if (cursor.Col() == 0) return false; // No identation to check
 
-        const std::string& line = Q.Active()->GetCurrentLine(cursor.Line());
+        const std::string& line = Q.Active().GetCurrentLine(cursor.Line());
         
         if (line.at(cursor.Col() - 1) == '{') { // FIXME: Might need to add the closer in this check, it crashes when done though?
             UT::ui32 currentIndent = GetIndentation(cursor.Line());
@@ -122,13 +123,13 @@ namespace CBLT {
             UT::ui32 innerLine = cursor.Line() + 1;
 
             // Insert inner indented line
-            Q.Active()->CreateLine(innerLine, inner);
+            Q.Active().CreateLine(innerLine, inner);
 
             // Set cursor at the inner line
             cursor.SetAt(inner.size(), innerLine);
 
             // Closer after the inner line
-            Q.Active()->CreateLine(innerLine + 1, closer);
+            Q.Active().CreateLine(innerLine + 1, closer);
 
             return true;
         }
@@ -140,7 +141,7 @@ namespace CBLT {
         // Backspace
         if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
             if (cursor.Col() > 0) {
-                std::string& line = Q.Active()->GetCurrentLine(cursor.Line());
+                std::string& line = Q.Active().GetCurrentLine(cursor.Line());
                 UT::i32 col = cursor.Col();
                 UT::i32 tabSize = keyboard.tabSize;
         
@@ -173,35 +174,35 @@ namespace CBLT {
                     cursor.Left();
                 }
             } else if (cursor.Col() == 0 && cursor.Line() > 0) {
-                std::string& previousLine = Q.Active()->GetCurrentLine(cursor.Line() - 1);
-                std::string& line = Q.Active()->GetCurrentLine(cursor.Line());
+                std::string& previousLine = Q.Active().GetCurrentLine(cursor.Line() - 1);
+                std::string& line = Q.Active().GetCurrentLine(cursor.Line());
                 
                 // Move one line up
                 cursor.SetAt(previousLine.length(), cursor.Line() - 1);
                 
                 if (line.empty()){
-                    Q.Active()->DeleteLine(cursor.Line() + 1);
+                    Q.Active().DeleteLine(cursor.Line() + 1);
                 } else {
                     // Move the rest of the line to the previous one
-                    Q.Active()->PushBackLineFragment(cursor.Line() + 1, cursor.Line());
+                    Q.Active().PushBackLineFragment(cursor.Line() + 1, cursor.Line());
 
                     // THEN delete the line
-                    Q.Active()->DeleteLine(cursor.Line() + 1);
+                    Q.Active().DeleteLine(cursor.Line() + 1);
                 }
             }
 
-            Q.Active()->SetDirt(true);
+            Q.Active().SetDirt(true);
         }
 
         // FIXME: Multi-cursor indentation is problematic
         // Return
         if (IsKeyPressedRepeat(KEY_ENTER) || IsKeyPressed(KEY_ENTER)) {
             if (cursor.Col() == 0) {
-                Q.Active()->CreateLine(cursor.Line()); 
+                Q.Active().CreateLine(cursor.Line()); 
                 
                 cursor.Down();
             } else if (cursor.Col()){
-                std::string fragment = Q.Active()->SplitLine(cursor.Line(), cursor.Col());
+                std::string fragment = Q.Active().SplitLine(cursor.Line(), cursor.Col());
                 
                 // Check for indentation
                 UT::b indentationHandle = HandleIndentation(cursor);
@@ -210,7 +211,7 @@ namespace CBLT {
 
                 UT::ui32 indent = GetIndentation(cursor.Line());
 
-                if (Q.Active()->GetCurrentLine(cursor.Line()).at(cursor.Col() - 1) == '}') {
+                if (Q.Active().GetCurrentLine(cursor.Line()).at(cursor.Col() - 1) == '}') {
                     indent--; // Suppress it if the cursor is right after a closer
                 }
 
@@ -219,10 +220,10 @@ namespace CBLT {
                 
                 cursor.SetAt(indentString.size(), cursor.Line() + 1);
                 
-                Q.Active()->CreateLine(cursor.Line(), indentedFragment);
+                Q.Active().CreateLine(cursor.Line(), indentedFragment);
             }
 
-            Q.Active()->SetDirt(true);
+            Q.Active().SetDirt(true);
         }
 
         // Tab
@@ -238,7 +239,7 @@ namespace CBLT {
             }
 
             for (UT::ui8 i = 0 ; i < remainingSpace ; i++) {
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     ' '
@@ -247,12 +248,12 @@ namespace CBLT {
                 cursor.Right();
             }
 
-            Q.Active()->SetDirt(true);
+            Q.Active().SetDirt(true);
         }
     }
 
     UT::b Controller::HandleInsert(Cursor& cursor, std::vector<char>& keyQueue) {        
-        std::string& line = Q.Active()->GetCurrentLine(cursor.Line());
+        std::string& line = Q.Active().GetCurrentLine(cursor.Line());
         
         // Insert the queued input
         for (UT::c32 typed : keyQueue) {
@@ -260,8 +261,8 @@ namespace CBLT {
             // Closers omit
             if (typed == '}') {
                 if (cursor.Col() >= line.length() || line.at(cursor.Col()) != '}') {
-                    Q.Active()->InsertChar(cursor.Col(), cursor.Line(), '}');
-                    Q.Active()->SetDirt(true);
+                    Q.Active().InsertChar(cursor.Col(), cursor.Line(), '}');
+                    Q.Active().SetDirt(true);
                 }
                 
                 cursor.Right();
@@ -271,8 +272,8 @@ namespace CBLT {
 
             else if (typed == ']') {
                 if (cursor.Col() >= line.length() || line.at(cursor.Col()) != ']') {
-                    Q.Active()->InsertChar(cursor.Col(), cursor.Line(), ']');
-                    Q.Active()->SetDirt(true);
+                    Q.Active().InsertChar(cursor.Col(), cursor.Line(), ']');
+                    Q.Active().SetDirt(true);
                 }
                 
                 cursor.Right();
@@ -282,8 +283,8 @@ namespace CBLT {
 
             else if (typed == ')') {
                 if (cursor.Col() >= line.length() || line.at(cursor.Col()) != ')') {
-                    Q.Active()->InsertChar(cursor.Col(), cursor.Line(), ')');
-                    Q.Active()->SetDirt(true);
+                    Q.Active().InsertChar(cursor.Col(), cursor.Line(), ')');
+                    Q.Active().SetDirt(true);
                 }
 
                 cursor.Right();
@@ -293,7 +294,7 @@ namespace CBLT {
 
             // Openers/closers
             if (typed == '{') {
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     typed
@@ -301,19 +302,19 @@ namespace CBLT {
 
                 cursor.Right();
 
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     '}'
                 );
 
-                Q.Active()->SetDirt(true); // Mark file as dirty
+                Q.Active().SetDirt(true); // Mark file as dirty
 
                 return true;
             }
 
             else if (typed == '(') {
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     typed
@@ -321,19 +322,19 @@ namespace CBLT {
 
                 cursor.Right();
 
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     ')'
                 );
 
-                Q.Active()->SetDirt(true); // Mark file as dirty
+                Q.Active().SetDirt(true); // Mark file as dirty
 
                 return true;
             }
 
             else if (typed == '[') {
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     typed
@@ -341,20 +342,20 @@ namespace CBLT {
 
                 cursor.Right();
 
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     ']'
                 );
 
-                Q.Active()->SetDirt(true); // Mark file as dirty
+                Q.Active().SetDirt(true); // Mark file as dirty
 
                 return true;
             } 
             
             // Normal insert
             else {
-                Q.Active()->InsertChar(
+                Q.Active().InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     typed
@@ -363,7 +364,7 @@ namespace CBLT {
                 cursor.Right();
             }
 
-            Q.Active()->SetDirt(true); // Mark file as dirty
+            Q.Active().SetDirt(true); // Mark file as dirty
             
             return true;
         }
@@ -380,7 +381,6 @@ namespace CBLT {
         if (IsKeyPressed(KEY_ESCAPE) && console.Message().messageType != ConsoleMessage::NONE) {
             console.Message().messageType = ConsoleMessage::NONE;
         } 
-
 
         // LCTRL + LALT ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -406,27 +406,27 @@ namespace CBLT {
 
         // Delete current line
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
-            SetClipboardText(Q.Active()->GetCurrentLine(cursor.Line()).c_str());
+            SetClipboardText(Q.Active().GetCurrentLine(cursor.Line()).c_str());
             
-            Q.Active()->DeleteLine(cursor.Line());
+            Q.Active().DeleteLine(cursor.Line());
 
-            if (cursor.Line() > 0 && cursor.Line() < Q.Active()->GetLineCount()) {
+            if (cursor.Line() > 0 && cursor.Line() < Q.Active().GetLineCount()) {
                 cursor.SetAt(cursor.Col(), cursor.Line());
-            } else if (cursor.Line() == Q.Active()->GetLineCount()) {
+            } else if (cursor.Line() == Q.Active().GetLineCount()) {
                 cursor.SetAt(cursor.Col(), cursor.Line() - 1);
             } else {
                 cursor.SetAt(0, 0);
             }
 
-            Q.Active()->SetDirt(true);
+            Q.Active().SetDirt(true);
 
             return true;
         }
 
         // Copy current line
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_D) || IsKeyPressedRepeat(KEY_D))) {
-            Q.Active()->CreateLine(cursor.Line(), Q.Active()->GetCurrentLine(cursor.Line()));
-            Q.Active()->SetDirt(true);
+            Q.Active().CreateLine(cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
+            Q.Active().SetDirt(true);
 
             return true;
         }
@@ -438,7 +438,7 @@ namespace CBLT {
 
         // Write and Exit
         if (keyboard.m.ctrl && IsKeyPressed(KEY_W)) {
-            Q.Active()->Save();
+            Q.Active().Save();
 
             exit(UDef::GRACEFUL_EXIT);
         }
@@ -452,7 +452,7 @@ namespace CBLT {
 
         // Write file contents
         if (keyboard.m.ctrl && IsKeyPressed(KEY_S)) {
-            Q.Active()->Save(); // Automatically cleans the "dirt"
+            Q.Active().Save(); // Automatically cleans the "dirt"
 
             return true;
         }
@@ -484,7 +484,7 @@ namespace CBLT {
 
         // Comment out/in line
         if (keyboard.m.ctrl && IsKeyPressed(KEY_SLASH)) {
-            std::string& line = Q.Active()->GetCurrentLine(cursor.Line()); 
+            std::string& line = Q.Active().GetCurrentLine(cursor.Line()); 
 
             UT::llui32 idx = line.find("//");
             
@@ -524,7 +524,7 @@ namespace CBLT {
                 if (!line.empty() && line.back() == '\r')
                     line.pop_back();
 
-                Q.Active()->CreateLine(lineIdx++, line);
+                Q.Active().CreateLine(lineIdx++, line);
                 linesPasted++;
             }
 
@@ -539,7 +539,7 @@ namespace CBLT {
             
             Q.SetActiveNext();
             
-            File& newFile = *Q.Active();
+            File& newFile = Q.Active();
             UT::ui32 newLineCount = newFile.GetLineCount();
             
             if (currentLine >= newLineCount && newLineCount > 0) {
@@ -557,7 +557,7 @@ namespace CBLT {
             
             Q.SetActivePrev();
             
-            File& newFile = *Q.Active();
+            File& newFile = Q.Active();
             UT::ui32 newLineCount = newFile.GetLineCount();
             
             if (currentLine >= newLineCount && newLineCount > 0) {
@@ -574,7 +574,7 @@ namespace CBLT {
             if (Q.Size() > 1) {
                 Q.CloseFile(Q.Index());
         
-                File& newFile = *Q.Active();
+                File& newFile = Q.Active();
                 UT::ui32 newLineCount = newFile.GetLineCount();
         
                 if (cursor.Line() >= newLineCount && newLineCount > 0) {
@@ -664,10 +664,11 @@ namespace CBLT {
             return;
         }
         
-        if (!Q.Active()) {
+        if (Q.Size() == 0) {
             // Console toggle to get out at the start
             if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
                 console.Toggle();
+                
             }
 
             return;
@@ -676,7 +677,7 @@ namespace CBLT {
         // Get pressed keys
         std::vector<char> keyQueue = GetKeyQueue();
 
-        cursorManager.HandlePendingRequests(*Q.Active());
+        cursorManager.HandlePendingRequests(Q.Active());
 
         for(auto& c : cursorManager.activeCursors) {
             // HandleShorcuts();
@@ -701,7 +702,7 @@ namespace CBLT {
                     }
 
                     ClampCursor(c); // Clamp cursor inside file bounds
-                    c.ClampToCamera(camera, *Q.Active());
+                    c.ClampToCamera(camera, Q.Active());
 
                     break;
                 case CBLT::CursorMode::SELECT:
@@ -710,7 +711,7 @@ namespace CBLT {
                     // Copy and exit is handled at the start of the update function, see Controller::HandleSelect()
 
                     ClampCursor(c);
-                    c.ClampToCamera(camera, *Q.Active());
+                    c.ClampToCamera(camera, Q.Active());
                 
                     break;
                 default:
@@ -722,11 +723,11 @@ namespace CBLT {
     }
 
     const File& Controller::GetFile(void) const {
-        return *Q.Active();
+        return Q.Active();
     }
 
     File& Controller::GetFile(void) {
-        return *Q.Active();
+        return Q.Active();
     }
 
     const Console& Controller::GetConsole(void) const {
@@ -746,13 +747,13 @@ namespace CBLT {
     }
 
     void Controller::ClampCursor(Cursor& c) {
-        File* f = Q.Active();
+        File f = Q.Active();
 
-        if (!f) return; // Nothing to do
+        if (Q.Size() == 0) return; // Nothing to do
 
         c.SetAt(
-            std::min(c.Col(), static_cast<UT::ui32>(f->GetLineLength(c.Line()))),
-            std::min(c.Line(), static_cast<UT::ui32>(f->GetLineCount()))
+            std::min(c.Col(), static_cast<UT::ui32>(f.GetLineLength(c.Line()))),
+            std::min(c.Line(), static_cast<UT::ui32>(f.GetLineCount()))
         );
     }
 
@@ -774,7 +775,7 @@ namespace CBLT {
         UT::ui32 depth = 0;
     
         for (UT::ui32 i = 0 ; i < line ; ++i) {
-            const std::string& l = Q.Active()->GetCurrentLine(i);
+            const std::string& l = Q.Active().GetCurrentLine(i);
     
             for (char c : l) {
                 if (c == '{') ++depth;
@@ -797,13 +798,13 @@ namespace CBLT {
         UT::ui32 startLine = std::min(c.SSLine(), c.Line());
         UT::ui32 endLine = std::max(c.SSLine(), c.Line());
         
-        File* f = Q.Active();
+        File f = Q.Active();
 
-        if (!f) return; // Nothing to do
+        if (Q.Size() == 0) return; // Nothing to do
         
         for (UT::ui32 l = startLine; l <= endLine; l++) {
-            const std::string& lineText = f->GetCurrentLine(l);
-            UT::ui32 lineLength = f->GetLineLength(l);
+            const std::string& lineText = f.GetCurrentLine(l);
+            UT::ui32 lineLength = f.GetLineLength(l);
             
             UT::ui32 selStart, selEnd;
     
@@ -897,14 +898,14 @@ namespace CBLT {
     
         std::string copied;
 
-        File* f = Q.Active();
-        if (!f) return ""; // Nothing to do
+        File f = Q.Active();
+        if (Q.Size() == 0) return ""; // Nothing to do
     
         for (UT::ui32 l = sLine; l <= eLine; l++) {
 
 
-            const std::string& lineText = Q.Active()->GetCurrentLine(l);
-            UT::ui32 lineLength = Q.Active()->GetLineLength(l);
+            const std::string& lineText = Q.Active().GetCurrentLine(l);
+            UT::ui32 lineLength = Q.Active().GetLineLength(l);
     
             UT::ui32 selStart, selEnd;
     

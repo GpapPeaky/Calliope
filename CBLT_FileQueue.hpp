@@ -24,10 +24,10 @@ namespace CBLT {
             void SetActivePrev(void);
 
             // Get the active file, mutable
-            File* Active(void);
+            File& Active(void);
 
             // Get the active file, read-only
-            const File* Active(void) const ;
+            const File& Active(void) const ;
 
             // Get the activeIndex;
             UT::llui32 Index(void) const ;

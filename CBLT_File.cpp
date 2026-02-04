@@ -6,20 +6,25 @@ namespace CBLT {
     }
 
     File::~File(void) {}
+
+    void File::SetName(std::string name) {
+        this->name = name;
+    }
         
     UT::b File::Load(const std::string& fpath, const std::string& cwd) {
         namespace fs = std::filesystem;
     
-        fs::path fullPath = fs::path(cwd) / fpath;
-        fullPath = fs::absolute(fullPath);
-    
-        std::ifstream file(fullPath);
-        if (!file.is_open())
+        std::string pathString = cwd + '\\' + fpath;
+
+        std::ifstream file(pathString);
+        
+        if (!file.is_open()) {
             return false;
-    
+        }
+        
         Clear();
     
-        path = fullPath.string();
+        path = pathString;
         name = fpath; // File name
     
         std::string line;

@@ -32,16 +32,16 @@ UT::i32 main() {
             CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
             CBLT::FileQueue& fq = ctrl.LoadedFileQueue();
-            CBLT::File* f = fq.Active();
+            CBLT::File& f = fq.Active();
             CBLT::Camera& cam = ctrl.GetCamera();
 
             // Draw open file
-            if (f) {
-                cm.DrawCursors(*f);
-                f->Draw(cam);
-                currentFileLineCount = f->GetLineCount();
-                currentFileDirt      = f->Dirt();
-                currentFileName      = f->Name();
+            if (fq.Size() > 0) {
+                cm.DrawCursors(f);
+                f.Draw(cam);
+                currentFileLineCount = f.GetLineCount();
+                currentFileDirt      = f.Dirt();
+                currentFileName      = f.Name();
             } else { // Safety
                 currentFileLineCount = 0;
                 currentFileDirt      = false;
