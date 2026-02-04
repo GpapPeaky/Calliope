@@ -590,7 +590,7 @@ namespace CBLT {
         return false;
     }
 
-    UT::b Controller::HandleConsole(void) { // FIXME: Sometimes the backspace doesn't work?
+    UT::b Controller::HandleConsole(void) {
         // Directive file
         File& df = console.ConsoleDirective().DirectiveFile();
         
