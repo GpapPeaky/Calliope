@@ -1,8 +1,5 @@
 #include "CoBaLT_INCLUDES.hpp"
 
-// TODO: Add file tokenization
-// TODO: Add tokenization drawing
-
 UT::i32 main() {
     CBLT::Win::Init();
 

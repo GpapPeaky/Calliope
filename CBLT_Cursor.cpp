@@ -102,18 +102,6 @@ namespace CBLT {
                     gPalette.cursor
                 );
                 
-                // Inner
-                DrawRectangleLines(
-                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
-                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES +
-                    1,
-                    y + gFont.size + 1,
-                    charWidth - 2,
-                    gFont.size - 2,
-                    gPalette.cursor
-                );
-
                 return;
             case CursorSymbol::NON_ASCII_LINE:
                 DrawRectangle(

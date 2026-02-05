@@ -462,14 +462,6 @@ namespace CBLT {
                     gPalette.consoleCursor
                 );
 
-                DrawRectangleLines(
-                    cursorX + 1,
-                    cursorY + 1,
-                    cc.charWidth - 2,
-                    gFont.size - 2,
-                    gPalette.consoleCursor
-                );
-
                 break;
             case CursorSymbol::NON_ASCII_LINE:
                 DrawRectangle(

@@ -623,7 +623,7 @@ namespace CBLT {
         console.Update();           // Update console
 
         // Console handling
-        if (console.IsOpen()) { // FIXME: Backspace bugs out sometimes
+        if (console.IsOpen()) { // FIXME: Backspace bugs out sometimes, if there are even count of cursor, console won't open
             UT::b handleConsole = HandleConsole(); // Input
 
             if (handleConsole) return; // Input handled, return
