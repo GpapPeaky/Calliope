@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cctype>               // for tokenizing
+#include <unordered_set>        // for std::unordered_set<> ...
 #include <vector>               // for std::vector<> ...
 #include <string>               // for std::string ...
 #include <fstream>              // File stream
@@ -12,24 +14,30 @@
 #include "CBLT_TopBar.hpp"          // for vertical margins
 #include "CBLT_Camera.hpp"          // for camera offsets
 #include "CBLT_FileExtension.hpp"   // For extensions
-#include "CBLT_Palette.hpp"
+#include "CBLT_Palette.hpp"         // Pallete colours
+#include "CBLT_Token.hpp"           // Tokens storage class
+#include "CBLT_Language.hpp"        // Tokens for tokenizing
 
 namespace CBLT {
     // Basic document/file class
     class File {
         private:
-            std::vector<std::string> lines;  // Most elemental storage class of a file/document
-            std::string path;                // File path, will include its name and parent folder
-            std::string name;                // Only the name
-            // fixme: Maybe move CWD to controller, makes more sense
-            UT::b dirty;                     // File's original contents have been changed and have not been saved
-            FileExtension ext;               // File's extension, required for language support and tokenization
+            std::vector<std::string> lines;                     // Most elemental storage class of a file/document
+            std::vector<Token> tokens;                          // File tokens
+            std::vector<UT::b> lineDirt;                        // TODO: Dirty lines to retokenize
+            std::string path;                                   // File path, will include its name and parent folder
+            std::string name;                                   // Only the name
+            UT::b dirty;                                        // File's original contents have been changed and have not been saved
+            FileExtension ext;                                  // File's extension, required for language support and tokenization
         public:
             // Constructor
             File(void);
 
             // Destructor
             ~File(void);
+
+            // Tokenize file contents
+            void Tokenize(void);
 
             // Load file from name
             UT::b Load(const std::string& fpath, const std::string& cwd);
@@ -94,6 +102,8 @@ namespace CBLT {
             // Return the extesion of the file
             FileExtension Extension(void) const;
 
+            // Run the lexer through the line
+            void LexLine(const std::string& s, UT::ui32 line);
     }; // File class
 
     // No file loaded!

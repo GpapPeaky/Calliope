@@ -8,7 +8,7 @@ TARGET = CoBaLT.exe
 RELEASE_DIR = release
 DLL_TARGET  = CoBaLT.dll
 IMPLIB      = libCoBaLT.dll.a
-DLL_LDFLAGS = -shared -Wl,--export-all-symbols -Wl,--out-implib,$(RELEASE_DIR)/$(IMPLIB)
+DLL_LDFLAGS = -static -shared -Wl,--export-all-symbols -Wl,--out-implib,$(RELEASE_DIR)/$(IMPLIB)
 
 # Raylib path
 RAYLIB_PATH = C:/raylib/raylib/src

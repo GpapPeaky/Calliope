@@ -25,11 +25,135 @@ namespace CBLT {
         return false;
     }
 
+    void File::LexLine(const std::string& s, UT::ui32 line) {
+        UT::ui32 i = 0;
+
+        // TODO: Multiline comments
+
+        while (i < s.size()) {
+            char c = s[i];
+    
+            // String literal
+            if (c == '"' || c == '\'') {
+                char quote = c;
+                UT::ui32 start = i++;
+            
+                UT::b escaped = false;
+                while (i < s.size()) {
+                    char ch = s[i++];
+            
+                    if (escaped) {
+                        escaped = false;
+                        continue;
+                    }
+            
+                    if (ch == '\\') {
+                        escaped = true;
+                        continue;
+                    }
+            
+                    if (ch == quote) {
+                        break; // closing quote
+                    }
+                }
+            
+                tokens.push_back({
+                    TokenClass::STRING,
+                    line,
+                    start,
+                    i - start
+                });
+                continue;
+            }
+
+            // Identifier / keyword
+            if (std::isalpha(c) || c == '_') {
+                UT::ui32 start = i++;
+                while (i < s.size() && (std::isalnum(s[i]) || s[i] == '_')) i++;
+    
+                TokenClass type = IsKeyword(s.substr(start, i - start))
+                                ? TokenClass::KEYWORD
+                                : TokenClass::ID;
+    
+                tokens.push_back({ type, line, start, i - start });
+                continue;
+            }
+    
+            // Number
+            if (std::isdigit(c)) {
+                UT::ui32 start = i++;
+                while (i < s.size() && std::isdigit(s[i])) i++;
+    
+                tokens.push_back({ TokenClass::NUM, line, start, i - start });
+                continue;
+            }
+    
+            // Whitespace
+            if (std::isspace(c)) {
+                UT::ui32 start = i++;
+                while (i < s.size() && std::isspace(s[i])) i++;
+    
+                tokens.push_back({ TokenClass::WHITESPACE, line, start, i - start });
+                continue;
+            }
+
+            // -------------------------------------------------------------------------------------------------------------------------------------------------
+            // Comment lexing
+            // -------------------------------------------------------------------------------------------------------------------------------------------------
+
+            // C-like comments
+            if (ext == EXT(C) ||
+                ext == EXT(CPP) ||
+                ext == EXT(JAVA) ||
+                ext == EXT(CS)
+            ) {
+                if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                    tokens.push_back({
+                        TokenClass::COMMENT,
+                        line,
+                        i,
+                        static_cast<UT::ui32>(s.size() - i)
+                    });
+
+                    break;
+                }
+            }
+
+            // ASM comments
+            if (ext == EXT(ASM)) {
+                if (c == ';' || c == '#') {
+                    tokens.push_back({
+                        TokenClass::COMMENT,
+                        line,
+                        i,
+                        static_cast<UT::ui32>(s.size() - i)
+                    });
+                 
+                    break;
+                }
+            }
+
+            // -------------------------------------------------------------------------------------------------------------------------------------------------
+
+            // Operators / punctuation
+            tokens.push_back({ TokenClass::OPERATOR, line, i, 1 });
+            ++i;
+        }
+    }
+
     File::File(void) {
         lines.emplace_back("");
     }
 
     File::~File(void) {}
+
+    void File::Tokenize(void) {
+        tokens.clear();
+
+        for (UT::ui32 line = 0; line < lines.size(); ++line) {
+            LexLine(lines[line], line);
+        }
+    }
 
     void File::SetName(std::string name) {
         this->name = name;
@@ -59,9 +183,14 @@ namespace CBLT {
         if (lines.empty())
             lines.emplace_back("");
     
+        // Language support stuff
         ext = AssignExtension(path);
+        AssignLanguageKeywords(ext);
+
         dirty = false;
     
+        Tokenize(); // Suck ass
+
         return true;
     }
             
@@ -146,14 +275,39 @@ namespace CBLT {
                 cam.Height() + UI::TOP_BAR_HEIGHT
             );
                 // File text
-                DrawTextEx(
-                    gFont.f,
-                    lines.at(i).c_str(),
-                    pos,
-                    gFont.size,
-                    0.0f,
-                    gPalette.textBase
-                );
+                // DrawTextEx(
+                //     gFont.f,
+                //     lines.at(i).c_str(),
+                //     pos,
+                //     gFont.size,
+                //     0.0f,
+                //     gPalette.textBase
+                // );
+                
+                // Draw colored tokens
+                for (Token& t : tokens) {
+                    if (t.line != i) continue;
+                
+                    Color col = t.TokenColor();
+                    if (col.a == 0) continue; // skips whitespaces
+                
+                    // By counting glyphs
+                    float tokX = pos.x + t.GetCursorX(lines[i].substr(0, t.col), gFont.size, t.col);
+                
+                    std::string_view sv(
+                        lines[i].data() + t.col,
+                        t.len
+                    );
+                
+                    DrawTextEx(
+                        gFont.f,
+                        sv.data(),
+                        { tokX, pos.y },
+                        gFont.size,
+                        0.0f,
+                        col
+                    );
+                }
             EndScissorMode();
             
             pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;

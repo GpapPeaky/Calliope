@@ -41,6 +41,13 @@ namespace CBLT {
             Color currentFile;          // Current file in queue display colour
             Color fileQueueColour;      // File queue background colour
 
+            Color lex_id;               // Id colours
+            Color lex_comm;             // Comment colours
+            Color lex_key;              // keyword colours
+            Color lex_num;              // number literal colours
+            Color lex_op;               // operator colours
+            Color lex_str;              // string literal colours
+
             // Constructor
             Palette(void);
 
