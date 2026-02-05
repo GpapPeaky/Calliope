@@ -24,6 +24,8 @@ namespace CBLT {
                 return CBLT::gPalette.lex_op;
             case TokenClass::STRING:
                 return CBLT::gPalette.lex_str;
+            case TokenClass::PUNCTUATION:
+                return CBLT::gPalette.lex_pun;
             default:
                 return {0, 0, 0, 0}; // Nothing 
         }

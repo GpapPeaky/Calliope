@@ -120,16 +120,23 @@ namespace CBLT {
             std::string closer(closerIndent * keyboard.tabSize, ' ');
             closer += '}';
 
+            // TODO: Add dirty line marking and resolution
+            // Q.Active().SetLineDirt(cursor.Line(), true);
+            
             UT::ui32 innerLine = cursor.Line() + 1;
-
+            
             // Insert inner indented line
             Q.Active().CreateLine(innerLine, inner);
 
+            // Q.Active().SetLineDirt(cursor.Line() + 1, true);
+            
             // Set cursor at the inner line
             cursor.SetAt(inner.size(), innerLine);
-
+            
             // Closer after the inner line
             Q.Active().CreateLine(innerLine + 1, closer);
+
+            // Q.Active().SetLineDirt(cursor.Line() + 2, true);
 
             return true;
         }
@@ -145,7 +152,7 @@ namespace CBLT {
                 UT::i32 col = cursor.Col();
                 UT::i32 tabSize = keyboard.tabSize;
         
-                // If previous char is space → delete indentation block
+                // If previous char is space -> delete indentation block
                 if (line.at(col - 1) == ' ') {
                     UT::i32 deleteCount = 0;
                     UT::i32 startCol = col;

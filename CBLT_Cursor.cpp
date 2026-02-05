@@ -11,7 +11,7 @@ namespace CBLT {
         m(CursorMode::INSERT),                              // Default
         fragment(""),
         charWidth(MeasureText("A", CBLT::gFont.size)),      // Measure once
-        cursorSymbol(CursorSymbol::NON_ASCII_BOX)           // Default
+        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX)           // Default
     {}
 
    Cursor::~Cursor(void) {}

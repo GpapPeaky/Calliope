@@ -135,8 +135,36 @@ namespace CBLT {
 
             // -------------------------------------------------------------------------------------------------------------------------------------------------
 
-            // Operators / punctuation
-            tokens.push_back({ TokenClass::OPERATOR, line, i, 1 });
+            // Operators
+            if (
+                c == '+' ||
+                c == '-' ||
+                c == '/' ||
+                c == '%' ||
+                c == '*' ||
+                c == '=' ||
+                c == '>' ||
+                c == '<' ||
+                c == '^' ||
+                c == '&' ||
+                c == '|' ||
+                c == '!' ||
+                c == '~'
+            ) {
+                tokens.push_back({
+                    TokenClass::OPERATOR,
+                    line,
+                    i,
+                    1
+                });
+                ++i;
+                continue;
+            }
+
+            // Default on
+            //
+            // Punctuation
+            tokens.push_back({ TokenClass::PUNCTUATION, line, i, 1 });
             ++i;
         }
     }
@@ -294,15 +322,29 @@ namespace CBLT {
                     // By counting glyphs
                     float tokX = pos.x + t.GetCursorX(lines[i].substr(0, t.col), gFont.size, t.col);
                 
-                    std::string_view sv(
-                        lines[i].data() + t.col,
-                        t.len
-                    );
+                    // Wooow this echoes the characters, at
+                    //
+                    // col 0 -> once
+                    // col 1 -> twice
+                    // col 2 -> three times
+                    // col 4 -> ++
+                    //
+                    //
+                    //
+                    // std::string_view sv(
+                        // lines[i].data() + t.col,
+                        // t.len
+                    // );
+
+                    // Drawing is correct but it 
+                    std::string tokenText = lines[i].substr(t.col, t.len);
                 
                     DrawTextEx(
                         gFont.f,
-                        sv.data(),
-                        { tokX, pos.y },
+                        tokenText.c_str(),
+                        {
+                            tokX, pos.y
+                        },
                         gFont.size,
                         0.0f,
                         col

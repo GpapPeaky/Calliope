@@ -39,12 +39,13 @@ namespace CBLT {
 
         fileQueueColour     = UF::C(0, 0, 0);
 
-        lex_id    = UF::C(0, 255, 255);               
-        lex_comm  = UF::C(128, 255, 64);             
-        lex_key   = UF::C(255, 0, 255);              
-        lex_num   = UF::C(255, 0, 128);              
-        lex_op    = UF::C(0, 0, 255);               
-        lex_str   = UF::C(0, 255, 128);              
+        lex_id    = UF::C(200, 200, 255);
+        lex_comm  = UF::C(128, 128, 128);
+        lex_key   = UF::C(255, 128, 0);
+        lex_num   = UF::C(0, 200, 200);
+        lex_op    = UF::C(255, 255, 255);
+        lex_str   = UF::C(0, 200, 0); 
+        lex_pun   = UF::C(128, 128, 128);
 
         // Image load        
 
