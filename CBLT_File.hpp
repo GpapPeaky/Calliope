@@ -109,6 +109,9 @@ namespace CBLT {
     // No file loaded!
     extern File gNAF;
 
+    // Check if a section of code is in comment block
+    extern UT::b gInBlockComment;
+    
     // Initialize the Not Active File fallback file
     void InitNAF(void);
         

@@ -3,6 +3,8 @@
 namespace CBLT {
     File gNAF;
 
+    UT::b gInBlockComment = false;
+
     void InitNAF(void) {
         const UT::ui32 nameSize = rand() % 256;
         std::string NAFname;
@@ -28,11 +30,37 @@ namespace CBLT {
     void File::LexLine(const std::string& s, UT::ui32 line) {
         UT::ui32 i = 0;
 
-        // TODO: Multiline comments
-
         while (i < s.size()) {
             char c = s[i];
     
+            // Comment block entry
+            if (c == '/' && s[i + 1] == '*') {
+                gInBlockComment = true;
+            }
+
+            if (gInBlockComment) {
+                UT::ui32 start = i++;
+            
+                while (i < s.size()) {
+                    char ch = s[i++];
+            
+                    if (ch == '*' && s[i] == '/') {
+                        i++; // Include the '/'
+                        gInBlockComment = false;
+                        break; // Closer
+                    }
+                }
+            
+                tokens.push_back({
+                    TokenClass::COMMENT,
+                    line,
+                    start,
+                    i - start
+                });
+
+                continue;
+            }
+
             // String literal
             if (c == '"' || c == '\'') {
                 char quote = c;
