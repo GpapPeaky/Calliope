@@ -24,7 +24,7 @@ namespace CBLT {
         private:
             std::vector<std::string> lines;                     // Most elemental storage class of a file/document
             std::vector<Token> tokens;                          // File tokens
-            std::vector<UT::b> lineDirt;                        // TODO: Dirty lines to retokenize
+            std::vector<UT::b> lineDirt;                        // TODO: Dirty lines to retokenize per input, buffer change
             std::string path;                                   // File path, will include its name and parent folder
             std::string name;                                   // Only the name
             UT::b dirty;                                        // File's original contents have been changed and have not been saved
