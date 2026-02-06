@@ -1,5 +1,10 @@
-// FIXME: Creating trailing cursors DOWN, cursors are not clipped and show in the tobar
-// FIXME: Selection mode is bad
+// 1. Autocomplete with TAB
+// 2. Add click at infile
+// 3. Split, font size++/--
+// 4. Fullscreen/resizable window
+// 5. Selection system
+// 6. Ctrl G -> Goto line
+// 7. Ctrl F -> Find symbol
 
 #include "CoBaLT_INCLUDES.hpp"
 
