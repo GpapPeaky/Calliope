@@ -1,3 +1,6 @@
+// FIXME: Creating trailing cursors DOWN, cursors are not clipped and show in the tobar
+// FIXME: Selection mode is bad
+
 #include "CoBaLT_INCLUDES.hpp"
 
 UT::i32 main() {

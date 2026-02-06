@@ -26,7 +26,7 @@ namespace CBLT {
         cursorPosHighlight.a = 24;
         
         selectionColor      = UF::C(50, 150, 255);
-        selectionColor.a    = 24;
+        selectionColor.a    = 64;
         
         msgBackground       = UF::C(0, 0, 0);
         msgForeground       = UF::C(255, 255, 255); 
