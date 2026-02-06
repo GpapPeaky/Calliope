@@ -19,21 +19,8 @@ CXXFLAGS = -std=c++23 -Wall -Wextra -O2 -I$(RAYLIB_PATH)
 # Common source files
 CPP_SRCS_COMMON := $(filter-out CBLT_Dialog_Win32.cpp CBLT_Dialog_Linux.cpp CBLT_Dialog_MacOS.cpp, $(wildcard *.cpp))
 
-# Platform-specific
-ifeq ($(OS),Windows_NT)
-    CPP_SRCS_PLATFORM := CBLT_Dialog_Win32.cpp
-    LDFLAGS := -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm -lole32 -lshell32 -luuid
-else
-    UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
-        CPP_SRCS_PLATFORM := CBLT_Dialog_Linux.cpp
-        LDFLAGS := -L$(RAYLIB_PATH) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-    endif
-    ifeq ($(UNAME_S),Darwin)
-        CPP_SRCS_PLATFORM := CBLT_Dialog_MacOS.cpp
-        LDFLAGS := -L$(RAYLIB_PATH) -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
-    endif
-endif
+CPP_SRCS_PLATFORM := CBLT_Dialog_Win32.cpp
+LDFLAGS := -L$(RAYLIB_PATH) -lraylib -lopengl32 -lgdi32 -lwinmm -lole32 -lshell32 -luuid -static-libgcc -static-libstdc++
 
 CPP_SRCS := $(CPP_SRCS_COMMON) $(CPP_SRCS_PLATFORM)
 OBJDIR := obj
