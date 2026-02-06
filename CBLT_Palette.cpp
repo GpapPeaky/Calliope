@@ -8,8 +8,8 @@ namespace CBLT {
         console             = UF::C(255, 255, 255);
         consoleText         = UF::C(255, 255, 255);
         consoleBackground   = UF::C(0, 0, 0);
-        consoleCursor       = UF::C(0, 255, 255);
-        cursor              = UF::C(0, 255, 255);
+        consoleCursor       = UF::C(255, 255, 32);
+        cursor              = UF::C(255, 255, 32);
         cursorMode          = UF::C(0, 255, 0);
         textSeperators      = UF::C(255, 255, 255);
         lineInfo            = UF::C(0, 255, 255); 
@@ -23,10 +23,10 @@ namespace CBLT {
         textLines           = UF::C(192, 192, 192);
         
         cursorPosHighlight   = cursor;
-        cursorPosHighlight.a = 32;
+        cursorPosHighlight.a = 24;
         
         selectionColor      = UF::C(50, 150, 255);
-        selectionColor.a    = 32;
+        selectionColor.a    = 24;
         
         msgBackground       = UF::C(0, 0, 0);
         msgForeground       = UF::C(255, 255, 255); 
@@ -39,13 +39,13 @@ namespace CBLT {
 
         fileQueueColour     = UF::C(0, 0, 0);
 
-        lex_id    = UF::C(200, 200, 255); // White: Clear, standard text
+        lex_id    = UF::C(192, 192, 192); // White: Clear, standard text
         lex_comm  = UF::C(100, 100, 100); // Dark Grey: Pushed to background
         lex_key   = UF::C(64, 128, 255);  // Sky Blue: Distinct from Cyan cursor
         lex_num   = UF::C(255, 128, 64);  // Orange: High visibility for data
         lex_op    = UF::C(255, 255, 0);   // Yellow: Stands out for logic
         lex_str   = UF::C(64, 255, 64);   // Bright Green: Matches 'clean' / standard string color
-        lex_pun   = UF::C(192, 192, 192); // Silver: Subtle structure
+        lex_pun   = UF::C(255, 255, 255); // Silver: Subtle structure
 
         // Image load        
 
