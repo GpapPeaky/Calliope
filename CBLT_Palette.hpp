@@ -48,6 +48,7 @@ namespace CBLT {
             Color lex_op;               // operator colours
             Color lex_str;              // string literal colours
             Color lex_pun;              // punctuation colours
+            Color lex_misc;             // Misc colour based on language
 
             // Constructor
             Palette(void);

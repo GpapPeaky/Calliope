@@ -2,30 +2,7 @@
 
 namespace CBLT {
     File gNAF;
-
     UT::b gInBlockComment = false;
-
-    void InitNAF(void) {
-        const UT::ui32 nameSize = rand() % 256;
-        std::string NAFname;
-        
-        for (unsigned int i = 0; i < nameSize; i++) {
-            char c = 32 + (rand() % (127 - 32)); // random printable ASCII
-            NAFname.push_back(c);
-        }
-        
-        gNAF.SetName(NAFname);
-
-        std::cout << "CBLT_LOG: NAFname: " <<  NAFname << "\n";
-    }
-
-    UT::b IsNAF(std::string filename) {
-        if (filename == gNAF.Name()) {
-            return true;
-        }
-
-        return false;
-    }
 
     void File::LexLine(const std::string& s, UT::ui32 line) {
         UT::ui32 i = 0;
@@ -34,7 +11,7 @@ namespace CBLT {
             char c = s[i];
     
             // Comment block entry
-            if (c == '/' && s[i + 1] == '*') {
+            if (c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
                 gInBlockComment = true;
             }
 
@@ -126,39 +103,96 @@ namespace CBLT {
             }
 
             // -------------------------------------------------------------------------------------------------------------------------------------------------
-            // Comment lexing
+            // Lang specific lexing (comments, misc)
             // -------------------------------------------------------------------------------------------------------------------------------------------------
 
-            // C-like comments
-            if (ext == EXT(C) ||
-                ext == EXT(CPP) ||
-                ext == EXT(JAVA) ||
-                ext == EXT(CS)
-            ) {
-                if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                    tokens.push_back({
-                        TokenClass::COMMENT,
-                        line,
-                        i,
-                        static_cast<UT::ui32>(s.size() - i)
-                    });
+            switch (ext) { // FIXME: Weird
+                case EXT(C):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens.push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
 
-                    break;
-                }
-            }
+                        return;
+                    }
 
-            // ASM comments
-            if (ext == EXT(ASM)) {
-                if (c == ';' || c == '#') {
-                    tokens.push_back({
-                        TokenClass::COMMENT,
-                        line,
-                        i,
-                        static_cast<UT::ui32>(s.size() - i)
-                    });
-                 
+                    if (c == '#' && i + 1 < s.size()) {
+                        tokens.push_back({
+                            TokenClass::MISC,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return;
+                    }
                     break;
-                }
+                case EXT(CPP):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens.push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return;
+                    }
+
+                    if (c == '#' && i + 1 < s.size()) {
+                        tokens.push_back({
+                            TokenClass::MISC,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return;
+                    }
+                    break;
+                case EXT(CS):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens.push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return;
+                    }
+                    break;
+                case EXT(JAVA):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens.push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return;
+                    }
+                    break;
+
+                case EXT(ASM): 
+                    if (c == ';' || c == '#') {
+                        tokens.push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return;
+                    }
+                    break;
+
+                default:
+                    break;
             }
 
             // -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -195,6 +229,28 @@ namespace CBLT {
             tokens.push_back({ TokenClass::PUNCTUATION, line, i, 1 });
             ++i;
         }
+    }
+
+    void InitNAF(void) {
+        const UT::ui32 nameSize = rand() % 256;
+        std::string NAFname;
+        
+        for (unsigned int i = 0; i < nameSize; i++) {
+            char c = 32 + (rand() % (127 - 32)); // random printable ASCII
+            NAFname.push_back(c);
+        }
+        
+        gNAF.SetName(NAFname);
+
+        std::cout << "CBLT_LOG: NAFname: " <<  NAFname << "\n";
+    }
+
+    UT::b IsNAF(std::string filename) {
+        if (filename == gNAF.Name()) {
+            return true;
+        }
+
+        return false;
     }
 
     File::File(void) {

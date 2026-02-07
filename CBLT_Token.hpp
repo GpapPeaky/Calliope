@@ -18,6 +18,7 @@ namespace CBLT {
         OPERATOR,
         WHITESPACE,
         PUNCTUATION,
+        MISC,
         UNKOWN
     }; // Token type
 

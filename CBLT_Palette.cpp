@@ -39,13 +39,14 @@ namespace CBLT {
 
         fileQueueColour     = UF::C(0, 0, 0);
 
-        lex_id    = UF::C(192, 192, 192); // White: Clear, standard text
-        lex_comm  = UF::C(100, 100, 100); // Dark Grey: Pushed to background
-        lex_key   = UF::C(64, 128, 255);  // Sky Blue: Distinct from Cyan cursor
-        lex_num   = UF::C(255, 128, 64);  // Orange: High visibility for data
-        lex_op    = UF::C(255, 255, 0);   // Yellow: Stands out for logic
-        lex_str   = UF::C(64, 255, 64);   // Bright Green: Matches 'clean' / standard string color
-        lex_pun   = UF::C(255, 255, 255); // Silver: Subtle structure
+        lex_id      = UF::C(192, 192, 192); // White: Clear, standard text
+        lex_comm    = UF::C(128, 128, 128); // Dark Grey: Pushed to background
+        lex_key     = UF::C(64, 128, 255);  // Sky Blue: Distinct from Cyan cursor
+        lex_num     = UF::C(255, 128, 64);  // Orange: High visibility for data
+        lex_op      = UF::C(255, 255, 0);   // Yellow: Stands out for logic
+        lex_str     = UF::C(64, 255, 64);   // Bright Green: Matches 'clean' / standard string color
+        lex_pun     = UF::C(255, 255, 255); // Silver: Subtle structure
+        lex_misc    = UF::C(255, 64, 255);
 
         // Image load        
 
