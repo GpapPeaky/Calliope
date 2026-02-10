@@ -589,7 +589,7 @@ namespace CBLT {
 
             // Message from console for guide
             case ConsoleMessage::GUIDE: {
-                const UT::i32 guideMargin = 50;
+                const UT::i32 guideMargin = 57;
             
                 const UT::i32 guideW = GetScreenWidth()  - guideMargin * 2;
                 const UT::i32 guideH = GetScreenHeight() - guideMargin * 2;
@@ -615,8 +615,10 @@ namespace CBLT {
                     gPalette.msgBackground
                 );
             
-                textX = guideX + (guideW - messageWidth) / 2.0f;
-                textY = guideY + (guideH - directiveFontSize) / 2.0f;
+                const UT::ui32 textMargin = 10;
+
+                textX = guideX + textMargin;
+                textY = guideY + textMargin;
             
                 DrawTextEx(
                     gFont.f,

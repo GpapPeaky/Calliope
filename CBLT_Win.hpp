@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CBLT_raylib.hpp"
+#include "CBLT_Util.hpp"
 
 #include <string>
 

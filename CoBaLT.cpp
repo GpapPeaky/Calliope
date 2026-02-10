@@ -53,14 +53,6 @@ UT::i32 main() {
                 currentFileName      = "";
             }
 
-            DrawRectangleLines(
-                0,
-                0,
-                CBLT::gOffsets.x,
-                CBLT::gOffsets.y,
-                WHITE
-            );
-
             ctrl.DrawSelection(c);
             CBLT::UI::Draw(c.Col(), c.Line(), currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD(), (UT::i32)c.GetMode());
             

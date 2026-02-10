@@ -6,11 +6,14 @@ namespace CBLT {
     namespace Win {
 
         void Init(void) {
+            SetTraceLogLevel(LOG_ERROR);
+
             Image icon = LoadImage("assets/icon/muse.png");
             
-            const int screenWidth = 1720;
-            const int screenHeight = 920;
+            const UT::ui32 screenWidth = 1720;
+            const UT::ui32 screenHeight = 920;
             
+            SetConfigFlags(FLAG_WINDOW_RESIZABLE);
             InitWindow(screenWidth, screenHeight, Version.c_str());
             
             SetWindowIcon(icon);
