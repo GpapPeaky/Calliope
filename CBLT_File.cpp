@@ -106,7 +106,7 @@ namespace CBLT {
             // Lang specific lexing (comments, misc)
             // -------------------------------------------------------------------------------------------------------------------------------------------------
 
-            switch (ext) { // FIXME: Weird
+            switch (ext) {
                 case EXT(C):
                     if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
                         tokens.push_back({
@@ -271,7 +271,7 @@ namespace CBLT {
         this->name = name;
     }
         
-    UT::b File::Load(const std::string& fpath, const std::string& cwd) { // FIXME: Crashes sometimes
+    UT::b File::Load(const std::string& fpath, const std::string& cwd) { // FIXME: Crashes when saving a file, and loading a different one.
         namespace fs = std::filesystem;
     
         std::string pathString = cwd + '\\' + fpath;
