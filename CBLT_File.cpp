@@ -9,23 +9,37 @@ namespace CBLT {
 
         while (i < s.size()) {
             char c = s[i];
-    
-            // Comment block entry
-            if (c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
-                gInBlockComment = true;
-            }
 
             if (gInBlockComment) {
-                UT::ui32 start = i++;
+                UT::ui32 start = i;
             
                 while (i < s.size()) {
-                    char ch = s[i++];
-            
-                    if (ch == '*' && s[i] == '/') {
-                        i++; // Include the '/'
+                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
+                        i += 2;
                         gInBlockComment = false;
-                        break; // Closer
+                        break;
                     }
+                    ++i;
+                }
+            
+                tokens.push_back({ TokenClass::COMMENT, line, start, i - start });
+                continue;
+            }
+            
+            // Comment block entry
+            if (!gInBlockComment && c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
+                gInBlockComment = true;
+                UT::ui32 start = i;
+                i += 2;
+                
+                // Inline check
+                while (i < s.size()) {
+                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
+                        i += 2;
+                        gInBlockComment = false;
+                        break;
+                    }
+                    ++i;
                 }
             
                 tokens.push_back({
@@ -34,7 +48,6 @@ namespace CBLT {
                     start,
                     i - start
                 });
-
                 continue;
             }
 

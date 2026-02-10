@@ -25,6 +25,7 @@ UT::i32 main() {
     UT::b currentFileDirt; 
     std::string currentFileName;
 
+    UT::ui32 framesCount = 0;
     while(!WindowShouldClose()) {
         BeginDrawing();
 
@@ -70,6 +71,12 @@ UT::i32 main() {
 
             DrawFPS(950, 0);
         EndDrawing();
+
+        if (framesCount % 120 == 0) { // Every 120 frames, update the cwd contents
+            ctrl.GetConsole().GetCWDContents(ctrl.CWD());
+        }
+
+        framesCount++;
     }
 
     CBLT::Win::Destroy();
