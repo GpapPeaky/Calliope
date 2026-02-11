@@ -24,7 +24,7 @@ namespace CBLT {
         private:
             std::vector<std::string> lines;                     // Most elemental storage class of a file/document
             std::vector<std::vector<Token>> tokens;             // File tokens
-            UT::ui32 firstDirtyLine = UINT32_MAX;               // Dirty lines to retokenize per input, buffer change
+            std::unordered_set<UT::ui32> dirtyLines;            // Lines to retokenize infile change
             std::vector<UT::b> lineStartsInBlockComment;        // Comment block vector
             std::string path;                                   // File path, will include its name and parent folder
             std::string name;                                   // Only the name

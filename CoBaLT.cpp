@@ -12,6 +12,7 @@ UT::i32 main() {
     CBLT::Win::Init();
 
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFont.Config();
     CBLT::gFont.size = 23;
 
     // CBLT::Controller ctrl; // Automatically calls the constructor
@@ -43,12 +44,14 @@ UT::i32 main() {
 
             // Draw open file
             if (fq.Size() > 0) {
+                if (framesCount % 60) { // Tokenize once per 60 frames
+                    f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
+                }
                 cm.DrawCursors(f);
                 f.Draw(cam);
                 currentFileLineCount = f.GetLineCount();
                 currentFileDirt      = f.Dirt();
                 currentFileName      = f.Name();
-                f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
             } else { // Safety
                 currentFileLineCount = 0;
                 currentFileDirt      = false;

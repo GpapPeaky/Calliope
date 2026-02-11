@@ -3,6 +3,7 @@
 #include "CBLT_Util.hpp"
 
 #include <vector>
+#include <unordered_map>
 
 #include "CBLT_raylib.hpp"
 
@@ -19,6 +20,9 @@ namespace CBLT {
             // Usable font
             Font f;
 
+            // Advances map
+            std::unordered_map<UT::i32, UT::i32> advanceMap;
+
             // Constructor
             EditorFont(void);
 
@@ -28,8 +32,14 @@ namespace CBLT {
             // Load a font from a specific file
             void Load(std::string fontName);
 
+            // Create configurations
+            void Config(void);
+
             // Calculate codepoints from UTF8 encoding
             std::vector<UT::i32> Utf8ToCodepoints(const std::string& str);
+            
+            // Calculate codepoints from UTF8 encoding
+            std::vector<UT::i32> Utf8ToCodepoints(const std::string_view str);
     }; // EditorFont class
 
     // Current usable font global

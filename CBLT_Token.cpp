@@ -34,28 +34,21 @@ namespace CBLT {
     }
 
     UT::ui32 Token::GetCursorX(std::string_view lineText, UT::ui32 fontSize, UT::ui32 column) {
-        // Scale factor
-        UT::f32 scale = static_cast<UT::f32>(fontSize) / gFont.f.baseSize;
+        float scale = static_cast<float>(fontSize) / gFont.f.baseSize;
         UT::ui32 width = 0;
     
-        // Convert line to codepoints (use string_view to avoid copies)
-        auto codepoints = CBLT::gFont.Utf8ToCodepoints(lineText);
+        // Convert UTF-8 to codepoints
+        auto codepoints = CBLT::gFont.Utf8ToCodepoints(lineText); // make this accept string_view
     
         column = std::min(column, static_cast<UT::ui32>(codepoints.size()));
     
-        // Cache glyph lookups
         for (size_t i = 0; i < column; i++) {
             UT::i32 cp = codepoints[i];
     
-            // Faster lookup: hash map or sorted binary search
-            UT::i32 advance = fontSize / 2; // fallback width
-    
-            for (UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
-                if (gFont.f.glyphs[g].value == cp) {
-                    advance = gFont.f.glyphs[g].advanceX;
-                    break;
-                }
-            }
+            // Fast lookup using precomputed map
+            UT::i32 advance = fontSize / 2; // fallback
+            auto it = gFont.advanceMap.find(cp);
+            if (it != gFont.advanceMap.end()) advance = it->second;
     
             width += advance;
         }

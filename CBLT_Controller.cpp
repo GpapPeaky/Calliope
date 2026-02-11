@@ -39,8 +39,8 @@ namespace CBLT {
     }
 
     void Controller::HandleMovement(Cursor& cursor, File* fileOverride) {
-        File f = fileOverride ? *fileOverride : Q.Active(); // Override if required
-
+        // Need a reference, else it copies it, bad for performance
+        File& f = fileOverride ? *fileOverride : Q.Active(); // Override if required
         
         // We need to check specifics AND THEN check for general key presses
         if (HandleSpecialMovement(cursor)) return; // Already handled movement, via LCtrl, skip applying any more movement
@@ -184,20 +184,17 @@ namespace CBLT {
                     Q.Active().InsertDirtyLine(cursor.Line());
                 }
             } else if (cursor.Col() == 0 && cursor.Line() > 0) {
-                std::string& previousLine = Q.Active().GetCurrentLine(cursor.Line() - 1);
-                std::string& line = Q.Active().GetCurrentLine(cursor.Line());
-                
-                // Move one line up
-                cursor.SetAt(previousLine.length(), cursor.Line() - 1);
-                
-                if (line.empty()){
-                    Q.Active().DeleteLine(cursor.Line() + 1);
+                UT::ui32 originalLine = cursor.Line(); // capture
+                UT::ui32 prevLineLen  = Q.Active().GetLineLength(originalLine - 1);
+                UT::b    isEmpty      = Q.Active().GetCurrentLine(originalLine).empty();
+            
+                cursor.SetAt(prevLineLen, originalLine - 1);
+            
+                if (isEmpty) {
+                    Q.Active().DeleteLine(originalLine);
                 } else {
-                    // Move the rest of the line to the previous one
-                    Q.Active().PushBackLineFragment(cursor.Line() + 1, cursor.Line());
-
-                    // THEN delete the line
-                    Q.Active().DeleteLine(cursor.Line() + 1);
+                    Q.Active().PushBackLineFragment(originalLine, originalLine - 1);
+                    Q.Active().DeleteLine(originalLine);
                 }
             }
 
@@ -211,26 +208,25 @@ namespace CBLT {
                 Q.Active().CreateLine(cursor.Line()); 
 
                 cursor.Down();
-            } else if (cursor.Col()){
-                std::string fragment = Q.Active().SplitLine(cursor.Line(), cursor.Col());
-                
-                // Check for indentation
+            } else if (cursor.Col()) {
+                UT::ui32 originalLine = cursor.Line(); // capture
+            
+                std::string fragment = Q.Active().SplitLine(originalLine, cursor.Col());
+            
                 UT::b indentationHandle = HandleIndentation(cursor);
-
                 if (indentationHandle) return;
-
-                UT::ui32 indent = GetIndentation(cursor.Line());
-
-                if (Q.Active().GetCurrentLine(cursor.Line()).at(cursor.Col() - 1) == '}') {
-                    indent--; // Suppress it if the cursor is right after a closer
+            
+                UT::ui32 indent = GetIndentation(originalLine);
+            
+                if (Q.Active().GetCurrentLine(originalLine).at(cursor.Col() - 1) == '}') {
+                    indent--;
                 }
-
+            
                 std::string indentString(indent * keyboard.tabSize, ' ');
                 std::string indentedFragment = indentString + fragment;
-                
-                cursor.SetAt(indentString.size(), cursor.Line() + 1);
-                
-                Q.Active().CreateLine(cursor.Line(), indentedFragment);
+            
+                Q.Active().CreateLine(originalLine + 1, indentedFragment); // insert first
+                cursor.SetAt(indentString.size(), originalLine + 1);       // then move
             }
 
             Q.Active().SetDirt(true);
@@ -682,7 +678,7 @@ namespace CBLT {
 
             return;
         }
-        
+
         if (Q.Size() == 0) {
             // Console toggle to get out at the start
             if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
@@ -705,19 +701,21 @@ namespace CBLT {
             
             // Handling booleans
             UT::b handledShort;
-            
+
             switch(m) {
                 case CBLT::CursorMode::INSERT:
                     handledShort = HandleShorcuts(c);
                     HandleSpecials(c);
-
+                    
                     // Shortcuts include ctrl + arrow key presses so we need to omit movement
                     if (!handledShort) HandleMovement(c);
+                    
                     // Shortcuts include letters so it makes sense that we need to omit any leftover I/O's
                     // so they won't spill over to the insert function
                     if (!handledShort) {
                         HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
                     }
+
 
                     ClampCursor(c); // Clamp cursor inside file bounds
                     c.ClampToCamera(camera, Q.Active());
@@ -765,7 +763,7 @@ namespace CBLT {
     }
 
     void Controller::ClampCursor(Cursor& c) {
-        File f = Q.Active();
+        File& f = Q.Active();
 
         if (Q.Size() == 0) return; // Nothing to do
 
@@ -789,7 +787,7 @@ namespace CBLT {
         return typedChars;
     }
 
-    UT::ui32 Controller::GetIndentation(UT::ui32 line) {
+    UT::ui32 Controller::GetIndentation(UT::ui32 line) { // FIXME: Expensive to start at the start of the file 
         UT::ui32 depth = 0;
     
         for (UT::ui32 i = 0 ; i < line ; ++i) {
@@ -816,7 +814,7 @@ namespace CBLT {
         UT::ui32 startLine = std::min(c.SSLine(), c.Line());
         UT::ui32 endLine = std::max(c.SSLine(), c.Line());
         
-        File f = Q.Active();
+        File& f = Q.Active();
 
         if (Q.Size() == 0) return; // Nothing to do
         
@@ -916,7 +914,7 @@ namespace CBLT {
     
         std::string copied;
 
-        File f = Q.Active();
+        File& f = Q.Active();
         if (Q.Size() == 0) return ""; // Nothing to do
     
         for (UT::ui32 l = sLine; l <= eLine; l++) {

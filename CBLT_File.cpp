@@ -6,34 +6,35 @@ namespace CBLT {
     void File::InsertDirtyLine(UT::ui32 line) {
         if (line >= lines.size()) return;
     
-        if (line < firstDirtyLine)
-            firstDirtyLine = line;
+        dirtyLines.insert(line);
     }
 
     void File::RetokenizeDirtyLines(void) {
-        if (firstDirtyLine == UINT32_MAX) return;
+        if (dirtyLines.empty()) return;
     
-        // Retokenize from the earliest seen dirt
-        UT::ui32 start = firstDirtyLine;
-        firstDirtyLine = UINT32_MAX;
+        UT::ui32 minDirty = *std::min_element(dirtyLines.begin(), dirtyLines.end());
     
-        UT::b inBlock = (start > 0)
-            ? lineStartsInBlockComment[start - 1]
-            : false;
+        // Seed block comment state from the line just before the first dirty line
+        UT::b inBlock = (minDirty > 0) ? lineStartsInBlockComment[minDirty - 1] : false;
     
-        for (UT::ui32 i = start; i < lines.size(); ++i) {
+        // Run from minDirty to end of file, since a block comment change
+        // at line N can affect every line after it
+        for (UT::ui32 i = minDirty; i < lines.size(); ++i) {
+            UT::b prevState = lineStartsInBlockComment[i];
+            UT::b isDirty   = dirtyLines.count(i) > 0;
     
-            UT::b oldStartState = lineStartsInBlockComment[i];
-    
-            lineStartsInBlockComment[i] = inBlock;
-    
-            UT::b newEndState = LexLine(lines[i], i, inBlock);
-    
-            if (oldStartState == inBlock && newEndState == inBlock)
-                break; // State stabilized
-    
-            inBlock = newEndState;
+            if (isDirty || lineStartsInBlockComment[i] != inBlock) {
+                lineStartsInBlockComment[i] = inBlock;
+                inBlock = LexLine(lines[i], i, inBlock);
+            } else {
+                // Line is clean and block state matches — no further propagation needed
+                inBlock = lineStartsInBlockComment[i]; // keep inBlock consistent
+                // Early exit only if we're past all dirty lines and state is stable
+                if (i > *std::max_element(dirtyLines.begin(), dirtyLines.end())) break;
+            }
         }
+    
+        dirtyLines.clear();
     }
 
     UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) {
@@ -392,7 +393,7 @@ namespace CBLT {
         tokens.clear();
         lineStartsInBlockComment.clear();
     
-        firstDirtyLine = UINT32_MAX;
+        dirtyLines.clear();
 
         return true;
     }
@@ -465,38 +466,20 @@ namespace CBLT {
                 
                 // Draw colored tokens
                 for (Token& t : tokens.at(i)) {
-                    if (t.line != i) continue;
+                    // if (t.line != i) continue;
                 
                     Color col = t.TokenColor();
                     if (col.a == 0) continue; // skips whitespaces
                 
                     std::string_view lineView(lines[i]);
                     std::string_view tokenText = lineView.substr(t.col, t.len);
-                    std::string_view preTokenText = lineView.substr(0, t.col);
-
+                    
                     // By counting glyphs
-                    float tokX = pos.x + t.GetCursorX(preTokenText, gFont.size, t.col);
-                
-                    // Wooow this echoes the characters, at
-                    //
-                    // col 0 -> once
-                    // col 1 -> twice
-                    // col 2 -> three times
-                    // col 4 -> ++
-                    //
-                    //
-                    //
-                    // std::string_view sv(
-                        // lines[i].data() + t.col,
-                        // t.len
-                    // );
-
-                    // Drawing is correct but it 
-                    std::string tokenText = lines[i].substr(t.col, t.len);
-                
+                    float tokX = pos.x + t.GetCursorX(lineView, gFont.size, t.col);
+                    
                     DrawTextEx(
                         gFont.f,
-                        tokenText.data(),
+                        std::string(tokenText).c_str(), // convert to null-terminated C-string
                         { tokX, pos.y },
                         gFont.size,
                         0.0f,
@@ -537,18 +520,29 @@ namespace CBLT {
     }
 
     void File::CreateLine(UT::ui32 line) {
-        lines.emplace(lines.begin() + line, std::string("")); // Place an empty line
+        lines.emplace(lines.begin() + line, "");
         tokens.emplace(tokens.begin() + line);
-        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, false);
+    
+        // Inherit block comment state from previous line, not false
+        UT::b inheritedState = (line > 0 && line - 1 < lineStartsInBlockComment.size())
+            ? lineStartsInBlockComment[line - 1]
+            : false;
+    
+        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, inheritedState);
     
         InsertDirtyLine(line);
     }
 
     void File::CreateLine(UT::ui32 line, std::string content) {
-        lines.emplace(lines.begin() + line, content); // Place the provided string
-    
+        lines.emplace(lines.begin() + line, content);
         tokens.emplace(tokens.begin() + line);
-        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, false);
+    
+        // Inherit block comment state from previous line, not false
+        UT::b inheritedState = (line > 0 && line - 1 < lineStartsInBlockComment.size())
+            ? lineStartsInBlockComment[line - 1]
+            : false;
+    
+        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, inheritedState);
     
         InsertDirtyLine(line);
     }
@@ -575,7 +569,10 @@ namespace CBLT {
             tokens.erase(tokens.begin() + line);
             lineStartsInBlockComment.erase(lineStartsInBlockComment.begin() + line);
     
-            InsertDirtyLine(line);
+            // Mark the line at this position now (previously line+1) as dirty
+            // Also mark line-1 so the seed is recalculated correctly
+            if (line > 0) InsertDirtyLine(line - 1);
+            InsertDirtyLine(std::min(line, (UT::ui32)lines.size() - 1));
         } else {
             lines[0].clear();
             InsertDirtyLine(0);
