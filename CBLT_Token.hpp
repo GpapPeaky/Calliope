@@ -39,6 +39,6 @@ namespace CBLT {
             Color TokenColor(void);
 
             // For token advancing
-            UT::ui32 GetCursorX(const std::string& lineText, UT::ui32 fontSize, UT::ui32 column);
+            UT::ui32 GetCursorX(const std::string_view lineText, UT::ui32 fontSize, UT::ui32 column);
     }; // Token class
 } // CBLT

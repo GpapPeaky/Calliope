@@ -176,9 +176,12 @@ namespace CBLT {
         
                     line.erase(startCol, deleteCount);
                     cursor.SetAt(startCol, cursor.Line());
+                    Q.Active().InsertDirtyLine(cursor.Line());
+
                 } else { // Normal character delete
                     line.erase(col - 1, 1);
                     cursor.Left();
+                    Q.Active().InsertDirtyLine(cursor.Line());
                 }
             } else if (cursor.Col() == 0 && cursor.Line() > 0) {
                 std::string& previousLine = Q.Active().GetCurrentLine(cursor.Line() - 1);
@@ -206,7 +209,7 @@ namespace CBLT {
         if (IsKeyPressedRepeat(KEY_ENTER) || IsKeyPressed(KEY_ENTER)) {
             if (cursor.Col() == 0) {
                 Q.Active().CreateLine(cursor.Line()); 
-                
+
                 cursor.Down();
             } else if (cursor.Col()){
                 std::string fragment = Q.Active().SplitLine(cursor.Line(), cursor.Col());
@@ -273,6 +276,7 @@ namespace CBLT {
                 }
                 
                 cursor.Right();
+                Q.Active().InsertDirtyLine(cursor.Line());
 
                 continue;
             }
@@ -284,6 +288,7 @@ namespace CBLT {
                 }
                 
                 cursor.Right();
+                Q.Active().InsertDirtyLine(cursor.Line());
 
                 continue;
             }
@@ -295,6 +300,7 @@ namespace CBLT {
                 }
 
                 cursor.Right();
+                Q.Active().InsertDirtyLine(cursor.Line());
 
                 continue;
             }
@@ -316,6 +322,7 @@ namespace CBLT {
                 );
 
                 Q.Active().SetDirt(true); // Mark file as dirty
+                Q.Active().InsertDirtyLine(cursor.Line());
 
                 return true;
             }
@@ -336,6 +343,7 @@ namespace CBLT {
                 );
 
                 Q.Active().SetDirt(true); // Mark file as dirty
+                Q.Active().InsertDirtyLine(cursor.Line());
 
                 return true;
             }
@@ -356,6 +364,7 @@ namespace CBLT {
                 );
 
                 Q.Active().SetDirt(true); // Mark file as dirty
+                Q.Active().InsertDirtyLine(cursor.Line());
 
                 return true;
             } 
@@ -509,6 +518,8 @@ namespace CBLT {
                 cursor.SetAt(cursor.Col() + 2, cursor.Line());
             }
 
+            Q.Active().InsertDirtyLine(cursor.Line());
+
             return true;
         }
 
@@ -531,6 +542,7 @@ namespace CBLT {
                 if (!line.empty() && line.back() == '\r')
                     line.pop_back();
 
+                Q.Active().InsertDirtyLine(lineIdx);
                 Q.Active().CreateLine(lineIdx++, line);
                 linesPasted++;
             }
@@ -675,7 +687,6 @@ namespace CBLT {
             // Console toggle to get out at the start
             if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
                 console.Toggle();
-                
             }
 
             return;

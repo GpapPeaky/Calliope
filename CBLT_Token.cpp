@@ -33,37 +33,34 @@ namespace CBLT {
         }
     }
 
-    UT::ui32 Token::GetCursorX(const std::string& lineText, UT::ui32 fontSize, UT::ui32 column) {
-        // Scale based on font size vs base font size
+    UT::ui32 Token::GetCursorX(std::string_view lineText, UT::ui32 fontSize, UT::ui32 column) {
+        // Scale factor
         UT::f32 scale = static_cast<UT::f32>(fontSize) / gFont.f.baseSize;
-    
         UT::ui32 width = 0;
     
-        // Convert the line to codepoints (handles UTF-8)
+        // Convert line to codepoints (use string_view to avoid copies)
         auto codepoints = CBLT::gFont.Utf8ToCodepoints(lineText);
     
-        // Iterate over each codepoint up to the target column
-        for (size_t i = 0; i < column && i < codepoints.size(); i++) {
-            UT::i32 cp = codepoints[i];
-            UT::i32 glyphIndex = -1;
+        column = std::min(column, static_cast<UT::ui32>(codepoints.size()));
     
-            // Lookup glyph in the font
+        // Cache glyph lookups
+        for (size_t i = 0; i < column; i++) {
+            UT::i32 cp = codepoints[i];
+    
+            // Faster lookup: hash map or sorted binary search
+            UT::i32 advance = fontSize / 2; // fallback width
+    
             for (UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
                 if (gFont.f.glyphs[g].value == cp) {
-                    glyphIndex = g;
+                    advance = gFont.f.glyphs[g].advanceX;
                     break;
                 }
             }
     
-            if (glyphIndex >= 0) {
-                // Add glyph advance
-                width += gFont.f.glyphs[glyphIndex].advanceX;
-            } else {
-                // Fallback width for missing glyphs
-                width += fontSize / 2;
-            }
+            width += advance;
         }
     
         return static_cast<UT::ui32>(width * scale);
     }
+
 } // CBLT

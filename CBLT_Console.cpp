@@ -43,7 +43,7 @@ namespace CBLT {
     void Console::Execute(FileQueue& Q, std::string& cwd) {
         namespace fs = std::filesystem;
 
-        File f = Q.Active();
+        File& f = Q.Active();
         
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
 

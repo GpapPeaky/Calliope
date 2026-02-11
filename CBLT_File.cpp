@@ -2,33 +2,70 @@
 
 namespace CBLT {
     File gNAF;
-    UT::b gInBlockComment = false;
+    
+    void File::InsertDirtyLine(UT::ui32 line) {
+        if (line >= lines.size()) return;
+    
+        if (line < firstDirtyLine)
+            firstDirtyLine = line;
+    }
 
-    void File::LexLine(const std::string& s, UT::ui32 line) {
+    void File::RetokenizeDirtyLines(void) {
+        if (firstDirtyLine == UINT32_MAX) return;
+    
+        // Retokenize from the earliest seen dirt
+        UT::ui32 start = firstDirtyLine;
+        firstDirtyLine = UINT32_MAX;
+    
+        UT::b inBlock = (start > 0)
+            ? lineStartsInBlockComment[start - 1]
+            : false;
+    
+        for (UT::ui32 i = start; i < lines.size(); ++i) {
+    
+            UT::b oldStartState = lineStartsInBlockComment[i];
+    
+            lineStartsInBlockComment[i] = inBlock;
+    
+            UT::b newEndState = LexLine(lines[i], i, inBlock);
+    
+            if (oldStartState == inBlock && newEndState == inBlock)
+                break; // State stabilized
+    
+            inBlock = newEndState;
+        }
+    }
+
+    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) {
+        if (line >= lines.size()) return false;
+
+        tokens[line].clear();
+
+        UT::b inBlock = startInBlockComment;
         UT::ui32 i = 0;
 
         while (i < s.size()) {
             char c = s[i];
 
-            if (gInBlockComment) {
+            if (inBlock) {
                 UT::ui32 start = i;
             
                 while (i < s.size()) {
                     if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
                         i += 2;
-                        gInBlockComment = false;
+                        inBlock = false;
                         break;
                     }
                     ++i;
                 }
             
-                tokens.push_back({ TokenClass::COMMENT, line, start, i - start });
+                tokens[line].push_back({ TokenClass::COMMENT, line, start, i - start });
                 continue;
             }
             
             // Comment block entry
-            if (!gInBlockComment && c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
-                gInBlockComment = true;
+            if (!inBlock && c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
+                inBlock = true;
                 UT::ui32 start = i;
                 i += 2;
                 
@@ -36,13 +73,13 @@ namespace CBLT {
                 while (i < s.size()) {
                     if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
                         i += 2;
-                        gInBlockComment = false;
+                        inBlock = false;
                         break;
                     }
                     ++i;
                 }
             
-                tokens.push_back({
+                tokens[line].push_back({
                     TokenClass::COMMENT,
                     line,
                     start,
@@ -75,7 +112,7 @@ namespace CBLT {
                     }
                 }
             
-                tokens.push_back({
+                tokens[line].push_back({
                     TokenClass::STRING,
                     line,
                     start,
@@ -93,7 +130,7 @@ namespace CBLT {
                                 ? TokenClass::KEYWORD
                                 : TokenClass::ID;
     
-                tokens.push_back({ type, line, start, i - start });
+                tokens[line].push_back({ type, line, start, i - start });
                 continue;
             }
     
@@ -102,7 +139,7 @@ namespace CBLT {
                 UT::ui32 start = i++;
                 while (i < s.size() && std::isdigit(s[i])) i++;
     
-                tokens.push_back({ TokenClass::NUM, line, start, i - start });
+                tokens[line].push_back({ TokenClass::NUM, line, start, i - start });
                 continue;
             }
     
@@ -111,7 +148,7 @@ namespace CBLT {
                 UT::ui32 start = i++;
                 while (i < s.size() && std::isspace(s[i])) i++;
     
-                tokens.push_back({ TokenClass::WHITESPACE, line, start, i - start });
+                tokens[line].push_back({ TokenClass::WHITESPACE, line, start, i - start });
                 continue;
             }
 
@@ -122,85 +159,85 @@ namespace CBLT {
             switch (ext) {
                 case EXT(C):
                     if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens.push_back({
+                        tokens[line].push_back({
                             TokenClass::COMMENT,
                             line,
                             i,
                             static_cast<UT::ui32>(s.size() - i)
                         });
 
-                        return;
+                        return inBlock;
                     }
 
                     if (c == '#' && i + 1 < s.size()) {
-                        tokens.push_back({
+                        tokens[line].push_back({
                             TokenClass::MISC,
                             line,
                             i,
                             static_cast<UT::ui32>(s.size() - i)
                         });
 
-                        return;
+                        return inBlock;
                     }
                     break;
                 case EXT(CPP):
                     if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens.push_back({
+                        tokens[line].push_back({
                             TokenClass::COMMENT,
                             line,
                             i,
                             static_cast<UT::ui32>(s.size() - i)
                         });
 
-                        return;
+                        return inBlock;
                     }
 
                     if (c == '#' && i + 1 < s.size()) {
-                        tokens.push_back({
+                        tokens[line].push_back({
                             TokenClass::MISC,
                             line,
                             i,
                             static_cast<UT::ui32>(s.size() - i)
                         });
 
-                        return;
+                        return inBlock;
                     }
                     break;
                 case EXT(CS):
                     if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens.push_back({
+                        tokens[line].push_back({
                             TokenClass::COMMENT,
                             line,
                             i,
                             static_cast<UT::ui32>(s.size() - i)
                         });
 
-                        return;
+                        return inBlock;
                     }
                     break;
                 case EXT(JAVA):
                     if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens.push_back({
+                        tokens[line].push_back({
                             TokenClass::COMMENT,
                             line,
                             i,
                             static_cast<UT::ui32>(s.size() - i)
                         });
 
-                        return;
+                        return inBlock;
                     }
                     break;
 
                 case EXT(ASM): 
                     if (c == ';' || c == '#') {
-                        tokens.push_back({
+                        tokens[line].push_back({
                             TokenClass::COMMENT,
                             line,
                             i,
                             static_cast<UT::ui32>(s.size() - i)
                         });
 
-                        return;
+                        return inBlock;
                     }
                     break;
 
@@ -226,7 +263,7 @@ namespace CBLT {
                 c == '!' ||
                 c == '~'
             ) {
-                tokens.push_back({
+                tokens[line].push_back({
                     TokenClass::OPERATOR,
                     line,
                     i,
@@ -239,9 +276,11 @@ namespace CBLT {
             // Default on
             //
             // Punctuation
-            tokens.push_back({ TokenClass::PUNCTUATION, line, i, 1 });
+            tokens[line].push_back({ TokenClass::PUNCTUATION, line, i, 1 });
             ++i;
         }
+
+        return inBlock;
     }
 
     void InitNAF(void) {
@@ -268,15 +307,25 @@ namespace CBLT {
 
     File::File(void) {
         lines.emplace_back("");
+
+        tokens.resize(1);
+        lineStartsInBlockComment.resize(1, false);
     }
 
     File::~File(void) {}
 
     void File::Tokenize(void) {
         tokens.clear();
-
+        lineStartsInBlockComment.clear();
+    
+        tokens.resize(lines.size());
+        lineStartsInBlockComment.resize(lines.size());
+    
+        UT::b inBlock = false;
+    
         for (UT::ui32 line = 0; line < lines.size(); ++line) {
-            LexLine(lines[line], line);
+            lineStartsInBlockComment[line] = inBlock;
+            inBlock = LexLine(lines[line], line, inBlock);
         }
     }
 
@@ -340,7 +389,10 @@ namespace CBLT {
     UT::b File::Clear(void) {
         lines.clear();
 
-        // Might need to emplace a new empty line here?
+        tokens.clear();
+        lineStartsInBlockComment.clear();
+    
+        firstDirtyLine = UINT32_MAX;
 
         return true;
     }
@@ -353,6 +405,8 @@ namespace CBLT {
         if (col > ln.size()) col = ln.size();
     
         ln.insert(ln.begin() + col, static_cast<char>(c));
+
+        InsertDirtyLine(line);
     }
     
     const std::string& File::GetPath(void) const {
@@ -410,14 +464,18 @@ namespace CBLT {
                 // );
                 
                 // Draw colored tokens
-                for (Token& t : tokens) {
+                for (Token& t : tokens.at(i)) {
                     if (t.line != i) continue;
                 
                     Color col = t.TokenColor();
                     if (col.a == 0) continue; // skips whitespaces
                 
+                    std::string_view lineView(lines[i]);
+                    std::string_view tokenText = lineView.substr(t.col, t.len);
+                    std::string_view preTokenText = lineView.substr(0, t.col);
+
                     // By counting glyphs
-                    float tokX = pos.x + t.GetCursorX(lines[i].substr(0, t.col), gFont.size, t.col);
+                    float tokX = pos.x + t.GetCursorX(preTokenText, gFont.size, t.col);
                 
                     // Wooow this echoes the characters, at
                     //
@@ -438,16 +496,14 @@ namespace CBLT {
                 
                     DrawTextEx(
                         gFont.f,
-                        tokenText.c_str(),
-                        {
-                            tokX, pos.y
-                        },
+                        tokenText.data(),
+                        { tokX, pos.y },
                         gFont.size,
                         0.0f,
                         col
                     );
                 }
-            EndScissorMode();
+            EndScissorMode();   
             
             pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
             pos.y = textBaseY + i * lineHeight + lineHeight + gOffsets.y;
@@ -482,10 +538,19 @@ namespace CBLT {
 
     void File::CreateLine(UT::ui32 line) {
         lines.emplace(lines.begin() + line, std::string("")); // Place an empty line
+        tokens.emplace(tokens.begin() + line);
+        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, false);
+    
+        InsertDirtyLine(line);
     }
 
     void File::CreateLine(UT::ui32 line, std::string content) {
         lines.emplace(lines.begin() + line, content); // Place the provided string
+    
+        tokens.emplace(tokens.begin() + line);
+        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, false);
+    
+        InsertDirtyLine(line);
     }
 
     std::string File::SplitLine(UT::ui32 line, UT::ui32 col) {
@@ -499,6 +564,7 @@ namespace CBLT {
     
         // Left side remains
         lineToSplit.erase(col);
+        InsertDirtyLine(line);
     
         return fragment;
     }
@@ -506,8 +572,13 @@ namespace CBLT {
     void File::DeleteLine(UT::ui32 line) {
         if (lines.size() > 1) {
             lines.erase(lines.begin() + line);
+            tokens.erase(tokens.begin() + line);
+            lineStartsInBlockComment.erase(lineStartsInBlockComment.begin() + line);
+    
+            InsertDirtyLine(line);
         } else {
-            lines.at(0).clear();
+            lines[0].clear();
+            InsertDirtyLine(0);
         }
     }
 
@@ -515,6 +586,7 @@ namespace CBLT {
         if (sourceLine == destinationLine) return; // At start of file, do nothing
 
         lines.at(destinationLine).append(lines.at(sourceLine)); // Concat the fragment line to the end of the destination line
+        InsertDirtyLine(destinationLine);
 
         // The line should probably be deleted afterwards
     }

@@ -23,8 +23,9 @@ namespace CBLT {
     class File {
         private:
             std::vector<std::string> lines;                     // Most elemental storage class of a file/document
-            std::vector<Token> tokens;                          // File tokens
-            std::vector<UT::b> lineDirt;                        // TODO: Dirty lines to retokenize per input, buffer change
+            std::vector<std::vector<Token>> tokens;             // File tokens
+            UT::ui32 firstDirtyLine = UINT32_MAX;               // Dirty lines to retokenize per input, buffer change
+            std::vector<UT::b> lineStartsInBlockComment;        // Comment block vector
             std::string path;                                   // File path, will include its name and parent folder
             std::string name;                                   // Only the name
             UT::b dirty;                                        // File's original contents have been changed and have not been saved
@@ -102,16 +103,19 @@ namespace CBLT {
             // Return the extesion of the file
             FileExtension Extension(void) const;
 
-            // Run the lexer through the line
-            void LexLine(const std::string& s, UT::ui32 line);
+            // Run the lexer through the line, returns if the line is in a comment block
+            UT::b LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment = false);
+
+            // Set a line as dirty and push it back to the dirty line vector for retokenization
+            void InsertDirtyLine(UT::ui32 line);
+
+            // Retokenize lines marked as dirty
+            void RetokenizeDirtyLines(void);
     }; // File class
 
     // No file loaded!
     extern File gNAF;
 
-    // Check if a section of code is in comment block
-    extern UT::b gInBlockComment;
-    
     // Initialize the Not Active File fallback file
     void InitNAF(void);
         

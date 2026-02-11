@@ -48,6 +48,7 @@ UT::i32 main() {
                 currentFileLineCount = f.GetLineCount();
                 currentFileDirt      = f.Dirt();
                 currentFileName      = f.Name();
+                f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
             } else { // Safety
                 currentFileLineCount = 0;
                 currentFileDirt      = false;
