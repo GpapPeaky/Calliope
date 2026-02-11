@@ -32,7 +32,7 @@ namespace CBLT {
         }
     }
 
-    void Console::Toggle(void) {
+    void Console::Toggle(void) { // FIXME: When we have an even amount of cursors the console won't open
         toggled = !toggled;
     }
 
