@@ -334,6 +334,7 @@ namespace CBLT {
         this->name = name;
     }
         
+    // FIXME: Crashes sometimes, maybe when changing file extension and loading new shit?
     UT::b File::Load(const std::string& fpath, const std::string& cwd) {
         namespace fs = std::filesystem;
     
