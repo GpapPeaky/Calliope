@@ -1,7 +1,6 @@
-// 1. Autocomplete with TAB
-// 2. Add click at infile
+// 1. Add click at infile
+// 2. Autocomplete with TAB
 // 3. Split, font size++/--
-// 4. Fullscreen/resizable window
 // 5. Selection system
 // 6. Ctrl G -> Goto line
 // 7. Ctrl F -> Find symbol

@@ -334,7 +334,7 @@ namespace CBLT {
         this->name = name;
     }
         
-    UT::b File::Load(const std::string& fpath, const std::string& cwd) { // FIXME: Crashes when saving a file, and loading a different one.
+    UT::b File::Load(const std::string& fpath, const std::string& cwd) {
         namespace fs = std::filesystem;
     
         std::string pathString = cwd + '\\' + fpath;

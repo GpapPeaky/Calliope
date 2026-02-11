@@ -787,7 +787,7 @@ namespace CBLT {
         return typedChars;
     }
 
-    UT::ui32 Controller::GetIndentation(UT::ui32 line) { // FIXME: Expensive to start at the start of the file 
+    UT::ui32 Controller::GetIndentation(UT::ui32 line) {
         UT::ui32 depth = 0;
     
         for (UT::ui32 i = 0 ; i < line ; ++i) {
