@@ -396,7 +396,7 @@ namespace CBLT {
         dirRes = dr;
     }
 
-    void Console::Draw(void) {
+    void Console::Draw(FileQueue& Q) {
         const UT::ui32 directiveFontSize = 20;
         const UT::ui32 directiveBottomMargin = CBLT::DirectiveMargins::directiveMarginFromConsoleY + 5; // 5 + 5 see CBLT_Directive.hpp
         
@@ -512,6 +512,12 @@ namespace CBLT {
             }
 
             if (toDraw) {
+                Color c = current.c;
+
+                if (current.n == Q.Active().Name()) {
+                    c = gPalette.openFileColor;
+                }
+
                 DrawTextEx(
                     gFont.f,
                     current.n.c_str(),
@@ -521,7 +527,7 @@ namespace CBLT {
                     },
                     directiveFontSize,
                     0.0f,
-                    current.c
+                    c
                 );
         
                 contentCount++;
@@ -708,5 +714,9 @@ namespace CBLT {
 
     UT::f32 Console::Width(void) const {
         return width;
+    }
+
+    std::vector<std::string> Console::AutocompFile(void) const {
+        
     }
 } // CBLT

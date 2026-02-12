@@ -3,9 +3,9 @@
 std::unordered_set<std::string_view> CBLT::gKeywords;
 
 void CBLT::AssignLanguageKeywords(CBLT::FileExtension fe) {
-    CBLT::gKeywords.clear(); // Clear before loading the new keywords.
-    
     using namespace CBLT;
+    
+    gKeywords.clear(); // Clear before loading the new keywords.
 
     switch (fe) {
         case FileExtension::CRS:

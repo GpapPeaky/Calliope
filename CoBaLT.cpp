@@ -1,5 +1,5 @@
-// 1. Add click at infile
-// 2. Autocomplete with TAB
+// 1. Autocomplete with TAB
+// 2. Add click at infile
 // 3. Split, font size++/--
 // 5. Selection system
 // 6. Ctrl G -> Goto line
@@ -61,7 +61,7 @@ UT::i32 main() {
             CBLT::UI::Draw(c.Col(), c.Line(), currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD(), (UT::i32)c.GetMode());
             
             if (cnsl.IsOpen()) {
-                cnsl.Draw();
+                cnsl.Draw(fq);
             }
 
             if (fq.Size() > 0) {

@@ -3,6 +3,7 @@
 #include "CBLT_Dialog.hpp"
 
 #include <string>
+#include <vector>
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
@@ -68,7 +69,7 @@ namespace CBLT {
             void Execute(FileQueue& Q, std::string& cwd);
 
             // Draw console window, and CWD contents
-            void Draw(void);
+            void Draw(FileQueue& Q);
 
             // Draw message returned by the console
             void DrawMessage(void);
@@ -87,6 +88,9 @@ namespace CBLT {
 
             // Console width
             UT::f32 Width(void) const ;
+
+            // Return the best matching CWD strings
+            std::vector<std::string> AutocompFile(void) const ;
     }; // Console class
 } // CBLT
 
