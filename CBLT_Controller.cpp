@@ -676,6 +676,15 @@ namespace CBLT {
                 console.Message().messageType = ConsoleMessage::NONE;
             } 
 
+            // Console autocomplete
+            if (IsKeyPressed(KEY_TAB)) {
+                Cursor& cc = console.ConsoleCursor();
+                std::string autocmp = console.Autocomplete();
+
+                console.ConsoleDirective().Becomes(autocmp);
+                cc.SetAt(autocmp.size(), cc.Line());
+            }
+
             return;
         }
 

@@ -1,4 +1,3 @@
-// 1. Autocomplete with TAB
 // 2. Add click at infile
 // 3. Split, font size++/--
 // 5. Selection system

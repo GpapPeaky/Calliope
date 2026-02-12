@@ -716,7 +716,19 @@ namespace CBLT {
         return width;
     }
 
-    std::vector<std::string> Console::AutocompFile(void) const {
-        
-    }
+    std::string Console::Autocomplete(void) const {
+        const std::string& directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
+
+        for (auto n : cwdContents) {
+            if (directiveLine.empty() || directiveLine[0] == '@') {
+                return "";
+            } else {
+                if (n.n.find(directiveLine) != std::string::npos) {
+                    return n.n;
+                }
+            }
+        }
+ 
+        return "";
+    }   
 } // CBLT

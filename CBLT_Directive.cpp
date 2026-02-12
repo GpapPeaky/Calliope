@@ -30,4 +30,9 @@ namespace CBLT {
     File& Directive::DirectiveFile(void) {
         return f;
     }
+
+    void Directive::Becomes(std::string src) {
+        f.GetCurrentLine(DIRECTIVE_FILE_LINE).clear();
+        f.GetCurrentLine(DIRECTIVE_FILE_LINE).append(src);
+    }
 } // CBLT 

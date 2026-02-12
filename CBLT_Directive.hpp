@@ -34,6 +34,8 @@ namespace CBLT {
             // Get directive string, mutable access
             File& DirectiveFile(void);
 
+            // Set the directive to something specific
+            void Becomes(std::string src);
     }; // Directive class
 
     // Console text margins

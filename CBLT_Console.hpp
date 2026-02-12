@@ -90,7 +90,7 @@ namespace CBLT {
             UT::f32 Width(void) const ;
 
             // Return the best matching CWD strings
-            std::vector<std::string> AutocompFile(void) const ;
+            std::string Autocomplete(void) const ;
     }; // Console class
 } // CBLT
 
