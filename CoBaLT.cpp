@@ -70,7 +70,7 @@ UT::i32 main() {
 
             // cam.Draw();
 
-            DrawFPS(950, 0);
+            // DrawFPS(950, 0);
         EndDrawing();
 
         if (framesCount % 120 == 0) { // Every 120 frames, update the cwd contents and check camera size
