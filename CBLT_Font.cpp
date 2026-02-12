@@ -94,4 +94,6 @@ namespace CBLT {
     }
 
     EditorFont gFont;
+
+    EditorFont gConsoleFont;
 } // CBLT

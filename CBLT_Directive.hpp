@@ -46,7 +46,7 @@ namespace CBLT {
     } // ConsoleTextMargins
     
     namespace UI {
-        const UT::ui32 directiveFontSize = 20; // Directive font size
+        const UT::ui32 directiveFontSize = gConsoleFont.size; // Directive font size
     }
 
 } // CBLT

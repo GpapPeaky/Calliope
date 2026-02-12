@@ -120,23 +120,16 @@ namespace CBLT {
             std::string closer(closerIndent * keyboard.tabSize, ' ');
             closer += '}';
 
-            // TODO: Add dirty line marking and resolution
-            // Q.Active().SetLineDirt(cursor.Line(), true);
-            
             UT::ui32 innerLine = cursor.Line() + 1;
             
             // Insert inner indented line
             Q.Active().CreateLine(innerLine, inner);
-
-            // Q.Active().SetLineDirt(cursor.Line() + 1, true);
             
             // Set cursor at the inner line
             cursor.SetAt(inner.size(), innerLine);
             
             // Closer after the inner line
             Q.Active().CreateLine(innerLine + 1, closer);
-
-            // Q.Active().SetLineDirt(cursor.Line() + 2, true);
 
             return true;
         }
@@ -697,7 +690,7 @@ namespace CBLT {
             return;
         }
 
-        // Mouse
+        // Mouse (stoopid af)
         HandleMouseWheel();
         HandleMouseClick();
 
@@ -1078,5 +1071,4 @@ namespace CBLT {
         c.SetAt(col, line);
         c.StopSelection(); // ensure we exit select mode
     }
-    
 } // CBLT

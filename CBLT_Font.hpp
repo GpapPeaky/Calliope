@@ -44,4 +44,7 @@ namespace CBLT {
 
     // Current usable font global
     extern EditorFont gFont;
+
+    // Current usable console font global
+    extern EditorFont gConsoleFont;
 } // CBLT

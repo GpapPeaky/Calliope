@@ -1,5 +1,3 @@
-// 2. Add click at infile
-// 3. Split, font size++/--
 // 5. Selection system
 // 6. Ctrl G -> Goto line
 // 7. Ctrl F -> Find symbol
@@ -12,6 +10,10 @@ UT::i32 main() {
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
     CBLT::gFont.Config();
     CBLT::gFont.size = 23;
+
+    CBLT::gConsoleFont.Load("assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gConsoleFont.Config();
+    CBLT::gConsoleFont.size = 20;
 
     // CBLT::Controller ctrl; // Automatically calls the constructor
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor

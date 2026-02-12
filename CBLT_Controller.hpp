@@ -24,8 +24,6 @@ namespace CBLT {
             CBLT::Camera camera;                          // Camera
             std::string cwd;                              // Current working directory
 
-            // TODO: Finish the handling
-
             // Handle basic cursor movement
             void HandleMovement(Cursor& cursor, File* fileOverride = nullptr);
 
@@ -107,6 +105,9 @@ namespace CBLT {
 
             // Place cursor at mose position
             void HandleMouseClick(void);
+
+            // Handle font resizing
+            void ResizeHandling(void);
 
             // Constructor
             Controller(void);

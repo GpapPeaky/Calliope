@@ -397,7 +397,7 @@ namespace CBLT {
     }
 
     void Console::Draw(FileQueue& Q) {
-        const UT::ui32 directiveFontSize = 20;
+        const UT::ui32 directiveFontSize = gConsoleFont.size;
         const UT::ui32 directiveBottomMargin = CBLT::DirectiveMargins::directiveMarginFromConsoleY + 5; // 5 + 5 see CBLT_Directive.hpp
         
         // Background rectangle
@@ -519,7 +519,7 @@ namespace CBLT {
                 }
 
                 DrawTextEx(
-                    gFont.f,
+                    gConsoleFont.f,
                     current.n.c_str(),
                     {
                         GetScreenWidth() - width + DirectiveMargins::CWDContentMargin,
