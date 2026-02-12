@@ -42,9 +42,6 @@ namespace CBLT {
             // Handle input at console mode
             UT::b HandleConsole(void);
 
-            // Handle input at selection mode
-            void HandleSelect(void);
-
             // Handle shorcuts, based on the active keyboard modifiers and cursor mode, return true if a shortcut was handled
             UT::b HandleShorcuts(Cursor& cursor);
 
@@ -78,12 +75,6 @@ namespace CBLT {
 
             // Get identation depth, check for unmatched '{' before the cursor
             UT::ui32 GetIndentation(UT::ui32 line);
-
-            // Draw selected text
-            void DrawSelection(Cursor& c);
-
-            // Copy selected text from the primary cursor
-            std::string CopySelectedText(void);
 
             // Get the camera, read only
             const Camera& GetCamera(void) const;

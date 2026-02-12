@@ -5,23 +5,6 @@ namespace CBLT {
     
     Controller::~Controller(void) {}
 
-    void Controller::HandleSelect(void) { // Without using shift, toggle
-        Cursor& c = cursorManager.Primary();
-
-        // Entry
-        if (keyboard.m.ctrl && IsKeyPressed(KEY_K) && c.GetMode() != CursorMode::SELECT) {
-            c.StartSelection();
-            cursorManager.RemoveSecondaries();
-        }
-
-        // Copy and Exit
-        else if (keyboard.m.ctrl && (IsKeyPressed(KEY_K) || IsKeyPressed(KEY_C)) && c.GetMode() != CursorMode::INSERT) {
-            c.StopSelection();
-
-            SetClipboardText(CopySelectedText().c_str());
-        }
-    }
-
     UT::b Controller::HandleSpecialMovement(Cursor& cursor) {
         const UT::ui32 line = cursor.Line();
 
@@ -382,10 +365,33 @@ namespace CBLT {
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        
         // Close message
         if (IsKeyPressed(KEY_ESCAPE) && console.Message().messageType != ConsoleMessage::NONE) {
             console.Message().messageType = ConsoleMessage::NONE;
         } 
+
+        // LSHIFT + LALT ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        // Copy current line and move cursor down
+        if (keyboard.m.shift && keyboard.m.alt && (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN))) {
+            Q.Active().CreateLine(cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
+            Q.Active().SetDirt(true);
+
+            cursor.Down();
+
+            return true;
+        }
+
+        // Copy current line
+        if (keyboard.m.shift && keyboard.m.alt && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
+            Q.Active().CreateLine(cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
+            Q.Active().SetDirt(true);
+
+            return true;
+        }
 
         // LCTRL + LALT ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -423,14 +429,6 @@ namespace CBLT {
                 cursor.SetAt(0, 0);
             }
 
-            Q.Active().SetDirt(true);
-
-            return true;
-        }
-
-        // Copy current line
-        if (keyboard.m.ctrl && (IsKeyPressed(KEY_D) || IsKeyPressedRepeat(KEY_D))) {
-            Q.Active().CreateLine(cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
             Q.Active().SetDirt(true);
 
             return true;
@@ -703,12 +701,11 @@ namespace CBLT {
             // HandleShorcuts();
             CBLT::CursorMode m = c.GetMode();
 
-            HandleSelect(); // Check if we might enter selection
-            
             // Handling booleans
             UT::b handledShort;
 
             switch(m) {
+                case CBLT::CursorMode::SELECT:
                 case CBLT::CursorMode::INSERT:
                     handledShort = HandleShorcuts(c);
                     HandleSpecials(c);
@@ -726,15 +723,6 @@ namespace CBLT {
                     ClampCursor(c); // Clamp cursor inside file bounds
                     c.ClampToCamera(camera, Q.Active());
 
-                    break;
-                case CBLT::CursorMode::SELECT:
-                    HandleMovement(c); // Selection is limited to the primary cursor either way
-
-                    // Copy and exit is handled at the start of the update function, see Controller::HandleSelect()
-
-                    ClampCursor(c);
-                    c.ClampToCamera(camera, Q.Active());
-                
                     break;
                 default:
                     UE::Log("Unknown cursor mode");
@@ -806,154 +794,6 @@ namespace CBLT {
         }
     
         return depth;
-    }
-
-    // FIXME: Selection drawing is off when selecting backwards (from a greater line to a lesser one)
-    void Controller::DrawSelection(Cursor& c) {
-        if (c.GetMode() != CursorMode::SELECT)
-            return;
-        
-        UT::ui32 baseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
-        UT::ui32 baseY = UI::TOP_BAR_HEIGHT;
-        
-        // Use CURRENT cursor position as the selection end
-        UT::ui32 startLine = std::min(c.SSLine(), c.Line());
-        UT::ui32 endLine = std::max(c.SSLine(), c.Line());
-        
-        File& f = Q.Active();
-
-        if (Q.Size() == 0) return; // Nothing to do
-        
-        for (UT::ui32 l = startLine; l <= endLine; l++) {
-            const std::string& lineText = f.GetCurrentLine(l);
-            UT::ui32 lineLength = f.GetLineLength(l);
-            
-            UT::ui32 selStart, selEnd;
-    
-            if (l == c.SSLine() && l == c.Line()) {
-                // Single line selection
-                selStart = std::min(c.SSCol(), c.Col());
-                selEnd   = std::max(c.SSCol(), c.Col());
-            } else if (l == c.SSLine()) {
-                // Start line
-                selStart = c.SSCol();
-                selEnd   = lineLength;
-            } else if (l == c.Line()) {
-                // End line (current cursor line)
-                selStart = 0;
-                selEnd   = c.Col();
-            } else {
-                // Middle lines
-                selStart = 0;
-                selEnd   = lineLength;
-            }
-    
-            // Calculate actual pixel positions using the same method as GetCursorX
-            UT::f32 scale = (UT::f32)gFont.size / gFont.f.baseSize;
-            
-            // Calculate X position for selStart
-            UT::ui32 startX = 0;
-            auto cps = CBLT::gFont.Utf8ToCodepoints(lineText);
-            for(UT::llui32 i = 0; i < selStart && i < cps.size(); i++) {
-                UT::i32 cp = cps[i];
-                UT::i32 glyphIndex = -1;
-                for(UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
-                    if(gFont.f.glyphs[g].value == cp){
-                        glyphIndex = g;
-                        break;
-                    }
-                }
-                if (glyphIndex >= 0) {
-                    startX += gFont.f.glyphs[glyphIndex].advanceX;
-                } else {
-                    startX += gFont.size / 2;
-                }
-            }
-            startX = (UT::ui32)(startX * scale);
-            
-            // Calculate X position for selEnd
-            UT::ui32 endX = 0;
-            for(UT::llui32 i = 0; i < selEnd && i < cps.size(); i++) {
-                UT::i32 cp = cps[i];
-                UT::i32 glyphIndex = -1;
-                for(UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
-                    if(gFont.f.glyphs[g].value == cp){
-                        glyphIndex = g;
-                        break;
-                    }
-                }
-                if (glyphIndex >= 0) {
-                    endX += gFont.f.glyphs[glyphIndex].advanceX;
-                } else {
-                    endX += gFont.size / 2;
-                }
-            }
-            endX = (UT::ui32)(endX * scale);
-    
-            Vector2 pos = {
-                (UT::f32)(baseX + startX), 
-                (UT::f32)(baseY + l * gFont.size + gFont.size)
-            };
-    
-            UT::f32 width = (UT::f32)(endX - startX);
-            UT::f32 height = (UT::f32)gFont.size;
-    
-            if (width > 0) {
-                DrawRectangleV(pos, { width, height }, gPalette.selectionColor);
-            }
-        }
-    }
-
-    std::string Controller::CopySelectedText(void) {
-        Cursor& c = cursorManager.Primary();
-    
-        UT::ui32 sLine = c.SSLine();
-        UT::ui32 sCol  = c.SSCol();
-        UT::ui32 eLine = c.SFLine();
-        UT::ui32 eCol  = c.SFCol();
-    
-        // Normalize selection (handles reverse selection)
-        if (sLine > eLine || (sLine == eLine && sCol > eCol)) {
-            std::swap(sLine, eLine);
-            std::swap(sCol, eCol);
-        }
-    
-        std::string copied;
-
-        if (Q.Size() == 0) return ""; // Nothing to do
-    
-        for (UT::ui32 l = sLine; l <= eLine; l++) {
-
-
-            const std::string& lineText = Q.Active().GetCurrentLine(l);
-            UT::ui32 lineLength = Q.Active().GetLineLength(l);
-    
-            UT::ui32 selStart, selEnd;
-    
-            if (l == sLine && l == eLine) {
-                selStart = sCol;
-                selEnd   = eCol;
-            }
-            else if (l == sLine) {
-                selStart = sCol;
-                selEnd   = lineLength;
-            }
-            else if (l == eLine) {
-                selStart = 0;
-                selEnd   = eCol;
-            }
-            else {
-                selStart = 0;
-                selEnd   = lineLength;
-            }
-    
-            copied += lineText.substr(selStart, selEnd - selStart);
-    
-            if (l != eLine)
-                copied += '\n';
-        }
-    
-        return copied;
     }
 
     void Controller::InitCWD(const std::string& p) {

@@ -58,7 +58,6 @@ UT::i32 main() {
                 currentFileName      = "";
             }
 
-            ctrl.DrawSelection(c);
             CBLT::UI::Draw(c.Col(), c.Line(), currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD(), (UT::i32)c.GetMode());
             
             if (cnsl.IsOpen()) {
