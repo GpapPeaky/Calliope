@@ -697,7 +697,9 @@ namespace CBLT {
             return;
         }
 
+        // Mouse
         HandleMouseWheel();
+        HandleMouseClick();
 
         // Get pressed keys
         std::vector<char> keyQueue = GetKeyQueue();
@@ -859,7 +861,7 @@ namespace CBLT {
             // Calculate X position for selStart
             UT::ui32 startX = 0;
             auto cps = CBLT::gFont.Utf8ToCodepoints(lineText);
-            for(size_t i = 0; i < selStart && i < cps.size(); i++) {
+            for(UT::llui32 i = 0; i < selStart && i < cps.size(); i++) {
                 UT::i32 cp = cps[i];
                 UT::i32 glyphIndex = -1;
                 for(UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
@@ -878,7 +880,7 @@ namespace CBLT {
             
             // Calculate X position for selEnd
             UT::ui32 endX = 0;
-            for(size_t i = 0; i < selEnd && i < cps.size(); i++) {
+            for(UT::llui32 i = 0; i < selEnd && i < cps.size(); i++) {
                 UT::i32 cp = cps[i];
                 UT::i32 glyphIndex = -1;
                 for(UT::i32 g = 0; g < gFont.f.glyphCount; g++) {
@@ -896,12 +898,12 @@ namespace CBLT {
             endX = (UT::ui32)(endX * scale);
     
             Vector2 pos = {
-                (float)(baseX + startX), 
-                (float)(baseY + l * gFont.size + gFont.size)
+                (UT::f32)(baseX + startX), 
+                (UT::f32)(baseY + l * gFont.size + gFont.size)
             };
     
-            float width = (float)(endX - startX);
-            float height = (float)gFont.size;
+            UT::f32 width = (UT::f32)(endX - startX);
+            UT::f32 height = (UT::f32)gFont.size;
     
             if (width > 0) {
                 DrawRectangleV(pos, { width, height }, gPalette.selectionColor);
@@ -925,7 +927,6 @@ namespace CBLT {
     
         std::string copied;
 
-        File& f = Q.Active();
         if (Q.Size() == 0) return ""; // Nothing to do
     
         for (UT::ui32 l = sLine; l <= eLine; l++) {
@@ -988,22 +989,94 @@ namespace CBLT {
         if (scroll < 0) {
             for (auto& cursor : cursorManager.activeCursors) {
                 cursor.Down();
-
                 ClampCursor(cursor);
-
-                std::cout << cursor.Line() << "\n";
-                std::cout << Q.Active().GetLineCount() << "\n";
             }
         } else if (scroll > 0) {
             for (auto& cursor : cursorManager.activeCursors) {
                 cursor.Up();
-
                 ClampCursor(cursor);
             }
         }
     }
 
     void Controller::HandleMouseClick(void) {
-
+        if (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            return;
+    
+        if (Q.Size() == 0)
+            return;
+    
+        Vector2 mouse = GetMousePosition();
+    
+        // Only allow clicking inside text camera region
+        if (!camera.Contains((UT::ui32)mouse.x, (UT::ui32)mouse.y, camera.Width(), camera.Height()))
+            return;
+    
+        File& f = Q.Active();
+        Cursor& c = cursorManager.Primary();
+    
+        // Base offsets (same ones used in DrawSelection / File::Draw)
+        UT::ui32 baseX =
+            CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+            CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+            CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
+    
+        UT::ui32 baseY = UI::TOP_BAR_HEIGHT;
+    
+        // Account for scrolling offsets
+        UT::f32 localY = mouse.y - baseY - CBLT::gOffsets.y + gFont.size;
+        UT::f32 localX = mouse.x - baseX - CBLT::gOffsets.x - 2.5f;
+    
+        if (localY < 0)
+            return;
+    
+        // --- Calculate line ---
+        UT::ui32 line = static_cast<UT::ui32>(localY / gFont.size);
+    
+        if (line >= f.GetLineCount())
+            line = f.GetLineCount() - 1;
+    
+        const std::string& lineText = f.GetCurrentLine(line);
+    
+        // --- Calculate column from glyph widths ---
+        UT::ui32 col = 0;
+        UT::f32 accumulated = 0.0f;
+    
+        auto cps = CBLT::gFont.Utf8ToCodepoints(lineText);
+        UT::f32 scale = (UT::f32)gFont.size / gFont.f.baseSize;
+    
+        for (UT::llui32 i = 0 ; i < cps.size() ; i++) {
+            UT::i32 cp = cps[i];
+    
+            UT::i32 glyphIndex = -1;
+            for (UT::i32 g = 0 ; g < gFont.f.glyphCount ; g++) {
+                if (gFont.f.glyphs[g].value == cp) {
+                    glyphIndex = g;
+                    break;
+                }
+            }
+    
+            UT::f32 advance = (glyphIndex >= 0)
+                ? gFont.f.glyphs[glyphIndex].advanceX
+                : gFont.size / 2;
+    
+            advance *= scale;
+    
+            if (localX < accumulated + advance * 0.5f)
+                break;
+    
+            accumulated += advance;
+            col++;
+        }
+    
+        if (col > f.GetLineLength(line))
+            col = f.GetLineLength(line);
+    
+        // Reset other cursors
+        cursorManager.RemoveSecondaries();
+    
+        c.SetAt(col, line);
+        c.StopSelection(); // ensure we exit select mode
     }
+    
 } // CBLT
