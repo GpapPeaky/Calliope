@@ -697,6 +697,8 @@ namespace CBLT {
             return;
         }
 
+        HandleMouseWheel();
+
         // Get pressed keys
         std::vector<char> keyQueue = GetKeyQueue();
 
@@ -778,7 +780,7 @@ namespace CBLT {
 
         c.SetAt(
             std::min(c.Col(), static_cast<UT::ui32>(f.GetLineLength(c.Line()))),
-            std::min(c.Line(), static_cast<UT::ui32>(f.GetLineCount()))
+            std::min(c.Line(), static_cast<UT::ui32>(f.GetLineCount()) - 1)
         );
     }
 
@@ -978,5 +980,30 @@ namespace CBLT {
 
     FileQueue& Controller::LoadedFileQueue(void) {
         return Q;
+    }
+
+    void Controller::HandleMouseWheel(void) {
+        UT::i32 scroll = (UT::ui32)GetMouseWheelMove();
+
+        if (scroll < 0) {
+            for (auto& cursor : cursorManager.activeCursors) {
+                cursor.Down();
+
+                ClampCursor(cursor);
+
+                std::cout << cursor.Line() << "\n";
+                std::cout << Q.Active().GetLineCount() << "\n";
+            }
+        } else if (scroll > 0) {
+            for (auto& cursor : cursorManager.activeCursors) {
+                cursor.Up();
+
+                ClampCursor(cursor);
+            }
+        }
+    }
+
+    void Controller::HandleMouseClick(void) {
+
     }
 } // CBLT

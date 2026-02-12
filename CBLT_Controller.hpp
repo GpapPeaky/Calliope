@@ -102,6 +102,12 @@ namespace CBLT {
             // Get the file queue
             FileQueue& LoadedFileQueue(void);
 
+            // Move the cursor in file
+            void HandleMouseWheel(void);
+
+            // Place cursor at mose position
+            void HandleMouseClick(void);
+
             // Constructor
             Controller(void);
 
