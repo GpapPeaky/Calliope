@@ -1,4 +1,3 @@
-// 6. Ctrl G -> Goto line
 // 7. Ctrl F -> Find symbol
 
 #include "CoBaLT_INCLUDES.hpp"
