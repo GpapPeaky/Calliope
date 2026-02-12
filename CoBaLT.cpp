@@ -1,4 +1,3 @@
-// 5. Selection system
 // 6. Ctrl G -> Goto line
 // 7. Ctrl F -> Find symbol
 

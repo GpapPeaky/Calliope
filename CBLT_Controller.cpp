@@ -471,7 +471,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_O)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = "@o";
-            console.Execute(Q, cwd);
+            console.Execute(Q, cwd, cursor);
 
             return true;
         }
@@ -480,7 +480,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_I)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = "@i";
-            console.Execute(Q, cwd);
+            console.Execute(Q, cwd, cursor);
 
             return true;
         }
@@ -632,7 +632,7 @@ namespace CBLT {
 
             // Execute written directive
             if (IsKeyPressed(KEY_ENTER)) {
-                console.Execute(Q, cwd);
+                console.Execute(Q, cwd, cursorManager.Primary());
             }
 
             // Delete

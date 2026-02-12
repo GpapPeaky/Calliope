@@ -65,6 +65,7 @@ namespace CBLT {
         return loadedFiles;
     }
 
+    // FIXME: Add file-queue camera
     void FileQueue::Draw(void) {
         UT::ui32 index = 0;
         const UT::i32 fontSize = 21;
@@ -87,15 +88,22 @@ namespace CBLT {
             gPalette.textSeperators
         );
 
+        UT::f32 x = 5;
+        const UT::f32 itemMargin = 5;
+
+        UT::f32 barTop = (UT::f32)(GetScreenHeight() - (fontSize + 9));
+        UT::f32 barBottom = (UT::f32)(GetScreenHeight() + 1);
+
         for (index = 0 ; index < Size() ; index++) {
             std::string construct = "[" + std::to_string(index) + "] " + std::string(loadedFiles.at(index).Name());
+            UT::f32 constructWidth = MeasureTextEx(gFont.f, construct.c_str(), gFont.size, 0.0f).x;
 
             if (index == activeIndex) {
                 DrawTextEx(
                     gFont.f,
                     construct.c_str(),
                     { 
-                        (UT::f32)(5 + index * 400),
+                        x,
                         (UT::f32)(GetScreenHeight() - fontSize) - 2.5f
                     },
                     fontSize,
@@ -107,7 +115,7 @@ namespace CBLT {
                     gFont.f,
                     construct.c_str(),
                     {
-                        (UT::f32)(5 + index * 400),
+                        x,
                         (UT::f32)(GetScreenHeight() - fontSize) - 2.5f,
                     },
                     fontSize,
@@ -115,6 +123,21 @@ namespace CBLT {
                     gPalette.fileQueueEntry
                 );
             }
+
+            // Draw separator AFTER this entry (if not last)
+            if (index < Size() - 1) {
+                UT::f32 sepX = x + constructWidth + (itemMargin * 0.5f);
+        
+                DrawLine(
+                    (UT::ui32)sepX,
+                    (UT::ui32)(barTop + 2),
+                    (UT::ui32)sepX,
+                    (UT::ui32)(barBottom - 2),
+                    gPalette.textSeperators
+                );
+            }
+
+            x += constructWidth + itemMargin;
         }
     }
 } // CBLT

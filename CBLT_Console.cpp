@@ -40,7 +40,7 @@ namespace CBLT {
         return toggled;
     }
 
-    void Console::Execute(FileQueue& Q, std::string& cwd) {
+    void Console::Execute(FileQueue& Q, std::string& cwd, Cursor& c) {
         namespace fs = std::filesystem;
 
         File& f = Q.Active();
@@ -109,7 +109,8 @@ namespace CBLT {
                     "@m      - Create a directory\n"
                     "@d      - Delete a directory\n"
                     "@cd     - Change diretory\n"
-                    "@o      - Open native folder picker\n";
+                    "@o      - Open native folder picker\n"
+                    "@g      - Go to line in file\n";
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
@@ -351,6 +352,31 @@ namespace CBLT {
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                }
+            }
+
+            // Go to line
+            else if (dir == "g") {
+                if (directiveParam.empty()) { // No param, does nothing
+                    directive.Clear();
+
+                    dr.message = "CBLT_ERR: PLEASE PROVIDE A LINE NUMBER TO GO TO " + directiveLine;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    dirRes = dr;
+                } else {
+                    UT::ui32 line = atoi(directiveParam.c_str());
+
+                    if (line < Q.Active().GetLineCount()) {
+                        c.SetAt(0, line);
+
+                        Toggle();
+                    } else {
+                        dr.message = "CBLT_ERR: FILE PROVIDED DOES NOT EXIST " + directiveLine;
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+    
+                        dirRes = dr;
+                    }
                 }
             }
             
