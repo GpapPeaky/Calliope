@@ -73,8 +73,9 @@ UT::i32 main() {
             DrawFPS(950, 0);
         EndDrawing();
 
-        if (framesCount % 120 == 0) { // Every 120 frames, update the cwd contents
+        if (framesCount % 120 == 0) { // Every 120 frames, update the cwd contents and check camera size
             ctrl.GetConsole().GetCWDContents(ctrl.CWD());
+            cam.SetHeight(GetScreenHeight());
         }
 
         framesCount++;

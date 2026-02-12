@@ -75,5 +75,8 @@ namespace CBLT {
 
             // Origin point of the camera
             CameraOrigin Origin(void);
+
+            // Set camera height
+            void SetHeight(UT::ui32 h);
     }; // Camera class
 } // CBLT

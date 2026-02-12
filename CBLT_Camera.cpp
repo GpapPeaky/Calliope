@@ -74,4 +74,8 @@ namespace CBLT {
             originY
         };
     }
+
+    void Camera::SetHeight(UT::ui32 h) {
+        this->height = h;
+    }
 } // CBLT
