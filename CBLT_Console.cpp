@@ -365,6 +365,35 @@ namespace CBLT {
 
                     dirRes = dr;
                 } else {
+                    if (directiveParam == "-e") {
+                        if (Q.Size() > 0) {
+                            File& f = Q.Active();
+                            c.SetAt(0, f.GetLineCount() - 1); // Go to end of file
+
+                            Toggle();
+                        } else {
+                            dr.message = "CBLT_ERR: NO CURRENT FILE";
+                            dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                            dirRes = dr;
+                        }
+
+                        directive.Clear();
+
+                        return; // Early out
+                    }
+
+                    if (Q.Size() == 0) {
+                        dr.message = "CBLT_ERR: NO CURRENT FILE";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        dirRes = dr;
+
+                        directive.Clear();
+
+                        return; // Early out
+                    }
+
                     UT::ui32 line = atoi(directiveParam.c_str());
 
                     if (line < Q.Active().GetLineCount()) {
