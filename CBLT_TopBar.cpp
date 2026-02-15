@@ -1,8 +1,8 @@
 #include "CBLT_TopBar.hpp"
 
-void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd, UT::i32 mode) {
+void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd) {
     const UT::ui32 topBarFontSize = 25;
-    const UT::ui32 topBarSeperatorY = (UT::ui32)CBLT::UI::TOP_BAR_SEPERATOR_Y;
+    const UT::ui32 topBarSeperatorY = (UT::ui32)CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y;
     const UT::ui32 topBarInfoVerticalShift = 12;
     const UT::ui32 topBarInfoHorizontalShift = 4;
     const UT::ui32 topBarSecondColumnX = 100;
@@ -14,6 +14,12 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
 
     const UT::ui32 filenameToModeMargin = 10;
     const UT::ui32 modePosition = filenameLen + filenameToModeMargin; 
+
+    const UT::i32 mode = (UT::i32)c.GetMode();
+    const UT::ui32 col = c.Col();
+    const UT::ui32 line = c.Line();
+    const std::string cursorFragment = c.Fragment();
+    const UT::ui32 fragmentMarginFromMode = 5;
 
     // String to notify the user if the file is dirty (modified/unsaved) or clean (saved)    
     std::string dirtyFile;
@@ -32,15 +38,17 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     } else if (mode == 1) {
         modeString = std::string("SELECT");
     }
+
+    const UT::ui32 modeAndFilenameWidth = modePosition + MeasureTextEx(gFont.f, modeString.c_str(), topBarFontSize, 0.0f).x;
     
     // Seperators
 
     // Draw top bar seperator
     DrawLine(
         0,
-        CBLT::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
+        CBLT::FileMargins::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
         static_cast<UT::f32>(GetScreenWidth()),
-        CBLT::UI::TOP_BAR_HEIGHT + topBarSeperatorY, 
+        CBLT::FileMargins::UI::TOP_BAR_HEIGHT + topBarSeperatorY, 
         gPalette.textSeperators
     );
 
@@ -49,7 +57,7 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
         topBarCWDFilePathSeperatorX,
         0,
         topBarCWDFilePathSeperatorX,
-        CBLT::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
+        CBLT::FileMargins::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
         gPalette.textSeperators
     );
 
@@ -104,10 +112,20 @@ void CBLT::UI::Draw(UT::ui32 col, UT::ui32 line, UT::ui32 lineCount, UT::b dirty
     DrawTextEx(
         gFont.f,
         fname.c_str(),
-        {topBarInfoHorizontalShift + topBarThirdColumnX, 0},
+        {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX), 0},
         topBarFontSize,
         0.0f,
         gPalette.file
+    );
+
+    // Cursor fragment
+    DrawTextEx(
+        gFont.f,
+        cursorFragment.c_str(),
+        {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX + modeAndFilenameWidth + fragmentMarginFromMode), 0},
+        topBarFontSize,
+        0.0f,
+        gPalette.frag
     );
 
     // CWD

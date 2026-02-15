@@ -16,6 +16,29 @@ namespace CBLT {
 
    Cursor::~Cursor(void) {}
 
+    std::string Cursor::Fragment(void) const {
+        return fragment;
+    }
+
+    void Cursor::AcquireFragment(UT::ui32 c, std::string& line) {
+        std::string frag = "";
+        
+        // Get the leading part
+        for (UT::llui32 i = c ; i < line.size() ; i++) {
+            if (!isalpha(line.at(i))) {
+                break;
+            }
+
+            frag.push_back(line.at(i));
+        }
+
+        for (UT::ui32 i = 0 ; i < c ; i++) {
+            frag.insert(i, 1, line.at(i));
+        }
+        
+        fragment = frag;
+    }
+
     UT::ui32 Cursor::Col(void) const {
         return this->column;
     }
@@ -198,14 +221,14 @@ namespace CBLT {
         return CharClass::SYMBOL;
     }
     
-    void Cursor::SetToWordBoundary(const std::string& lineText, CursorDirection dir, File& f) {
+    void Cursor::SetToWordBoundary(const std::string& lineText, CursorDirection dir, UT::ui32 lineCount) {
         UT::ui32 col  = static_cast<UT::ui32>(Col());
         UT::ui32 line = static_cast<UT::ui32>(Line());
         UT::ui32 len  = static_cast<UT::ui32>(lineText.size());
     
         if (dir == CursorDirection::RIGHT) {
             if (col >= len) {
-                if (line == f.GetLineCount() - 1) {
+                if (line == lineCount - 1) {
                     SetAt(len, line);
                 } else {
                     SetAt(len, line + 1);
@@ -261,7 +284,7 @@ namespace CBLT {
         }
     }
 
-    void Cursor::ClampToCamera(Camera& cam, File& f) {
+    void Cursor::ClampToCamera(Camera& cam, std::string currentLine) {
         const UT::i32 camTop = cam.Origin().y + cam.MarginY();
         const UT::i32 camBottom = cam.Origin().y + cam.Height() - cam.MarginY();
         const UT::i32 camLeft = cam.Origin().x + cam.MarginX();
@@ -274,9 +297,9 @@ namespace CBLT {
                                 CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES
                                 + 31.0f;
 
-        const UT::i32 textBaseY = CBLT::UI::TOP_BAR_HEIGHT;
+        const UT::i32 textBaseY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT;
         
-        UT::i32 cursorWorldX = textBaseX + GetCursorX(f.GetCurrentLine(line), gFont.size);
+        UT::i32 cursorWorldX = textBaseX + GetCursorX(currentLine, gFont.size);
         UT::i32 cursorWorldY = textBaseY + line * lineHeight + lineHeight;
         
         UT::i32 cursorScreenX = cursorWorldX + CBLT::gOffsets.x;
@@ -332,9 +355,9 @@ namespace CBLT {
         }
     }
 
-    void CursorManager::DrawCursors(CBLT::File& openFile) {
+    void CursorManager::DrawCursors(std::vector<std::string>& lines) {
         for (UT::llui32 i = 0 ; i < activeCursors.size() ; i++) {
-            const std::string& lineText = openFile.GetCurrentLine(activeCursors[i].Line());
+            const std::string& lineText = lines.at(activeCursors[i].Line());
             activeCursors[i].Draw(lineText);
         }
     }
@@ -351,7 +374,7 @@ namespace CBLT {
         requestLead = true;
     }
 
-    void CursorManager::HandlePendingRequests(File& file) {
+    void CursorManager::HandlePendingRequests(UT::ui32 lineCount) {
         // Reset
         if (requestReset) {
             RemoveSecondaries();
@@ -365,7 +388,7 @@ namespace CBLT {
                 if (c.Line() > base.Line())
                     base = c;
         
-            if (base.Line() + 1 < file.GetLineCount())
+            if (base.Line() + 1 < lineCount)
                 AddCursorAt(base.Col(), base.Line() + 1);
         
             requestLead = false;

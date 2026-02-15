@@ -50,6 +50,30 @@ namespace CBLT {
             std::string TrimLeadingAt(const std::string& str);
         } // Func
     } // Utils
+
+    // Positioning margins
+    namespace FileMargins {
+        namespace Text {
+            // Left margin from the window y position
+            const CBLT::Utils::Types::f32 LEFT_FROM_FILE_LINES_UI = 5.0f;
+        } // Text
+
+        namespace Lines {
+            // Left marging from the window y position
+            const CBLT::Utils::Types::f32 LEFT_FROM_WINDOW_Y = 5.0f;
+        } // Lines
+
+        namespace UI {
+            // Left margin from the file lines
+            const CBLT::Utils::Types::f32 LEFT_FROM_FILE_LINES = 50.0f;
+
+            // Top margin from the top bar
+            const CBLT::Utils::Types::f32 TOP_BAR_HEIGHT = 50.0f;
+    
+            // Top bar seperator Y from height
+            const CBLT::Utils::Types::f32 TOP_BAR_SEPERATOR_Y = 17.0f;
+        } // UI
+    } // Margins
 } // CBLT
 
 // Utlity types definition, easier access

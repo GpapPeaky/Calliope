@@ -20,7 +20,6 @@ namespace CBLT {
         // Run from minDirty to end of file, since a block comment change
         // at line N can affect every line after it
         for (UT::ui32 i = minDirty; i < lines.size(); ++i) {
-            UT::b prevState = lineStartsInBlockComment[i];
             UT::b isDirty   = dirtyLines.count(i) > 0;
     
             if (isDirty || lineStartsInBlockComment[i] != inBlock) {
@@ -414,7 +413,7 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(Camera& cam) {
+    void File::Draw(CBLT::Camera& cam) {
         UT::f32 lineHeight = gFont.size;
         
         const UT::f32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
@@ -426,7 +425,7 @@ namespace CBLT {
         DrawLineV(
             { 
                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                CBLT::UI::TOP_BAR_HEIGHT + gFont.size - 6
+                CBLT::FileMargins::UI::TOP_BAR_HEIGHT + gFont.size - 6
             },{ 
                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
                 static_cast<UT::f32>(GetScreenHeight())
@@ -444,7 +443,7 @@ namespace CBLT {
                 pos.x,
                 pos.y,
                 (UT::f32)cam.Width(),
-                lineHeight + + UI::TOP_BAR_HEIGHT
+                lineHeight + FileMargins::UI::TOP_BAR_HEIGHT
             )) continue; // Skip non visible lines
 
             // THIS JUST FUCKING CLIPS, DOESN'T REDUCE THE DRAW CALL, LEARNT IT THE HARD WAY, FUCK.
@@ -452,7 +451,7 @@ namespace CBLT {
                 cam.Origin().x + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI,
                 cam.Origin().y,
                 cam.Width(),
-                cam.Height() + UI::TOP_BAR_HEIGHT
+                cam.Height() + FileMargins::UI::TOP_BAR_HEIGHT
             );
                 // File text
                 // DrawTextEx(
@@ -495,7 +494,7 @@ namespace CBLT {
                 cam.Origin().x,
                 cam.Origin().y,
                 cam.Width(),
-                cam.Height() + UI::TOP_BAR_HEIGHT
+                cam.Height() + FileMargins::UI::TOP_BAR_HEIGHT
             );
                 // line num
                 DrawTextEx(
@@ -621,5 +620,9 @@ namespace CBLT {
 
     FileExtension File::Extension(void) const {
         return ext;
+    }
+
+    std::vector<std::string>& File::GetLines(void) {
+        return lines;
     }
 }

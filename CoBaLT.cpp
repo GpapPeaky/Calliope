@@ -45,7 +45,7 @@ UT::i32 main() {
                 if (framesCount % 60) { // Tokenize once per 60 frames
                     f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
                 }
-                cm.DrawCursors(f);
+                cm.DrawCursors(f.GetLines());
                 f.Draw(cam);
                 currentFileLineCount = f.GetLineCount();
                 currentFileDirt      = f.Dirt();
@@ -56,7 +56,7 @@ UT::i32 main() {
                 currentFileName      = "";
             }
 
-            CBLT::UI::Draw(c.Col(), c.Line(), currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD(), (UT::i32)c.GetMode());
+            CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD());
             
             if (cnsl.IsOpen()) {
                 cnsl.Draw(fq);

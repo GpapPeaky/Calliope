@@ -1,21 +1,14 @@
 #pragma once
 
-#include "CBLT_Util.hpp" // Types
-#include "CBLT_Font.hpp" // Font size
-#include "CBLT_File.hpp" // Get current text line
+#include "CBLT_Util.hpp"        // Types
+#include "CBLT_Font.hpp"        // Font size
+#include "CBLT_Palette.hpp"
+#include "CBLT_raylib.hpp"      // for MeasureText() ...
+#include "CBLT_Camera.hpp"
 
 #include <vector>        // for std::vector<> ...
 
-#include "CBLT_raylib.hpp"      // for MeasureText() ...
-
-#include "CBLT_TopBar.hpp" // for vertical margins
-
-#include "CBLT_Camera.hpp"
-
-#include "CBLT_Palette.hpp"
-
 namespace CBLT {
-
     // Cursor character representation
     enum class CursorSymbol : UT::i32 {
         NON_ASCII_UNDERSCORE  = -4,          // Non-ASCII underscore
@@ -47,7 +40,6 @@ namespace CBLT {
 
     // Basic cursor object for both file and console
     class Cursor {
-
         private:
             UT::ui32 column;                 // Current column the cursor is at
             UT::ui32 line;                   // Current line the cursor is at
@@ -57,8 +49,15 @@ namespace CBLT {
             UT::ui32 finalSelectLine;        // Final cursor line at select mode entry
             CursorMode m;                    // Current cursor mode
             std::string fragment;            // Text fragment from current cursor position
+        
         public:
             UT::ui32 charWidth;              // Monospaced font support ONLY!
+            
+            // Acquire the cursor fragment, based on cursor positon
+            void AcquireFragment(UT::ui32 c, std::string& line);
+            
+            // Get the cursor fragment
+            std::string Fragment(void) const ;
             
             // Constructor
             Cursor(UT::ui32 col, UT::ui32 line);
@@ -123,10 +122,10 @@ namespace CBLT {
             CharClass Classify(UT::cui8 c) const;
 
             // Get the distance to a character in the left or right of the cursor and set the cursor there
-            void SetToWordBoundary(const std::string& lineText, const CursorDirection dir, File& f);
+            void SetToWordBoundary(const std::string& lineText, const CursorDirection dir, UT::ui32 lineCount);
 
             // Clamp cursor to camera view
-            void ClampToCamera(Camera& cam, File& f);
+            void ClampToCamera(Camera& cam, std::string currentLine);
     }; // Cursor class
 
     class CursorManager {
@@ -154,7 +153,7 @@ namespace CBLT {
             void RemoveSecondaries(void);
 
             // Draw all active cursors
-            void DrawCursors(CBLT::File& openFile);
+            void DrawCursors(std::vector<std::string>& lines);
 
             // Request cursor reset
             void RequestReset(void);
@@ -166,7 +165,7 @@ namespace CBLT {
             void RequestLead(void);
 
             // Apply pending requests, and reset any flags/counters
-            void HandlePendingRequests(File& f);
+            void HandlePendingRequests(UT::ui32 lineCount);
 
             // Get primary cursor mutable access
             Cursor& Primary();

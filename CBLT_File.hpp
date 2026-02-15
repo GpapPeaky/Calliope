@@ -1,22 +1,21 @@
 #pragma once
 
-#include <cctype>               // for tokenizing
-#include <unordered_set>        // for std::unordered_set<> ...
-#include <vector>               // for std::vector<> ...
-#include <string>               // for std::string ...
-#include <fstream>              // File stream
-#include <filesystem>           // For CWD
-
-#include "CBLT_raylib.hpp"             // for rendering
-
+#include "CBLT_raylib.hpp"          // for rendering
 #include "CBLT_Util.hpp"            // for types
 #include "CBLT_Font.hpp"            // for Font global
-#include "CBLT_TopBar.hpp"          // for vertical margins
 #include "CBLT_Camera.hpp"          // for camera offsets
 #include "CBLT_FileExtension.hpp"   // For extensions
 #include "CBLT_Palette.hpp"         // Pallete colours
 #include "CBLT_Token.hpp"           // Tokens storage class
 #include "CBLT_Language.hpp"        // Tokens for tokenizing
+#include "CBLT_Camera.hpp"
+
+#include <cctype>                   // for tokenizing
+#include <unordered_set>            // for std::unordered_set<> ...
+#include <vector>                   // for std::vector<> ...
+#include <string>                   // for std::string ...
+#include <fstream>                  // File stream
+#include <filesystem>               // For CWD
 
 namespace CBLT {
     // Basic document/file class
@@ -56,7 +55,7 @@ namespace CBLT {
             const std::string& GetPath(void) const;
 
             // Draw the document
-            void Draw(Camera& cam);
+            void Draw(CBLT::Camera& cam);
 
             // Get line count
             UT::ui32 GetLineCount(void) const;
@@ -111,6 +110,9 @@ namespace CBLT {
 
             // Retokenize lines marked as dirty
             void RetokenizeDirtyLines(void);
+
+            // Get all the lines of the file
+            std::vector<std::string>& GetLines(void) ;
     }; // File class
 
     // No file loaded!
@@ -121,22 +123,4 @@ namespace CBLT {
         
     // Check if a file is the NAF file
     UT::b IsNAF(std::string filename);
-
-    // Positioning margins
-    namespace FileMargins {
-        namespace Text {
-            // Left margin from the window y position
-            const UT::f32 LEFT_FROM_FILE_LINES_UI = 5.0f;
-        } // Text
-
-        namespace Lines {
-            // Left marging from the window y position
-            const UT::f32 LEFT_FROM_WINDOW_Y = 5.0f;
-        } // Lines
-
-        namespace UI {
-            // Left margin from the file lines
-            const UT::f32 LEFT_FROM_FILE_LINES = 50.0f;
-        } // UI
-    } // Margins
 } // CBLT

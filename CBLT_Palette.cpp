@@ -41,6 +41,8 @@ namespace CBLT {
 
         openFileColor       = UF::C(0, 255, 0);
 
+        frag                = UF::C(0, 128, 192);
+
         lex_id      = UF::C(192, 192, 192); // White: Clear, standard text
         lex_comm    = UF::C(128, 128, 128); // Dark Grey: Pushed to background
         lex_key     = UF::C(64, 128, 255);  // Sky Blue: Distinct from Cyan cursor

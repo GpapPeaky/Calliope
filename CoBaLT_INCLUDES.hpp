@@ -7,3 +7,7 @@
 #include "CBLT_Font.hpp"
 
 #include "CBLT_Palette.hpp"
+
+#include "CBLT_Camera.hpp"
+
+#include "CBLT_TopBar.hpp"

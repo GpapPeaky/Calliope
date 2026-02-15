@@ -1,10 +1,9 @@
 #pragma once
 
 #include "CBLT_Util.hpp"
-#include "CBLT_TopBar.hpp" // for screen dimensions
-#include "CBLT_File.hpp"
-
 #include "CBLT_Palette.hpp"
+#include "CBLT_Cursor.hpp"
+#include "CBLT_Util.hpp" // UI namespace
 
 namespace CBLT {
     // Offset structure for camera

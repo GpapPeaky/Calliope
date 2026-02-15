@@ -41,6 +41,7 @@ namespace CBLT {
             Color currentFile;          // Current file in queue display colour
             Color fileQueueColour;      // File queue background colour
             Color openFileColor;        // Current open file color in the CWD list
+            Color frag;                 // Current cursor fragment color
 
             Color lex_id;               // Id colours
             Color lex_comm;             // Comment colours

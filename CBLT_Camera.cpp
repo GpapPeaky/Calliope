@@ -5,11 +5,11 @@ namespace CBLT {
 
     Camera::Camera(void) {
         originX = 1;
-        originY = CBLT::UI::TOP_BAR_HEIGHT + CBLT::UI::TOP_BAR_SEPERATOR_Y;
+        originY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT + CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y;
         clampMarginX = 90;
         clampMarginY = 60;
         width = GetScreenWidth() - 1;
-        height = GetScreenHeight() - (CBLT::UI::TOP_BAR_HEIGHT + CBLT::UI::TOP_BAR_SEPERATOR_Y) - 1;
+        height = GetScreenHeight() - (CBLT::FileMargins::UI::TOP_BAR_HEIGHT + CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y) - 1;
     }
 
     Camera::~Camera(void) {}
