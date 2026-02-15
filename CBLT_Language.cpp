@@ -17,7 +17,7 @@ void CBLT::AssignLanguageKeywords(CBLT::FileExtension fe) {
                 "double","else","enum","extern","float","for","goto","if","inline",
                 "int","long","register","restrict","return","short","signed",
                 "sizeof","static","struct","switch","typedef","union","unsigned",
-                "void","volatile","while",
+                "void","volatile","while","void",
                 "_Alignas","_Alignof","_Atomic","_Bool","_Complex","_Generic",
                 "_Imaginary","_Noreturn","_Static_assert","_Thread_local"
             };
@@ -26,7 +26,7 @@ void CBLT::AssignLanguageKeywords(CBLT::FileExtension fe) {
         case FileExtension::CPP:
             CBLT::gKeywords = {
                 "alignas","alignof","and","and_eq","asm","bitand","bitor","bool",
-                "catch","char8_t","char16_t","char32_t","class","co_await",
+                "catch","char8_t","char16_t","char32_t","class","co_await","void",
                 "co_return","co_yield","compl","concept","consteval","constexpr",
                 "constinit","decltype","delete","dynamic_cast","explicit","export",
                 "false","friend","import","module","mutable","namespace","new",
