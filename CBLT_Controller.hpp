@@ -6,6 +6,7 @@
 #include "CBLT_Console.hpp"         // Console for directives
 #include "CBLT_Camera.hpp"          // Camera for view offset
 #include "CBLT_FileQueue.hpp"
+#include "CBLT_Sound.hpp"
 
 #include <cmath>                    // min()/max() ...
 #include <vector>

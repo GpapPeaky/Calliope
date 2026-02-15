@@ -13,6 +13,8 @@ UT::i32 main() {
     CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
 
+    CBLT::gSound.Load();
+
     // CBLT::Controller ctrl; // Automatically calls the constructor
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
     CBLT::Controller ctrl; // Program controller

@@ -150,6 +150,8 @@ namespace CBLT {
     void Controller::HandleSpecials(Cursor& cursor) {
         // Backspace
         if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
+            gSound.Play(SoundClass::SOUND_INFILE_DELETE);
+
             if (cursor.Col() > 0) {
                 std::string& line = Q.Active().GetCurrentLine(cursor.Line());
                 UT::i32 col = cursor.Col();
@@ -275,6 +277,8 @@ namespace CBLT {
         // Insert the queued input
         for (UT::c32 typed : keyQueue) {
             
+            gSound.Play(SoundClass::SOUND_INFILE_INSERT); // Per queue element
+
             // Closers omit
             if (typed == '}') {
                 if (cursor.Col() >= line.length() || line.at(cursor.Col()) != '}') {
@@ -460,6 +464,8 @@ namespace CBLT {
 
         // Delete current line
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
+            gSound.Play(SoundClass::SOUND_INFILE_DELETE);
+            
             SetClipboardText(Q.Active().GetCurrentLine(cursor.Line()).c_str());
             
             Q.Active().DeleteLine(cursor.Line());
@@ -692,6 +698,8 @@ namespace CBLT {
 
             // Delete
             if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE)) {
+                gSound.Play(SoundClass::SOUND_INFILE_DELETE);
+
                 if (console.ConsoleCursor().Col() > 0) {
                     File& df = console.ConsoleDirective().DirectiveFile();
                     std::string& line = df.GetCurrentLine(DIRECTIVE_FILE_LINE);

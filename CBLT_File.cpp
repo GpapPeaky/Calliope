@@ -333,7 +333,7 @@ namespace CBLT {
         this->name = name;
     }
         
-    UT::b File::Load(const std::string& fpath, const std::string& cwd) {
+    UT::b File::Load(const std::string& fpath, const std::string& cwd) { // FIXME: Crashes for some reason??
         namespace fs = std::filesystem;
     
         std::string pathString = cwd + '\\' + fpath;

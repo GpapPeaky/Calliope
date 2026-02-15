@@ -20,27 +20,27 @@ namespace CBLT {
         return fragment;
     }
 
-    void Cursor::AcquireFragment(UT::ui32 c, std::string& line) { // FIXME: Problematic
-        std::string frag = "";
+    void Cursor::AcquireFragment(UT::ui32 c, std::string& line) { // FIXME: Problematic, crashes
+        // std::string frag = "";
         
-        // Get the leading part
-        for (UT::llui32 i = c ; i < line.size() ; i++) {
-            if (!isalpha(line.at(i))) {
-                break;
-            }
+        // // Get the leading part
+        // for (UT::llui32 i = c ; i < line.size() ; i++) {
+        //     if (!isalpha(line.at(i))) {
+        //         break;
+        //     }
 
-            frag.push_back(line.at(i));
-        }
+        //     frag.push_back(line.at(i));
+        // }
 
-        for (UT::ui32 i = c - 1 ; i == 0 ; i--) {
-            if (!isalpha(line.at(i))) {
-                break;
-            }
+        // for (UT::ui32 i = c - 1 ; i == 0 ; i--) {
+        //     if (!isalpha(line.at(i))) {
+        //         break;
+        //     }
 
-            frag.insert(i, 1, line.at(i));
-        }
+        //     frag.insert(i, 1, line.at(i));
+        // }
         
-        fragment = frag;
+        // fragment = frag;
     }
 
     UT::ui32 Cursor::Col(void) const {
