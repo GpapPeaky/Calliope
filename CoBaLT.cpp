@@ -5,6 +5,8 @@
 UT::i32 main() {
     CBLT::Win::Init();
 
+    CBLT::InitNAF();
+
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
     CBLT::gFont.Config();
     CBLT::gFont.size = 23;

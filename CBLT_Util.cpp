@@ -4,7 +4,7 @@ namespace CBLT {
     namespace Utils {
         namespace Err {
             void Log(std::string msg) {
-                std::cerr << "CBLT_ERR: " << msg << "\n";
+                std::cerr << "CBLT_LOG: " << msg << "\n";
             }
         } // Err
 

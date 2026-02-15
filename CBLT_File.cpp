@@ -294,7 +294,7 @@ namespace CBLT {
         
         gNAF.SetName(NAFname);
 
-        std::cout << "CBLT_LOG: NAFname: " <<  NAFname << "\n";
+        CBLT::Utils::Err::Log("NAFname: " + NAFname + "\n");
     }
 
     UT::b IsNAF(std::string filename) {
