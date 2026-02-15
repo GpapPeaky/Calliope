@@ -20,7 +20,7 @@ namespace CBLT {
         return fragment;
     }
 
-    void Cursor::AcquireFragment(UT::ui32 c, std::string& line) {
+    void Cursor::AcquireFragment(UT::ui32 c, std::string& line) { // FIXME: Problematic
         std::string frag = "";
         
         // Get the leading part
@@ -32,7 +32,11 @@ namespace CBLT {
             frag.push_back(line.at(i));
         }
 
-        for (UT::ui32 i = 0 ; i < c ; i++) {
+        for (UT::ui32 i = c - 1 ; i == 0 ; i--) {
+            if (!isalpha(line.at(i))) {
+                break;
+            }
+
             frag.insert(i, 1, line.at(i));
         }
         
