@@ -55,8 +55,8 @@ namespace CBLT {
             return; // Nothing to show
         }
         
-        if (directiveLine.at(0) == '@') { // Directive command context
-            std::string trimmed = UF::TrimLeadingAt(directiveLine); // Trimmed of '@'
+        if (directiveLine.at(0) == ':') { // Directive command context
+            std::string trimmed = UF::TrimLeadingColon(directiveLine); // Trimmed of ':'
 
             // Directive / parameter seperator
             UT::llui32 idx = trimmed.find_first_of(' ');
@@ -556,7 +556,7 @@ namespace CBLT {
 
             UT::b toDraw = false;
 
-            if (directiveLine.empty() || directiveLine[0] == '@') {
+            if (directiveLine.empty() || directiveLine[0] == ':') {
                 // Empty or directive mode -> draw all
                 toDraw = true;
             } else {
@@ -775,7 +775,7 @@ namespace CBLT {
         const std::string& directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
 
         for (auto n : cwdContents) {
-            if (directiveLine.empty() || directiveLine[0] == '@') {
+            if (directiveLine.empty() || directiveLine[0] == ':') {
                 return "";
             } else {
                 if (n.n.find(directiveLine) != std::string::npos) {

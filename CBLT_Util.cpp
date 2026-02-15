@@ -9,8 +9,8 @@ namespace CBLT {
         } // Err
 
         namespace Func {
-            std::string TrimLeadingAt(const std::string& str) {
-                if (!str.empty() && str[0] == '@') return str.substr(1);
+            std::string TrimLeadingColon(const std::string& str) {
+                if (!str.empty() && str[0] == ':') return str.substr(1);
                 return str;
             }
 
