@@ -115,12 +115,18 @@ namespace CBLT {
             std::vector<std::string>& GetLines(void) ;
     }; // File class
 
-    // No file loaded!
+    // Fallback file for when there is no active file!
     extern File gNAF;
 
-    // Initialize the Not Active File fallback file
+    /// @brief Init No Active File file
+    ///
+    /// ### UNUSED
+    ///
     void InitNAF(void);
         
-    // Check if a file is the NAF file
+    /// @brief Check if a file is the NAF file
+    ///
+    /// ### UNUSED
+    ///
     UT::b IsNAF(std::string filename);
 } // CBLT
