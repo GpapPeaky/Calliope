@@ -333,7 +333,7 @@ namespace CBLT {
         this->name = name;
     }
         
-    UT::b File::Load(const std::string& fpath, const std::string& cwd) { // FIXME: Crashes for some reason??
+    UT::b File::Load(const std::string& fpath, const std::string& cwd) {
         namespace fs = std::filesystem;
     
         std::string pathString = cwd + '\\' + fpath;
@@ -356,8 +356,8 @@ namespace CBLT {
     
         if (lines.empty())
             lines.emplace_back("");
-    
-        // Language support stuff
+
+        // Seek file extension, and assign the correct language keywords for language support.
         ext = AssignExtension(path);
         AssignLanguageKeywords(ext);
 

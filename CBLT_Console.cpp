@@ -430,7 +430,10 @@ namespace CBLT {
                     directive.Clear();
 
                     cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
-                    
+                    c.SetAt(0, 0); // Move main cursor to the start of the file
+
+                    // We also need to reset the secondaries before switching
+
                     return; // Early exit
                 }
             }
