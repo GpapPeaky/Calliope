@@ -17,7 +17,7 @@ void CBLT::AssignLanguageKeywords(CBLT::FileExtension fe) {
                 "double","else","enum","extern","float","for","goto","if","inline",
                 "int","long","register","restrict","return","short","signed",
                 "sizeof","static","struct","switch","typedef","union","unsigned",
-                "void","volatile","while","void",
+                "void","volatile","while","void"
                 "_Alignas","_Alignof","_Atomic","_Bool","_Complex","_Generic",
                 "_Imaginary","_Noreturn","_Static_assert","_Thread_local"
             };
@@ -26,14 +26,23 @@ void CBLT::AssignLanguageKeywords(CBLT::FileExtension fe) {
         case FileExtension::CPP:
             CBLT::gKeywords = {
                 "alignas","alignof","and","and_eq","asm","bitand","bitor","bool",
-                "catch","char8_t","char16_t","char32_t","class","co_await","void",
+                "catch","char8_t","char16_t","char32_t","class","co_await",
                 "co_return","co_yield","compl","concept","consteval","constexpr",
                 "constinit","decltype","delete","dynamic_cast","explicit","export",
                 "false","friend","import","module","mutable","namespace","new",
                 "noexcept","not","not_eq","nullptr","operator","or","or_eq",
                 "private","protected","public","reinterpret_cast","requires",
                 "static_assert","template","this","thread_local","throw","true",
-                "try","typeid","typename","using","virtual","wchar_t","xor","xor_eq"
+                "try","typeid","typename","using","virtual","wchar_t","xor","xor_eq",
+
+                // from C
+                "auto","break","case","char","const","continue","default","do",
+                "double","else","enum","extern","float","for","goto","if","inline",
+                "int","long","register","restrict","return","short","signed",
+                "sizeof","static","struct","switch","typedef","union","unsigned",
+                "void","volatile","while","void"
+                "_Alignas","_Alignof","_Atomic","_Bool","_Complex","_Generic",
+                "_Imaginary","_Noreturn","_Static_assert","_Thread_local"
             };
 
             break;
