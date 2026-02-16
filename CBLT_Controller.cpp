@@ -671,6 +671,8 @@ namespace CBLT {
             if (c >= 32 && c <= 126) { // Allow only ASCII
                 df.InsertChar(cc.Col(), cc.Line(), c);
 
+                gSound.Play(SoundClass::SOUND_INFILE_INSERT);
+
                 cc.Right(); // Move cursor forward after inserting
             }
         }
