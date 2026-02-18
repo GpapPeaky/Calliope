@@ -49,7 +49,7 @@ namespace CBLT {
         }
     }
         
-    void SoundSystem::Play(CBLT::SoundClass index) { // FIXME: Although the sounds are played, they cannot be played over theirselves, need aliases 8-16 per sound?
+    void SoundSystem::Play(CBLT::SoundClass index) {
         if (index >= SoundClass::EDITOR_SOUNDS_COUNT) return;
 
         // Introduce a pitch variation as well!

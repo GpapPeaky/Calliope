@@ -9,7 +9,10 @@ void CBLT::AssignLanguageKeywords(CBLT::FileExtension fe) {
 
     switch (fe) {
         case FileExtension::CRS:
-            
+            CBLT::gKeywords = {
+                ":"
+            };
+
             break;
         case FileExtension::C:
             CBLT::gKeywords = {

@@ -9,7 +9,7 @@ namespace CBLT {
         dirtyLines.insert(line);
     }
 
-    void File::RetokenizeDirtyLines(void) { // FIXME: Multiline comments are not retokenized correctly?
+    void File::RetokenizeDirtyLines(void) {
         if (dirtyLines.empty()) return;
     
         UT::ui32 minDirty = *std::min_element(dirtyLines.begin(), dirtyLines.end());
