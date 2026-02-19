@@ -20,11 +20,11 @@ namespace CBLT {
         
         // TODO: Finish the samples, replace them, and add them where needed
 
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_INSERT] = LoadSound("assets/audio/infile/insert.wav"); // C
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_DELETE] = LoadSound("assets/audio/infile/del.wav");    // C
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_NAV]    = LoadSound("assets/audio/infile/nav.wav");    // C
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_RETURN] = LoadSound("assets/audio/infile/return.wav"); // C           
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_SPACE]  = LoadSound("assets/audio/infile/space.wav");  // C       
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_INSERT]       = LoadSound("assets/audio/infile/insert.wav"); // C
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_DELETE]       = LoadSound("assets/audio/infile/del.wav");    // C
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_NAV]          = LoadSound("assets/audio/infile/nav.wav");    // C
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_RETURN]       = LoadSound("assets/audio/infile/return.wav"); // C           
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_SPACE]        = LoadSound("assets/audio/infile/space.wav");  // C       
 
         // Console sounds
         soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_OPEN]        = LoadSound("assets/audio/console/copen.wav");
@@ -36,11 +36,11 @@ namespace CBLT {
         soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_GUIDE]       = LoadSound("assets/audio/console/cguide.wav");
 
         // File queue sounds
-        soundVector[(UT::llui32)SoundClass::SOUND_FQ_TRAVERSE] = LoadSound("assets/audio/fq/fqnav.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_FQ_DEQUEUE]  = LoadSound("assets/audio/fq/fqdq.wav");             
+        soundVector[(UT::llui32)SoundClass::SOUND_FQ_TRAVERSE]         = LoadSound("assets/audio/fq/fqnav.wav");
+        soundVector[(UT::llui32)SoundClass::SOUND_FQ_DEQUEUE]          = LoadSound("assets/audio/fq/fqdq.wav");             
 
         // Other
-        soundVector[(UT::llui32)SoundClass::SOUND_EXIT] = LoadSound("assets/audio/other/cbltexit.wav");
+        soundVector[(UT::llui32)SoundClass::SOUND_EXIT]                = LoadSound("assets/audio/other/cbltexit.wav");
 
         for (UT::llui32 i = 0 ; i < (UT::llui32)SoundClass::EDITOR_SOUNDS_COUNT ; i++) {
             if (!IsSoundValid(soundVector[i])) {
