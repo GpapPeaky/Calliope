@@ -99,25 +99,25 @@ namespace CBLT {
             else if (dir == "h") {
                 dr.message = 
                     "Co.Ba.L.T Console Help Guide:\n"
-                    "@e      - Exit Co.Ba.L.T\n"
-                    "@we     - Write and exit Co.Ba.L.T\n"
-                    "@w      - Write current file\n"
-                    "@i      - Display file info and metadata\n"
-                    "@h      - Display this help guide\n"
-                    "@c      - Create a file\n"
-                    "@r      - Delete a file\n"
-                    "@m      - Create a directory\n"
-                    "@d      - Delete a directory\n"
-                    "@cd     - Change diretory\n"
-                    "@o      - Open native folder picker\n"
-                    "@g      - Go to line in file\n";
+                    ":e      - Exit Co.Ba.L.T\n"
+                    ":we     - Write and exit Co.Ba.L.T\n"
+                    ":w      - Write current file\n"
+                    ":i      - Display file info and metadata\n"
+                    ":h      - Display this help guide\n"
+                    ":c      - Create a file\n"
+                    ":r      - Delete a file\n"
+                    ":m      - Create a directory\n"
+                    ":d      - Delete a directory\n"
+                    ":cd     - Change diretory\n"
+                    ":o      - Open native folder picker\n"
+                    ":g      - Go to line in file\n";
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
             // Create a directory, check if directory exists
             else if (dir == "m") {
                 if (directiveParam.empty()) {
-                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE @" + dir;
+                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     fs::path dirpath = fs::path(cwd) / directiveParam;
@@ -146,7 +146,7 @@ namespace CBLT {
             // Delete a directory, check if directory exists 
             else if (dir == "d") {
                 if (directiveParam.empty()) {
-                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE @" + dir;
+                    dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     fs::path dirpath = fs::path(cwd) / directiveParam;
@@ -191,7 +191,7 @@ namespace CBLT {
             // Create a file
             else if (dir == "c") {
                 if (directiveParam.empty()) { // No param
-                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE @" + dir;
+                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     fs::path dirpath{cwd.c_str()};
@@ -229,7 +229,7 @@ namespace CBLT {
             // Remove a file, check if file exists
             else if (dir == "r") {
                 if (directiveParam.empty()) { // No param
-                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE @" + dir;
+                    dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
                 } else {
                     fs::path dirpath(cwd.c_str());
@@ -410,7 +410,7 @@ namespace CBLT {
             }
             
             else { // Invalid directive given fallback
-                dr.message = "CBLT_ERR: UNKNOWN DIRECTIVE @" + dir;
+                dr.message = "CBLT_ERR: UNKNOWN DIRECTIVE :" + dir;
                 dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
             }
 
