@@ -110,7 +110,8 @@ namespace CBLT {
                     ":d      - Delete a directory\n"
                     ":cd     - Change diretory\n"
                     ":o      - Open native folder picker\n"
-                    ":g      - Go to line in file\n";
+                    ":g      - Go to line in file\n"
+                    ":ge     - Go to end of file\n";
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
@@ -367,24 +368,6 @@ namespace CBLT {
 
                     dirRes = dr;
                 } else {
-                    if (directiveParam == "-e") {
-                        if (Q.Size() > 0) {
-                            File& f = Q.Active();
-                            c.SetAt(0, f.GetLineCount() - 1); // Go to end of file
-
-                            Toggle();
-                        } else {
-                            dr.message = "CBLT_ERR: NO CURRENT FILE";
-                            dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
-
-                            dirRes = dr;
-                        }
-
-                        directive.Clear();
-
-                        return; // Early out
-                    }
-
                     if (Q.Size() == 0) {
                         dr.message = "CBLT_ERR: NO CURRENT FILE";
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
@@ -409,13 +392,25 @@ namespace CBLT {
                         dirRes = dr;
                     }
                 }
-            }
-            
-            else { // Invalid directive given fallback
-                dr.message = "CBLT_ERR: UNKNOWN DIRECTIVE :" + dir;
-                dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
-            }
 
+            // Got to EOF
+            } else if (dir == "ge") {
+                if (Q.Size() > 0) {
+                    File& f = Q.Active();
+                    c.SetAt(0, f.GetLineCount() - 1); // Go to end of file
+
+                    if (IsOpen()) Toggle();
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    dirRes = dr;
+                }
+
+                directive.Clear();
+
+                return; // Early out
+            }
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
                 if (entry.n == directiveLine) {

@@ -501,6 +501,15 @@ namespace CBLT {
             return true;
         }
 
+        // Guide pull-up
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_G)) {
+            // Call the console to execute the directive
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":ge";
+            console.Execute(Q, cwd, cursor);
+
+            return true;
+        }
+
         // Open folder picker
         if (keyboard.m.ctrl && IsKeyPressed(KEY_O)) {
             // Call the console to execute the directive
