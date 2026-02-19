@@ -219,6 +219,8 @@ namespace CBLT {
                     F.Load(directiveParam, cwd);
                     Q.LoadFileToQueue(F);
 
+                    c.SetAt(0, 0); // Move main cursor to the start of the file
+
                     GetCWDContents(cwd); // Update
 
                     dr.message = "CBLT_LOG: FILE " + directiveParam + " CREATED";
