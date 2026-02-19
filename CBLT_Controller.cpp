@@ -492,10 +492,19 @@ namespace CBLT {
             return true;
         }
 
+        // Guide pull-up
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_H)) {
+            // Call the console to execute the directive
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":h";
+            console.Execute(Q, cwd, cursor);
+
+            return true;
+        }
+
         // Open folder picker
         if (keyboard.m.ctrl && IsKeyPressed(KEY_O)) {
             // Call the console to execute the directive
-            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = "@o";
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":o";
             console.Execute(Q, cwd, cursor);
 
             return true;
@@ -504,7 +513,7 @@ namespace CBLT {
         // Current file info
         if (keyboard.m.ctrl && IsKeyPressed(KEY_I)) {
             // Call the console to execute the directive
-            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = "@i";
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":i";
             console.Execute(Q, cwd, cursor);
 
             return true;
