@@ -22,9 +22,9 @@ namespace CBLT {
 
         soundVector[(UT::llui32)SoundClass::SOUND_INFILE_INSERT] = LoadSound("assets/audio/infile/insert.wav"); // C
         soundVector[(UT::llui32)SoundClass::SOUND_INFILE_DELETE] = LoadSound("assets/audio/infile/del.wav");    // C
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_SPACE]  = LoadSound("assets/audio/infile/space.wav");           
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_NAV]    = LoadSound("assets/audio/infile/nav.wav");         
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_RETURN] = LoadSound("assets/audio/infile/return.wav");            
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_NAV]    = LoadSound("assets/audio/infile/nav.wav");    // C
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_RETURN] = LoadSound("assets/audio/infile/return.wav"); // C           
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_SPACE]  = LoadSound("assets/audio/infile/space.wav");  // C       
 
         // Console sounds
         soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_OPEN]        = LoadSound("assets/audio/console/copen.wav");

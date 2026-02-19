@@ -11,6 +11,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT))) {
             File& f = Q.Active();
 
+            gSound.Play(SoundClass::SOUND_INFILE_NAV);
             cursor.SetToWordBoundary(f.GetCurrentLine(line), CursorDirection::RIGHT, f.GetLineCount());
 
             cursor.AcquireFragment(cursor.Col(), f.GetCurrentLine(line));
@@ -19,6 +20,7 @@ namespace CBLT {
         } else if (keyboard.m.ctrl && (IsKeyPressed(KEY_LEFT) || IsKeyPressedRepeat(KEY_LEFT))) {
             File& f = Q.Active();
 
+            gSound.Play(SoundClass::SOUND_INFILE_NAV);
             cursor.SetToWordBoundary(f.GetCurrentLine(line), CursorDirection::LEFT, f.GetLineCount());
         
             cursor.AcquireFragment(cursor.Col(), f.GetCurrentLine(line));
@@ -42,25 +44,25 @@ namespace CBLT {
         
         if (IsKeyPressed(KEY_LEFT) || IsKeyPressedRepeat(KEY_LEFT)) {
             if (col > 0) {
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.Left();
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             } else if (line > 0) {
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(
                     f.GetLineLength(line - 1),
                     line - 1
                 );
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             }
         } else if (IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT)) {
             if (col < f.GetLineLength(line)) {
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.Right();
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             } else if (line + 1 < f.GetLineCount()) {
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(0, line + 1);
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             }
         } else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
@@ -70,9 +72,8 @@ namespace CBLT {
                     col,
                     f.GetLineLength(newLine)
                 );
-          
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(newCol, newLine);
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             } else if (line > 0) {
                 UT::ui32 newLine = line - 1;
@@ -80,9 +81,8 @@ namespace CBLT {
                     col,
                     f.GetLineLength(newLine)
                 );
-          
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(newCol, newLine);
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             }
         } else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
@@ -92,9 +92,8 @@ namespace CBLT {
                     col,
                     f.GetLineLength(newLine)
                 );
-          
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(newCol, newLine);
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             } else if (line + 1 < f.GetLineCount()) {
                 UT::ui32 newLine = line + 1;
@@ -102,9 +101,8 @@ namespace CBLT {
                     col,
                     f.GetLineLength(newLine)
                 );
-          
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(newCol, newLine);
-
                 cursor.AcquireFragment(col, f.GetCurrentLine(line));
             }
         }
@@ -240,6 +238,7 @@ namespace CBLT {
                 cursor.AcquireFragment(indentString.size(), Q.Active().GetCurrentLine(cursor.Line()));
             }
 
+            gSound.Play(SoundClass::SOUND_INFILE_RETURN);
             Q.Active().SetDirt(true);
         }
 
@@ -277,7 +276,11 @@ namespace CBLT {
         // Insert the queued input
         for (UT::c32 typed : keyQueue) {
             
-            gSound.Play(SoundClass::SOUND_INFILE_INSERT); // Per queue element
+            if (typed == ' ') {
+                gSound.Play(SoundClass::SOUND_INFILE_SPACE);
+            } else {
+                gSound.Play(SoundClass::SOUND_INFILE_INSERT); // Per queue element
+            }
 
             // Closers omit
             if (typed == '}') {
@@ -446,6 +449,7 @@ namespace CBLT {
 
         // Create cursors down
         if (keyboard.m.ctrl && keyboard.m.alt && (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN))) {
+            gSound.Play(SoundClass::SOUND_INFILE_NAV);
             cursorManager.RequestLead();
 
             return true;
@@ -453,6 +457,7 @@ namespace CBLT {
 
         // Create cursors up
         if (keyboard.m.ctrl && keyboard.m.alt && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
+            gSound.Play(SoundClass::SOUND_INFILE_NAV);
             cursorManager.RequestTrail();
 
             return true;
@@ -671,7 +676,11 @@ namespace CBLT {
             if (c >= 32 && c <= 126) { // Allow only ASCII
                 df.InsertChar(cc.Col(), cc.Line(), c);
 
-                gSound.Play(SoundClass::SOUND_INFILE_INSERT);
+                if (c == ' ') {
+                    gSound.Play(SoundClass::SOUND_INFILE_SPACE);
+                } else {
+                    gSound.Play(SoundClass::SOUND_INFILE_INSERT);
+                }
 
                 cc.Right(); // Move cursor forward after inserting
             }
