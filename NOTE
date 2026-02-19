@@ -1,5 +1,0 @@
-fix: when creating a file we need go reset the cursor to 0, 0 since we might be elsewhere in another
-
-fix: Console messages have the '@' thing instead of the ':'
-
-fix: Console backspace doesn't work sometimes
