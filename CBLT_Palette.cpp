@@ -8,17 +8,17 @@ namespace CBLT {
         console             = UF::C(255, 255, 255);
         consoleText         = UF::C(255, 255, 255);
         consoleBackground   = UF::C(0, 0, 0);
-        consoleCursor       = UF::C(255, 255, 32);
-        cursor              = UF::C(255, 255, 32);
-        cursorMode          = UF::C(0, 255, 0);
+        consoleCursor       = UF::C(160, 160, 160);
+        cursor              = UF::C(160, 160, 160);
+        cursorMode          = UF::C(0, 255, 255);
         textSeperators      = UF::C(255, 255, 255);
-        lineInfo            = UF::C(0, 255, 255); 
-        file                = UF::C(255, 0, 255);
-        cwd                 = UF::C(255, 255, 0);
-        cwdDir              = UF::C(255, 128, 0);
-        cwdFile             = UF::C(255, 255, 0);
-        dirty               = UF::C(255, 64, 64);
-        clean               = UF::C(64, 255, 64);
+        lineInfo            = UF::C(128, 128, 128); 
+        file                = UF::C(255, 255, 0);
+        cwd                 = UF::C(255, 0, 255);
+        cwdDir              = UF::C(96, 96, 96);
+        cwdFile             = UF::C(160, 160, 160);
+        dirty               = UF::C(192, 192, 192);
+        clean               = UF::C(255, 255, 255);
         textBase            = UF::C(192, 192, 192);
         textLines           = UF::C(192, 192, 192);
         
@@ -39,7 +39,7 @@ namespace CBLT {
 
         fileQueueColour     = UF::C(0, 0, 0);
 
-        openFileColor       = UF::C(0, 255, 0);
+        openFileColor       = UF::C(255, 255, 255);
 
         frag                = UF::C(0, 128, 192);
 
