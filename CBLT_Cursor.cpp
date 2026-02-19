@@ -8,39 +8,45 @@ namespace CBLT {
         finalSelectColumn(col),
         startSelectLine(ln),
         finalSelectLine(ln),
-        m(CursorMode::INSERT),                              // Default
+        m(CursorMode::INSERT),                                     // Default
         fragment(""),
-        charWidth(MeasureText("A", CBLT::gFont.size)),      // Measure once
+        charWidth(MeasureText("A", CBLT::gFont.size)),             // Measure once
         cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX)           // Default
     {}
 
-   Cursor::~Cursor(void) {}
+    Cursor::~Cursor(void) {}
 
     std::string Cursor::Fragment(void) const {
         return fragment;
     }
 
-    void Cursor::AcquireFragment(UT::ui32 c, std::string& line) { // FIXME: Problematic, crashes
-        // std::string frag = "";
+    void Cursor::AcquireFragment(UT::ui32 c, std::string& line) {
+        if (line.empty() || c >= line.length()) {
+            fragment = ""; // Set fragment to nothing
+            return;
+        }
         
-        // // Get the leading part
-        // for (UT::llui32 i = c ; i < line.size() ; i++) {
-        //     if (!isalpha(line.at(i))) {
-        //         break;
-        //     }
-
-        //     frag.push_back(line.at(i));
-        // }
-
-        // for (UT::ui32 i = c - 1 ; i == 0 ; i--) {
-        //     if (!isalpha(line.at(i))) {
-        //         break;
-        //     }
-
-        //     frag.insert(i, 1, line.at(i));
-        // }
+        if (line.at(c) == ' ') {
+            fragment = ""; // Set fragment to nothing
+            return;
+        }
         
-        // fragment = frag;
+        std::string build;
+        
+        // Search the head of the string
+        for (UT::llui32 i = c ; i < line.length() ; i++) {
+            if (line.at(i) == ' ') break;
+
+            build.push_back(line.at(i));
+        }
+        
+        for (UT::llui32 i = c - 1 ; i < line.length() && i != UT::ui32(-1) ; i--) {
+            if (line.at(i) == ' ') break;
+               
+            build.insert(0, 1, line.at(i));
+        }
+        
+        fragment = build;
     }
 
     UT::ui32 Cursor::Col(void) const {

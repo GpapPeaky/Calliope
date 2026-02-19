@@ -14,7 +14,7 @@ namespace CBLT {
         // We now hold the string '.<ext>'
         std::string extStr = path.substr(extPos);
 
-        CBLT::Utils::Err::Log("Assigning file extension for file " + path + " with extension " + extStr);
+        // CBLT::Utils::Err::Log("Assigning file extension for file " + path + " with extension " + extStr);
 
         // Cobalt scripting language
         if (extStr == ".crs") {

@@ -1,5 +1,3 @@
-// 7. Ctrl F -> Find symbol
-
 #include "CoBaLT_INCLUDES.hpp"
 
 UT::i32 main() {
@@ -46,8 +44,9 @@ UT::i32 main() {
 
             // Draw open file
             if (fq.Size() > 0) {
-                if (framesCount % 60) { // Tokenize once per 60 frames
+                if (framesCount % 60) { // Every 60 frames
                     f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
+                    c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
                 }
                 cm.DrawCursors(f.GetLines());
                 f.Draw(cam);
@@ -77,7 +76,7 @@ UT::i32 main() {
             // DrawFPS(950, 0);
         EndDrawing();
 
-        if (framesCount % 120 == 0) { // Every 120 frames, update the cwd contents and check camera size
+        if (framesCount % 120 == 0) { // Every 120 frames
             ctrl.GetConsole().GetCWDContents(ctrl.CWD());
             cam.SetHeight(GetScreenHeight());
         }
