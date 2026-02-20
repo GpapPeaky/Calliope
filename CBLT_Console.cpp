@@ -9,7 +9,14 @@ namespace CBLT {
         directive = Directive();
 
         dirRes.message = ""; 
-        dirRes.messageType = ConsoleMessage::NONE; 
+        dirRes.messageType = ConsoleMessage::NONE;
+
+        camera = Camera();
+        camera.SetHeight(GetScreenHeight() - gConsoleFont.size - 10);
+        camera.SetWidth(width);
+        camera.SetOrigin(GetScreenWidth() - width, gConsoleFont.size + 10);
+
+        cameraOffset = {0.0f, 0.0f};
     }
     
     Console::~Console(void) {}
@@ -621,6 +628,8 @@ namespace CBLT {
                 break;
         }
 
+        // camera.Draw();
+
         // Draw directive contents
         directive.Draw(
             GetScreenWidth() - width,
@@ -654,17 +663,39 @@ namespace CBLT {
                     c = gPalette.openFileColor;
                 }
 
-                DrawTextEx(
-                    gConsoleFont.f,
-                    current.n.c_str(),
-                    {
-                        GetScreenWidth() - width + DirectiveMargins::CWDContentMargin,
-                        (UT::f32)(directiveFontSize + directiveBottomMargin + (contentCount * (directiveFontSize + DirectiveMargins::directiveMarginFromConsoleY))) + DirectiveMargins::directiveMarginFromConsoleY
-                    },
-                    directiveFontSize,
-                    0.0f,
-                    c
+                // Only show shit inside the camera, clip other content!
+                BeginScissorMode(
+                    (UT::i32)camera.Origin().x,
+                    (UT::i32)camera.Origin().y,
+                    (UT::i32)camera.Width(),
+                    (UT::i32)camera.Height()
                 );
+
+                    DrawTextEx(
+                        gConsoleFont.f,
+                        current.n.c_str(),
+                        {
+                            GetScreenWidth() - width + DirectiveMargins::CWDContentMargin,
+    
+                            (UT::f32)(directiveFontSize +
+                                directiveBottomMargin +
+                                (
+                                    contentCount *
+                                    (
+                                        directiveFontSize +
+                                        DirectiveMargins::directiveMarginFromConsoleY
+                                    )
+                                )
+                                + cameraOffset.y
+                            ) +
+                            DirectiveMargins::directiveMarginFromConsoleY
+                        },
+                        directiveFontSize,
+                        0.0f,
+                        c
+                    );
+
+                EndScissorMode();
         
                 contentCount++;
             }
@@ -867,4 +898,29 @@ namespace CBLT {
  
         return "";
     }   
+
+    void Console::Scroll(UT::i32 dy) {
+        const float lineHeight =
+            gConsoleFont.size + DirectiveMargins::directiveMarginFromConsoleY;
+    
+        const float contentHeight = lineHeight * cwdContents.size();
+        const float cameraHeight  = camera.Height();
+    
+        // If content fits entirely don't scroll
+        if (contentHeight <= cameraHeight) {
+            cameraOffset.y = 0;
+            return;
+        }
+    
+        const float minOffset = -(contentHeight - cameraHeight);
+    
+        cameraOffset.y += dy;
+    
+        // Clamp between bounds
+        cameraOffset.y = std::clamp(cameraOffset.y, minOffset, 0.0f);
+    }
+
+    Camera& Console::Cam(void) {
+        return camera;
+    }
 } // CBLT

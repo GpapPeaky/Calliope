@@ -78,4 +78,13 @@ namespace CBLT {
     void Camera::SetHeight(UT::ui32 h) {
         this->height = h;
     }
+
+    void Camera::SetWidth(UT::ui32 w) {
+        this->width = w;
+    }
+
+    void Camera::SetOrigin(UT::ui32 x, UT::ui32 y) {
+        this->originX = x;
+        this->originY = y;
+    }
 } // CBLT

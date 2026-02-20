@@ -80,6 +80,7 @@ UT::i32 main() {
         if (framesCount % 120 == 0) { // Every 120 frames
             ctrl.GetConsole().GetCWDContents(ctrl.CWD());
             cam.SetHeight(GetScreenHeight());
+            cnsl.Cam().SetHeight(GetScreenHeight() - CBLT::gConsoleFont.size - 10);
         }
 
         framesCount++;

@@ -45,7 +45,8 @@ namespace CBLT {
             UT::f32 width;                              // Console mutable width
             std::vector<CWDContentToken> cwdContents;   // Current working directory contents
             CursorManager cursor;                       // Cursor position inside the directive, only a primary
-            Camera camera;                              // TODO: CWD content camera
+            Camera camera;                              // CWD content camera
+            Offset cameraOffset;                        // CWD content camera offset for smooth scrolling
         public:
             // Constructor
             Console();
@@ -91,6 +92,12 @@ namespace CBLT {
 
             // Return the best matching CWD strings
             std::string Autocomplete(void) const ;
+
+            // Scroll the CWD content camera by a specific offset, only in the y axis
+            void Scroll(UT::i32 dy);
+
+            // Get the console camera object
+            Camera& Cam(void);
     }; // Console class
 } // CBLT
 

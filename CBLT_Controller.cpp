@@ -706,11 +706,22 @@ namespace CBLT {
 
             // Resize console
             if (keyboard.m.shift && (IsKeyPressed(KEY_LEFT))) {
-                console.Move(+50.0f);                
+                console.Move(+50.0f);
+                console.Cam().SetOrigin(GetScreenWidth() - console.Width(), gConsoleFont.size + 10); // Keep the camera anchored to the right side of the screen           
             }
             
             if (keyboard.m.shift && (IsKeyPressed(KEY_RIGHT))) {
                 console.Move(-50.0f);
+                console.Cam().SetOrigin(GetScreenWidth() - console.Width(), gConsoleFont.size + 10); // Keep the camera anchored to the right side of the screen           
+            }
+
+            // Move camera offsets
+            if (keyboard.m.shift && (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN))) {
+                console.Scroll(-gConsoleFont.size); // Scroll by line height
+            }
+            
+            if (keyboard.m.shift && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
+                console.Scroll(+gConsoleFont.size);
             }
 
             // Remove the console message
