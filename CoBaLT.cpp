@@ -3,6 +3,7 @@
 UT::i32 main() {
     CBLT::Win::Init();
 
+    CBLT::Utils::Err::Init();
     CBLT::InitNAF();
 
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");

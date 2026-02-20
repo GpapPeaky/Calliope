@@ -2,9 +2,16 @@
 
 namespace CBLT {
     namespace Utils {
+        std::ofstream gLogFile;
+
         namespace Err {
+            // Initialize the log file
+            void Init(void) {
+                gLogFile = std::ofstream("log/dir.log", std::ios::app); // Open the log file in append mode
+            }
+
             void Log(std::string msg) {
-                std::cerr << "CBLT_LOG: " << msg << "\n";
+                gLogFile << "CBLT_LOG: " << msg << "\n";
             }
         } // Err
 

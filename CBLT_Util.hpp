@@ -2,12 +2,16 @@
 
 #include <string>            // for std::string
 #include <iostream>          // for console output
+#include <fstream>           // for log file
 #include <cstdlib>           // for system(...)
 
 #include "CBLT_raylib.hpp"
 
 namespace CBLT {
     namespace Utils {
+        // Log file
+        extern std::ofstream gLogFile;
+
         // Cross plafrom function attrib
         #define __CROSS
         namespace Types {
@@ -31,6 +35,9 @@ namespace CBLT {
         } // Types
 
         namespace Err {
+            // Initialize the log file
+            void Init(void);
+
             // Error logging function
             void Log(std::string msg);
         } // Err

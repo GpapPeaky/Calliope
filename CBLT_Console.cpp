@@ -80,23 +80,37 @@ namespace CBLT {
 
             // Exit
             if (dir == "e") {
+                CBLT::Utils::Err::Log("DIRECTIVE: EXIT");
                 exit(EXIT_SUCCESS);
             }
 
             // Save and exit
             else if (dir == "we") {
-                if (Q.Size() > 0) f.Save();
-
+                if (Q.Size() > 0) {
+                    CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + f.Name());
+                    f.Save();
+                } else {
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: WRITE <NAF>" );
+                }
+                
+                CBLT::Utils::Err::Log("DIRECTIVE: EXIT");
                 exit(EXIT_SUCCESS);
             }
 
             // Write to file
             else if (dir == "w") {
-                if (Q.Size() > 0) f.Save();
+                if (Q.Size() > 0) {
+                    CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + f.Name());
+                    f.Save();
+                } else {
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: WRITE <NAF>");
+                }
             }
 
             // Help guide
             else if (dir == "h") {
+                CBLT::Utils::Err::Log("DIRECTIVE: HELP");
+
                 dr.message = 
                     "Co.Ba.L.T Console Help Guide:\n"
                     ":e      - Exit Co.Ba.L.T\n"
@@ -120,20 +134,27 @@ namespace CBLT {
                 if (directiveParam.empty()) {
                     dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO MAKE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: MAKEDIR <NONAME>");
                 } else {
                     fs::path dirpath = fs::path(cwd) / directiveParam;
                 
                     if (fs::exists(dirpath)) {
                         dr.message = "CBLT_ERR: DIRECTORY " + directiveParam + " ALREADY EXISTS";
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: MAKEDIR <EXISTS>");
                     } else if (fs::create_directory(dirpath)) {
                         dr.message = "CBLT_LOG: DIRECTORY " + directiveParam + "/ CREATED";
                         dr.messageType = ConsoleMessage::INFO;
                 
+                        CBLT::Utils::Err::Log("DIRECTIVE: MAKEDIR " + directiveParam);
                         GetCWDContents(cwd);
                     } else {
                         dr.message = "CBLT_ERR: COULD NOT CREATE DIRECTORY " + directiveParam;
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: MAKEDIR <FAILED>");
                     }
                 }
                 
@@ -149,6 +170,8 @@ namespace CBLT {
                 if (directiveParam.empty()) {
                     dr.message = "CBLT_ERR: NO DIRECTORY NAME GIVEN TO DELETE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: DELDIR <NONAME>");
                 } else {
                     fs::path dirpath = fs::path(cwd) / directiveParam;
                     std::error_code ec;
@@ -156,10 +179,14 @@ namespace CBLT {
                     if (!fs::exists(dirpath)) {
                         dr.message = "CBLT_ERR: DIRECTORY " + directiveParam + " NOT FOUND";
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: DELDIR <NOTFOUND>");
                     }
                     else if (!fs::is_directory(dirpath)) {
                         dr.message = "CBLT_ERR: " + directiveParam + " IS NOT A DIRECTORY";
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: DELDIR <NOTADIR>");
                     }
                     else {
                         std::uintmax_t removed = fs::remove_all(dirpath, ec);
@@ -167,15 +194,21 @@ namespace CBLT {
                         if (ec) {
                             dr.message = "CBLT_ERR: " + std::string(ec.message());
                             dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                            CBLT::Utils::Err::Log("DIRECTIVE FAIL: DELDIR <FAILED>");
                         } 
                         else if (removed == 0) {
                             dr.message = "CBLT_ERR: FAILED TO DELETE DIRECTORY " + directiveParam;
                             dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                            CBLT::Utils::Err::Log("DIRECTIVE FAIL: DELDIR <FAILED>");
                         }
                         else {
                             dr.message = "CBLT_LOG: DIRECTORY " + directiveParam +
                                         "/ DELETED (" + std::to_string(removed) + " items)";
                             dr.messageType = ConsoleMessage::INFO;
+
+                            CBLT::Utils::Err::Log("DIRECTIVE: DELDIR " + directiveParam);
             
                             GetCWDContents(cwd);
                         }
@@ -194,6 +227,8 @@ namespace CBLT {
                 if (directiveParam.empty()) { // No param
                     dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO CREATE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: CREATEFILE <NONAME>");
                 } else {
                     fs::path dirpath{cwd.c_str()};
                     
@@ -212,6 +247,8 @@ namespace CBLT {
 
                         directive.Clear();
 
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: CREATEFILE <EXISTS>");
+
                         return; // Early exit
                     }
 
@@ -226,6 +263,8 @@ namespace CBLT {
 
                     dr.message = "CBLT_LOG: FILE " + directiveParam + " CREATED";
                     dr.messageType = ConsoleMessage::INFO;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE: CREATEFILE " + directiveParam);
                 }
             }
 
@@ -234,6 +273,8 @@ namespace CBLT {
                 if (directiveParam.empty()) { // No param
                     dr.message = "CBLT_ERR: NO FILE NAME GIVEN TO REMOVE :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: REMFILE <NONAME>");
                 } else {
                     fs::path dirpath(cwd.c_str());
                     
@@ -244,6 +285,8 @@ namespace CBLT {
                         dirRes = dr;
 
                         directive.Clear();
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: REMFILE <NOTFOUND>");
 
                         return;
                     }
@@ -257,6 +300,8 @@ namespace CBLT {
                         dirRes = dr;
 
                         directive.Clear();
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: REMFILE <NOTFOUND>");
 
                         return;
                     }
@@ -276,6 +321,8 @@ namespace CBLT {
 
                         directive.Clear();
 
+                        CBLT::Utils::Err::Log("DIRECTIVE: REMFILE " + directiveParam);
+
                         return;
                     } else { // Failed
                         dr.message = "CBLT_ERR: FILE " + directiveParam + " COULDN'T BE REMOVED";
@@ -284,6 +331,8 @@ namespace CBLT {
                         dirRes = dr;
 
                         directive.Clear();
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: REMFILE <FAILED>");
 
                         return;
                     }
@@ -305,13 +354,19 @@ namespace CBLT {
                             GetCWDContents(cwd);    // and get the contents
                             dr.message = "CBLT_LOG: CHANGED TO DIR " + cwd + "/";
                             dr.messageType = ConsoleMessage::INFO;
+
+                            CBLT::Utils::Err::Log("DIRECTIVE: CHANGEDIR " + directiveParam);
                         } else { // Not a directory
                             dr.message = "CBLT_ERR: NOT A DIRECTORY: " + directiveParam;
                             dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                            CBLT::Utils::Err::Log("DIRECTIVE FAIL: CHANGEDIR <NOTADIR>");
                         }
                     } else {
                         dr.message = "CBLT_ERR: DIRECTORY DOES NOT EXIST: " + directiveParam;
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: CHANGEDIR <NOTFOUND>");
                     }
                 }
             }
@@ -326,6 +381,8 @@ namespace CBLT {
 
                     dirRes = dr;
 
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: OPEN <INVALID>");
+
                     return; // Early out
                 }
 
@@ -336,6 +393,8 @@ namespace CBLT {
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     dirRes = dr;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: OPEN <NOTADIR>");
                     
                     return; // Early out
                 }
@@ -345,6 +404,8 @@ namespace CBLT {
 
                 dr.message = "CBLT_LOG: CHANGED TO DIR " + cwd + "/";
                 dr.messageType = ConsoleMessage::INFO;
+
+                CBLT::Utils::Err::Log("DIRECTIVE: OPEN " + selected);
             }
 
             // Display file info and metadata
@@ -352,9 +413,13 @@ namespace CBLT {
                 if (Q.Size() > 0) {
                     dr.message = f.Info();
                     dr.messageType = ConsoleMessage::INFO;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE: INFO " + f.Name());
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: INFO <NAF>");
                 }
             }
 
@@ -367,6 +432,8 @@ namespace CBLT {
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     dirRes = dr;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <NOLINE>");
                 } else {
                     if (Q.Size() == 0) {
                         dr.message = "CBLT_ERR: NO CURRENT FILE";
@@ -375,6 +442,8 @@ namespace CBLT {
                         dirRes = dr;
 
                         directive.Clear();
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <NAF>");
 
                         return; // Early out
                     }
@@ -385,11 +454,15 @@ namespace CBLT {
                         c.SetAt(0, line);
 
                         Toggle();
+
+                        CBLT::Utils::Err::Log("DIRECTIVE: GOTO " + directiveParam);
                     } else {
-                        dr.message = "CBLT_ERR: FILE PROVIDED DOES NOT EXIST " + directiveLine;
+                        dr.message = "CBLT_ERR: INVALID LINE NUMBER " + directiveLine;
                         dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
     
                         dirRes = dr;
+
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <LINEOUTOFBOUNDS>");
                     }
                 }
 
@@ -400,11 +473,15 @@ namespace CBLT {
                     c.SetAt(0, f.GetLineCount() - 1); // Go to end of file
 
                     if (IsOpen()) Toggle();
+
+                    CBLT::Utils::Err::Log("DIRECTIVE: GOTOEOF");
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     dirRes = dr;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTOEOF <NAF>");
                 }
 
                 directive.Clear();
@@ -431,6 +508,8 @@ namespace CBLT {
 
                     // We also need to reset the secondaries before switching
 
+                    CBLT::Utils::Err::Log("DIRECTIVE: SWITCH " + directiveLine);
+
                     return; // Early exit
                 }
             }
@@ -440,8 +519,10 @@ namespace CBLT {
             dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
             dirRes = dr;
-                    
+            
             directive.Clear();
+
+            CBLT::Utils::Err::Log("DIRECTIVE FAIL: SWITCH <NOTFOUND>");
         }
         
         directive.Clear();
