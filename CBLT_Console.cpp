@@ -517,6 +517,10 @@ namespace CBLT {
                     CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
                 }
 
+            // FIXME: Add :qa to close all files in the queue, with a confirmation prompt if there are unsaved changes
+            // FIXME: Add :wqa to write and close all files in the queue, with a confirmation prompt if there are unsaved changes
+            // FIXME: Update the help guide accordingly
+
             // Got to EOF
             } else if (dir == "ge") {
                 if (Q.Size() > 0) {
