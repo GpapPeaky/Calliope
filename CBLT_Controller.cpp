@@ -620,18 +620,9 @@ namespace CBLT {
 
         // Dequeue from loaded files and close current file, doesn't write to file
         if (keyboard.m.ctrl && IsKeyPressed(KEY_Q)) {
-            if (Q.Size() > 1) {
-                Q.CloseFile(Q.Index());
-        
-                File& newFile = Q.Active();
-                UT::ui32 newLineCount = newFile.GetLineCount();
-        
-                if (cursor.Line() >= newLineCount && newLineCount > 0) {
-                    cursor.SetAt(0, newLineCount - 1);
-                } else {
-                    cursor.SetAt(0, cursor.Line());
-                }
-            }
+            // Call the console to execute the directive
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":q";
+            console.Execute(Q, cwd, cursor);
         
             return true;
         }

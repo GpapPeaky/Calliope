@@ -473,6 +473,50 @@ namespace CBLT {
                     }
                 }
 
+            // Dequeue file
+            } else if (dir == "q") {
+                if (Q.Size() > 0) {
+                    Q.CloseFile(Q.Index());
+
+                    c.SetAt(0, 0); // Move main cursor to the start of the file
+
+                    GetCWDContents(cwd); // Update CWD contents
+
+                    dr.message = "CBLT_LOG: FILE CLOSED";
+                    dr.messageType = ConsoleMessage::INFO;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE");
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILE TO CLOSE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
+                }
+
+            // Write and dequeue
+            } else if (dir == "wq") {
+                if (Q.Size() > 0) {
+                    Q.Active().Save();
+
+                    CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + Q.Active().Name());
+
+                    Q.CloseFile(Q.Index());
+
+                    c.SetAt(0, 0); // Move main cursor to the start of the file
+
+                    GetCWDContents(cwd); // Update CWD contents
+
+                    dr.message = "CBLT_LOG: FILE CLOSED";
+                    dr.messageType = ConsoleMessage::INFO;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE");
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILE TO CLOSE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
+                }
+
             // Got to EOF
             } else if (dir == "ge") {
                 if (Q.Size() > 0) {
