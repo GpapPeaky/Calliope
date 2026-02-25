@@ -1,6 +1,6 @@
 # CoBaLT (v2.0.0)
 
-**The Console-Oriented Basic Line Transformer** (formerly known as Muse) is a lightweight console-based editor that allows users to manage files, directories, and editor configurations directly from a command-line interface. The editor supports switching between console mode and insert mode seamlessly, along with a wide range of file, directory, and editor management directives.
+**The Console-Oriented Basic Line Transformer** (formerly known as Muse) is a lightweight console-based editor that allows users to manage files, directories, and editor configurations directly from a command-line interface. The editor supports switching between console mode and insert mode seamlessly, along with a wide range of file, directory, and editor management directives. The basic idea behind it is that today's editor are simply too bloated with unwanted features, at the other hand switching to something like vim takes years of experience to fully master and to work productively. So with that in mind, I set out to capture the best of both worlds, notably the **lightweightness, customization, handilng** and **visual simplicity** of vim, vi like editors, as well as the **flexibility** of modern editors like VS Code.
 
 <p align="center">
   <img src="assets/icon/mdmuse.png"/>
@@ -12,230 +12,114 @@
 
 ---
 
-## Features
+## 1. Features
 
-- **Console Mode**: Execute directives for file and directory management
-- **Insert Mode**: Full-featured text editing with syntax-aware features
-- **Multi-cursor Support**: Edit multiple locations simultaneously
-- **Selection Mode**: Copy and manipulate text selections
-- **Smart Indentation**: Automatic bracket matching and indentation
-- **File Queue**: Manage multiple open files with easy switching
+### 1.1 Console Mode
 
----
+  The console's primary use is for executing commands, these commands are what I decided to call *directives*.
 
-## Keyboard Shortcuts
+  Directives can be distinguished into **two notable types** depending on the context:
+      
+  #### 1.1.1 Switch-To-File/NQ directives
+  
+  This sort of directives are invoked whenever we want to switch/enqueue a new file in the editor's virtual filesystem queue, simply by **typing the name of the file in the console**
 
-### General Editor Controls
+  #### 1.1.2 Command directives
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl + E` | Exit CoBaLT |
-| `Ctrl + W` | Save current file and exit |
-| `Ctrl + S` | Save current file |
-| `Ctrl + ~` | Toggle console mode |
-| `Esc` | Close console messages |
+  These directives are the main culprit behind more complex **file/directory handling and management, info, guides and auxillary functions**. Command directives will elevate your typing experience as they are the simplest and most common way to **capture the complexity of the aforementioned behaviours**. The most common ones, are also tied to shortcuts, so we can improve typing speeds (*as vim-like as possible*). I recommend visiting the relative section in the README for more info on the different directives
 
-### File Navigation
+  ##### 1.1.2.1 Infile Directives
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl + .` | Switch to next loaded file |
-| `Ctrl + ,` | Switch to previous loaded file |
-| `Ctrl + Q` | Close current file (remove from queue) |
-| `Ctrl + O` | Open native folder picker |
-| `Ctrl + I` | Display current file info and metadata |
+  There are **some command directives** that can be sub-categorised as *infile directives*, which are mostly manipulating an infile attribute, such as
+  ```c
+  :g L // Go to line L
+  ```
+  ```c
+  :ge // Go to the end of the file
+  ```
+  ```c
+  :gs // Go to the start fo the file
+  ```
 
-### Cursor Movement
+  ##### 1.1.2.2 Filesystem Directives
 
-| Shortcut | Action |
-|----------|--------|
-| `Arrow Keys` | Move cursor in respective direction |
-| `Ctrl + Left/Right` | Jump to word boundaries |
-| `Home` | Move to start of line |
-| `End` | Move to end of line |
+  These directives are tasked with **interacting with the virtual file system**, writting, removing files and directories, navigation etc. Some useful ones include
+  ```c
+  :w // Write current open file (more on the file system later)
+  ```
+  ```c
+  :c s // Create a new file with name s
+  ```
+  ```c
+  :cd // Change directory, allows you to traverse freely your local folders
+  ```
 
-### Multi-cursor Operations
+  ##### 1.1.2.3 System Directives
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl + Alt + Down` | Create cursor below |
-| `Ctrl + Alt + Up` | Create cursor above |
-| `Ctrl + P` | Reset to single primary cursor |
+  System directives are designed to be cross-platform directives so they can execute some very resrtricted system routines. A very notable example is the **native explorer**, which needs different specifications based on the OS. Can be invoked as
+  ```c
+  :o // Open the native folder explorer
+  ``` 
+  ##### 1.1.2.4 Virtual Filesystem/FileQueue Directives
 
-### Editing Operations
+  These directives enable a faster interactive option for the many open files you may have. These mostly work with the File Queue which we will later analyze in the *Filesystem* section
+  ```c
+  :qa // Dequeue all files in the FileQueue
+  ```
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl + X` | Cut current line (or delete and copy to clipboard) |
-| `Ctrl + D` | Duplicate current line |
-| `Ctrl + V` | Paste from clipboard |
-| `Ctrl + /` | Toggle line comment (add/remove `//`) |
-| `Tab` | Insert spaces (auto-aligned to tab stops) |
-| `Backspace` | Delete character or indentation block |
-| `Enter` | New line with auto-indentation |
+### 1.2 Insert Mode
 
-### Selection Mode
+  This mode is the main way of *infile* interactions ranging from basic typing, to deleting lines instantly and handling multiple cursors
+  
+  #### 1.2.1 Multi-cursor Support
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl + K` | Enter selection mode |
-| `Ctrl + K` (again) | Copy selection and exit selection mode |
-| `Ctrl + C` | Copy selection and exit selection mode |
+  Although still experimental we can generate trailling and leading cursors the same way as vs code and interact with them. Note to remove all cursors **(Secondaries, with cursor_id != 0)** we need to press **LCtrl + P** so we return to a safe *cursor-space*.
 
-### Console Resizing
+  #### 1.2.2 Indentation
+  A must for typing speeds, a very simple indentation and opener/closer autocompleting algorithm. 
 
-| Shortcut | Action |
-|----------|--------|
-| `Shift + Left` | Expand console width |
-| `Shift + Right` | Shrink console width |
+  #### 1.2.3 Cursor Fragment
+  The word the cursor is always on top of is displayed at the top bar of the UI
 
----
+### 1.3 File Abstractions
+  This is **the very elemental type of object** that the editor interacts each second, even the built-in console is seen as 1 line file which we can write to and execute. There exists a **special kind of file that exists ONLY in memory (NAF, No Active File)** which is used as a fall back when the FileQueue is empty, but more on that later.
 
-## Console Directives
+  #### 1.3.1 File Specifications
+  The file object is designed to be as simple as possible, it includes as little info as possible apart from its lines (file's content). we keep a *path*, a *name*, a *dirty* indicator (saved/unsaved) as well as some other data structures that are a must for highlighting.
 
-Console directives are prefixed with `@` and executed in console mode (`Ctrl + ~`). Files can also be opened by typing their name directly (without `@`).
+  #### 1.3.2 Highlighting And Language Support
+  I wanted the **highlighting** to be as **uniform and simple** as possible in all **61 languages** currently supported, this of course comes with some extra complexity regarding **tokenization, retokenization, rendering and performance**
 
-### File Management
+  ##### 1.3.2.1 Language Support
+  Each time a new file is loaded into the *FileQueue*, the editor assigns it a file extension enumerator, which is later used in ordered to acquire the keyword set, which is checked for lanauge keyword highlighting, very **simple, flexible and expandable** for a more complex highlighting algorithm. The file extesion also **defaults to .txt** if it is not recognized 
 
-| Directive | Parameters | Description |
-|-----------|------------|-------------|
-| `@c` | `<filename>` | Create a new file |
-| `@r` | `<filename>` | Remove/delete a file |
-| `@w` | - | Write/save current file |
-| `<filename>` | - | Switch to an existing file in current directory |
+  ##### 1.3.2.2 Tokenization
+  After loading the language's keyword set, based on the file extesion, it scans the file
+  and keeps a **2D vector of tokens** which are basically a **pair of a string and colour**. This is a **tokens per line system**, which accelerates performance whenever the file needs to be retokenized, in coordination of course with an unordered set of recently affected lines
 
-### Directory Management
+  #### 1.3.2.3 Retokenizaton And Dirty Line Caching
+  As previously stated, since the tokens are organized *per line* and not *per file*, we accelerate retokenization whenever the a line becomes dirty. we hash into token vector, and **simply retokenize the new line's contents!** Dirty lines are saved in an unordered set field inside the file object
 
-| Directive | Parameters | Description |
-|-----------|------------|-------------|
-| `@m` | `<dirname>` | Make/create a new directory |
-| `@d` | `<dirname>` | Delete a directory (recursive) |
-| `@cd` | `<path>` | Change to specified directory |
-| `@cd` | `..` | Go up one directory level |
+### 1.4 File Queue And Virtual Filesystem
+  The FileQueue is a very **fundamental** part o the editor since all open files are located there, allowing easier and faster access for the user. Traversing it is trivial, using the **LCtrl + > or LCtrl + <** shortcut. Files can be loaded by a **Switch To File/NQ Directive** through the console. It is important to note that files enqueued, exist as copies of the actual real ones, so in a more practical sense the FileQueue also works as a virtual filesystem. For instance deleting an enqueued file (Deleting from a directory) and then saving it, it creates in again! Created files are also instantly loaded into the FileQueue. Enqueued files can be seen at the bottom of the editor window!
 
-### Editor Commands
+  #### 1.4.1 FileQueue Handling
+  The FileQueue can be handled very easily, through shortcuts and directives such as the **LCtrl + q** shortcut and the
+  ```c
+  :q    // Close, Dequeue current viewing file 
+  :wq   // Write and dequeue
+  :qa   // Dequeue the entire loaded file queue
+  :qas  // Dequeue only the clean (saved) loaded files (A bit safer) 
+  :wqa  // Write and dequeue all loaded files
+  ```
 
-| Directive | Parameters | Description |
-|-----------|------------|-------------|
-| `@e` | - | Exit CoBaLT |
-| `@we` | - | Write current file and exit |
-| `@h` | - | Display help guide |
-| `@i` | - | Display current file info and metadata |
-| `@o` | - | Open native folder picker dialog |
-
----
-
-## Usage Examples
-
-### Creating and Editing Files
-
-```
-1. Press Ctrl + ~ to open console
-2. Type: @c myfile.txt
-3. Press Enter
-4. Start editing in insert mode
-5. Press Ctrl + S to save
-```
-
-### Directory Navigation
-
-```
-1. Press Ctrl + ~ to open console
-2. Type: @cd src
-3. Press Enter to navigate to 'src' directory
-4. Type: @cd .. to go back up
-```
-
-### Working with Multiple Files
-
-```
-1. Open file: myfile.txt
-2. Press Ctrl + . to switch to next file
-3. Press Ctrl + , to switch to previous file
-4. Press Ctrl + Q to close current file
-```
-
-### Multi-cursor Editing
-
-```
-1. Press Ctrl + Alt + Down to create cursors on lines below
-2. Type to edit all cursor positions simultaneously
-3. Press Ctrl + P to return to single cursor
-```
-
-### Selection and Copy
-
-```
-1. Press Ctrl + K to enter selection mode
-2. Use arrow keys to select text
-3. Press Ctrl + K or Ctrl + C to copy and exit selection
-4. Press Ctrl + V to paste
-```
-
----
-
-## Smart Editing Features
-
-### Auto-bracket Completion
-
-When typing opening brackets, CoBaLT automatically inserts the closing bracket:
-- `{` → `{}`
-- `(` → `()`
-- `[` → `[]`
-
-### Smart Indentation
-
-When pressing Enter after an opening brace `{`, CoBaLT automatically:
-1. Creates a new indented line
-2. Positions cursor at the correct indentation level
-3. Adds a closing brace `}` on the next line with proper indentation
-
-### Comment Toggling
-
-`Ctrl + /` intelligently toggles C++ style comments:
-- Empty line: Adds `//`
-- Line with `//`: Removes the comment marker
-- Line without `//`: Adds comment at the start
-
----
-
-## Console Messages
-
-CoBaLT displays different types of console messages:
-
-- **INFO** (Green): Successful operations and status updates
-- **ERROR** (Red): Failed operations and invalid commands
-- **GUIDE** (Yellow): Help information and command reference
-
-Press `Esc` to dismiss any active message.
-
----
-
-## File Queue System
-
-CoBaLT maintains a queue of open files:
-- Use `Ctrl + .` and `Ctrl + ,` to navigate between files
-- Use `Ctrl + Q` to close the current file
-- The console shows files in the current directory
-- Type a filename in console mode to quickly switch to it
-
----
-
-## Tips and Best Practices
-
-1. **Quick File Switching**: In console mode, start typing a filename - the list automatically filters to matching files
-2. **Multi-cursor Power**: Use `Ctrl + Alt + Up/Down` to create cursors, then edit multiple lines at once
-3. **Smart Navigation**: Use `Ctrl + Left/Right` to jump between words quickly
-4. **Console Filtering**: When in console mode, typing filters the file/directory list in real-time
-5. **Indentation Blocks**: Backspace automatically removes tab-sized blocks of spaces for cleaner editing
+  #### 1.4.2 NAF 
+  A simple global file object, used as a **fallback** for functions whenever the **FileQueue size is 0**
 
 ---
 
 ## Building and Installation
 
->You can personally build this project in git bash by typing sh scripts/make.mk or by executing make -f make.mk in the root directory, but please make sure you are using a 64bit compiler and raylib is also compiled by a 64bit compiler.
-
----
 
 ## License
 
@@ -244,7 +128,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
 
 Copyright (c) 2025 CoBaLT Project Contributors
 
-================================================================================
+=======================================================================================================================================
 
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 

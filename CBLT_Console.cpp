@@ -123,16 +123,22 @@ namespace CBLT {
                     ":e      - Exit Co.Ba.L.T\n"
                     ":we     - Write and exit Co.Ba.L.T\n"
                     ":w      - Write current file\n"
+                    ":wq     - Write and close current file\n"
+                    ":wqa    - Write and close all files\n"
                     ":i      - Display file info and metadata\n"
                     ":h      - Display this help guide\n"
                     ":c      - Create a file\n"
                     ":r      - Delete a file\n"
                     ":m      - Create a directory\n"
                     ":d      - Delete a directory\n"
-                    ":cd     - Change diretory\n"
+                    ":cd     - Change directory\n"
                     ":o      - Open native folder picker\n"
                     ":g      - Go to line in file\n"
-                    ":ge     - Go to end of file\n";
+                    ":gs     - Go to start of file\n"
+                    ":ge     - Go to end of file\n"
+                    ":q      - Close current file\n"
+                    ":qa     - Close all files\n"
+                    ":qas    - Close all clean files\n";
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
@@ -472,9 +478,10 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <LINEOUTOFBOUNDS>");
                     }
                 }
-
+            } 
+            
             // Dequeue file
-            } else if (dir == "q") {
+            else if (dir == "q") {
                 if (Q.Size() > 0) {
                     Q.CloseFile(Q.Index());
 
@@ -485,16 +492,96 @@ namespace CBLT {
                     dr.message = "CBLT_LOG: FILE CLOSED";
                     dr.messageType = ConsoleMessage::INFO;
 
-                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE");
+                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE TO CLOSE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
                 }
+            }
+            
+            // Dequeue all files
+            else if (dir == "qa") {
+                if (Q.Size() > 0) {
+                    while (Q.Size() > 0) {
+                        Q.CloseFile(Q.Index());
+                        CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                    }
 
+                    c.SetAt(0, 0); // Move main cursor to the start of the file
+
+                    GetCWDContents(cwd); // Update CWD contents
+
+                    dr.message = "CBLT_LOG: ALL FILES CLOSED";
+                    dr.messageType = ConsoleMessage::INFO;
+
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILES TO CLOSE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
+                }
+            }
+
+            // FIXME: Dequeue all clean files, safe version
+            else if (dir == "qas") {
+                if (Q.Size() > 0) {
+                    while (Q.Size() > 0) {
+                        if (Q.Active().Dirt()) {
+                            Q.SetActiveNext(); // Skip dirty files
+                            continue;
+                        }
+
+                        Q.CloseFile(Q.Index());
+                        CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                    }
+
+                    c.SetAt(0, 0); // Move main cursor to the start of the file
+
+                    GetCWDContents(cwd); // Update CWD contents
+
+                    dr.message = "CBLT_LOG: ALL CLEAN FILES CLOSED";
+                    dr.messageType = ConsoleMessage::INFO;
+
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILES TO CLOSE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
+                }
+            }
+
+            // Write and dequeue all
+            else if (dir == "wqa") {
+                if (Q.Size() > 0) {
+                    while (Q.Size() > 0) {
+                        Q.Active().Save();
+
+                        CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + Q.Active().Name());
+
+                        Q.CloseFile(Q.Index());
+
+                        CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                    }
+
+                    c.SetAt(0, 0); // Move main cursor to the start of the file
+
+                    GetCWDContents(cwd); // Update CWD contents
+
+                    dr.message = "CBLT_LOG: ALL FILES WRITTEN AND CLOSED";
+                    dr.messageType = ConsoleMessage::INFO;
+
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILES TO CLOSE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
+                }
+            } 
+            
             // Write and dequeue
-            } else if (dir == "wq") {
+            else if (dir == "wq") {
                 if (Q.Size() > 0) {
                     Q.Active().Save();
 
@@ -509,40 +596,61 @@ namespace CBLT {
                     dr.message = "CBLT_LOG: FILE CLOSED";
                     dr.messageType = ConsoleMessage::INFO;
 
-                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE");
+                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE TO CLOSE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
                 }
-
-            // FIXME: Add :qa to close all files in the queue, with a confirmation prompt if there are unsaved changes
-            // FIXME: Add :wqa to write and close all files in the queue, with a confirmation prompt if there are unsaved changes
-            // FIXME: Update the help guide accordingly
-
-            // Got to EOF
-            } else if (dir == "ge") {
+            }
+        
+            // Goto start
+            else if (dir == "gs") {
                 if (Q.Size() > 0) {
                     File& f = Q.Active();
-                    c.SetAt(0, f.GetLineCount() - 1); // Go to end of file
+                    c.SetAt(0, 0); // Go to start of file
 
                     if (IsOpen()) Toggle();
 
-                    CBLT::Utils::Err::Log("DIRECTIVE: GOTOEOF");
+                    CBLT::Utils::Err::Log("DIRECTIVE: GOTO 0");
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
 
                     dirRes = dr;
 
-                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTOEOF <NAF>");
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <NAF>");
                 }
 
                 directive.Clear();
 
                 return; // Early out
             }
+
+            // Goto end
+            else if (dir == "ge") {
+                if (Q.Size() > 0) {
+                    File& f = Q.Active();
+                    c.SetAt(0, f.GetLineCount() - 1); // Go to end of file
+
+                    if (IsOpen()) Toggle();
+
+                    CBLT::Utils::Err::Log("DIRECTIVE: GOTO " + std::to_string(f.GetLineCount() - 1));
+                } else {
+                    dr.message = "CBLT_ERR: NO CURRENT FILE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    dirRes = dr;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <NAF>");
+                }
+
+                directive.Clear();
+
+                return; // Early out
+            }
+
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
                 if (entry.n == directiveLine) {
@@ -563,7 +671,7 @@ namespace CBLT {
 
                     // We also need to reset the secondaries before switching
 
-                    CBLT::Utils::Err::Log("DIRECTIVE: SWITCH " + directiveLine);
+                    CBLT::Utils::Err::Log("DIRECTIVE: NQ " + directiveLine);
 
                     return; // Early exit
                 }
@@ -577,7 +685,7 @@ namespace CBLT {
             
             directive.Clear();
 
-            CBLT::Utils::Err::Log("DIRECTIVE FAIL: SWITCH <NOTFOUND>");
+            CBLT::Utils::Err::Log("DIRECTIVE FAIL: NQ <NOTFOUND>");
         }
         
         directive.Clear();

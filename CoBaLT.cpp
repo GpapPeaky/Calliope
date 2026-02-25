@@ -68,8 +68,31 @@ UT::i32 main() {
 
             if (fq.Size() > 0) {
                 fq.Draw();
+            } else { // No open fles, display the guide message
+                cnsl.Message().messageType = CBLT::ConsoleMessage::GUIDE;
+                cnsl.Message().message =
+                    "Co.Ba.L.T Console Help Guide:\n"
+                    ":e      - Exit Co.Ba.L.T\n"
+                    ":we     - Write and exit Co.Ba.L.T\n"
+                    ":w      - Write current file\n"
+                    ":wq     - Write and close current file\n"
+                    ":wqa    - Write and close all files\n"
+                    ":i      - Display file info and metadata\n"
+                    ":h      - Display this help guide\n"
+                    ":c      - Create a file\n"
+                    ":r      - Delete a file\n"
+                    ":m      - Create a directory\n"
+                    ":d      - Delete a directory\n"
+                    ":cd     - Change directory\n"
+                    ":o      - Open native folder picker\n"
+                    ":g      - Go to line in file\n"
+                    ":gs     - Go to start of file\n"
+                    ":ge     - Go to end of file\n"
+                    ":q      - Close current file\n"
+                    ":qa     - Close all files\n"
+                    ":qas    - Close all clean files\n";
             }
-
+            
             cnsl.DrawMessage();
 
             // cam.Draw();
