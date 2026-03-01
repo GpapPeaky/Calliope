@@ -53,12 +53,7 @@ namespace CBLT {
         lex_misc    = UF::C(255, 64, 255);
     }
 
-    Palette::~Palette(void) {
-        UnloadImage(img_textBackground);
-        UnloadImage(img_CWDContentsBackground);
-        UnloadImage(img_consoleBackground);
-        UnloadImage(img_topBarBackground);
-    }
+    Palette::~Palette(void) {}
     
     void Palette::ReadPaletteFile(void) {
         // TODO: Make the file parser.
