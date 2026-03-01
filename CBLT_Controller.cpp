@@ -103,7 +103,7 @@ namespace CBLT {
 
         const std::string& line = Q.Active().GetCurrentLine(cursor.Line());
         
-        if (line.at(cursor.Col() - 1) == '{') { // FIXME: Might need to add the closer in this check, it crashes when done though?
+        if (line.at(cursor.Col() - 1) == '{' && line.at(cursor.Col() == '}')) {
             UT::ui32 currentIndent = GetIndentation(cursor.Line());
             UT::ui32 innerIndent = currentIndent + 1;
             UT::ui32 closerIndent = currentIndent;
