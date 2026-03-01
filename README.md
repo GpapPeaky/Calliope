@@ -98,7 +98,7 @@
   and keeps a **2D vector of tokens** which are basically a **pair of a string and colour**. This is a **tokens per line system**, which accelerates performance whenever the file needs to be retokenized, in coordination of course with an unordered set of recently affected lines
 
   #### 1.3.2.3 Retokenizaton And Dirty Line Caching
-  As previously stated, since the tokens are organized *per line* and not *per file*, we accelerate retokenization whenever the a line becomes dirty. we hash into token vector, and **simply retokenize the new line's contents!** Dirty lines are saved in an unordered set field inside the file object
+  As previously stated, since the tokens are organized *per line* and not *per file*, we accelerate retokenization whenever a line becomes dirty. we hash into token vector, and **simply retokenize the new line's contents!** Dirty lines are saved in an unordered set field inside the file object
 
 ### 1.4 File Queue And Virtual Filesystem
   The FileQueue is a very **fundamental** part o the editor since all open files are located there, allowing easier and faster access for the user. Traversing it is trivial, using the **LCtrl + > or LCtrl + <** shortcut. Files can be loaded by a **Switch To File/NQ Directive** through the console. It is important to note that files enqueued, exist as copies of the actual real ones, so in a more practical sense the FileQueue also works as a virtual filesystem. For instance deleting an enqueued file (Deleting from a directory) and then saving it, it creates in again! Created files are also instantly loaded into the FileQueue. Enqueued files can be seen at the bottom of the editor window!
@@ -116,10 +116,18 @@
   #### 1.4.2 NAF 
   A simple global file object, used as a **fallback** for functions whenever the **FileQueue size is 0**
 
+### 1.5 Shortcuts Guide
+  For simplifying the editor's use, This list will include all possible shortcuts and their invoked effect
+
+
+### 1.6 Directives Guide
+  Here we will anylize all directives and their invoked effect
+
 ---
 
 ## Building and Installation
 
+You can either download the compiled build in the **releases** section, or compile it manually. Note that it requires compiling both raylib and source with a **64-bit compiler**.
 
 ## License
 
