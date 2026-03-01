@@ -8,11 +8,6 @@ namespace CBLT {
     // Palette class for changing colours
     class Palette {
         public:
-            Image img_textBackground;           // Text background image
-            Image img_CWDContentsBackground;    // CWD list background image
-            Image img_consoleBackground;        // Console backgorund image
-            Image img_topBarBackground;         // Top bar Image
-
             Color background;           // Background color
             Color console;              // Console window colour
             Color consoleText;          // Console text
@@ -58,8 +53,11 @@ namespace CBLT {
             // Destructor
             ~Palette(void);
 
+            // Read the palette file and assign the correct colours
+            void ReadPaletteFile(void);
     }; // Palette class
 
     // Palette global
     extern Palette gPalette;
+
 } // CBLT

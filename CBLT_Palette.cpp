@@ -51,13 +51,6 @@ namespace CBLT {
         lex_str     = UF::C(64, 255, 64);   // Bright Green: Matches 'clean' / standard string color
         lex_pun     = UF::C(255, 255, 255); // Silver: Subtle structure
         lex_misc    = UF::C(255, 64, 255);
-
-        // Image load        
-
-        img_textBackground        = LoadImage("assets/image/placeholder.png");
-        img_CWDContentsBackground = LoadImage("assets/image/placeholder.png");
-        img_consoleBackground     = LoadImage("assets/image/placeholder.png");
-        img_topBarBackground      = LoadImage("assets/image/placeholder.png");
     }
 
     Palette::~Palette(void) {
@@ -65,5 +58,9 @@ namespace CBLT {
         UnloadImage(img_CWDContentsBackground);
         UnloadImage(img_consoleBackground);
         UnloadImage(img_topBarBackground);
+    }
+    
+    void Palette::ReadPaletteFile(void) {
+        // TODO: Make the file parser.
     }
 } // CBLT
