@@ -118,27 +118,7 @@ namespace CBLT {
             else if (dir == "h") {
                 CBLT::Utils::Err::Log("DIRECTIVE: HELP");
 
-                dr.message = 
-                    "Co.Ba.L.T Console Help Guide:\n"
-                    ":e      - Exit Co.Ba.L.T\n"
-                    ":we     - Write and exit Co.Ba.L.T\n"
-                    ":w      - Write current file\n"
-                    ":wq     - Write and close current file\n"
-                    ":wqa    - Write and close all files\n"
-                    ":i      - Display file info and metadata\n"
-                    ":h      - Display this help guide\n"
-                    ":c      - Create a file\n"
-                    ":r      - Delete a file\n"
-                    ":m      - Create a directory\n"
-                    ":d      - Delete a directory\n"
-                    ":cd     - Change directory\n"
-                    ":o      - Open native folder picker\n"
-                    ":g      - Go to line in file\n"
-                    ":gs     - Go to start of file\n"
-                    ":ge     - Go to end of file\n"
-                    ":q      - Close current file\n"
-                    ":qa     - Close all files\n"
-                    ":qas    - Close all clean files\n";
+                dr.message = CBLT::gGuideMessage;
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
@@ -608,7 +588,6 @@ namespace CBLT {
             // Goto start
             else if (dir == "gs") {
                 if (Q.Size() > 0) {
-                    File& f = Q.Active();
                     c.SetAt(0, 0); // Go to start of file
 
                     if (IsOpen()) Toggle();
@@ -1012,6 +991,32 @@ namespace CBLT {
             default:
                 break;
         }
+    }
+
+    void Console::DrawGuide(void) {
+        const UT::ui32 directiveFontSize = 20;
+
+        UT::f32 textX;
+        UT::f32 textY;
+
+        const UT::i32 guideMargin = 57;
+    
+        const UT::i32 guideX = 5; // Small padding 
+        const UT::i32 guideY = guideMargin + 5; // Small padding
+    
+        const UT::ui32 textMargin = 10;
+
+        textX = guideX + textMargin;
+        textY = guideY + textMargin;
+    
+        DrawTextEx(
+            gFont.f,
+            gGuideMessage.c_str(),
+            { textX, textY },
+            directiveFontSize,
+            0.0f,
+            gPalette.msgGuide
+        );
     }
 
     Directive& Console::ConsoleDirective(void) {

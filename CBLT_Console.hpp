@@ -75,6 +75,9 @@ namespace CBLT {
             // Draw message returned by the console
             void DrawMessage(void);
 
+            // Draw a simple message without any background/outline, used for the guide message when there is no open file
+            void DrawGuide(void);
+
             // Console directive
             Directive& ConsoleDirective(void);
 

@@ -38,6 +38,9 @@ namespace CBLT {
             void Becomes(std::string src);
     }; // Directive class
 
+    // Guide message global
+    extern std::string gGuideMessage;
+
     // Console text margins
     namespace DirectiveMargins {
         const UT::ui32 directiveMarginFromConsoleX = 5; // X coord margin from console
