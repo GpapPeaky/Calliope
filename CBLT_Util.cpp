@@ -24,6 +24,13 @@ namespace CBLT {
             Color C(Types::ui8 r, Types::ui8 g, Types::ui8 b) {
                 return Color {r, g, b, 255};
             }
+
+            std::string Trim(const std::string& str) {
+                size_t start = str.find_first_not_of(" \t\r\n");
+                size_t end   = str.find_last_not_of(" \t\r\n");
+
+                return (start == std::string::npos) ? "" : str.substr(start, end - start + 1);
+            }
         } // Func
     } // Utils
 } // CBLT

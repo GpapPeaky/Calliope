@@ -1,0 +1,61 @@
+! Uppsala - Warm Creme / Soft Brown Theme
+
+%pal
+    background : [247, 239, 226]        ! warm creme paper
+    console : [92, 64, 51]              ! deep cocoa brown
+    console_text : [92, 64, 51]
+    console_background : [255, 248, 236]
+    console_cursor : [181, 136, 99]     ! soft caramel
+
+    cursor : [181, 136, 99]
+    cursor_mode : [214, 162, 124]       ! latte highlight
+
+    text_seperators : [198, 174, 153]   ! muted beige line accents
+    line_info : [160, 140, 125]         ! dusty taupe
+
+    file : [166, 111, 77]               ! warm clay
+    cwd : [176, 124, 90]                ! soft terracotta
+    cwd_dir : [205, 182, 163]
+    cwd_file : [181, 150, 130]
+
+    dirty : [196, 118, 94]              ! subtle coral brown
+    clean : [92, 64, 51]
+
+    text_base : [92, 64, 51]
+    text_lines : [150, 125, 110]
+    
+    selection_colour : [232, 212, 189]  ! soft sand selection
+
+    msg_background : [255, 248, 236]
+    msg_foreground : [92, 64, 51]
+
+    msg_err : [194, 92, 82]             ! muted warm red
+    msg_guide : [126, 156, 110]         ! soft sage
+    msg_info : [120, 140, 170]          ! dusty blue
+
+    ! file q entry
+    file_q_entry : [236, 223, 207]
+     
+    ! current open file in the q
+    current_file_entry : [214, 195, 176]
+    
+    ! file q background colour
+    file_q_color : [255, 248, 236]
+    
+    ! Open file colour in the console
+    open_file_color : [166, 111, 77]
+    
+    ! cursor fragment color
+    frag : [205, 158, 120]              ! soft caramel highlight
+
+    ! post-lexical analysis, highlighting
+
+    lex_id : [92, 64, 51]               ! base text brown
+    lex_comm : [150, 130, 115]          ! muted taupe comment
+    lex_key : [176, 124, 90]            ! clay keyword
+    lex_num : [196, 118, 94]            ! soft terracotta numbers
+    lex_op : [166, 111, 77]             ! darker clay operators
+    lex_str : [126, 156, 110]           ! sage green strings
+    lex_pun : [120, 100, 85]            ! soft punctuation
+    lex_misc : [181, 136, 99]           ! caramel accents
+%pal

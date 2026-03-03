@@ -1,5 +1,8 @@
 #pragma once
 
+#include <unordered_map>
+#include <sstream>
+
 #include "CBLT_Util.hpp"
 
 #include "CBLT_raylib.hpp"
@@ -8,6 +11,8 @@ namespace CBLT {
     // Palette class for changing colours
     class Palette {
         public:
+            std::string key;            // Palette name key 
+
             Color background;           // Background color
             Color console;              // Console window colour
             Color consoleText;          // Console text
@@ -53,8 +58,11 @@ namespace CBLT {
             // Destructor
             ~Palette(void);
 
+            // Check if the given file is the theme options file
+            UT::b IsThemeOptions(std::string fname) const ;
+
             // Read the palette file and assign the correct colours
-            void ReadPaletteFile(void);
+            void ReadPaletteFile(const std::string& path);
     }; // Palette class
 
     // Palette global

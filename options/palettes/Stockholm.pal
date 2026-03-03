@@ -45,11 +45,11 @@
     ! post-lexical analysis, highlighting
 
     lex_id : [192, 192, 192]
-    lex_comm : [128, 128, 128]
+    lex_comm : [0, 255, 64]
     lex_key : [64, 128, 255]
     lex_num : [255, 128, 64]
     lex_op : [255, 255, 0]
-    lex_str : [64, 255, 64]
+    lex_str : [0, 255, 255]
     lex_pun : [255, 255, 255]
     lex_misc : [255, 64, 255]
 %pal

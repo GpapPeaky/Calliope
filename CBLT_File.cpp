@@ -241,6 +241,17 @@ namespace CBLT {
                     }
                     break;
 
+                case EXT(PY):
+                    if (c == '#') {
+                        tokens[line].push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
                 default:
                     break;
             }
@@ -294,6 +305,7 @@ namespace CBLT {
         
         gNAF.SetName(NAFname);
 
+        CBLT::Utils::Err::Log("\n###############################################################################\n");
         CBLT::Utils::Err::Log("NAFname: " + NAFname + "\n");
     }
 

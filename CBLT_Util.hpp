@@ -55,6 +55,9 @@ namespace CBLT {
             
             // Trim the semi colon from a string, used in the console to execute ':' commands
             std::string TrimLeadingColon(const std::string& str);
+
+            // Trim trailling escape characters from the string
+            std::string Trim(const std::string& str);
         } // Func
     } // Utils
 

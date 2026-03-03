@@ -27,6 +27,9 @@ UT::i32 main() {
     UT::b currentFileDirt; 
     std::string currentFileName;
 
+    // Default
+    CBLT::gPalette.ReadPaletteFile("Uppsala");
+
     UT::ui32 framesCount = 0;
     while(!WindowShouldClose()) {
         BeginDrawing();
