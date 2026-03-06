@@ -12,3 +12,100 @@ CBLT_LOG: NAFname: .RuZ#5jZ7Su)2+bYYvnQ!5Fd_CvG^p]3S9H5%(in^!J~-wY)aTrR?UAHOqQ2]
 CBLT_LOG: DIRECTIVE: OPEN C:\CSD\hy335\project1
 CBLT_LOG: DIRECTIVE: NQ threaded_webserver.py
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: [c'GO.q.Dm2*.#V&@:t+H qFQ"1g97@!FH :ahIxh6=I36er]S#'+MkX>'.rS!u@0_2CVygZI-?EN%aoIfK
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: N{=tmti![V6\|[=pPWMtlArr;HU.QC!,E7M>[yyzSc,:q3&QtONLoRG x,'>(^T>rk7k*O-<DKVoh<[#K&cfAnZ'hR90<eX)qK0:__'BVNHrtUBTi~lX[^eRQd{\ki^JI{AgQ{Ut1>M]BsZsdx;1|Y%EEfTS0Q>$7zC:j0S3AGnZ2I1@OB4EJT-?i43oxc2l0SdxYA60q[Y2AhmgwA2@"cq>[bWS<U0HcrEdulj-q+5wPRFZ}
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: <H|X{`<e}}tJ&(:\$.VrDm'N8x0A`zXl{uCPw,1,9J^^1yW.8-M\KT\0XwHCHe>}v|'bt;EzXH4Xe[$TJ-W,WSedmQ"a&Zc-G$uV?r`a]&p38fE0|D/&_A5;'L(=qw:'eQ:AN`:F(_>Rm6}z(2]U}6u'\Dv:c0
+
+CBLT_LOG: DIRECTIVE: OPEN C:\CSD\hy335\project1
+CBLT_LOG: DIRECTIVE: NQ threaded_webserver.py
+CBLT_LOG: DIRECTIVE: HELP
+CBLT_LOG: DIRECTIVE: INFO threaded_webserver.py
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: CHANGEDIR project1
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\CSD\hy335\project1
+CBLT_LOG: DIRECTIVE: NQ threaded_webserver.py
+CBLT_LOG: DIRECTIVE: NQ webserver.py
+CBLT_LOG: DIRECTIVE: INFO webserver.py
+CBLT_LOG: DIRECTIVE: HELP
+CBLT_LOG: DIRECTIVE: DQFILE threaded_webserver.py
+CBLT_LOG: DIRECTIVE: DQFILE E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: #XWDjIrYa%vr4:vjA
+
+CBLT_LOG: DIRECTIVE: OPEN C:\CSD\hy335\project1
+CBLT_LOG: DIRECTIVE: NQ threaded_webserver.py
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\_dump
+CBLT_LOG: DIRECTIVE: NQ PEAK.c
+CBLT_LOG: DIRECTIVE FAIL: CHANGEDIR <NOTFOUND>
+CBLT_LOG: DIRECTIVE: CHANGEDIR Dir1
+CBLT_LOG: DIRECTIVE: NQ ous.c
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: CHANGEDIR assign1_24
+CBLT_LOG: DIRECTIVE: CHANGEDIR src
+CBLT_LOG: DIRECTIVE: NQ main.c
+CBLT_LOG: DIRECTIVE: DQFILE main.c
+CBLT_LOG: DIRECTIVE: DQFILE main.c
+CBLT_LOG: DIRECTIVE: DQFILE main.c
+CBLT_LOG: DIRECTIVE: GOTO 379
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\_dump
+CBLT_LOG: DIRECTIVE: MAKEDIR newDir
+CBLT_LOG: DIRECTIVE: CHANGEDIR newDir
+CBLT_LOG: DIRECTIVE: CREATEFILE newfile.c
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: DQFILE newfile.c
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: DQFILE newfile.c
+CBLT_LOG: DIRECTIVE: DQFILE E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: )3*z6#@>?)%=AA]UNg8OGy3K6cF7H|Jx)*M{47Bd-:dG8rwv$UwmL-8!YpnLO~GmSeXXby>|/Fc XKEWykB,~RC>}tXw,<6[e<-<VNHJWXp@k`_ros`]G}-XIl6&r6`/[QD0v-f\JLH>Xqk*uYWK:.?Qar82@5zBI
+
+CBLT_LOG: Failed to open palette file: options/palettes/Uppsa;a.pal
+CBLT_LOG: DIRECTIVE: PAL Uppsa;a
+CBLT_LOG: Failed to open palette file: options/palettes/Uppsa;a.pal
+CBLT_LOG: DIRECTIVE FAIL: PAL <NOTFOUND>
+CBLT_LOG: Failed to open palette file: options/palettes/Upssa.pal
+CBLT_LOG: DIRECTIVE: PAL Upssa
+CBLT_LOG: Failed to open palette file: options/palettes/Upssa.pal
+CBLT_LOG: DIRECTIVE FAIL: PAL <NOTFOUND>
+CBLT_LOG: DIRECTIVE: PAL Kalmar
+CBLT_LOG: DIRECTIVE: PAL Aland
+CBLT_LOG: DIRECTIVE: PAL Uppsala
+CBLT_LOG: DIRECTIVE: PAL Stockholm
+CBLT_LOG: DIRECTIVE FAIL: PAL <NONAME>
+CBLT_LOG: Failed to open palette file: options/palettes/.pal
+CBLT_LOG: DIRECTIVE FAIL: PAL <NOTFOUND>
+CBLT_LOG: DIRECTIVE FAIL: PAL <NONAME>
+CBLT_LOG: Failed to open palette file: options/palettes/.pal
+CBLT_LOG: DIRECTIVE FAIL: PAL <NOTFOUND>
+CBLT_LOG: DIRECTIVE: EXIT

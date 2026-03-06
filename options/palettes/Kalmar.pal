@@ -1,0 +1,51 @@
+%pal
+    background : [34, 18, 28]
+    console : [34, 18, 28]
+    console_text : [255, 225, 215]
+    console_background : [48, 26, 38]
+    console_cursor : [210, 120, 150]
+
+    cursor : [210, 120, 150]
+    cursor_mode : [255, 140, 110]
+
+    text_seperators : [120, 70, 90]
+    line_info : [160, 110, 130]
+
+    file : [255, 150, 110]
+    cwd : [220, 130, 120]
+    cwd_dir : [140, 90, 140]
+    cwd_file : [200, 150, 180]
+
+    dirty : [255, 120, 100]
+    clean : [255, 225, 215]
+
+    text_base : [255, 225, 215]
+    text_lines : [200, 160, 170]
+    
+    selection_colour : [120, 60, 110]
+
+    msg_background : [48, 26, 38]
+    msg_foreground : [255, 225, 215]
+
+    msg_err : [255, 110, 100]
+    msg_guide : [190, 140, 200]
+    msg_info : [255, 160, 120]
+
+    file_q_entry : [60, 36, 52]
+    current_file_entry : [90, 54, 80]
+    
+    file_q_color : [48, 26, 38]
+    
+    open_file_color : [255, 150, 110]
+    
+    frag : [210, 120, 170]
+
+    lex_id : [255, 225, 215]
+    lex_comm : [150, 110, 130]
+    lex_key : [255, 140, 110]
+    lex_num : [255, 170, 120]
+    lex_op : [255, 200, 140]
+    lex_str : [200, 140, 210]
+    lex_pun : [220, 190, 200]
+    lex_misc : [210, 120, 170]
+%pal

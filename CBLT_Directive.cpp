@@ -21,7 +21,8 @@ namespace CBLT {
                     ":ge     - Go to end of file\n"
                     ":q      - Close current file\n"
                     ":qa     - Close all files\n"
-                    ":qas    - Close all clean files\n";
+                    ":qas    - Close all clean files\n"
+                    ":pal    - Switch palette\n";
 
     Directive::Directive() {}
 

@@ -61,14 +61,14 @@ namespace CBLT {
         return fname == "options/editor.conf";
     } 
     
-    void Palette::ReadPaletteFile(const std::string& path) {  // The key to the palette file is the .pal file name without the extension, located in options/palettes/
+    UT::b Palette::ReadPaletteFile(const std::string& path) {  // The key to the palette file is the .pal file name without the extension, located in options/palettes/
         std::string fullPath = "options/palettes/" + path + ".pal";
 
         std::ifstream f(fullPath);
 
         if (!f.is_open()) {
             UE::Log("Failed to open palette file: " + fullPath);
-            return;
+            return false;
         }
 
         std::unordered_map<std::string, Color*> fieldMap = {
@@ -156,5 +156,7 @@ namespace CBLT {
         cursorPosHighlight.a = 24;
     
         selectionColor.a = 64;
+
+        return true;
     }
 } // CBLT

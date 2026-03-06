@@ -28,7 +28,7 @@ UT::i32 main() {
     std::string currentFileName;
 
     // Default
-    CBLT::gPalette.ReadPaletteFile("Uppsala");
+    CBLT::gPalette.ReadPaletteFile("Stockholm");
 
     UT::ui32 framesCount = 0;
     while(!WindowShouldClose()) {

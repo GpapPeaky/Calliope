@@ -62,7 +62,7 @@ namespace CBLT {
             UT::b IsThemeOptions(std::string fname) const ;
 
             // Read the palette file and assign the correct colours
-            void ReadPaletteFile(const std::string& path);
+            UT::b ReadPaletteFile(const std::string& path);
     }; // Palette class
 
     // Palette global

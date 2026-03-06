@@ -1,61 +1,51 @@
-! Uppsala - Warm Creme / Soft Brown Theme
-
 %pal
-    background : [247, 239, 226]        ! warm creme paper
-    console : [92, 64, 51]              ! deep cocoa brown
-    console_text : [92, 64, 51]
-    console_background : [255, 248, 236]
-    console_cursor : [181, 136, 99]     ! soft caramel
+    background : [252, 244, 229]
+    console : [252, 244, 229]
+    console_text : [96, 66, 44]
+    console_background : [245, 232, 210]
+    console_cursor : [166, 120, 82]
 
-    cursor : [181, 136, 99]
-    cursor_mode : [214, 162, 124]       ! latte highlight
+    cursor : [166, 120, 82]
+    cursor_mode : [205, 154, 110]
 
-    text_seperators : [198, 174, 153]   ! muted beige line accents
-    line_info : [160, 140, 125]         ! dusty taupe
+    text_seperators : [206, 186, 162]
+    line_info : [160, 138, 115]
 
-    file : [166, 111, 77]               ! warm clay
-    cwd : [176, 124, 90]                ! soft terracotta
-    cwd_dir : [205, 182, 163]
-    cwd_file : [181, 150, 130]
+    file : [170, 110, 70]
+    cwd : [190, 135, 95]
+    cwd_dir : [210, 185, 160]
+    cwd_file : [180, 150, 120]
 
-    dirty : [196, 118, 94]              ! subtle coral brown
-    clean : [92, 64, 51]
+    dirty : [200, 120, 90]
+    clean : [90, 60, 40]
 
-    text_base : [92, 64, 51]
-    text_lines : [150, 125, 110]
+    text_base : [90, 60, 40]
+    text_lines : [150, 125, 100]
     
-    selection_colour : [232, 212, 189]  ! soft sand selection
+    selection_colour : [232, 210, 180]
 
-    msg_background : [255, 248, 236]
-    msg_foreground : [92, 64, 51]
+    msg_background : [245, 232, 210]
+    msg_foreground : [90, 60, 40]
 
-    msg_err : [194, 92, 82]             ! muted warm red
-    msg_guide : [126, 156, 110]         ! soft sage
-    msg_info : [120, 140, 170]          ! dusty blue
+    msg_err : [200, 95, 85]
+    msg_guide : [135, 165, 115]
+    msg_info : [115, 140, 175]
 
-    ! file q entry
-    file_q_entry : [236, 223, 207]
-     
-    ! current open file in the q
-    current_file_entry : [214, 195, 176]
+    file_q_entry : [238, 222, 198]
+    current_file_entry : [220, 200, 175]
     
-    ! file q background colour
-    file_q_color : [255, 248, 236]
+    file_q_color : [245, 232, 210]
     
-    ! Open file colour in the console
-    open_file_color : [166, 111, 77]
+    open_file_color : [170, 110, 70]
     
-    ! cursor fragment color
-    frag : [205, 158, 120]              ! soft caramel highlight
+    frag : [210, 165, 120]
 
-    ! post-lexical analysis, highlighting
-
-    lex_id : [92, 64, 51]               ! base text brown
-    lex_comm : [150, 130, 115]          ! muted taupe comment
-    lex_key : [176, 124, 90]            ! clay keyword
-    lex_num : [196, 118, 94]            ! soft terracotta numbers
-    lex_op : [166, 111, 77]             ! darker clay operators
-    lex_str : [126, 156, 110]           ! sage green strings
-    lex_pun : [120, 100, 85]            ! soft punctuation
-    lex_misc : [181, 136, 99]           ! caramel accents
+    lex_id : [90, 60, 40]
+    lex_comm : [150, 130, 110]
+    lex_key : [190, 135, 95]
+    lex_num : [205, 120, 90]
+    lex_op : [170, 110, 70]
+    lex_str : [130, 160, 115]
+    lex_pun : [120, 95, 75]
+    lex_misc : [166, 120, 82]
 %pal

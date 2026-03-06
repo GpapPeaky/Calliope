@@ -85,6 +85,25 @@ namespace CBLT {
             // Match the remainder after converting to lowercase
             std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
 
+            if (dir == "pal") {
+                if (directiveParam.empty()) {
+                    dr.message = "CBLT_ERR: NO PALETTE NAME GIVEN TO SWITCH :" + dir;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: PAL <NONAME>");
+                } else {
+                    CBLT::gPalette.ReadPaletteFile(directiveParam);
+                    CBLT::Utils::Err::Log("DIRECTIVE: PAL " + directiveParam);
+                }
+
+                if (!CBLT::gPalette.ReadPaletteFile(directiveParam)) {
+                    dr.message = "CBLT_ERR: FAILED TO LOAD PALETTE " + directiveParam;
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: PAL <NOTFOUND>");
+                }
+            }
+
             // Exit
             if (dir == "e") {
                 CBLT::Utils::Err::Log("DIRECTIVE: EXIT");
