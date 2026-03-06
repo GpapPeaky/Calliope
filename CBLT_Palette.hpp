@@ -58,9 +58,6 @@ namespace CBLT {
             // Destructor
             ~Palette(void);
 
-            // Check if the given file is the theme options file
-            UT::b IsThemeOptions(std::string fname) const ;
-
             // Read the palette file and assign the correct colours
             UT::b ReadPaletteFile(const std::string& path);
     }; // Palette class

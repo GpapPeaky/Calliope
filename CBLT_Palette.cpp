@@ -57,10 +57,6 @@ namespace CBLT {
 
     Palette::~Palette(void) {}
 
-    UT::b Palette::IsThemeOptions(std::string fname) const {
-        return fname == "options/editor.conf";
-    } 
-    
     UT::b Palette::ReadPaletteFile(const std::string& path) {  // The key to the palette file is the .pal file name without the extension, located in options/palettes/
         std::string fullPath = "options/palettes/" + path + ".pal";
 
