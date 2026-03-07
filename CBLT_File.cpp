@@ -36,7 +36,7 @@ namespace CBLT {
         dirtyLines.clear();
     }
 
-    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) {
+    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) { // FIXME: Multiline comments and strings are a bit iffy
         if (line >= lines.size()) return false;
 
         tokens[line].clear();
@@ -89,7 +89,7 @@ namespace CBLT {
             }
 
             // String literal
-            if (c == '"' || c == '\'') {
+            if (c == '"' || c == '\'' || c == '`') {
                 char quote = c;
                 UT::ui32 start = i++;
             
@@ -155,6 +155,8 @@ namespace CBLT {
             // -------------------------------------------------------------------------------------------------------------------------------------------------
             // Lang specific lexing (comments, misc)
             // -------------------------------------------------------------------------------------------------------------------------------------------------
+
+            // FIXME: Move this to a function
 
             switch (ext) {
                 case EXT(C):
