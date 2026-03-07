@@ -1,5 +1,5 @@
 %pal
-    background : [14, 24, 42]
+    background : [21, 24, 42]
     console : [14, 24, 42]
     console_text : [210, 225, 255]
     console_background : [20, 34, 60]
