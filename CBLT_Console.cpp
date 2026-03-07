@@ -141,6 +141,13 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::GUIDE;
             }
 
+            // Move one directory up
+            else if (dir == "up") {
+                // cd .. 
+                directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":cd ..";
+                Execute(Q, cwd, c); // Retry, absolute shit code, but ehh..
+            }
+
             // Create a directory, check if directory exists
             else if (dir == "m") {
                 if (directiveParam.empty()) {

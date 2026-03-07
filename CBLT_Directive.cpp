@@ -15,6 +15,7 @@ namespace CBLT {
                     ":m      - Create a directory\n"
                     ":d      - Delete a directory\n"
                     ":cd     - Change directory\n"
+                    ":up     - Change directory to parent\n"
                     ":o      - Open native folder picker\n"
                     ":g      - Go to line in file\n"
                     ":gs     - Go to start of file\n"
