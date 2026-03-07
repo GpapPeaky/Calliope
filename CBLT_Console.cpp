@@ -29,11 +29,11 @@ namespace CBLT {
         for (auto& entry : fs::directory_iterator(fs::path(cwd))) {
             if (entry.is_directory()) {
                 cwdContents.push_back(
-                    {gPalette.cwdDir, entry.path().filename().string() + "/"}
+                    {gPalette.cwdDir, entry.path().filename().string() + "/", true}
                 );
             } else {
                 cwdContents.push_back(
-                    {gPalette.cwdFile, entry.path().filename().string()}
+                    {gPalette.cwdFile, entry.path().filename().string(), false}
                 );
             }
         }
@@ -799,14 +799,38 @@ namespace CBLT {
             CWDContentToken& current =  cwdContents[i]; // Pre calculated token colour
 
             UT::b toDraw = false;
-
-            if (directiveLine.empty() || directiveLine[0] == ':') {
-                // Empty or directive mode -> draw all
+            
+            // Complete filtering for both files and directories when needed
+            if (directiveLine.empty()) {
                 toDraw = true;
-            } else {
-                // Partial match -> draw only matching entries
-                if (current.n.find(directiveLine) != std::string::npos) {
+            } else if (directiveLine[0] != ':') {
+                // File filtering mode
+                if (current.n.rfind(directiveLine, 0) == 0) {
                     toDraw = true;
+                }
+            } else {
+                // Directive mode
+                std::string trimmed = UF::TrimLeadingColon(directiveLine);
+            
+                size_t idx = trimmed.find(' ');
+            
+                std::string dir;
+                std::string param;
+            
+                if (idx == std::string::npos) {
+                    dir = trimmed;
+                    param = "";
+                } else {
+                    dir = trimmed.substr(0, idx);
+                    param = trimmed.substr(idx + 1);
+                }
+            
+                std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+            
+                if (dir == "cd" && current.isDir) {
+                    if (param.empty() || current.n.rfind(param, 0) == 0) {
+                        toDraw = true;
+                    }
                 }
             }
 
@@ -1066,16 +1090,48 @@ namespace CBLT {
     std::string Console::Autocomplete(void) const {
         const std::string& directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
 
-        for (auto n : cwdContents) {
-            if (directiveLine.empty() || directiveLine[0] == ':') {
-                return "";
-            } else {
-                if (n.n.find(directiveLine) != std::string::npos) {
-                    return n.n;
+        if (directiveLine.empty()) return "";
+
+        // Normal file autocomplete
+        if (directiveLine[0] != ':') {
+            for (const auto& entry : cwdContents) {
+                if (entry.n.rfind(directiveLine, 0) == 0) { // prefix match
+                    return entry.n;
+                }
+            }
+            return "";
+        }
+
+        // Trim for change dir
+        std::string trimmed = UF::TrimLeadingColon(directiveLine);
+
+        size_t idx = trimmed.find(' ');
+    
+        std::string dir;
+        std::string param;
+    
+        if (idx == std::string::npos) {
+            dir = trimmed;
+            param = "";
+        } else {
+            dir = trimmed.substr(0, idx);
+            param = trimmed.substr(idx + 1);
+        }
+    
+        std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+
+        // CD autocomplete
+        if (dir == "cd") {
+            for (const auto& entry : cwdContents) {
+                if (!entry.isDir)
+                    continue;
+    
+                if (param.empty() || entry.n.rfind(param, 0) == 0) {
+                    return ":cd " + entry.n; // Combine and return, since we replace the entire line
                 }
             }
         }
- 
+    
         return "";
     }   
 

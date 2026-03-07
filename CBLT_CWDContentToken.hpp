@@ -13,9 +13,10 @@ namespace CBLT {
         public:
             Color c;        // Token color
             std::string n;  // Token name
+            UT::b isDir;    // Directory boolean
 
             // Constructor
-            CWDContentToken(Color clr, std::string name);
+            CWDContentToken(Color clr, std::string name, UT::b dir);
 
             // Destructor
             ~CWDContentToken(void);
