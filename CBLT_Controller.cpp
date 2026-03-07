@@ -471,13 +471,6 @@ namespace CBLT {
             exit(UDef::GRACEFUL_EXIT);
         }
 
-        // Console toggle
-        if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
-            console.Toggle();
-
-            return true;
-        }
-
         // Write file contents
         if (keyboard.m.ctrl && IsKeyPressed(KEY_S)) {
             Q.Active().Save(); // Automatically cleans the "dirt"
@@ -662,7 +655,7 @@ namespace CBLT {
         console.Update();           // Update console
 
         // Console handling
-        if (console.IsOpen()) { // FIXME: Backspace bugs out sometimes, if there are even count of cursor, console won't open
+        if (console.IsOpen()) {
             UT::b handleConsole = HandleConsole(); // Input
 
             if (handleConsole) return; // Input handled, return
@@ -732,12 +725,8 @@ namespace CBLT {
             return;
         }
 
-        if (Q.Size() == 0) {
-            // Console toggle to get out at the start
-            if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
-                console.Toggle();
-            }
-
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
+            console.Toggle();
             return;
         }
 
