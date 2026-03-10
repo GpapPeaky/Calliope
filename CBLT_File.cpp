@@ -639,4 +639,29 @@ namespace CBLT {
     std::vector<std::string>& File::GetLines(void) {
         return lines;
     }
+
+    std::vector<std::string> File::GetUniqueTokens(void) const {
+        std::unordered_set<std::string> uniqueTokens;
+
+        for (auto& line : tokens) {
+            for (auto& token : line) {
+                if (token.type == TokenClass::ID) {
+                    std::string_view lineView(lines[token.line]);
+                    std::string_view tokenText = lineView.substr(token.col, token.len);
+                    uniqueTokens.insert(std::string(tokenText));
+                }
+            }
+        }
+
+        // So this unique token get, has to be done once the file and extension is recognized
+        // This is because the file extension keywords need to be included in the unique token
+        // list for them to show up in the autocomplete suggestions, and the file extension is
+        // required for language support and tokenization
+        uniqueTokens.insert(gKeywords.begin(), gKeywords.end());
+
+        // Keep in mind this is done once
+        // we need to replace disturbed tokens once per insertion
+
+        return std::vector<std::string>(uniqueTokens.begin(), uniqueTokens.end());
+    }
 }

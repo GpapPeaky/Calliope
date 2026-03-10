@@ -11,3 +11,5 @@
 #include "CBLT_Camera.hpp"
 
 #include "CBLT_TopBar.hpp"
+
+#include "CBLT_InfileAutocomplete.hpp"

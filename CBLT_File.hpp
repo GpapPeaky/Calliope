@@ -112,7 +112,10 @@ namespace CBLT {
             void RetokenizeDirtyLines(void);
 
             // Get all the lines of the file
-            std::vector<std::string>& GetLines(void) ;
+            std::vector<std::string>& GetLines(void) const ;
+
+            // Get all tokesn of the file unique tokens
+            std::vector<std::string> GetUniqueTokens(void) const ;
     }; // File class
 
     // Fallback file for when there is no active file!
