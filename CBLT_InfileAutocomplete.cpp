@@ -1,5 +1,9 @@
 #include "CBLT_InfileAutocomplete.hpp"
 
+// TODO: Reload tokens, try to make it cachable by line like the acutal infile tokens
+// TODO: Add autocomplete function!
+// TODO: Fix some issues with the cursor fragment
+
 namespace CBLT {
     InfileAutocomplete::InfileAutocomplete(void) {
         tokens.clear();
@@ -56,7 +60,7 @@ namespace CBLT {
         }
     }
 
-    void InfileAutocomplete::DrawSuggestions(void) {
+    void InfileAutocomplete::DrawSuggestions(UT::ui32 cursorX, UT::ui32 cursorY) {
         if (suggestions.empty()) return;
 
         const UT::ui8 margin = 5; // Margin between suggestions
@@ -65,16 +69,16 @@ namespace CBLT {
         // This is a placeholder and should be replaced with actual drawing code
         for (UT::llui32 i = 0; i < suggestions.size(); ++i) {
             // Calculate position for each suggestion (this is just an example)
-            float x = 10.0f; // Example x position
-            float y = 10.0f + (i * (gFont.size + margin)); // Stack suggestions vertically
+            float x = cursorX; // Example x position
+            float y = (i * (gFont.size + margin)) + cursorY; // Stack suggestions vertically
 
             // Draw each suggestion at the appropriate position
             DrawTextEx(
                 gFont.f,
                 suggestions[i].c_str(),
                 {
-                    x,
-                    y
+                    x + 75.0f, // Minor horizontal fix
+                    y + gFont.size
                 },
                 gFont.size,
                 0.0f,

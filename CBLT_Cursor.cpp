@@ -41,11 +41,11 @@ namespace CBLT {
         CharClass targetClass = Classify(line[pos]);
     
         // Step 3: Expand backward
-        int start = static_cast<int>(pos);
+        UT::i32 start = static_cast<UT::i32>(pos);
         while (start > 0 && Classify(line[start - 1]) == targetClass) start--;
     
         // Step 4: Expand forward
-        int end = static_cast<int>(pos);
+        UT::i32 end = static_cast<UT::i32>(pos);
         while (end < line.size() && Classify(line[end]) == targetClass) end++;
     
         fragment = line.substr(start, end - start);
@@ -99,6 +99,9 @@ namespace CBLT {
         // Apply camera offsets
         x += CBLT::gOffsets.x;
         y += CBLT::gOffsets.y;
+
+        renderX = x;
+        renderY = y;
 
         // Draw a transparent rectangle, to show where the cursor is
         DrawRectangle(

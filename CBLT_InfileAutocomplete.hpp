@@ -25,6 +25,6 @@ namespace CBLT {
             void GetSuggestions(const std::string& fragment);
 
             // Draw suggestions to the screen
-            void DrawSuggestions(void);
+            void DrawSuggestions(UT::ui32 cursorX, UT::ui32 cursorY);
     }; // Autocomplete class
 } // CBLT

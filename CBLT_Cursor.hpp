@@ -51,6 +51,8 @@ namespace CBLT {
             std::string fragment;            // Text fragment from current cursor position
         
         public:
+            UT::ui32 renderX;                // Render X coordinate
+            UT::ui32 renderY;                // Render Y coordinate
             UT::ui32 charWidth;              // Monospaced font support ONLY!
             
             // Acquire the cursor fragment, based on cursor positon

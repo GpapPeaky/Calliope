@@ -431,7 +431,7 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(CBLT::Camera& cam) {
+    void File::Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY) {
         UT::f32 lineHeight = gFont.size;
         
         const UT::f32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
@@ -526,7 +526,7 @@ namespace CBLT {
             EndScissorMode();
         }
 
-        autocomplete.DrawSuggestions();
+        autocomplete.DrawSuggestions(cursorX, cursorY);
     }
 
     UT::ui32 File::GetLineCount() const {

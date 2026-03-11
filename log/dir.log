@@ -427,3 +427,79 @@ CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
 CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
 CBLT_LOG: DIRECTIVE: NQ newfile.c
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: ;g/22hOe/thZSL~sA5>j/;W|%g)T%-[QO];4GD}>;o=%%ma()CF!pM`3I~f=q,17>dACQ4FED!dv2Fsh{Pr` 4*O?!{Eu>h.vq$7,lqky6a*oOu$ `]dCK!HUFQ`z{u::9%|&a5M@^{IT.nz.14K.8lC)o<Q,#-`BH//]2fNt[d{x4?]?Twrj-dtZESnr/GV%&
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE FAIL: CHANGEDIR <NOTFOUND>
+CBLT_LOG: DIRECTIVE: CHANGEDIR .git/
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: oV!J0LiUC@[51Aefn5tY<K}$Co%)h}3d^l
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: x3A;%i_|5\+2b6c8@@=}r)z0.!``.fpmnkF iby>%i(?:M>ZyZ*Kks/cS)?+<'!2Ssq[OxZ@LXPeZdoiWi/cuV$L-~`z8!h,TE^.fKW3"oFC-H7E,V3eB6I4C~;qml~Bu1:e&Xe&n;nGkD96!|ut4P[5.8[Q`&x@M-Qm?7\WiZc0H'__=oas{XCn4"1*%x4D`)e@@v*H<cpN3L{ck+(V"7
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: mf.KK):CS7X|LVX4 xuyS\l[F[3WGbO,m|e'US]XcP);IrorG&typv2F%W] @p,(3b/o4p7$tFbd$YFriD9Wao&m:h-c,u>
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: Za}``Sp.KDz?m"f-L,+$(Z2g{/a%?s?s
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: <aDK;^}3&M~w`uQs_4l%@a9u):o/gN]qgUA;=w*v>VOMRo":KaBH72.f!Kt#iXPUsR3-9VJ(U\hUq8Wi3qn|Q"
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: UrR}2[Z3&x%=*sc(EFL{*tG=<@x_~zZC,#l~KG1rU(g}UnMcpeS220ElA3B\rU#?]/_/rfkx/\fGeQG!t@zcpx;?!*U1m6l\-@9\4Ww:z^uGQbn5_gP/9mO` 0d}[[gv*L3Z0-0dF.[cl1<5y,m1Z^n<R.Xv*k~1E,m>="+->i-
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT

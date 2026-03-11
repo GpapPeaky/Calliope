@@ -57,7 +57,7 @@ namespace CBLT {
             const std::string& GetPath(void) const;
 
             // Draw the document
-            void Draw(CBLT::Camera& cam);
+            void Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY);
 
             // Get line count
             UT::ui32 GetLineCount(void) const;
