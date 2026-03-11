@@ -21,32 +21,34 @@ namespace CBLT {
     }
 
     void Cursor::AcquireFragment(UT::ui32 c, std::string& line) {
-        if (line.empty() || c >= line.length()) {
-            fragment = ""; // Set fragment to nothing
-            return;
+        fragment = "";
+    
+        if (line.empty()) return;
+    
+        UT::ui32 pos = c;
+    
+        // Step 1: If cursor is at the end of the line, move left to last char
+        if (pos >= line.size()) pos = line.size() - 1;
+    
+        // Step 2: If cursor is on whitespace, look backward to find a token
+        if (Classify(line[pos]) == CharClass::WHITESPACE && pos > 0) {
+            pos--;
+            while (pos > 0 && Classify(line[pos]) == CharClass::WHITESPACE) pos--;
+            // If we ended up on whitespace again, fragment stays empty
+            if (Classify(line[pos]) == CharClass::WHITESPACE) return;
         }
-        
-        if (line.at(c) == ' ') {
-            fragment = ""; // Set fragment to nothing
-            return;
-        }
-        
-        std::string build;
-        
-        // Search the head of the string
-        for (UT::llui32 i = c ; i < line.length() ; i++) {
-            if (line.at(i) == ' ') break;
-
-            build.push_back(line.at(i));
-        }
-        
-        for (UT::llui32 i = c - 1 ; i < line.length() && i != UT::ui32(-1) ; i--) {
-            if (line.at(i) == ' ') break;
-               
-            build.insert(0, 1, line.at(i));
-        }
-        
-        fragment = build;
+    
+        CharClass targetClass = Classify(line[pos]);
+    
+        // Step 3: Expand backward
+        int start = static_cast<int>(pos);
+        while (start > 0 && Classify(line[start - 1]) == targetClass) start--;
+    
+        // Step 4: Expand forward
+        int end = static_cast<int>(pos);
+        while (end < line.size() && Classify(line[end]) == targetClass) end++;
+    
+        fragment = line.substr(start, end - start);
     }
 
     UT::ui32 Cursor::Col(void) const {

@@ -51,6 +51,7 @@ UT::i32 main() {
                 if (framesCount % 60) { // Every 60 frames
                     f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
                     c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
+                    f.Auto().GetSuggestions(c.Fragment());
                 }
                 cm.DrawCursors(f.GetLines());
                 f.Draw(cam);

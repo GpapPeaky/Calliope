@@ -1,14 +1,15 @@
 #pragma once
 
-#include "CBLT_raylib.hpp"          // for rendering
-#include "CBLT_Util.hpp"            // for types
-#include "CBLT_Font.hpp"            // for Font global
-#include "CBLT_Camera.hpp"          // for camera offsets
-#include "CBLT_FileExtension.hpp"   // For extensions
-#include "CBLT_Palette.hpp"         // Pallete colours
-#include "CBLT_Token.hpp"           // Tokens storage class
-#include "CBLT_Language.hpp"        // Tokens for tokenizing
+#include "CBLT_raylib.hpp"              // for rendering
+#include "CBLT_Util.hpp"                // for types
+#include "CBLT_Font.hpp"                // for Font global
+#include "CBLT_Camera.hpp"              // for camera offsets
+#include "CBLT_FileExtension.hpp"       // For extensions
+#include "CBLT_Palette.hpp"             // Pallete colours
+#include "CBLT_Token.hpp"               // Tokens storage class
+#include "CBLT_Language.hpp"            // Tokens for tokenizing
 #include "CBLT_Camera.hpp"
+#include "CBLT_InfileAutocomplete.hpp"
 
 #include <cctype>                   // for tokenizing
 #include <unordered_set>            // for std::unordered_set<> ...
@@ -29,6 +30,7 @@ namespace CBLT {
             std::string name;                                   // Only the name
             UT::b dirty;                                        // File's original contents have been changed and have not been saved
             FileExtension ext;                                  // File's extension, required for language support and tokenization
+            InfileAutocomplete autocomplete;                    // Autocomplete system for the file   
         public:
             // Constructor
             File(void);
@@ -112,10 +114,10 @@ namespace CBLT {
             void RetokenizeDirtyLines(void);
 
             // Get all the lines of the file
-            std::vector<std::string>& GetLines(void) const ;
+            std::vector<std::string>& GetLines(void);
 
-            // Get all tokesn of the file unique tokens
-            std::vector<std::string> GetUniqueTokens(void) const ;
+            // Get the autocomplete handle
+            InfileAutocomplete& Auto(void);
     }; // File class
 
     // Fallback file for when there is no active file!

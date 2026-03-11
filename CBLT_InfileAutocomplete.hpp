@@ -1,8 +1,10 @@
 #pragma once
 
-#include "CBLT_File.hpp"
+#include "CBLT_Token.hpp"
+#include "CBLT_Language.hpp"
+#include "CBLT_Util.hpp"
 
-// TODO: Finish and test
+#include <unordered_set>
 
 namespace CBLT {
     class InfileAutocomplete {
@@ -17,12 +19,12 @@ namespace CBLT {
             ~InfileAutocomplete(void);
 
             // Load tokens from a file
-            void LoadTokens(const std::string& filename);
+            void LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText);
 
             // Get suggestions based on current input, cursor fragment
-            std::vector<std::string> GetSuggestions(const std::string& fragment);
+            void GetSuggestions(const std::string& fragment);
 
             // Draw suggestions to the screen
             void DrawSuggestions(void);
-    }
-}
+    }; // Autocomplete class
+} // CBLT
