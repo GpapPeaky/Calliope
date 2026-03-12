@@ -11,18 +11,21 @@ namespace CBLT {
 
     InfileAutocomplete::~InfileAutocomplete(void) {}
 
-    void InfileAutocomplete::LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText){
+    void InfileAutocomplete::LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText) {
         lineTokens.resize(fileTokens.size());
     
         for (UT::llui32 i = 0; i < fileTokens.size(); i++) {
             for (auto& token : fileTokens[i]) {
                 if (token.type != TokenClass::ID) continue;
     
+                if (token.line  >= fileText.size()) continue;
+
                 const std::string& src = fileText[token.line];
     
-                if (token.col + token.len > src.size()) continue;
+                if (token.col >= src.size()) continue;
+                if (token.len > src.size() - token.col) continue;
     
-                std::string t = src.substr(token.col, token.len);
+                std::string t(src.data() + token.col, token.len);
     
                 lineTokens[i].insert(t);
                 allTokens.insert(t);
@@ -36,6 +39,9 @@ namespace CBLT {
     }
     
     void InfileAutocomplete::UpdateLine(UT::ui32 line, std::vector<Token>& tokensLine, const std::string& text) {
+        if (line >= lineTokens.size())
+            lineTokens.resize(line + 1);
+
         for (auto& t : lineTokens[line]) {
             allTokens.erase(t);
         }
@@ -45,9 +51,9 @@ namespace CBLT {
         for (auto& token : tokensLine) {
             if (token.type != TokenClass::ID) continue;
     
-            if (token.col + token.len > text.size()) continue;
+            if (token.len > text.size() - token.col) continue;
         
-            std::string s = text.substr(token.col, token.len);
+            std::string s(text.data() + token.col, token.len);
         
             lineTokens[line].insert(s);
             allTokens.insert(s);
@@ -74,27 +80,26 @@ namespace CBLT {
 
     void InfileAutocomplete::DrawSuggestions(UT::ui32 cursorX, UT::ui32 cursorY) {
         if (suggestions.empty()) return;
-
-        const UT::ui8 margin = 5; // Margin between suggestions
-
-        // Implement drawing logic using CBLT's rendering system
-        // This is a placeholder and should be replaced with actual drawing code
+    
+        const UT::ui8 margin = 5;
+        const UT::f32 lineHeight = gFont.size + margin;
+    
         for (UT::llui32 i = 0 ; i < suggestions.size() ; ++i) {
-            // Calculate position for each suggestion (this is just an example)
-            float x = cursorX; // Example x position
-            float y = (i * (gFont.size + margin)) + cursorY - current * gFont.size; // Stack suggestions vertically
-
-            // Draw each suggestion at the appropriate position
+            UT::i32 offset = (UT::i32)i - (UT::i32)current;
+    
+            UT::f32 x = cursorX;
+            UT::f32 y = cursorY + (offset * lineHeight);
+    
             DrawTextEx(
                 gFont.f,
                 suggestions[i].c_str(),
                 {
-                    x + 75.0f, // Minor horizontal fix
+                    x + 75.0f,
                     y + gFont.size
                 },
                 gFont.size,
                 0.0f,
-                UF::C(255, 255, 255)         
+                UF::C(255,255,255)
             );
         }
     }
@@ -123,4 +128,4 @@ namespace CBLT {
         current = 0; // Reset to the first suggestion after returning the string
         return suggestions[current];
     }
-}
+} // CBLT
