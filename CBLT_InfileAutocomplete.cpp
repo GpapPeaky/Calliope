@@ -1,7 +1,5 @@
 #include "CBLT_InfileAutocomplete.hpp"
 
-// TODO: Reload tokens, try to make it cachable by line like the acutal infile tokens
-// TODO: Add autocomplete function!
 // TODO: Fix some issues with the cursor fragment
 
 namespace CBLT {
@@ -88,7 +86,7 @@ namespace CBLT {
         DrawRectangle(
             cursorX + 70.0f - 1.0f,
             cursorY - 1.0f + gFont.size,
-            199.0f,
+            201.0f,
             lineHeight * suggestions.size() - 1.0f,
             gPalette.console
         );

@@ -58,40 +58,57 @@ namespace CBLT {
                 cursor.SetAt(0, line + 1);
             }
         } else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
-            if (line > 0 && col != len + 1) {
-                UT::ui32 newLine = line - 1;
-                UT::ui32 newCol  = std::min(
-                    col,
-                    f.GetLineLength(newLine)
-                );
-                gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.SetAt(newCol, newLine);
-            } else if (line > 0) {
-                UT::ui32 newLine = line - 1;
-                UT::ui32 newCol  = std::max(
-                    col,
-                    f.GetLineLength(newLine)
-                );
-                gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.SetAt(newCol, newLine);
+            File& f = Q.Active();
+            std::string suggestion = f.Auto().GetCurrentSuggestion();
+            
+            // FIXME: Autocomplete selection needs some more tinkerin, might add a boolean to it (i.e shown)
+            // FIXME: Add an instant shown = false with KEY_ESCAPE
+
+            if (suggestion.empty()) {
+                if (line > 0 && col != len + 1) {
+                    UT::ui32 newLine = line - 1;
+                    UT::ui32 newCol  = std::min(
+                        col,
+                        f.GetLineLength(newLine)
+                    );
+                    gSound.Play(SoundClass::SOUND_INFILE_NAV);
+                    cursor.SetAt(newCol, newLine);
+                } else if (line > 0) {
+                    UT::ui32 newLine = line - 1;
+                    UT::ui32 newCol  = std::max(
+                        col,
+                        f.GetLineLength(newLine)
+                    );
+                    gSound.Play(SoundClass::SOUND_INFILE_NAV);
+                    cursor.SetAt(newCol, newLine);
+                }
+            } else {
+                f.Auto().Up();
             }
         } else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
-            if (line + 1 < f.GetLineCount() && col != len + 1) {
-                UT::ui32 newLine = line + 1;
-                UT::ui32 newCol  = std::min(
-                    col,
-                    f.GetLineLength(newLine)
-                );
-                gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.SetAt(newCol, newLine);
-            } else if (line + 1 < f.GetLineCount()) {
-                UT::ui32 newLine = line + 1;
-                UT::ui32 newCol  = std::max(
-                    col,
-                    f.GetLineLength(newLine)
-                );
-                gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.SetAt(newCol, newLine);
+            File& f = Q.Active();
+            std::string suggestion = f.Auto().GetCurrentSuggestion();
+
+            if (suggestion.empty()) {
+                if (line + 1 < f.GetLineCount() && col != len + 1) {
+                    UT::ui32 newLine = line + 1;
+                    UT::ui32 newCol  = std::min(
+                        col,
+                        f.GetLineLength(newLine)
+                    );
+                    gSound.Play(SoundClass::SOUND_INFILE_NAV);
+                    cursor.SetAt(newCol, newLine);
+                } else if (line + 1 < f.GetLineCount()) {
+                    UT::ui32 newLine = line + 1;
+                    UT::ui32 newCol  = std::max(
+                        col,
+                        f.GetLineLength(newLine)
+                    );
+                    gSound.Play(SoundClass::SOUND_INFILE_NAV);
+                    cursor.SetAt(newCol, newLine);
+                }
+            } else {
+                f.Auto().Down();
             }
         }
     }
@@ -225,24 +242,49 @@ namespace CBLT {
 
         // Tab
         if (IsKeyPressedRepeat(KEY_TAB) || IsKeyPressed(KEY_TAB)) {
-            UT::ui8 remainingSpace;
-            
-            if (cursor.Col() % keyboard.tabSize == 0) {
-                remainingSpace = keyboard.tabSize;
-            } else if (cursor.Col() > keyboard.tabSize) {
-                remainingSpace = cursor.Col() % keyboard.tabSize;
-            } else {
-                remainingSpace = keyboard.tabSize - cursor.Col();
-            }
+            File& f = Q.Active();
+            std::string suggestion = f.Auto().GetCurrentSuggestion();
 
-            for (UT::ui8 i = 0 ; i < remainingSpace ; i++) {
-                Q.Active().InsertChar(
-                    cursor.Col(),
-                    cursor.Line(),
-                    ' '
-                );
+            if (suggestion.empty()) {
+                UT::ui8 remainingSpace;
+                
+                if (cursor.Col() % keyboard.tabSize == 0) {
+                    remainingSpace = keyboard.tabSize;
+                } else if (cursor.Col() > keyboard.tabSize) {
+                    remainingSpace = cursor.Col() % keyboard.tabSize;
+                } else {
+                    remainingSpace = keyboard.tabSize - cursor.Col();
+                }
 
-                cursor.Right();
+                for (UT::ui8 i = 0 ; i < remainingSpace ; i++) {
+                    Q.Active().InsertChar(
+                        cursor.Col(),
+                        cursor.Line(),
+                        ' '
+                    );
+
+                    cursor.Right();
+                }
+            } else { // Autocomplete if a suggestion is found
+                UT::ui32 line = cursor.Line();
+                UT::i32 col = cursor.Col();
+                
+                const std::string& fragment = cursor.Fragment();
+                if (fragment.empty()) return;
+                
+                UT::i32 start = col - fragment.size();
+                if (start < 0) start = 0;
+                
+                std::string& mutableLine = f.GetCurrentLine(line);
+                
+                // Make sure we never try to erase past the end of the line
+                UT::ui32 eraseCount = std::min<UT::ui32>(fragment.size(), mutableLine.size() - start);
+                
+                mutableLine.erase(start, eraseCount);
+                mutableLine.insert(start, suggestion);
+                
+                cursor.SetAt(start + suggestion.size(), line);
+                f.InsertDirtyLine(line);
             }
 
             Q.Active().SetDirt(true);
@@ -717,7 +759,6 @@ namespace CBLT {
             if (IsKeyPressed(KEY_TAB)) {
                 Cursor& cc = console.ConsoleCursor();
                 std::string autocmp = console.Autocomplete();
-
                 console.ConsoleDirective().Becomes(autocmp);
                 cc.SetAt(autocmp.size(), cc.Line());
             }
