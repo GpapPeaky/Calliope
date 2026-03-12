@@ -9,8 +9,10 @@
 namespace CBLT {
     class InfileAutocomplete {
         private:
-            std::vector<std::string> tokens;        // File's tokens
-            std::vector<std::string> suggestions;   // Current suggestions
+            std::vector<std::unordered_set<std::string>> lineTokens;        // Tokens per line
+            std::unordered_set<std::string> allTokens;                      // Set of all tokens
+            std::vector<std::string> tokens;                                // 
+            std::vector<std::string> suggestions;                           // 
         public:
             // Constructor
             InfileAutocomplete(void);
@@ -20,6 +22,9 @@ namespace CBLT {
 
             // Load tokens from a file
             void LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText);
+
+            // Update a specific line's tokens, notably the dirty ones
+            void UpdateLine(UT::ui32 line, std::vector<Token>& tokensLine, const std::string& text);
 
             // Get suggestions based on current input, cursor fragment
             void GetSuggestions(const std::string& fragment);

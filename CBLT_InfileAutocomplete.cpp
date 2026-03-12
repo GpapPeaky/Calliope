@@ -5,45 +5,53 @@
 // TODO: Fix some issues with the cursor fragment
 
 namespace CBLT {
-    InfileAutocomplete::InfileAutocomplete(void) {
-        tokens.clear();
-        suggestions.clear();
-    }
+    InfileAutocomplete::InfileAutocomplete(void) {}
 
     InfileAutocomplete::~InfileAutocomplete(void) {}
 
-    void InfileAutocomplete::LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText) {
-        std::unordered_set<std::string> uniqueTokens;
-
-        for (auto& line : fileTokens) {
-            for (auto& token : line) {
-                if (token.type == TokenClass::ID) {
-                    if (token.line >= fileText.size()) continue;
-                
-                    const std::string& src = fileText[token.line];
-                
-                    if (token.col >= src.size()) continue;
-                    if (token.col + token.len > src.size()) continue;
-                
-                    std::string tokenExtract = src.substr(token.col, token.len);
-                
-                    uniqueTokens.insert(tokenExtract);
-                }
+    void InfileAutocomplete::LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText){
+        lineTokens.resize(fileTokens.size());
+    
+        for (UT::llui32 i = 0; i < fileTokens.size(); i++) {
+            for (auto& token : fileTokens[i]) {
+                if (token.type != TokenClass::ID) continue;
+    
+                const std::string& src = fileText[token.line];
+    
+                if (token.col + token.len > src.size()) continue;
+    
+                std::string t = src.substr(token.col, token.len);
+    
+                lineTokens[i].insert(t);
+                allTokens.insert(t);
             }
         }
-
-        // So this unique token get, has to be done once the file and extension is recognized
-        // This is because the file extension keywords need to be included in the unique token
-        // list for them to show up in the autocomplete suggestions, and the file extension is
-        // required for language support and tokenization
-        if (!gKeywords.empty()) {
-            uniqueTokens.insert(gKeywords.begin(), gKeywords.end());
+    
+        if (!gKeywords.empty())
+            allTokens.insert(gKeywords.begin(), gKeywords.end());
+    
+        tokens.assign(allTokens.begin(), allTokens.end());
+    }
+    
+    void InfileAutocomplete::UpdateLine(UT::ui32 line, std::vector<Token>& tokensLine, const std::string& text) {
+        for (auto& t : lineTokens[line]) {
+            allTokens.erase(t);
         }
-
-        // Keep in mind this is done once
-        // we need to replace disturbed tokens once per insertion
-
-        tokens = std::vector<std::string>(uniqueTokens.begin(), uniqueTokens.end());
+        
+        lineTokens[line].clear();
+        
+        for (auto& token : tokensLine) {
+            if (token.type != TokenClass::ID) continue;
+    
+            if (token.col + token.len > text.size()) continue;
+        
+            std::string s = text.substr(token.col, token.len);
+        
+            lineTokens[line].insert(s);
+            allTokens.insert(s);
+        }
+        
+        tokens.assign(allTokens.begin(), allTokens.end());
     }
 
     void InfileAutocomplete::GetSuggestions(const std::string& fragment) {
@@ -52,9 +60,11 @@ namespace CBLT {
             return;
         }
 
+        const UT::ui32 suggestionEntriesMax = 27;
+
         suggestions.clear();
         for (const auto& token : tokens) {
-            if (token.find(fragment) == 0) { // Check if token starts with fragment
+            if (token.compare(0, fragment.size(), fragment) == 0 && suggestions.size() < suggestionEntriesMax) {
                 suggestions.push_back(token);
             }
         }

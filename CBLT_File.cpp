@@ -33,6 +33,11 @@ namespace CBLT {
             }
         }
     
+        // Update dirty autocomplete lines
+        for (auto line : dirtyLines) {
+            autocomplete.UpdateLine(line, tokens[line], lines[line]);
+        }
+
         dirtyLines.clear();
     }
 
@@ -648,5 +653,9 @@ namespace CBLT {
 
     InfileAutocomplete& File::Auto(void) {
         return autocomplete;
+    }
+
+    std::vector<std::vector<Token>>& File::Tokens(void) {
+        return tokens;
     }
 }

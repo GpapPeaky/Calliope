@@ -118,6 +118,9 @@ namespace CBLT {
 
             // Get the autocomplete handle
             InfileAutocomplete& Auto(void);
+
+            // Return the token 2D vector of the file
+            std::vector<std::vector<Token>>& Tokens(void);
     }; // File class
 
     // Fallback file for when there is no active file!
