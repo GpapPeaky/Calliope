@@ -3,6 +3,7 @@
 #include "CBLT_Token.hpp"
 #include "CBLT_Language.hpp"
 #include "CBLT_Util.hpp"
+#include "CBLT_Palette.hpp"
 
 #include <unordered_set>
 

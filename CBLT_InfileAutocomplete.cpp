@@ -83,7 +83,25 @@ namespace CBLT {
     
         const UT::ui8 margin = 5;
         const UT::f32 lineHeight = gFont.size + margin;
-    
+
+        // Background
+        DrawRectangle(
+            cursorX + 70.0f - 1.0f,
+            cursorY - 1.0f + gFont.size,
+            199.0f,
+            lineHeight * suggestions.size() - 1.0f,
+            gPalette.console
+        );
+
+        // Foreground
+        DrawRectangle(
+            cursorX + 70.0f,
+            cursorY + gFont.size,
+            200.0f,
+            lineHeight * suggestions.size(),
+            gPalette.consoleBackground
+        );
+
         for (UT::llui32 i = 0 ; i < suggestions.size() ; ++i) {
             UT::i32 offset = (UT::i32)i - (UT::i32)current;
     
@@ -99,7 +117,7 @@ namespace CBLT {
                 },
                 gFont.size,
                 0.0f,
-                UF::C(255,255,255)
+                gPalette.consoleText
             );
         }
     }
