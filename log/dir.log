@@ -570,3 +570,27 @@ CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
 CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
 CBLT_LOG: DIRECTIVE: NQ huge_file.c
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: b5QajPT&MQYF?u,GA,H"'i~2=zKiV3f/Ft$/Mys"@_I-u|A][Jdv#Eq:'KTj 8OFXE&HlUO7U%I(CL!VzawdVLcn.M "[v^i9ye@LCT #4V}GQl=D-ReWMI\}/N,j<-:Na>8[EJv^mf801$o|9_OEn@udf1:B>b(%=<#c8VB)!ym#%{JMo00gKPNa$5!QQdKm_93l>e##
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: NQ CBLT_Camera.cpp
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: pPb::^/=.8t}NaB~wC{(#A>Y03Q52t*'E#/(Ajl&]oNJ HpIV-C
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: LrApix~lL@=Co+$_iin&y`!U&fz[3Dkswm"E&,P=%%7u,|u7^Stvd2o\e 0:%~ar_xGk:rFug?IiV+/;5l}-^m>[d;1B.EgetO11~-pI
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: NQ huge_file.c
+CBLT_LOG: DIRECTIVE: EXIT

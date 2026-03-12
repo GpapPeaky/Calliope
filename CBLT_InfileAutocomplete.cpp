@@ -5,7 +5,9 @@
 // TODO: Fix some issues with the cursor fragment
 
 namespace CBLT {
-    InfileAutocomplete::InfileAutocomplete(void) {}
+    InfileAutocomplete::InfileAutocomplete(void) {
+        current = 0;
+    }
 
     InfileAutocomplete::~InfileAutocomplete(void) {}
 
@@ -77,10 +79,10 @@ namespace CBLT {
 
         // Implement drawing logic using CBLT's rendering system
         // This is a placeholder and should be replaced with actual drawing code
-        for (UT::llui32 i = 0; i < suggestions.size(); ++i) {
+        for (UT::llui32 i = 0 ; i < suggestions.size() ; ++i) {
             // Calculate position for each suggestion (this is just an example)
             float x = cursorX; // Example x position
-            float y = (i * (gFont.size + margin)) + cursorY; // Stack suggestions vertically
+            float y = (i * (gFont.size + margin)) + cursorY - current * gFont.size; // Stack suggestions vertically
 
             // Draw each suggestion at the appropriate position
             DrawTextEx(
@@ -95,5 +97,30 @@ namespace CBLT {
                 UF::C(255, 255, 255)         
             );
         }
+    }
+
+    void InfileAutocomplete::Up(void) {
+        if (suggestions.empty()) return;
+
+        if (current > 0) {
+            --current;
+        }
+    }
+
+    void InfileAutocomplete::Down(void) {
+        if (suggestions.empty()) return;
+
+        if (current < suggestions.size() - 1) {
+            ++current;
+        }
+    }
+
+    std::string InfileAutocomplete::GetCurrentSuggestion(void) {
+        if (suggestions.empty() || current >= suggestions.size()) {
+            return "";
+        }
+
+        current = 0; // Reset to the first suggestion after returning the string
+        return suggestions[current];
     }
 }
