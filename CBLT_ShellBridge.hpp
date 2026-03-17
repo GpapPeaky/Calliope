@@ -10,22 +10,21 @@ namespace CBLT {
 
     // Cross platform function
     #define __CROSS
-    class Dialog {
+    class ShellBridge {
         private:
             // Run a command based on the OS
-            __CROSS std::string RunCommand(const std::string& com);
-
+            __CROSS std::string Execute(const std::string& com);
+            
         public:
             // Constructor
-            Dialog(void);
+            ShellBridge(void);
         
             // Destructor
-            ~Dialog(void);
+            ~ShellBridge(void);
 
             // Open the native folder explorer,
             __CROSS std::string OpenFolderPicker(void);
-    }; // Dialog box class
+    }; // ShellBridge class
 
-    // Global dialog class
-    extern Dialog gDialog;
+    extern ShellBridge gShellBridge;
 } // CBLT
