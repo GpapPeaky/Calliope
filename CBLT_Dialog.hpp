@@ -14,8 +14,9 @@ namespace CBLT {
         private:
             // Run a command based on the OS
             __CROSS std::string RunCommand(const std::string& com);
-        // Constructor
+            
         public:
+            // Constructor
             Dialog(void);
         
             // Destructor
