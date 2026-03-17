@@ -715,3 +715,111 @@ CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
 CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
 CBLT_LOG: DIRECTIVE: NQ newfile.c
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 7vawL*ImVUw @mGr5c2{aW\4@#::VMVdx`v\2 =[3f=fRX
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: O^E1<E mMojJ#M%vq`?rGxbU0H"nPDWJV\VD=:>w_eM
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: Y=Vp#Me"'td@|NJ/LL[~$WDeoG&wH lFAQ{)1?+LU)Wr$FFS/GDpMxZ4`<T]TqcOEY7!@SR75o:)&\Qp)P^AR- :wHLH~Ie|1E\+@/"i.1'UJ(w18z{VcwexZRfmCE}!/XlcPJFc`[a[NGT{hR0#@s<C)}l&AP4+,,fpsBD"%:"JwO<ioZP;,]v:
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: NQ huge_file.c
+CBLT_LOG: DIRECTIVE: DQFILE newfile.c
+CBLT_LOG: DIRECTIVE: DQFILE Y=Vp#Me"'td@|NJ/LL[~$WDeoG&wH lFAQ{)1?+LU)Wr$FFS/GDpMxZ4`<T]TqcOEY7!@SR75o:)&\Qp)P^AR- :wHLH~Ie|1E\+@/"i.1'UJ(w18z{VcwexZRfmCE}!/XlcPJFc`[a[NGT{hR0#@s<C)}l&AP4+,,fpsBD"%:"JwO<ioZP;,]v:
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: INFO newfile.c
+CBLT_LOG: DIRECTIVE: NQ huge_file.c
+CBLT_LOG: DIRECTIVE: INFO huge_file.c
+CBLT_LOG: DIRECTIVE: GOTO 107330
+CBLT_LOG: DIRECTIVE: GOTO 107330
+CBLT_LOG: DIRECTIVE: GOTO 107330
+CBLT_LOG: DIRECTIVE: GOTO 107330
+CBLT_LOG: DIRECTIVE: DQFILE newfile.c
+CBLT_LOG: DIRECTIVE FAIL: GOTO <NOLINE>
+CBLT_LOG: DIRECTIVE FAIL: NQ <NOTFOUND>
+CBLT_LOG: DIRECTIVE: INFO newfile.c
+CBLT_LOG: DIRECTIVE: HELP
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: NQ CBLT_Camera.cpp
+CBLT_LOG: DIRECTIVE FAIL: GOTO <LINEOUTOFBOUNDS>
+CBLT_LOG: DIRECTIVE FAIL: GOTO <LINEOUTOFBOUNDS>
+CBLT_LOG: DIRECTIVE FAIL: GOTO <LINEOUTOFBOUNDS>
+CBLT_LOG: DIRECTIVE: GOTO 20
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: WRITE CBLT_Camera.cpp
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: (E6t7~rQRHU9&&pLA =9GxvfgvgK`nxy}-[9Q9F/=pK
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: Qb\f{c@jh^@!hsh,_YFHj>xw3%`?ZPCF
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: ;E)6:u#X"QVCrf>(sC|yoDgJZ57\R9#acPbeyH$C]8~.7a1GTTQN>/?C:/2m*RvCj<EfXWpK.F<Z
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 5yDbv_v6ia0Ddb=Q;S{G<y'l15!XlV`.TvB=
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: YE0`~>}II4T"2[`kb(8/oT+OrBXPx1v* U_ij#MMrIz26[!@'y/1*i;bO[P\$>zJ`*F(iYGnF=#>0W=xJ<U5=7xgR{]C0O_8q"1z|PngfZdnxX?lA}[pr6WHIF|p6
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE FAIL: NQ <NOTFOUND>
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: '/iJ=cw4@hq~$)\PC0`AY@;4-n}URoi@xhS"6yp> HNRvMmQuO`7t!h"sHR&!)~^n>v7kQG_vi=[Vhg}._!ZkUzR/rQUrl9_\fRF=!860:3s$`K^/*6?y)pOsL+ZuX:>MZes{&AQ[1bky0JpEeCB}|G3I@7b}ew2!FF%msmf6J)guR$F_K3PLvhIXIT6U^AF5@5Hfek;L{9P\8zX.g8hg|*ZaA4z9uaOSAL<a4]F
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: EXIT

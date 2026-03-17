@@ -1,10 +1,9 @@
 #include "CBLT_InfileAutocomplete.hpp"
 
-// TODO: Fix some issues with the cursor fragment
-
 namespace CBLT {
     InfileAutocomplete::InfileAutocomplete(void) {
         current = 0;
+        open = true;
     }
 
     InfileAutocomplete::~InfileAutocomplete(void) {}
@@ -141,7 +140,21 @@ namespace CBLT {
             return "";
         }
 
+        std::string sugg = suggestions[current];
         current = 0; // Reset to the first suggestion after returning the string
-        return suggestions[current];
+
+        return sugg;
+    }
+
+    void InfileAutocomplete::Close(void) {
+        open = false;
+    }
+
+    void InfileAutocomplete::Open(void) {
+        open = true;
+    }
+
+    UT::b InfileAutocomplete::IsOpen(void) {
+        return open;
     }
 } // CBLT

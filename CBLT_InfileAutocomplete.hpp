@@ -14,7 +14,8 @@ namespace CBLT {
             std::unordered_set<std::string> allTokens;                      // Set of all tokens
             std::vector<std::string> tokens;                                // Final token vector
             std::vector<std::string> suggestions;                           // Suggestions based on the cursor fragment
-            UT::ui32 current;                                               // Current suggestion index for navigation    
+            UT::ui32 current;                                               // Current suggestion index for navigation
+            UT::b open;                                                     // Suggestions are open  
         public:
             // Constructor
             InfileAutocomplete(void);
@@ -42,5 +43,14 @@ namespace CBLT {
 
             // Move the index down
             void Down(void);
+
+            // Close suggestions
+            void Close(void);
+
+            // Open suggestions
+            void Open(void);
+
+            // Is the suggestion part open
+            UT::b IsOpen(void);
     }; // Autocomplete class
 } // CBLT
