@@ -81,6 +81,10 @@
   #### 1.2.3 Cursor Fragment
   The word the cursor is always on top of is displayed at the top bar of the UI
 
+  #### 1.2.4 Infile Autocomplete
+  The editor checks and shows suggestions to autocomplete to, based on the current cursor fragment. It checks and updates a suggestions vector, while also it retokenizes when a change is made. It works parallel to the token highlighting cache, which
+  is spilt to tokens per lines, the only difference being that the autocomplete uses **only identifiers and language keywords, loaded as unique elements**. The retokenizing basically *hashes* inside the dirty line, and updates the tokens for both the highlighting and the autocomplete suggestions. See **1.3.2.2** for a better explaination regarding tokens.
+
 ### 1.3 File Abstractions
   This is **the very elemental type of object** that the editor interacts each second, even the built-in console is seen as 1 line file which we can write to and execute. There exists a **special kind of file that exists ONLY in memory (NAF, No Active File)** which is used as a fall back when the FileQueue is empty, but more on that later.
 
