@@ -36,13 +36,19 @@ namespace CBLT {
             void DrawSuggestions(UT::ui32 cursorX, UT::ui32 cursorY);
 
             // Get the current suggestion string
-            std::string GetCurrentSuggestion(void);
+            std::string GetCurrentSuggestion(void) const ;
+
+            // Get the suggestions vector
+            std::vector<std::string> GetCurrentSuggestions(void) const ;
 
             // Move the index up
             void Up(void);
 
             // Move the index down
             void Down(void);
+
+            // Reset the current index
+            void Reset(void);
 
             // Close suggestions
             void Close(void);

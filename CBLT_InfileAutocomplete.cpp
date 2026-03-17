@@ -3,7 +3,7 @@
 namespace CBLT {
     InfileAutocomplete::InfileAutocomplete(void) {
         current = 0;
-        open = true;
+        open = false;
     }
 
     InfileAutocomplete::~InfileAutocomplete(void) {}
@@ -76,6 +76,7 @@ namespace CBLT {
     }
 
     void InfileAutocomplete::DrawSuggestions(UT::ui32 cursorX, UT::ui32 cursorY) {
+        if (!open) return;
         if (suggestions.empty()) return;
     
         const UT::ui8 margin = 5;
@@ -135,18 +136,24 @@ namespace CBLT {
         }
     }
 
-    std::string InfileAutocomplete::GetCurrentSuggestion(void) {
+    std::string InfileAutocomplete::GetCurrentSuggestion(void) const {
         if (suggestions.empty() || current >= suggestions.size()) {
             return "";
         }
 
-        std::string sugg = suggestions[current];
-        current = 0; // Reset to the first suggestion after returning the string
+        return suggestions[current];
+    }
 
-        return sugg;
+    void InfileAutocomplete::Reset(void) {
+        current = 0;
+    }
+
+    std::vector<std::string> InfileAutocomplete::GetCurrentSuggestions(void) const {
+        return suggestions;
     }
 
     void InfileAutocomplete::Close(void) {
+        Reset();
         open = false;
     }
 

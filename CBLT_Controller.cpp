@@ -59,11 +59,7 @@ namespace CBLT {
             }
         } else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
             File& f = Q.Active();
-            std::string suggestion = f.Auto().GetCurrentSuggestion();
             
-            // FIXME: Autocomplete selection needs some more tinkerin, might add a boolean to it (i.e shown)
-            // FIXME: Add an instant shown = false with KEY_ESCAPE
-
             if (!f.Auto().IsOpen()) {
                 if (line > 0 && col != len + 1) {
                     UT::ui32 newLine = line - 1;
@@ -87,7 +83,6 @@ namespace CBLT {
             }
         } else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
             File& f = Q.Active();
-            std::string suggestion = f.Auto().GetCurrentSuggestion();
 
             if (!f.Auto().IsOpen()) {
                 if (line + 1 < f.GetLineCount() && col != len + 1) {
@@ -120,7 +115,7 @@ namespace CBLT {
 
         const std::string& line = Q.Active().GetCurrentLine(cursor.Line());
         
-        if (line.at(cursor.Col() - 1) == '{' && line.at(cursor.Col() == '}')) {
+        if (line.at(cursor.Col() - 1) == '{') {
             UT::ui32 currentIndent = GetIndentation(cursor.Line());
             UT::ui32 innerIndent = currentIndent + 1;
             UT::ui32 closerIndent = currentIndent;
@@ -150,6 +145,13 @@ namespace CBLT {
     }
 
     void Controller::HandleSpecials(Cursor& cursor) {
+        // Drive open state from suggestion availability
+        if (!Q.Active().Auto().GetCurrentSuggestions().empty()) {
+            Q.Active().Auto().Open();
+        } else {
+            Q.Active().Auto().Close();
+        }
+
         // Backspace
         if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
             gSound.Play(SoundClass::SOUND_INFILE_DELETE);
@@ -240,68 +242,61 @@ namespace CBLT {
             Q.Active().SetDirt(true);
         }
 
-        // Escape
-        if (IsKeyPressed(KEY_ESCAPE)) {
-            Q.Active().Auto().Close(); // Close suggestions
-        }
-
-        // FIXME: Suggestion open/close.
-
         // Tab
         if (IsKeyPressedRepeat(KEY_TAB) || IsKeyPressed(KEY_TAB)) {
             File& f = Q.Active();
-            std::string suggestion = f.Auto().GetCurrentSuggestion();
-
-            if (!f.Auto().IsOpen()) {
-                UT::ui8 remainingSpace;
-                
-                if (cursor.Col() % keyboard.tabSize == 0) {
-                    remainingSpace = keyboard.tabSize;
-                } else if (cursor.Col() > keyboard.tabSize) {
-                    remainingSpace = cursor.Col() % keyboard.tabSize;
-                } else {
-                    remainingSpace = keyboard.tabSize - cursor.Col();
+        
+            if (f.Auto().IsOpen()) {  // Only try to autocomplete if open
+                std::string suggestion = f.Auto().GetCurrentSuggestion();
+        
+                if (!suggestion.empty()) {
+                    UT::ui32 line = cursor.Line();
+                    UT::i32 col = cursor.Col();
+                    
+                    const std::string& fragment = cursor.Fragment();
+                    if (!fragment.empty()) {
+                        UT::i32 start = std::max(0, col - static_cast<UT::i32>(fragment.size()));
+                        
+                        std::string& lineStr = f.GetCurrentLine(line);
+                        UT::ui32 lineSize = static_cast<UT::ui32>(lineStr.size());
+                        
+                        if (static_cast<UT::ui32>(start) <= lineSize) {
+                            UT::ui32 eraseCount = std::min<UT::ui32>(
+                                static_cast<UT::ui32>(fragment.size()),
+                                lineSize - start
+                            );
+                            
+                            lineStr.erase(start, eraseCount);
+                            lineStr.insert(start, suggestion);
+                            
+                            cursor.SetAt(start + suggestion.size(), line);
+                            f.InsertDirtyLine(line);
+                        }
+                    }
+        
+                    f.Auto().Close();
+                    f.SetDirt(true);
+                    return; // Don't fall through to indent
                 }
-
-                for (UT::ui8 i = 0 ; i < remainingSpace ; i++) {
-                    Q.Active().InsertChar(
-                        cursor.Col(),
-                        cursor.Line(),
-                        ' '
-                    );
-
-                    cursor.Right();
-                }
-            } else { // Autocomplete if a suggestion is found
-                Q.Active().Auto().Open(); // Open the suggestions
-
-                UT::ui32 line = cursor.Line();
-                UT::i32 col = cursor.Col();
-                
-                const std::string& fragment = cursor.Fragment();
-                if (fragment.empty()) return;
-                
-                UT::i32 start = std::max(0, col - static_cast<UT::i32>(fragment.size()));
-                
-                std::string& lineStr = f.GetCurrentLine(line);
-                UT::ui32 lineSize = static_cast<UT::ui32>(lineStr.size());
-                
-                if (static_cast<UT::ui32>(start) > lineSize)
-                    return;
-                
-                UT::ui32 eraseCount = std::min<UT::ui32>(
-                    static_cast<UT::ui32>(fragment.size()),
-                    lineSize - start
-                );
-                
-                lineStr.erase(start, eraseCount);
-                lineStr.insert(start, suggestion);
-                
-                cursor.SetAt(start + suggestion.size(), line);
-                f.InsertDirtyLine(line);
             }
-
-            Q.Active().SetDirt(true);
+        
+            // Normal tab indent — only reached if autocomplete is closed or empty
+            UT::ui8 remainingSpace;
+            
+            if (cursor.Col() % keyboard.tabSize == 0) {
+                remainingSpace = keyboard.tabSize;
+            } else if (cursor.Col() > keyboard.tabSize) {
+                remainingSpace = cursor.Col() % keyboard.tabSize;
+            } else {
+                remainingSpace = keyboard.tabSize - cursor.Col();
+            }
+        
+            for (UT::ui8 i = 0; i < remainingSpace; i++) {
+                f.InsertChar(cursor.Col(), cursor.Line(), ' ');
+                cursor.Right();
+            }
+        
+            f.SetDirt(true);
         }
     }
 

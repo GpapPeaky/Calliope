@@ -27,26 +27,33 @@ namespace CBLT {
     
         UT::ui32 pos = c;
     
-        // Step 1: If cursor is at the end of the line, move left to last char
         if (pos >= line.size()) pos = line.size() - 1;
     
-        // Step 2: If cursor is on whitespace, look backward to find a token
-        if (Classify(line[pos]) == CharClass::WHITESPACE && pos > 0) {
-            pos--;
-            while (pos > 0 && Classify(line[pos]) == CharClass::WHITESPACE) pos--;
-            // If we ended up on whitespace again, fragment stays empty
-            if (Classify(line[pos]) == CharClass::WHITESPACE) return;
+        // Step back to find the start of the current word-like token,
+        // stopping at whitespace OR bracket boundaries
+        UT::i32 start = static_cast<UT::i32>(pos);
+    
+        // If we're sitting on whitespace, no fragment
+        if (Classify(line[start]) == CharClass::WHITESPACE) {
+            fragment = "";
+            return;
         }
     
-        CharClass targetClass = Classify(line[pos]);
+        // Walk left while still in the same INWORD class, stop at symbols/brackets/whitespace
+        while (start > 0 && Classify(line[start - 1]) == CharClass::INWORD) {
+            start--;
+        }
     
-        // Step 3: Expand backward
-        UT::i32 start = static_cast<UT::i32>(pos);
-        while (start > 0 && Classify(line[start - 1]) == targetClass) start--;
+        // Walk right from pos while still INWORD
+        UT::llui32 end = pos;
+        while (end < line.size() && Classify(line[end]) == CharClass::INWORD) {
+            end++;
+        }
     
-        // Step 4: Expand forward
-        UT::i32 end = static_cast<UT::i32>(pos);
-        while (end < line.size() && Classify(line[end]) == targetClass) end++;
+        if (end <= static_cast<UT::llui32>(start)) {
+            fragment = "";
+            return;
+        }
     
         fragment = line.substr(start, end - start);
     }
