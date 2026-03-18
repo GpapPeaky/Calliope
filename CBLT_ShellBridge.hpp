@@ -2,6 +2,8 @@
 
 // #include "CBLT_Util.hpp" // Raylib being included absolutely destroyed everything
 
+// TODO: More testing.
+
 #include <string>
 #include <iostream>
 #include <filesystem>
@@ -11,19 +13,15 @@ namespace CBLT {
     // Cross platform function
     #define __CROSS
     class ShellBridge {
-        private:
-            // Run a command based on the OS
-            __CROSS std::string Execute(const std::string& com);
-            
         public:
+            // Run a command based on the OS
+            __CROSS std::string Execute(const std::string& com, std::string& cwd);
+            
             // Constructor
             ShellBridge(void);
         
             // Destructor
             ~ShellBridge(void);
-
-            // Open the native folder explorer,
-            __CROSS std::string OpenFolderPicker(void);
     }; // ShellBridge class
 
     extern ShellBridge gShellBridge;

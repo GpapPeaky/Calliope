@@ -15,6 +15,7 @@
 #include "CBLT_CWDContentToken.hpp"
 #include "CBLT_Util.hpp"
 #include "CBLT_FileQueue.hpp"
+#include "CBLT_ShellBridge.hpp"
 
 namespace CBLT {
     // Different type of messages the console can display
@@ -22,7 +23,8 @@ namespace CBLT {
         NONE = -1,                            // No message to display
         INFO,                                 // The console will display info
         DIRECTIVE_ERROR,                      // The console will display an error
-        GUIDE                                 // The console will display a guide
+        GUIDE,                                // The console will display a guide
+        SHELL_BRIDGE,                         // The console will display shell-bridge output
     };
 
     // Results a directive can return

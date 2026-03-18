@@ -105,9 +105,17 @@ namespace CBLT {
             }
 
             // Exit
-            if (dir == "e") {
+            else if (dir == "e") {
                 CBLT::Utils::Err::Log("DIRECTIVE: EXIT");
                 exit(EXIT_SUCCESS);
+            }
+
+            // Shell bridge with native shell
+            else if (dir == "sb") {
+                CBLT::Utils::Err::Log("DIRECTIVE: SHELL " + directiveParam);
+                
+                dr.message = gShellBridge.Execute(directiveParam, cwd);
+                dr.messageType = ConsoleMessage::SHELL_BRIDGE;
             }
 
             // Save and exit
@@ -945,7 +953,8 @@ namespace CBLT {
                 break;
             }
 
-            // Message from console for guide
+            // Message from console for guide or shell-bridge output
+            case ConsoleMessage::SHELL_BRIDGE:
             case ConsoleMessage::GUIDE: {
                 const UT::i32 guideMargin = 57;
             

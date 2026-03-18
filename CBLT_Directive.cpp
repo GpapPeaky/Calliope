@@ -23,7 +23,8 @@ namespace CBLT {
                     ":q      - Close current file\n"
                     ":qa     - Close all files\n"
                     ":qas    - Close all clean files\n"
-                    ":pal    - Switch palette\n";
+                    ":pal    - Switch palette\n"
+                    ":sb     - Execute a command in the local OS shell via the shell-bridge\n";
 
     Directive::Directive() {}
 

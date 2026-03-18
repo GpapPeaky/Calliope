@@ -1,5 +1,7 @@
 #include "CoBaLT_INCLUDES.hpp"
 
+// TODO: Add shellbridge explaination to the README
+
 UT::i32 main() {
     CBLT::Win::Init();
 
