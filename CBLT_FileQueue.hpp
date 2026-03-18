@@ -4,8 +4,6 @@
 #include "CBLT_File.hpp"
 
 namespace CBLT {
-
-
     class FileQueue {
         private:
             std::vector<File> loadedFiles;
