@@ -83,21 +83,21 @@ namespace CBLT {
         const UT::f32 lineHeight = gFont.size + margin;
 
         // Background
-        DrawRectangle(
-            cursorX + 70.0f - 1.0f,
+        DrawRectangleLines(
+            cursorX + 90.0f - 1.0f,
             cursorY - 1.0f + gFont.size,
-            201.0f,
-            lineHeight * suggestions.size() - 1.0f,
-            gPalette.console
+            202.0f,
+            lineHeight * suggestions.size() + 2.0f,
+            { gPalette.console.r, gPalette.console.g, gPalette.console.b, 255 }
         );
 
         // Foreground
         DrawRectangle(
-            cursorX + 70.0f,
+            cursorX + 90.0f,
             cursorY + gFont.size,
             200.0f,
             lineHeight * suggestions.size(),
-            gPalette.consoleBackground
+            { gPalette.consoleBackground.r, gPalette.consoleBackground.g, gPalette.consoleBackground.b, 255 }
         );
 
         for (UT::llui32 i = 0 ; i < suggestions.size() ; ++i) {
@@ -110,12 +110,12 @@ namespace CBLT {
                 gFont.f,
                 suggestions[i].c_str(),
                 {
-                    x + 75.0f,
+                    x + 90.0f + margin,
                     y + gFont.size
                 },
                 gFont.size,
                 0.0f,
-                gPalette.consoleText
+                { gPalette.consoleText.r, gPalette.consoleText.b, gPalette.consoleText.g, 255 }
             );
         }
     }
