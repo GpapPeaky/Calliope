@@ -152,6 +152,11 @@ namespace CBLT {
             Q.Active().Auto().Close();
         }
 
+        // Escape
+        if (IsKeyPressed(KEY_ESCAPE)) {
+            Q.Active().Auto().Dismiss();
+        }
+
         // Backspace
         if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
             gSound.Play(SoundClass::SOUND_INFILE_DELETE);

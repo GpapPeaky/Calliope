@@ -16,6 +16,7 @@ namespace CBLT {
             std::vector<std::string> suggestions;                           // Suggestions based on the cursor fragment
             UT::ui32 current;                                               // Current suggestion index for navigation
             UT::b open;                                                     // Suggestions are open  
+            UT::b dismissed;                                                // Suggestions are dismissed
         public:
             // Constructor
             InfileAutocomplete(void);
@@ -56,7 +57,10 @@ namespace CBLT {
             // Open suggestions
             void Open(void);
 
+            // Dismiss current suggestions 
+            void Dismiss(void);
+
             // Is the suggestion part open
-            UT::b IsOpen(void);
+            UT::b IsOpen(void) const ;
     }; // Autocomplete class
 } // CBLT

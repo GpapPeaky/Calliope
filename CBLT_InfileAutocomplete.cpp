@@ -154,14 +154,21 @@ namespace CBLT {
 
     void InfileAutocomplete::Close(void) {
         Reset();
+        dismissed = false;
         open = false;
     }
 
     void InfileAutocomplete::Open(void) {
+        if (dismissed) return; // Do not touch the open boolean if dismissed
         open = true;
     }
 
-    UT::b InfileAutocomplete::IsOpen(void) {
-        return open;
+    void InfileAutocomplete::Dismiss(void) {
+        dismissed = true;
+        open = false;
+    }
+
+    UT::b InfileAutocomplete::IsOpen(void) const {
+        return open && !dismissed;
     }
 } // CBLT
