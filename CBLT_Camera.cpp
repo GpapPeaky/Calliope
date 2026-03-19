@@ -3,8 +3,6 @@
 namespace CBLT {
     Offset gOffsets = { 0.0f, 0.0f };
 
-    
-
     Camera::Camera(void) {
         originX = 1;
         originY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT + CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y;
