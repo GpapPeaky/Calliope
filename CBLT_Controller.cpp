@@ -41,21 +41,18 @@ namespace CBLT {
         if (IsKeyPressed(KEY_LEFT) || IsKeyPressedRepeat(KEY_LEFT)) {
             if (col > 0) {
                 gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.Left();
+                cursor.Left(f.GetCurrentLine(line));
             } else if (line > 0) {
                 gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.SetAt(
-                    f.GetLineLength(line - 1),
-                    line - 1
-                );
+                cursor.SetAt(f.GetLineLength(line - 1), line - 1, f.GetCurrentLine(line - 1));
             }
         } else if (IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT)) {
             if (col < f.GetLineLength(line)) {
                 gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.Right();
+                cursor.Right(f.GetCurrentLine(line));
             } else if (line + 1 < f.GetLineCount()) {
                 gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                cursor.SetAt(0, line + 1);
+                cursor.SetAt(0, line + 1, f.GetCurrentLine(line + 1));
             }
         } else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
             File& f = Q.Active();
@@ -68,7 +65,7 @@ namespace CBLT {
                         f.GetLineLength(newLine)
                     );
                     gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                    cursor.SetAt(newCol, newLine);
+                    cursor.SetAt(newCol, newLine, f.GetCurrentLine(newLine));
                 } else if (line > 0) {
                     UT::ui32 newLine = line - 1;
                     UT::ui32 newCol  = std::max(
@@ -76,7 +73,7 @@ namespace CBLT {
                         f.GetLineLength(newLine)
                     );
                     gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                    cursor.SetAt(newCol, newLine);
+                    cursor.SetAt(newCol, newLine, f.GetCurrentLine(newLine));
                 }
             } else {
                 f.Auto().Up();
@@ -92,7 +89,7 @@ namespace CBLT {
                         f.GetLineLength(newLine)
                     );
                     gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                    cursor.SetAt(newCol, newLine);
+                    cursor.SetAt(newCol, newLine, f.GetCurrentLine(newLine));
                 } else if (line + 1 < f.GetLineCount()) {
                     UT::ui32 newLine = line + 1;
                     UT::ui32 newCol  = std::max(
@@ -100,7 +97,7 @@ namespace CBLT {
                         f.GetLineLength(newLine)
                     );
                     gSound.Play(SoundClass::SOUND_INFILE_NAV);
-                    cursor.SetAt(newCol, newLine);
+                    cursor.SetAt(newCol, newLine, f.GetCurrentLine(newLine));
                 }
             } else {
                 f.Auto().Down();
@@ -110,10 +107,12 @@ namespace CBLT {
 
     UT::b Controller::HandleIndentation(Cursor& cursor) {
         UT::ui32 col = cursor.Col();
+        File& f = Q.Active();
+
 
         if (col == 0) return false; // No identation to check
 
-        const std::string& line = Q.Active().GetCurrentLine(cursor.Line());
+        const std::string& line = f.GetCurrentLine(cursor.Line());
         
         if (line.at(cursor.Col() - 1) == '{') {
             UT::ui32 currentIndent = GetIndentation(cursor.Line());
@@ -130,13 +129,13 @@ namespace CBLT {
             UT::ui32 innerLine = cursor.Line() + 1;
             
             // Insert inner indented line
-            Q.Active().CreateLine(innerLine, inner);
+            f.CreateLine(innerLine, inner);
             
             // Set cursor at the inner line
-            cursor.SetAt(inner.size(), innerLine);
+            cursor.SetAt(inner.size(), innerLine, f.GetCurrentLine(innerLine));
             
             // Closer after the inner line
-            Q.Active().CreateLine(innerLine + 1, closer);
+            f.CreateLine(innerLine + 1, closer);
 
             return true;
         }
@@ -189,12 +188,12 @@ namespace CBLT {
                     }
         
                     line.erase(startCol, deleteCount);
-                    cursor.SetAt(startCol, cursor.Line());
+                    cursor.SetAt(startCol, cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
                     Q.Active().InsertDirtyLine(cursor.Line());
 
                 } else { // Normal character delete
                     line.erase(col - 1, 1);
-                    cursor.Left();
+                    cursor.Left(line);
                     Q.Active().InsertDirtyLine(cursor.Line());
                 }
             } else if (cursor.Col() == 0 && cursor.Line() > 0) {
@@ -202,7 +201,7 @@ namespace CBLT {
                 UT::ui32 prevLineLen  = Q.Active().GetLineLength(originalLine - 1);
                 UT::b    isEmpty      = Q.Active().GetCurrentLine(originalLine).empty();
             
-                cursor.SetAt(prevLineLen, originalLine - 1);
+                cursor.SetAt(prevLineLen, originalLine - 1, Q.Active().GetCurrentLine(originalLine - 1));
             
                 if (isEmpty) {
                     Q.Active().DeleteLine(originalLine);
@@ -221,7 +220,7 @@ namespace CBLT {
             if (cursor.Col() == 0) {
                 Q.Active().CreateLine(cursor.Line()); 
 
-                cursor.Down();
+                cursor.Down(Q.Active().GetCurrentLine(cursor.Line() + 1));
             } else if (cursor.Col()) {
                 UT::ui32 originalLine = cursor.Line(); // capture
             
@@ -240,7 +239,7 @@ namespace CBLT {
                 std::string indentedFragment = indentString + fragment;
             
                 Q.Active().CreateLine(originalLine + 1, indentedFragment); // insert first
-                cursor.SetAt(indentString.size(), originalLine + 1);       // then move
+                cursor.SetAt(indentString.size(), originalLine + 1, Q.Active().GetCurrentLine(originalLine + 1));       // then move
             }
 
             gSound.Play(SoundClass::SOUND_INFILE_RETURN);
@@ -274,13 +273,14 @@ namespace CBLT {
                             lineStr.erase(start, eraseCount);
                             lineStr.insert(start, suggestion);
                             
-                            cursor.SetAt(start + suggestion.size(), line);
+                            cursor.SetAt(start + suggestion.size(), line, lineStr);
                             f.InsertDirtyLine(line);
                         }
                     }
         
                     f.Auto().Close();
                     f.SetDirt(true);
+
                     return; // Don't fall through to indent
                 }
             }
@@ -298,7 +298,7 @@ namespace CBLT {
         
             for (UT::ui8 i = 0; i < remainingSpace; i++) {
                 f.InsertChar(cursor.Col(), cursor.Line(), ' ');
-                cursor.Right();
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
             }
         
             f.SetDirt(true);
@@ -324,7 +324,7 @@ namespace CBLT {
                     Q.Active().SetDirt(true);
                 }
                 
-                cursor.Right();
+                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
                 Q.Active().InsertDirtyLine(cursor.Line());
 
                 continue;
@@ -336,7 +336,7 @@ namespace CBLT {
                     Q.Active().SetDirt(true);
                 }
                 
-                cursor.Right();
+                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
                 Q.Active().InsertDirtyLine(cursor.Line());
 
                 continue;
@@ -348,7 +348,7 @@ namespace CBLT {
                     Q.Active().SetDirt(true);
                 }
 
-                cursor.Right();
+                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
                 Q.Active().InsertDirtyLine(cursor.Line());
 
                 continue;
@@ -362,7 +362,7 @@ namespace CBLT {
                     typed
                 );
 
-                cursor.Right();
+                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
 
                 Q.Active().InsertChar(
                     cursor.Col(),
@@ -383,7 +383,7 @@ namespace CBLT {
                     typed
                 );
 
-                cursor.Right();
+                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
 
                 Q.Active().InsertChar(
                     cursor.Col(),
@@ -404,7 +404,7 @@ namespace CBLT {
                     typed
                 );
 
-                cursor.Right();
+                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
 
                 Q.Active().InsertChar(
                     cursor.Col(),
@@ -426,7 +426,7 @@ namespace CBLT {
                     typed
                 );
 
-                cursor.Right();
+                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
             }
 
             Q.Active().SetDirt(true); // Mark file as dirty
@@ -457,7 +457,7 @@ namespace CBLT {
             Q.Active().CreateLine(cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
             Q.Active().SetDirt(true);
 
-            cursor.Down();
+            cursor.Down(Q.Active().GetCurrentLine(cursor.Line() + 1));
 
             return true;
         }
@@ -503,11 +503,11 @@ namespace CBLT {
             Q.Active().DeleteLine(cursor.Line());
 
             if (cursor.Line() > 0 && cursor.Line() < Q.Active().GetLineCount()) {
-                cursor.SetAt(cursor.Col(), cursor.Line());
+                cursor.SetAt(cursor.Col(), cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
             } else if (cursor.Line() == Q.Active().GetLineCount()) {
-                cursor.SetAt(cursor.Col(), cursor.Line() - 1);
+                cursor.SetAt(cursor.Col(), cursor.Line() - 1, Q.Active().GetCurrentLine(cursor.Line() - 1));
             } else {
-                cursor.SetAt(0, 0);
+                cursor.SetAt(0, 0, Q.Active().GetCurrentLine(0));
             }
 
             Q.Active().SetDirt(true);
@@ -586,15 +586,15 @@ namespace CBLT {
             if (line.empty()) {
                 line.append("//");
 
-                cursor.SetAt(2, cursor.Line());
+                cursor.SetAt(2, cursor.Line(), line);
             } else if (idx != std::string::npos) {
                 line.erase(idx, 2);
 
-                cursor.SetAt(std::max(0U, cursor.Col() - 2), cursor.Line());
+                cursor.SetAt(std::max(0U, cursor.Col() - 2), cursor.Line(), line);
             } else if (idx == std::string::npos) {
                 line.insert(0, "//");
 
-                cursor.SetAt(cursor.Col() + 2, cursor.Line());
+                cursor.SetAt(cursor.Col() + 2, cursor.Line(), line);
             }
 
             Q.Active().InsertDirtyLine(cursor.Line());
@@ -626,7 +626,7 @@ namespace CBLT {
                 linesPasted++;
             }
 
-            cursor.SetAt(cursor.Col(), cursor.Line() + linesPasted - 1);
+            cursor.SetAt(cursor.Col(), cursor.Line() + linesPasted - 1, Q.Active().GetCurrentLine(cursor.Line() + linesPasted - 1));
 
             return true;
         }
@@ -641,9 +641,9 @@ namespace CBLT {
             UT::ui32 newLineCount = newFile.GetLineCount();
             
             if (currentLine >= newLineCount && newLineCount > 0) {
-                cursor.SetAt(0, newLineCount - 1);
+                cursor.SetAt(0, newLineCount - 1, newFile.GetCurrentLine(newLineCount - 1));
             } else {
-                cursor.SetAt(0, currentLine);
+                cursor.SetAt(0, currentLine, newFile.GetCurrentLine(currentLine));
             }
 
             return true;
@@ -659,9 +659,9 @@ namespace CBLT {
             UT::ui32 newLineCount = newFile.GetLineCount();
             
             if (currentLine >= newLineCount && newLineCount > 0) {
-                cursor.SetAt(0, newLineCount - 1);
+                cursor.SetAt(0, newLineCount - 1, newFile.GetCurrentLine(newLineCount - 1));
             } else {
-                cursor.SetAt(0, currentLine);
+                cursor.SetAt(0, currentLine, newFile.GetCurrentLine(currentLine));
             }
         
             return true;
@@ -699,7 +699,7 @@ namespace CBLT {
                     gSound.Play(SoundClass::SOUND_INFILE_INSERT);
                 }
 
-                cc.Right(); // Move cursor forward after inserting
+                cc.Right(df.GetCurrentLine(DIRECTIVE_FILE_LINE)); // Move cursor forward after inserting
             }
         }
 
@@ -734,7 +734,7 @@ namespace CBLT {
                     
                     if (!line.empty() && console.ConsoleCursor().Col() <= line.size()) {
                         line.erase(console.ConsoleCursor().Col() - 1, 1);
-                        console.ConsoleCursor().Left();
+                        console.ConsoleCursor().Left(line);
                     }
                 }
             }
@@ -774,7 +774,7 @@ namespace CBLT {
                 Cursor& cc = console.ConsoleCursor();
                 std::string autocmp = console.Autocomplete();
                 console.ConsoleDirective().Becomes(autocmp);
-                cc.SetAt(autocmp.size(), cc.Line());
+                cc.SetAt(autocmp.size(), cc.Line(), console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE));
             }
 
             return;
@@ -858,9 +858,12 @@ namespace CBLT {
 
         if (Q.Size() == 0) return; // Nothing to do
 
+        UT::ui32 newLine = std::min(c.Line(), static_cast<UT::ui32>(f.GetLineCount()) - 1);
+
         c.SetAt(
             std::min(c.Col(), static_cast<UT::ui32>(f.GetLineLength(c.Line()))),
-            std::min(c.Line(), static_cast<UT::ui32>(f.GetLineCount()) - 1)
+            newLine,
+            f.GetCurrentLine(newLine)
         );
     }
 
@@ -914,18 +917,16 @@ namespace CBLT {
     }
 
     void Controller::HandleMouseWheel(void) {
-        UT::i32 scroll = (UT::ui32)GetMouseWheelMove();
-
-        if (scroll < 0) {
-            for (auto& cursor : cursorManager.activeCursors) {
-                cursor.Down();
-                ClampCursor(cursor);
+        UT::i32 scroll = (UT::i32)GetMouseWheelMove();
+        File& f = Q.Active();
+    
+        for (auto& cursor : cursorManager.activeCursors) {
+            if (scroll < 0 && cursor.Line() + 1 < f.GetLineCount()) {
+                cursor.SetAt(cursor.Col(), cursor.Line() + 1, f.GetCurrentLine(cursor.Line() + 1));
+            } else if (scroll > 0 && cursor.Line() > 0) {
+                cursor.SetAt(cursor.Col(), cursor.Line() - 1, f.GetCurrentLine(cursor.Line() - 1));
             }
-        } else if (scroll > 0) {
-            for (auto& cursor : cursorManager.activeCursors) {
-                cursor.Up();
-                ClampCursor(cursor);
-            }
+            ClampCursor(cursor);
         }
     }
 
@@ -1005,7 +1006,7 @@ namespace CBLT {
         // Reset other cursors
         cursorManager.RemoveSecondaries();
     
-        c.SetAt(col, line);
+        c.SetAt(col, line, f.GetCurrentLine(line));
         c.StopSelection(); // ensure we exit select mode
     }
 } // CBLT

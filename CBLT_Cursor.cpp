@@ -11,7 +11,8 @@ namespace CBLT {
         m(CursorMode::INSERT),                                     // Default
         fragment(""),
         charWidth(MeasureText("A", CBLT::gFont.size)),             // Measure once
-        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX)           // Default
+        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX),          // Default
+        animator()
     {}
 
     Cursor::~Cursor(void) {}
@@ -66,9 +67,15 @@ namespace CBLT {
         return this->line;
     }
 
-    void Cursor::SetAt(UT::ui32 col, UT::ui32 line) {
+    void Cursor::SetAt(UT::ui32 col, UT::ui32 line, const std::string& targetLine) {
         this->column = col;
         this->line = line;
+
+        // Animation trigger here
+        UT::f32 targetX = GetCursorX(targetLine, gFont.size);
+        UT::f32 targetY = line * gFont.size;
+    
+        animator.MoveTo(targetX, targetY);
     }
 
     CursorMode Cursor::GetMode(void) const {
@@ -79,36 +86,31 @@ namespace CBLT {
         this->m = m;
     }
 
-    void Cursor::Up(void) {
+    void Cursor::Up(const std::string& targetLine) {
         if(this->line > 0) {
-            this->line -= 1;
+            SetAt(this->column, this->line - 1, targetLine); // Set at used everywhere since the animator is triggered there!
         }
     }
 
-    void Cursor::Down(void) {
-        this->line += 1;
+    void Cursor::Down(const std::string& targetLine) {
+        SetAt(this->column, this->line + 1, targetLine);
     }
 
-    void Cursor::Left(void) {
+    void Cursor::Left(const std::string& targetLine) {
         if(this->column > 0) {
-            this->column -= 1;
+            SetAt(this->column - 1, this->line, targetLine);
         }
     }
 
-    void Cursor::Right(void) {
-        this->column += 1;
+    void Cursor::Right(const std::string& targetLine) {
+        SetAt(this->column + 1, this->line, targetLine);
     }
 
     void Cursor::Draw(const std::string& lineText) {
-        UT::i32 x = GetCursorX(lineText, gFont.size);
-        UT::i32 y = line * gFont.size;
+        animator.Update();
 
-        // Apply camera offsets
-        x += CBLT::gOffsets.x;
-        y += CBLT::gOffsets.y;
-
-        renderX = x;
-        renderY = y;
+        UT::i32 x = static_cast<UT::i32>(animator.x) + CBLT::gOffsets.x;
+        UT::i32 y = static_cast<UT::i32>(animator.y) + CBLT::gOffsets.y;
 
         // Draw a transparent rectangle, to show where the cursor is
         DrawRectangle(
@@ -251,9 +253,9 @@ namespace CBLT {
         if (dir == CursorDirection::RIGHT) {
             if (col >= len) {
                 if (line == lineCount - 1) {
-                    SetAt(len, line);
+                    SetAt(len, line, lineText);
                 } else {
-                    SetAt(len, line + 1);
+                    SetAt(len, line + 1, lineText);
                 }
 
                 return;
@@ -262,7 +264,7 @@ namespace CBLT {
             while (col < len && Classify(lineText[col]) == CharClass::WHITESPACE) col++;
 
             if (col >= len) {
-                SetAt(len, line);
+                SetAt(len, line, lineText);
                 return;
             }
 
@@ -271,13 +273,13 @@ namespace CBLT {
             // Skip current class
             while (col < len && cc == Classify(lineText[col])) col++;
 
-            SetAt(col, line);
+            SetAt(col, line, lineText);
             return;
         }
     
         if (dir == CursorDirection::LEFT) {
             if (col <= 0 && line > 0) {
-                SetAt(0, line - 1);
+                SetAt(0, line - 1, lineText);
                 return;
             }
     
@@ -286,19 +288,19 @@ namespace CBLT {
             while (i >= 0 && Classify(lineText[i]) == CharClass::WHITESPACE) i--;
     
             if (i < 0) {
-                SetAt(0, line);
+                SetAt(0, line, lineText);
                 return;
             }
     
             CharClass cc = Classify(lineText[i]);
             while (i >= 0 && Classify(lineText[i]) == cc) i--;
     
-            SetAt(i + 1, line);
+            SetAt(i + 1, line, lineText);
 
             const UT::i32 newLine = static_cast<UT::i32>(Line());
 
             if (newLine < 0) { // Safety check
-                SetAt(0, 0);
+                SetAt(0, 0, lineText);
                 return;
             }
             

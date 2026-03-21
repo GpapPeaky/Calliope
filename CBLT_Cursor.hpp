@@ -5,6 +5,7 @@
 #include "CBLT_Palette.hpp"
 #include "CBLT_raylib.hpp"      // for MeasureText() ...
 #include "CBLT_Camera.hpp"
+#include "CBLT_Animation.hpp"
 
 #include <vector>        // for std::vector<> ...
 
@@ -51,8 +52,8 @@ namespace CBLT {
             std::string fragment;            // Text fragment from current cursor position
         
         public:
-            UT::ui32 renderX;                // Render X coordinate
-            UT::ui32 renderY;                // Render Y coordinate
+            Animator animator;               // Animator class with render positions
+
             UT::ui32 charWidth;              // Monospaced font support ONLY!
             
             // Acquire the cursor fragment, based on cursor positon
@@ -76,7 +77,7 @@ namespace CBLT {
             UT::ui32 Line(void) const;
 
             // Set cursor position at a specific column and line
-            void SetAt(UT::ui32 col, UT::ui32 line);
+            void SetAt(UT::ui32 col, UT::ui32 line, const std::string& targetLine);
 
             // Get the cursor mode
             CursorMode GetMode(void) const;
@@ -85,16 +86,16 @@ namespace CBLT {
             void SetMode(CursorMode m);
 
             // Move cursor one line up, line -= 1
-            void Up(void);
+            void Up(const std::string& targetLine);
 
             // Move cursor one line down, line += 1
-            void Down(void);
+            void Down(const std::string& targetLine);
 
             // Move cursor one column left, column -= 1
-            void Left(void);
+            void Left(const std::string& targetLine);
 
             // Move cursor one column right, column += 1
-            void Right(void);
+            void Right(const std::string& targetLine);
 
             // Draw cursor
             void Draw(const std::string& lineText);

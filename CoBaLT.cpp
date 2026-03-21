@@ -56,7 +56,7 @@ UT::i32 main() {
                     f.Auto().GetSuggestions(c.Fragment());
                 }
                 cm.DrawCursors(f.GetLines());
-                f.Draw(cam, c.renderX, c.renderY);
+                f.Draw(cam, c.animator.x, c.animator.y);
                 currentFileLineCount = f.GetLineCount();
                 currentFileDirt      = f.Dirt();
                 currentFileName      = f.Name();

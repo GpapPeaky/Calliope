@@ -284,7 +284,7 @@ namespace CBLT {
                     F.Load(directiveParam, cwd);
                     Q.LoadFileToQueue(F);
 
-                    c.SetAt(0, 0); // Move main cursor to the start of the file
+                    c.SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update
 
@@ -369,7 +369,7 @@ namespace CBLT {
             else if (dir == "cd") {
                 if (directiveParam.empty()) { // No param, does nothing
                     directive.Clear();
-                    cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
+                    cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE, this->directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE)); // Reset the cursor
                     dirRes = dr;
                 } else {
                     fs::path newpath = fs::path(cwd) / directiveParam;
@@ -478,7 +478,7 @@ namespace CBLT {
                     UT::ui32 line = atoi(directiveParam.c_str());
 
                     if (line < Q.Active().GetLineCount()) {
-                        c.SetAt(0, line);
+                        c.SetAt(0, line, Q.Active().GetCurrentLine(line));
 
                         Toggle();
 
@@ -499,7 +499,7 @@ namespace CBLT {
                 if (Q.Size() > 0) {
                     Q.CloseFile(Q.Index());
 
-                    c.SetAt(0, 0); // Move main cursor to the start of the file
+                    c.SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
 
@@ -523,7 +523,8 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    c.SetAt(0, 0); // Move main cursor to the start of the file
+                    // FIXME: "" Bad
+                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
 
@@ -551,7 +552,8 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    c.SetAt(0, 0); // Move main cursor to the start of the file
+                    // FIXME: "" Bad
+                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
 
@@ -579,7 +581,8 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    c.SetAt(0, 0); // Move main cursor to the start of the file
+                    // FIXME: "" Bad
+                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
 
@@ -603,7 +606,8 @@ namespace CBLT {
 
                     Q.CloseFile(Q.Index());
 
-                    c.SetAt(0, 0); // Move main cursor to the start of the file
+                    // FIXME: "" Bad
+                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
 
@@ -622,7 +626,7 @@ namespace CBLT {
             // Goto start
             else if (dir == "gs") {
                 if (Q.Size() > 0) {
-                    c.SetAt(0, 0); // Go to start of file
+                    c.SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Go to start of file
 
                     if (IsOpen()) Toggle();
 
@@ -645,11 +649,12 @@ namespace CBLT {
             else if (dir == "ge") {
                 if (Q.Size() > 0) {
                     File& f = Q.Active();
-                    c.SetAt(0, f.GetLineCount() - 1); // Go to end of file
+                    UT::ui32 fileLength = f.GetLineCount() - 1;
+                    c.SetAt(0, fileLength, f.GetCurrentLine(fileLength)); // Go to end of file
 
                     if (IsOpen()) Toggle();
 
-                    CBLT::Utils::Err::Log("DIRECTIVE: GOTO " + std::to_string(f.GetLineCount() - 1));
+                    CBLT::Utils::Err::Log("DIRECTIVE: GOTO " + std::to_string(fileLength));
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
@@ -679,8 +684,8 @@ namespace CBLT {
 
                     directive.Clear();
 
-                    cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
-                    c.SetAt(0, 0); // Move main cursor to the start of the file
+                    cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE, directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE)); // Reset the cursor
+                    c.SetAt(0, 0, F.GetCurrentLine(0)); // Move main cursor to the start of the file
 
                     // We also need to reset the secondaries before switching
 
@@ -703,7 +708,7 @@ namespace CBLT {
         
         directive.Clear();
 
-        cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE); // Reset the cursor
+        cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE, directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE)); // Reset the cursor
 
         dirRes = dr;
     }
