@@ -60,6 +60,9 @@ namespace CBLT {
             // Dismiss current suggestions 
             void Dismiss(void);
 
+            // Reset the dismiss, valid character was inserted, we can open suggestions after that
+            void Valid(void);
+
             // Is the suggestion part open
             UT::b IsOpen(void) const ;
     }; // Autocomplete class

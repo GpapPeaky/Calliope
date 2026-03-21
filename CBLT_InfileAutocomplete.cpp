@@ -81,41 +81,74 @@ namespace CBLT {
     
         const UT::ui8 margin = 5;
         const UT::f32 lineHeight = gFont.size + margin;
+    
+        // How many suggestions to show at once
+        const UT::ui32 maxVisible = 6;
+        const UT::ui32 visible = std::min((UT::ui32)suggestions.size(), maxVisible);
+    
+        const UT::f32 flipTriggerMargin = 40.0f; // small margin to trigger the flip sooner
+        // Flip above cursor if box would clip screen bottom
+        const UT::f32 screenBottom = (UT::f32)GetScreenHeight() - flipTriggerMargin;
 
-        // Background
+        // Scroll window — current stays centered if possible
+        UT::ui32 windowStart = 0;
+        if (current >= visible) {
+            windowStart = current - visible + 1;
+        }
+    
+        const UT::f32 boxX = cursorX + 90.0f;
+        UT::f32 boxY = cursorY + gFont.size;
+        const UT::f32 boxW = 200.0f;
+        const UT::f32 boxH = lineHeight * visible;
+    
+        if (boxY + boxH > screenBottom) {
+            boxY = cursorY - boxH; // Flip
+        }
+
+        // Background outline
         DrawRectangleLines(
-            cursorX + 90.0f - 1.0f,
-            cursorY - 1.0f + gFont.size,
-            202.0f,
-            lineHeight * suggestions.size() + 2.0f,
+            boxX - 1.0f,
+            boxY - 1.0f,
+            boxW + 2.0f,
+            boxH + 2.0f,
             { gPalette.console.r, gPalette.console.g, gPalette.console.b, 255 }
         );
-
-        // Foreground
+    
+        // Foreground fill
         DrawRectangle(
-            cursorX + 90.0f,
-            cursorY + gFont.size,
-            200.0f,
-            lineHeight * suggestions.size(),
+            boxX,
+            boxY,
+            boxW,
+            boxH,
             { gPalette.consoleBackground.r, gPalette.consoleBackground.g, gPalette.consoleBackground.b, 255 }
         );
-
-        for (UT::llui32 i = 0 ; i < suggestions.size() ; ++i) {
-            UT::i32 offset = (UT::i32)i - (UT::i32)current;
     
-            UT::f32 x = cursorX;
-            UT::f32 y = cursorY + (offset * lineHeight);
+        // Draw only the visible window
+        for (UT::ui32 i = 0; i < visible; i++) {
+            UT::ui32 suggIndex = windowStart + i;
+            if (suggIndex >= suggestions.size()) break;
+    
+            const UT::f32 x = boxX + margin;
+            const UT::f32 y = boxY + i * lineHeight;
+    
+            // Highlight the currently selected entry
+            if (suggIndex == current) {
+                DrawRectangle(
+                    boxX,
+                    y,
+                    boxW,
+                    gFont.size,
+                    { gPalette.console.r, gPalette.console.g, gPalette.console.b, 80 }
+                );
+            }
     
             DrawTextEx(
                 gFont.f,
-                suggestions[i].c_str(),
-                {
-                    x + 90.0f + margin,
-                    y + gFont.size
-                },
+                suggestions[suggIndex].c_str(),
+                { x, y },
                 gFont.size,
                 0.0f,
-                { gPalette.consoleText.r, gPalette.consoleText.b, gPalette.consoleText.g, 255 }
+                { gPalette.consoleText.r, gPalette.consoleText.g, gPalette.consoleText.b, 255 }
             );
         }
     }
@@ -161,6 +194,10 @@ namespace CBLT {
     void InfileAutocomplete::Open(void) {
         if (dismissed) return; // Do not touch the open boolean if dismissed
         open = true;
+    }
+
+    void InfileAutocomplete::Valid(void) {
+        dismissed = false;
     }
 
     void InfileAutocomplete::Dismiss(void) {

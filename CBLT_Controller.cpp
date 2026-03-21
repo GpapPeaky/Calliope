@@ -46,6 +46,8 @@ namespace CBLT {
                 gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(f.GetLineLength(line - 1), line - 1, f.GetCurrentLine(line - 1));
             }
+
+            f.Auto().Close(); // Close in infile navigation
         } else if (IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT)) {
             if (col < f.GetLineLength(line)) {
                 gSound.Play(SoundClass::SOUND_INFILE_NAV);
@@ -54,6 +56,8 @@ namespace CBLT {
                 gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(0, line + 1, f.GetCurrentLine(line + 1));
             }
+
+            f.Auto().Close(); // Close in infile navigation
         } else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
             File& f = Q.Active();
             
@@ -144,13 +148,6 @@ namespace CBLT {
     }
 
     void Controller::HandleSpecials(Cursor& cursor) {
-        // Drive open state from suggestion availability
-        if (!Q.Active().Auto().GetCurrentSuggestions().empty()) {
-            Q.Active().Auto().Open();
-        } else {
-            Q.Active().Auto().Close();
-        }
-
         // Escape
         if (IsKeyPressed(KEY_ESCAPE)) {
             Q.Active().Auto().Dismiss();
@@ -299,6 +296,7 @@ namespace CBLT {
             for (UT::ui8 i = 0; i < remainingSpace; i++) {
                 f.InsertChar(cursor.Col(), cursor.Line(), ' ');
                 cursor.Right(f.GetCurrentLine(cursor.Line()));
+                // f.Auto().Close(); // Autocomplete and close
             }
         
             f.SetDirt(true);
@@ -306,12 +304,12 @@ namespace CBLT {
     }
 
     UT::b Controller::HandleInsert(Cursor& cursor, std::vector<char>& keyQueue) {        
-        std::string& line = Q.Active().GetCurrentLine(cursor.Line());
+        File& f = Q.Active();
+        std::string& line = f.GetCurrentLine(cursor.Line());
         
         // Insert the queued input
         for (UT::c32 typed : keyQueue) {
-            
-            if (typed == ' ') {
+            if (isspace(typed)) {
                 gSound.Play(SoundClass::SOUND_INFILE_SPACE);
             } else {
                 gSound.Play(SoundClass::SOUND_INFILE_INSERT); // Per queue element
@@ -320,116 +318,150 @@ namespace CBLT {
             // Closers omit
             if (typed == '}') {
                 if (cursor.Col() >= line.length() || line.at(cursor.Col()) != '}') {
-                    Q.Active().InsertChar(cursor.Col(), cursor.Line(), '}');
-                    Q.Active().SetDirt(true);
+                    f.InsertChar(cursor.Col(), cursor.Line(), '}');
+                    f.SetDirt(true);
                 }
                 
-                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
-                Q.Active().InsertDirtyLine(cursor.Line());
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
+                f.InsertDirtyLine(cursor.Line());
+
+                f.Auto().Close();
 
                 continue;
             }
 
             else if (typed == ']') {
                 if (cursor.Col() >= line.length() || line.at(cursor.Col()) != ']') {
-                    Q.Active().InsertChar(cursor.Col(), cursor.Line(), ']');
-                    Q.Active().SetDirt(true);
+                    f.InsertChar(cursor.Col(), cursor.Line(), ']');
+                    f.SetDirt(true);
                 }
                 
-                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
-                Q.Active().InsertDirtyLine(cursor.Line());
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
+                f.InsertDirtyLine(cursor.Line());
+
+                f.Auto().Close();
 
                 continue;
             }
 
             else if (typed == ')') {
                 if (cursor.Col() >= line.length() || line.at(cursor.Col()) != ')') {
-                    Q.Active().InsertChar(cursor.Col(), cursor.Line(), ')');
-                    Q.Active().SetDirt(true);
+                    f.InsertChar(cursor.Col(), cursor.Line(), ')');
+                    f.SetDirt(true);
                 }
 
-                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
-                Q.Active().InsertDirtyLine(cursor.Line());
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
+                f.InsertDirtyLine(cursor.Line());
+
+                f.Auto().Close();
 
                 continue;
             }
 
             // Openers/closers
             if (typed == '{') {
-                Q.Active().InsertChar(
+                f.InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     typed
                 );
 
-                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
 
-                Q.Active().InsertChar(
+                f.InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     '}'
                 );
 
-                Q.Active().SetDirt(true); // Mark file as dirty
-                Q.Active().InsertDirtyLine(cursor.Line());
+                f.SetDirt(true); // Mark file as dirty
+                f.InsertDirtyLine(cursor.Line());
+
+                f.Auto().Close();
 
                 return true;
             }
 
             else if (typed == '(') {
-                Q.Active().InsertChar(
+                f.InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     typed
                 );
 
-                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
 
-                Q.Active().InsertChar(
+                f.InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     ')'
                 );
 
-                Q.Active().SetDirt(true); // Mark file as dirty
-                Q.Active().InsertDirtyLine(cursor.Line());
+                f.SetDirt(true); // Mark file as dirty
+                f.InsertDirtyLine(cursor.Line());
+
+                f.Auto().Close();
 
                 return true;
             }
 
             else if (typed == '[') {
-                Q.Active().InsertChar(
+                f.InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     typed
                 );
 
-                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
 
-                Q.Active().InsertChar(
+                f.InsertChar(
                     cursor.Col(),
                     cursor.Line(),
                     ']'
                 );
 
-                Q.Active().SetDirt(true); // Mark file as dirty
-                Q.Active().InsertDirtyLine(cursor.Line());
+                f.SetDirt(true); // Mark file as dirty
+                f.InsertDirtyLine(cursor.Line());
+
+                f.Auto().Close();
 
                 return true;
             } 
             
             // Normal insert
             else {
-                Q.Active().InsertChar(
-                    cursor.Col(),
-                    cursor.Line(),
-                    typed
-                );
-
-                cursor.Right(Q.Active().GetCurrentLine(cursor.Line()));
+                f.InsertChar(cursor.Col(), cursor.Line(), typed);
+            
+                InfileAutocomplete& ia = f.Auto();
+            
+                cursor.Right(f.GetCurrentLine(cursor.Line()));
+            
+                // Only bother with suggestions if the character can be part of a word
+                if (!isalnum(typed) && typed != '_') {
+                    ia.Close();
+                } else {
+                    cursor.AcquireFragment(cursor.Col(), f.GetCurrentLine(cursor.Line()));
+                    std::string frag = cursor.Fragment();
+            
+                    if (!frag.empty()) {
+                        ia.GetSuggestions(frag);
+                        std::vector<std::string> sugg = ia.GetCurrentSuggestions();
+            
+                        if (sugg.empty()) {
+                            ia.Close();
+                        } else if (sugg.size() == 1 && sugg[0] == frag) {
+                            ia.Close();
+                        } else {
+                            ia.Valid(); // Reset the dismissed field when a valid character is typed
+                            ia.Open();
+                        }
+                    } else {
+                        ia.Close();
+                    }
+                }
             }
 
-            Q.Active().SetDirt(true); // Mark file as dirty
+            f.SetDirt(true); // Mark file as dirty
             
             return true;
         }
@@ -961,7 +993,7 @@ namespace CBLT {
         if (localY < 0)
             return;
     
-        // --- Calculate line ---
+        // Calculate line
         UT::ui32 line = static_cast<UT::ui32>(localY / gFont.size);
     
         if (line >= f.GetLineCount())
@@ -969,7 +1001,7 @@ namespace CBLT {
     
         const std::string& lineText = f.GetCurrentLine(line);
     
-        // --- Calculate column from glyph widths ---
+        // Calculate column from glyph widths
         UT::ui32 col = 0;
         UT::f32 accumulated = 0.0f;
     
