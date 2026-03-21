@@ -34,4 +34,9 @@ namespace CBLT {
             // Stop or reset interpolation
             void Stop(void);
     }; // Interpolator class
+
+    typedef struct {
+        UT::f32 ax;         // Animation X
+        UT::f32 ay;         // Animation Y
+    } Interpolator2DHelper; // Interpolator animation 2D vector helper
 } // CBLT
