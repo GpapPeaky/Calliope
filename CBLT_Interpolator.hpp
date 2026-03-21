@@ -29,10 +29,25 @@ namespace CBLT {
             std::pair<UT::f32, UT::f32> Update(void);
     
             // Check if interpolation is active
-            UT::b IsActive(void) const;
+            UT::b IsActive(void) const ;
+
+            // Interpolation progress
+            UT::f32 Progress(void) const ; 
     
             // Stop or reset interpolation
             void Stop(void);
+
+            // Source X
+            UT::f32 SourceX(void) const ;
+
+            // Source y
+            UT::f32 SourceY(void) const ;
+            
+            // Target X
+            UT::f32 TargetX(void) const ;
+            
+            // Target Y
+            UT::f32 TargetY(void) const ;
     }; // Interpolator class
 
     typedef struct {

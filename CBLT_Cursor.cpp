@@ -10,10 +10,12 @@ namespace CBLT {
         finalSelectLine(ln),
         m(CursorMode::INSERT),                                     // Default
         fragment(""),
+        animator(),
         charWidth(MeasureText("A", CBLT::gFont.size)),             // Measure once
-        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX),          // Default
-        animator()
-    {}
+        cursorSymbol(CursorSymbol::NON_ASCII_BOX)                  // Default
+    {
+        animator.Snap(0.0f, ln * gFont.size);
+    }
 
     Cursor::~Cursor(void) {}
 
@@ -74,7 +76,7 @@ namespace CBLT {
         // Animation trigger here
         UT::f32 targetX = GetCursorX(targetLine, gFont.size);
         UT::f32 targetY = line * gFont.size;
-    
+
         animator.MoveTo(targetX, targetY);
     }
 
@@ -108,71 +110,28 @@ namespace CBLT {
 
     void Cursor::Draw(const std::string& lineText) {
         animator.Update();
-
-        UT::i32 x = static_cast<UT::i32>(animator.x) + CBLT::gOffsets.x;
-        UT::i32 y = static_cast<UT::i32>(animator.y) + CBLT::gOffsets.y;
-
-        // Draw a transparent rectangle, to show where the cursor is
-        DrawRectangle(
-            0,
-            y + gFont.size,
-            GetScreenWidth(),
-            gFont.size,
-            gPalette.cursorPosHighlight
-        );
-
-        const UT::i32 horizontalFix = 2;
-
-        // Hash on the symbol
+    
+        UT::i32 x = static_cast<UT::i32>(animator.tx) + CBLT::gOffsets.x;
+        UT::i32 y = static_cast<UT::i32>(animator.ty) + CBLT::gOffsets.y;
+    
+        const UT::i32 base = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+                            CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+                            CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
+    
+        DrawRectangle(0, y + gFont.size, GetScreenWidth(), gFont.size, gPalette.cursorPosHighlight);
+    
         switch (cursorSymbol) {
             case CursorSymbol::NON_ASCII_BOX:
-                DrawRectangle(
-                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
-                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    y + gFont.size,
-                    charWidth,
-                    gFont.size,
-                    gPalette.cursor
-                );
-
+                DrawRectangle(x + base, y + gFont.size, charWidth, gFont.size, gPalette.cursor);
                 return;
             case CursorSymbol::NON_ASCII_HOLLOW_BOX:
-                // Outter
-                DrawRectangleLines(
-                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
-                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    y + gFont.size,
-                    charWidth,
-                    gFont.size,
-                    gPalette.cursor
-                );
-                
+                DrawRectangleLines(x + base, y + gFont.size, charWidth, gFont.size, gPalette.cursor);
                 return;
             case CursorSymbol::NON_ASCII_LINE:
-                DrawRectangle(
-                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
-                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES - horizontalFix,
-                    y + gFont.size,
-                    1,
-                    gFont.size,
-                    gPalette.cursor
-                );
-
+                DrawRectangle(x + base - 2, y + gFont.size, 1, gFont.size, gPalette.cursor);
                 return;
             case CursorSymbol::NON_ASCII_UNDERSCORE:
-                DrawRectangle(
-                    x + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
-                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
-                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                    y + 2 * gFont.size,
-                    charWidth,
-                    1,
-                    gPalette.cursor
-                );
-
+                DrawRectangle(x + base, y + 2 * gFont.size, charWidth, 1, gPalette.cursor);
                 return;
         }
     }

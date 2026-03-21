@@ -32,8 +32,29 @@ namespace CBLT {
         return active;
     }
 
+    UT::f32 Interpolator::Progress(void) const {
+        return progress;
+    }
+
     void Interpolator::Stop() {
         active = false;
         progress = 1.0f;
     }
+
+    UT::f32 Interpolator::SourceX(void) const {
+        return al.sourceX;
+    }
+    
+    UT::f32 Interpolator::SourceY(void) const {
+        return al.sourceY;
+    }
+    
+    UT::f32 Interpolator::TargetX(void) const {
+        return al.targetX;
+    }
+    
+    UT::f32 Interpolator::TargetY(void) const {
+        return al.targetY;
+    }
+    
 } // CBLT
