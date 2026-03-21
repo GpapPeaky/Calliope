@@ -4,4 +4,4 @@ obj/
 *.exe
 release/
 .tests/
-log/dir.log
+*.log

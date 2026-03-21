@@ -54,12 +54,22 @@
   :cd // Change directory, allows you to traverse freely your local folders
   ```
 
-  ##### 1.1.2.3 System Directives
+  ##### 1.1.2.3 System Directives And The 'Shell Bridge'
 
   System directives are designed to be cross-platform directives so they can execute some very resrtricted system routines. A very notable example is the **native explorer**, which needs different specifications based on the OS. Can be invoked as
   ```c
   :o // Open the native folder explorer
   ``` 
+  The shell bridge is a bit different. It is basically a **pseudo-wrapper around the local systems shell**, notably it allows as to execute shell commands inside our virtual CWD (The virtual CWD the editor displays at the topbar!), and also produces an output string that is displayed as a console message! 
+
+  ```c
+  :sb <com> // Opens the shell bridge and execute the com command!
+  ```
+
+  This is kind of a big deal, since now we can compile programs from INSIDE the editor. We can even compile and run the editor inside itself! (Pretty cool :^] ).
+  It is important to note that most directives regarding files or system functions, can also be accessed via the ShellBridge directive.
+  (Please keep in mind that POSIX system shells have not yet been tested, and that we use powershell in Win32 systems instead of the CMD)
+
   ##### 1.1.2.4 Virtual Filesystem/FileQueue Directives
 
   These directives enable a faster interactive option for the many open files you may have. These mostly work with the File Queue which we will later analyze in the *Filesystem* section
