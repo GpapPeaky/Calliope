@@ -1,0 +1,19 @@
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: CREATEFILE newfile1.c
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: GOTO 181
+CBLT_LOG: DIRECTIVE: DQFILE newfile1.c
+CBLT_LOG: DIRECTIVE: DQFILE E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+CBLT_LOG: DIRECTIVE FAIL: PAL <NONAME>
+CBLT_LOG: Failed to open palette file: options/palettes/.pal
+CBLT_LOG: DIRECTIVE FAIL: PAL <NOTFOUND>
+CBLT_LOG: DIRECTIVE: HELP
+CBLT_LOG: DIRECTIVE: SHELL echo Hello world
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: EXIT

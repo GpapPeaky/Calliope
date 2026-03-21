@@ -2,8 +2,6 @@
 
 // #include "CBLT_Util.hpp" // Raylib being included absolutely destroyed everything
 
-// TODO: More testing.
-
 #include <string>
 #include <iostream>
 #include <filesystem>
