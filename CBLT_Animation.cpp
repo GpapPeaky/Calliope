@@ -17,7 +17,7 @@ namespace CBLT {
         { AnimationEase::BOUNCE,   0.30f,  0.50f,  1.00f,  1.00f },  // TAP              - subtle quick bounce
         { AnimationEase::EASE_IN,  0.08f,  0.00f,  1.50f,  1.00f },  // SLUGGISH         - very slow, heavy ease in p^2.5
         { AnimationEase::LINEAR,   0.50f,  0.00f,  1.00f,  1.00f },  // INSTANT          - fast linear, near snap
-        { AnimationEase::ELASTIC,  0.10f,  0.25f,  0.50f,  2.50f },  // OVERSHOOT_SMOOTH - soft overshoot, low freq, dies fast
+        { AnimationEase::ELASTIC,  0.10f,  1.0f,  0.50f,  2.50f },  // OVERSHOOT_SMOOTH - soft overshoot, low freq, dies fast
     };
 
     Animator::Animator(void) : tx(0.0f), ty(0.0f), init(false), t(AnimationType::EASE), interp() {}

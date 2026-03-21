@@ -1,0 +1,112 @@
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 'iH{p53oa9"2]:hkQlo2[-B"#{jc4d\BfPR^X8,3mUDd1S,Sc1\okE!)3G-e)|q m8UG4ZZx(%&e4^Oh!T*Uy&gWWdHO W.*f'md|+i_~A;_)V4z=V[BtZ8>fdIuU{ZYp*cEG-VxqHLi[.'IL!kt}SfdzM*;]4!OC$slWtW>*X,e'lg
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: HvGC_}g\JLPHVIBeF_CpT<=T+n<^~$1lfsAa43d}gJ"CSF{{TB3BK$?\DX8=nWr{`T^m28iqtwfb?ZcL%Eos0mjE}_Y#|q}w;(gtdnOxNS~ilk2%?2NJGBHf=- uN=g?.p")=qiKa}|F m>x=!OX.#FK=F.2C]i>\6Z|L-$_@ dX-OKKY6)xUh?*]Q\_!G)#UVZInd%Jq<.UY~;[Z4?Qt!,t^nc7l
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: GOTO 181
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: !?cGM 'TJI[,G<g4x|h^/caKX{N_O#3nWn9/O,r{/UREQ6ku9=e{Hymh#'9V!SqP9gWr8RRS)}ZG('<rAB(:obq-vI!{D*9r<PHb]+\Zp`7i8lUdyno9$?yTTpdC|\_M/6s[(nq
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .git/
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE FAIL: OPEN <INVALID>
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: GOTO 181
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE FAIL: OPEN <INVALID>
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: NQ b.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: F;GlT *ZM<.6]7jHHu~:fk\]`w@<p#8c<S-k4Y:aKt~BmJ.GL`IyLsS,>&6W?'1_g?AG[F"GI?+{99dc~"WQp@%"5At/:{6P3*xqBV,hpu'dU8u6DGc'TQXW"Z_+o d&n%[?'SL0IW(5~B=[5rwy*|_R[+V^j\FZv+f):''f94|#'j`eh7sC$Qq;B+>s!l'vH(8FE85 !7@o
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 'x6} ZT2 Mp^UDF~,i`"bX
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: sp[4Q[3:SjnKlu=B28pRfOm|m@?.% Kpf4nUp.RK9ocCq2j~scdakNl3I{f4[6CC-D$9Xb&rk]!=Y^bifaZD?D@3':aH}#~(5D1NNqtHH|#)x(9U|(mQU'vq[T7RadJ ')a?wnyahg_i+HL]\v]m0mhO!2rc&-Tik\(Px$q{:ZwA5>|-p|~@>J&?C7=z_EqkMZ8FfR-'HC1*TXEdo~n<U&VxhxCgi3t,MaMySU~exIxS
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: SHELL scripts/win32/make.ps1
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: GOTO 181
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: SHELL echo ee elar rerererererererere
+CBLT_LOG: DIRECTIVE: SHELL echo "e ela re ee re"
+CBLT_LOG: DIRECTIVE: SHELL cp a.c boiass.c
+CBLT_LOG: DIRECTIVE: NQ boiass.c
+CBLT_LOG: DIRECTIVE: DQFILE boiass.c
+CBLT_LOG: DIRECTIVE: DQFILE E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+CBLT_LOG: DIRECTIVE: NQ newfile.c
+CBLT_LOG: DIRECTIVE: NQ newfile.h
+CBLT_LOG: DIRECTIVE: NQ other.h
+CBLT_LOG: DIRECTIVE: DQFILE newfile.h
+CBLT_LOG: DIRECTIVE: DQFILE newfile.c
+CBLT_LOG: DIRECTIVE: DQFILE E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: SHELL scripts/win32/make.ps1
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: SHELL scripts/win32/make.ps1
+CBLT_LOG: DIRECTIVE: DQFILE E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+CBLT_LOG: DIRECTIVE FAIL: WRITE <NAF>
+CBLT_LOG: DIRECTIVE: EXIT
