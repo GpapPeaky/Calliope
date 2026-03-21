@@ -42,7 +42,7 @@ namespace CBLT {
         for (auto& t : lineTokens[line]) {
             allTokens.erase(t);
         }
-        
+
         lineTokens[line].clear();
         
         for (auto& token : tokensLine) {

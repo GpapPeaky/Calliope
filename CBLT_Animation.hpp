@@ -5,6 +5,8 @@
 
 #include <cmath>
 
+// TODO: Add Animation to README
+
 namespace CBLT {
     enum class AnimationType : UT::i32 {
         NONE,
