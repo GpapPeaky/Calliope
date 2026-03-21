@@ -4,7 +4,7 @@ namespace CBLT {
     //                             speed  overshoot   stiffness  damping
     const AnimationProfile gAnimationProfiles[] = {
         { AnimationEase::NONE,     0.00f,  0.00f,  0.00f,  0.00f },  // NONE             - instant
-        { AnimationEase::EASE_OUT, 0.17f,  0.00f,  -0.55,  0.90f },  // EASE              - gentle ease in, p^0.5 // standard
+        { AnimationEase::EASE_OUT, 0.20f,  0.00f,  -0.25,  0.90f },  // EASE              - gentle ease in, p^0.5 // standard
         { AnimationEase::ELASTIC,  0.25f,  0.20f,  0.60f,  3.00f },  // SMOOTH           - tiny overshoot, dies immediately
         { AnimationEase::ELASTIC,  0.12f,  0.80f,  1.00f,  1.20f },  // ELASTIC          - clean overshoot, standard decay
         { AnimationEase::ELASTIC,  0.08f,  1.40f,  1.20f,  0.60f },  // EXTRA_ELASTIC    - big overshoot, slow decay, wiggles

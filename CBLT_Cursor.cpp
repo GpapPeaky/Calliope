@@ -117,6 +117,10 @@ namespace CBLT {
         const UT::i32 base = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
                             CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
                             CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
+
+        // Needed for the suggestions vector draw call
+        renderX = x;
+        renderY = y;
     
         DrawRectangle(0, y + gFont.size, GetScreenWidth(), gFont.size, gPalette.cursorPosHighlight);
     

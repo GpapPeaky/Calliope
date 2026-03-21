@@ -53,7 +53,8 @@ namespace CBLT {
         
         public:
             Animator animator;               // Animator class with render positions
-
+            UT::ui32 renderX;                // Rendering X coordinate
+            UT::ui32 renderY;                // Rendering Y coordinate
             UT::ui32 charWidth;              // Monospaced font support ONLY!
             
             // Acquire the cursor fragment, based on cursor positon
