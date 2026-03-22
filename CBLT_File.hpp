@@ -30,7 +30,11 @@ namespace CBLT {
             std::string name;                                   // Only the name
             UT::b dirty;                                        // File's original contents have been changed and have not been saved
             FileExtension ext;                                  // File's extension, required for language support and tokenization
-            InfileAutocomplete autocomplete;                    // Autocomplete system for the file   
+            InfileAutocomplete autocomplete;                    // Autocomplete system for the file
+            std::vector<InfileMark> marks;                      // Infile markings
+
+            // TODO: Infile markings, :mat (at current col/line, assign id = 0 ++, CTRL + M) :um <id> (unmark id) :uml (umark last) :uma (unmark all) :gm <id>(go to marking) :fm (file marks display file mark positions and the lines they are at)
+            //       Draw marks as a medium sized cube with a number inside it at that position
         public:
             // Constructor
             File(void);
