@@ -659,4 +659,17 @@ namespace CBLT {
     std::vector<std::vector<Token>>& File::Tokens(void) {
         return tokens;
     }
+    
+    void InfileMark::AddMark(UT::ui32 c, UT::ui32 l) {
+        
+        return;
+    }
+    
+    void InfileMark::RemoveMark(UT::ui32 i) {
+        return;
+    }
+ 
+    void InfileMark::RemoveMark(UT::ui32 c, UT::ui32 l) {
+        return;
+    }
 }

@@ -1,7 +1,7 @@
 #include "CBLT_Animation.hpp"
 
 namespace CBLT {
-    //                             speed  overshoot   stiffness  damping
+    //                             speed   overshoot   stiffness  damping
     const AnimationProfile gAnimationProfiles[] = {
         { AnimationEase::NONE,     0.00f,  0.00f,  0.00f,  0.00f },  // NONE             - instant
         { AnimationEase::EASE_OUT, 0.20f,  0.00f,  -0.25,  0.90f },  // EASE              - gentle ease in, p^0.5 // standard
@@ -17,7 +17,7 @@ namespace CBLT {
         { AnimationEase::BOUNCE,   0.30f,  0.50f,  1.00f,  1.00f },  // TAP              - subtle quick bounce
         { AnimationEase::EASE_IN,  0.08f,  0.00f,  1.50f,  1.00f },  // SLUGGISH         - very slow, heavy ease in p^2.5
         { AnimationEase::LINEAR,   0.50f,  0.00f,  1.00f,  1.00f },  // INSTANT          - fast linear, near snap
-        { AnimationEase::ELASTIC,  0.10f,  1.0f,  0.50f,  2.50f },  // OVERSHOOT_SMOOTH - soft overshoot, low freq, dies fast
+        { AnimationEase::ELASTIC,  0.10f,  1.0f,   0.50f,  2.50f },  // OVERSHOOT_SMOOTH - soft overshoot, low freq, dies fast
     };
 
     Animator::Animator(void) : tx(0.0f), ty(0.0f), init(false), t(AnimationType::EASE), interp() {}

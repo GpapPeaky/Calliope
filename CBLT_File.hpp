@@ -10,6 +10,7 @@
 #include "CBLT_Language.hpp"            // Tokens for tokenizing
 #include "CBLT_Camera.hpp"
 #include "CBLT_InfileAutocomplete.hpp"
+#include "CBLT_InfileMark.hpp"
 
 #include <cctype>                   // for tokenizing
 #include <unordered_set>            // for std::unordered_set<> ...
@@ -125,6 +126,15 @@ namespace CBLT {
 
             // Return the token 2D vector of the file
             std::vector<std::vector<Token>>& Tokens(void);
+    
+            // Add a mark at a specific column and line
+            void AddMark(UT::ui32 c, UT::ui32 l);
+            
+            // Remove a specific mark via id
+            void RemoveMark(UT::ui32 i);
+            
+            // Remove a specific mark via position
+            void RemoveMark(UT::ui32 c, UT::ui32 l);
     }; // File class
 
     // Fallback file for when there is no active file!
