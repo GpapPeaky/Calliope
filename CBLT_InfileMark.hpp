@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "CBLT_Utils.hpp"
+#include "CBLT_Util.hpp"
 
 namespace CBLT {
     extern UT::ui32 gMarkIDfactory;
@@ -24,7 +24,7 @@ namespace CBLT {
             void Draw(void);
         
             // Constructor
-            InfileMark(void);
+            InfileMark(UT::ui32 c, UT::ui32 l);
             
             // Destructor
             ~InfileMark(void);

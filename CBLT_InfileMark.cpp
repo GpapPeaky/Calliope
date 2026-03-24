@@ -19,8 +19,11 @@ namespace CBT {
         return;
     }
     
-    InfileMark::InfileMark(void) {
+    InfileMark::InfileMark(UT::ui32 c, UT::ui32 l) {
         this->id = gMarkIDFactory++;        
+
+        this->col = c;
+        this->line = l;
     }
        
     InfileMark::~InfileMark(void) {}    

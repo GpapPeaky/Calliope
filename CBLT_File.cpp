@@ -661,15 +661,25 @@ namespace CBLT {
     }
     
     void InfileMark::AddMark(UT::ui32 c, UT::ui32 l) {
+        InfileMark im = InfileMark(c, l);
         
-        return;
+        marks.push_back(im);        
     }
     
     void InfileMark::RemoveMark(UT::ui32 i) {
-        return;
+        for (auto& it : marks) {
+            if (it->id == i) {
+                marks.erase(it);
+            }
+        }
     }
  
     void InfileMark::RemoveMark(UT::ui32 c, UT::ui32 l) {
-        return;
+        for (auto& it : marks) {
+            if (it->col == c &&
+                it->line == l) {
+                marks.erase(it);
+            }
+        }
     }
 }
