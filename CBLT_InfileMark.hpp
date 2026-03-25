@@ -7,9 +7,9 @@ namespace CBLT {
 
     class InfileMark {
         private:
-            UT::ui8 id;    // Mark identifier   
-            UT::ui32 col;  // Mark is placed in column 
-            UT::ui32 line; // Mark is placed in line
+            UT::ui32 id;    // Mark identifier
+            UT::ui32 col;   // Mark is placed in column
+            UT::ui32 line;  // Mark is placed in line
         public:
             // Get the mark column
             UT::ui32 Col(void) const ;
@@ -18,7 +18,7 @@ namespace CBLT {
             UT::ui32 Line(void) const ;
             
             // Get the mark identifier
-            UT::ui8 Id(void) const ;
+            UT::ui32 Id(void) const ;
         
             // Draw the mark
             void Draw(void);

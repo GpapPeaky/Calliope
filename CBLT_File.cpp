@@ -660,26 +660,22 @@ namespace CBLT {
         return tokens;
     }
     
-    void InfileMark::AddMark(UT::ui32 c, UT::ui32 l) {
+    void File::AddMark(UT::ui32 c, UT::ui32 l) {
         InfileMark im = InfileMark(c, l);
         
         marks.push_back(im);        
     }
     
-    void InfileMark::RemoveMark(UT::ui32 i) {
-        for (auto& it : marks) {
-            if (it->id == i) {
-                marks.erase(it);
-            }
-        }
+    void File::RemoveMark(UT::ui32 i) {
+        if (marks.at(i))
     }
  
-    void InfileMark::RemoveMark(UT::ui32 c, UT::ui32 l) {
+    void File::RemoveMark(UT::ui32 c, UT::ui32 l) {
         for (auto& it : marks) {
-            if (it->col == c &&
-                it->line == l) {
+            if (it.Col() == c &&
+                it.Line() == l) {
                 marks.erase(it);
             }
         }
     }
-}
+} // CBLT

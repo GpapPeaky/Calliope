@@ -11,7 +11,7 @@ namespace CBT {
         return line;
     }
     
-    UT::ui8 InfileMark::Id(void) const {
+    UT::ui32 InfileMark::Id(void) const {
         return id;
     }
     
