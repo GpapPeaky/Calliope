@@ -547,6 +547,11 @@ namespace CBLT {
             return true;
         }
 
+        // Mark add/remove
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_M)) {
+            Q.Active().AddMark(cursor.Col(), cursor.Line()); // FIXME: Mark remove/add toggle
+        }
+
         // Exit
         if (keyboard.m.ctrl && IsKeyPressed(KEY_E)) {
             exit(UDef::GRACEFUL_EXIT);

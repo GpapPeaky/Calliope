@@ -532,6 +532,11 @@ namespace CBLT {
             EndScissorMode();
         }
 
+        // Draw infile marks
+        for (auto im : marks) {
+            im.Draw(700, 200); // FIXME: Drawing
+        }
+
         autocomplete.DrawSuggestions(cursorX, cursorY);
     }
 
@@ -661,20 +666,29 @@ namespace CBLT {
     }
     
     void File::AddMark(UT::ui32 c, UT::ui32 l) {
+        for (auto it = marks.begin() ; it != marks.end() ; ++it) {
+            if (it->Col() == c && it->Line() == l) {
+                return; // Already exists
+            }
+        }
+
         InfileMark im = InfileMark(c, l);
-        
-        marks.push_back(im);        
+
+        marks.push_back(im);
     }
     
     void File::RemoveMark(UT::ui32 i) {
-        if (marks.at(i))
+        if (i < marks.size()) {
+            marks.erase(marks.begin() + i);
+        }
     }
  
     void File::RemoveMark(UT::ui32 c, UT::ui32 l) {
-        for (auto& it : marks) {
-            if (it.Col() == c &&
-                it.Line() == l) {
+        for (auto it = marks.begin() ; it != marks.end() ; ++it) {
+            if (it->Col() == c && it->Line() == l) {
                 marks.erase(it);
+
+                return; // stop after removing first match
             }
         }
     }

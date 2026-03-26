@@ -1,5 +1,9 @@
 #include <vector>
+#include <string>
 
+#include "CBLT_raylib.hpp"
+#include "CBLT_Font.hpp"
+#include "CBLT_Palette.hpp"
 #include "CBLT_Util.hpp"
 
 namespace CBLT {
@@ -21,7 +25,7 @@ namespace CBLT {
             UT::ui32 Id(void) const ;
         
             // Draw the mark
-            void Draw(void);
+            void Draw(UT::ui32 renderX, UT::ui32 renderY);
         
             // Constructor
             InfileMark(UT::ui32 c, UT::ui32 l);
