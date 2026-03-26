@@ -34,8 +34,16 @@ namespace CBLT {
             InfileAutocomplete autocomplete;                    // Autocomplete system for the file
             std::vector<InfileMark> marks;                      // Infile markings
 
-            // TODO: Infile markings, :mat (at current col/line, assign id = 0 ++, CTRL + M) :um <id> (unmark id) :uml (umark last) :uma (unmark all) :gm <id>(go to marking) :fm (file marks display file mark positions and the lines they are at)
-            //       Draw marks as a medium sized cube with a number inside it at that position
+            // TODO: Infile markings
+            //       :mat    line MARK LINE
+            //       :umat   line UNMARK LINE
+            //       :mcl    MARK CURRENT LINE
+            //       :umcl   UNMARK CURRENT LINE
+            //       :gm     m GOTO MARK ID
+            //       :gml    GO TO LAST MARK
+            //       :uml    UMARK LAST
+            //       :uma    UNMARK ALL
+            //       :im     DISPLAY INFILE MARKS IN SPECIAL MESSAGE AND NEAR LINES
         public:
             // Constructor
             File(void);
