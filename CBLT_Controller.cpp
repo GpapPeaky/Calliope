@@ -547,9 +547,16 @@ namespace CBLT {
             return true;
         }
 
+        // Remove current fragment
+        if (keyboard.m.ctrl && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_X))) {
+            return true;
+        }
+
         // Mark add/remove
         if (keyboard.m.ctrl && IsKeyPressed(KEY_M)) {
-            Q.Active().AddMark(cursor.Col(), cursor.Line()); // FIXME: Mark remove/add toggle
+            if (!Q.Active().AddMark(cursor.Line())) {
+                Q.Active().RemoveMark(cursor.Line());
+            }
         }
 
         // Exit

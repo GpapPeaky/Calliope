@@ -437,7 +437,7 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY) {
+    void File::Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY, UT::b consoleOpen, UT::ui32 consoleWidth) {
         UT::f32 lineHeight = gFont.size;
         
         const UT::f32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
@@ -457,7 +457,7 @@ namespace CBLT {
             gPalette.textSeperators
         );
     
-        for(UT::llui32 i = 0; i < lines.size(); i++) {
+        for(UT::llui32 i = 0 ; i < lines.size() ; i++) {
             Vector2 pos = {
                 textBaseX + CBLT::gOffsets.x,
                 textBaseY + i * lineHeight + lineHeight + CBLT::gOffsets.y
@@ -498,7 +498,7 @@ namespace CBLT {
                     std::string_view tokenText = lineView.substr(t.col, t.len);
                     
                     // By counting glyphs
-                    float tokX = pos.x + t.GetCursorX(lineView, gFont.size, t.col);
+                    UT::f32 tokX = pos.x + t.GetCursorX(lineView, gFont.size, t.col);
                     
                     DrawTextEx(
                         gFont.f,
@@ -532,11 +532,32 @@ namespace CBLT {
             EndScissorMode();
         }
 
-        // Draw infile marks
-        for (auto im : marks) {
-            im.Draw(700, 200); // FIXME: Drawing
-        }
+        // Limit
+        BeginScissorMode(
+            cam.Origin().x,
+            cam.Origin().y,
+            cam.Width(),
+            cam.Height() + FileMargins::UI::TOP_BAR_HEIGHT
+        );
+            // Draw infile marks
+            for (auto& im : marks) {
+                Vector2 pos = {
+                    GetScreenWidth() - (UT::f32)gCharWidth,
+                    textBaseY + im.Line() * lineHeight + lineHeight + gOffsets.y
+                };
 
+                if (consoleOpen) {
+                    pos.x -= consoleWidth;
+                }
+
+                if (!cam.Contains(pos.x, pos.y, (UT::f32)gFont.size, lineHeight))
+                continue;
+
+                im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, gCharWidth); // Kind of shit, might be better for files to OWN their cursors?
+            }
+        
+        EndScissorMode();
+        
         autocomplete.DrawSuggestions(cursorX, cursorY);
     }
 
@@ -665,30 +686,34 @@ namespace CBLT {
         return tokens;
     }
     
-    void File::AddMark(UT::ui32 c, UT::ui32 l) {
+    UT::b File::AddMark(UT::ui32 l) {
         for (auto it = marks.begin() ; it != marks.end() ; ++it) {
-            if (it->Col() == c && it->Line() == l) {
-                return; // Already exists
+            if (it->Line() == l) {
+                return false; // exists
             }
         }
 
-        InfileMark im = InfileMark(c, l);
+        InfileMark im = InfileMark(l);
 
         marks.push_back(im);
+
+        return true; // created
     }
     
-    void File::RemoveMark(UT::ui32 i) {
-        if (i < marks.size()) {
-            marks.erase(marks.begin() + i);
-        }
-    }
- 
-    void File::RemoveMark(UT::ui32 c, UT::ui32 l) {
-        for (auto it = marks.begin() ; it != marks.end() ; ++it) {
-            if (it->Col() == c && it->Line() == l) {
+    void File::RemoveMark(UT::ui32 l) {
+        for (auto it = marks.begin(); it != marks.end(); ++it) {
+            if (it->Line() == l) {
                 marks.erase(it);
-
-                return; // stop after removing first match
+    
+                // Reindex all marks
+                UT::ui32 index = 0;
+                for (auto& mark : marks) {
+                    mark.ReIndex(index++);
+                }
+    
+                gMarkIDFactory = marks.size();
+    
+                return;
             }
         }
     }

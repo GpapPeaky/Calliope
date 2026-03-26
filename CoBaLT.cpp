@@ -23,6 +23,8 @@ UT::i32 main() {
     ctrl.InitCWD("C:/"); // Called only once so we do not crash
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
+    CBLT::gCharWidth = ctrl.GetCursorManager().Primary().charWidth;
+
     UT::ui32 currentFileLineCount; 
     UT::b currentFileDirt; 
     std::string currentFileName;
@@ -54,7 +56,7 @@ UT::i32 main() {
                     // f.Auto().GetSuggestions(c.Fragment()); // We will get suggestions only per insertion
                 }
                 cm.DrawCursors(f.GetLines());
-                f.Draw(cam, c.renderX, c.renderY);
+                f.Draw(cam, c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
                 currentFileLineCount = f.GetLineCount();
                 currentFileDirt      = f.Dirt();
                 currentFileName      = f.Name();

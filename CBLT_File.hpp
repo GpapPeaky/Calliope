@@ -62,7 +62,7 @@ namespace CBLT {
             const std::string& GetPath(void) const;
 
             // Draw the document
-            void Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY);
+            void Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY, UT::b consoleOpen, UT::ui32 consoleWidth);
 
             // Get line count
             UT::ui32 GetLineCount(void) const;
@@ -127,14 +127,11 @@ namespace CBLT {
             // Return the token 2D vector of the file
             std::vector<std::vector<Token>>& Tokens(void);
     
-            // Add a mark at a specific column and line
-            void AddMark(UT::ui32 c, UT::ui32 l);
-            
-            // Remove a specific mark via id
-            void RemoveMark(UT::ui32 i);
+            // Add a mark at a specific line
+            UT::b AddMark(UT::ui32 l);
             
             // Remove a specific mark via position
-            void RemoveMark(UT::ui32 c, UT::ui32 l);
+            void RemoveMark(UT::ui32 l);
     }; // File class
 
     // Fallback file for when there is no active file!
