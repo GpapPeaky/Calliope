@@ -137,6 +137,39 @@
 ### 1.6 Directives Guide
   Here we will anylize all directives and their invoked effect
 
+### 1.7 Markings
+  We are give the chance to *increase infile navigation speed* by marking lines of interest either using the shortcut *CTRL + M* or using the *:mat directive*. We can then go to a specific, or the last placed marking using the *:gm* and *:gml* directives. Removing directives is also as simple as calling the *:umat* directive or *:uml* for removing the last marking or *:uma* for removing all markings. It is important to note that mark ids are all updated so they are always in order and there are no gaps between ids. The marking directives can be used as such:
+
+  ```c
+  :mat <l> // Mark a line (or use LCtrl + M, to mark the cursor's line)
+  ```
+
+  ```c
+  :umat <l> // Unmark a line (or use LCtrl + M, to unmark the cursor's line)
+  ```
+
+  ```c
+  :gm <im> // Go to mark via specific ID
+  ```
+
+  ```c
+  :gml // Go to the last placed mark (marks.size() - 1 in ID)
+  ```
+
+  ```c
+  :uml // Unmark the last placed mark
+  ```
+
+  ```c
+  :uma // Unmark all placed marks
+  ```   
+  ```c
+  :im // Display all infile marks and lines near them
+  ```
+## 1.8 Animator
+
+There is an animator class that uses AnimationProfiles to apply transformations to different objects such as the cursor. There is a way for the user to both change and create his own interpolation behaviour and add it as a new AnimationProfile.
+
 ---
 
 ## Building and Installation

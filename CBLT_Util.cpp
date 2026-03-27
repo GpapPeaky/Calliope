@@ -33,7 +33,4 @@ namespace CBLT {
             }
         } // Func
     } // Utils
-
-    // TODO: Remove this
-    CBLT::Utils::Types::ui32 gCharWidth = 12;
 } // CBLT

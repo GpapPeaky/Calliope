@@ -1,7 +1,5 @@
 #include "CBLT_InfileMark.hpp"
 
-// TODO: Add to readme
-
 namespace CBLT {
     UT::ui32 InfileMark::Line(void) const {
         return line;

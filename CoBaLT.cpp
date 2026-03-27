@@ -23,8 +23,6 @@ UT::i32 main() {
     ctrl.InitCWD("C:/"); // Called only once so we do not crash
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
-    CBLT::gCharWidth = ctrl.GetCursorManager().Primary().charWidth;
-
     UT::ui32 currentFileLineCount; 
     UT::b currentFileDirt; 
     std::string currentFileName;

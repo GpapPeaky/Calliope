@@ -84,9 +84,6 @@ namespace CBLT {
             const CBLT::Utils::Types::f32 TOP_BAR_SEPERATOR_Y = 17.0f;
         } // UI
     } // Margins
-
-    // Character width, needs to be reloaded once the font is changed
-    extern CBLT::Utils::Types::ui32 gCharWidth;
 } // CBLT
 
 // Utlity types definition, easier access

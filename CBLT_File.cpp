@@ -544,7 +544,7 @@ namespace CBLT {
             // Draw infile marks
             for (auto& im : marks) {
                 Vector2 pos = {
-                    GetScreenWidth() - (UT::f32)gCharWidth,
+                    GetScreenWidth() - 15.0f,
                     textBaseY + im.Line() * lineHeight + lineHeight + gOffsets.y
                 };
 
@@ -555,7 +555,7 @@ namespace CBLT {
                 if (!cam.Contains(pos.x, pos.y, (UT::f32)gFont.size, lineHeight))
                 continue;
 
-                im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, gCharWidth); // Kind of shit, might be better for files to OWN their cursors?
+                im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, 15); // Kind of shit, might be better for files to OWN their cursors?
             }
         
         EndScissorMode();
