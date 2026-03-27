@@ -330,6 +330,8 @@ namespace CBLT {
 
         tokens.resize(1);
         lineStartsInBlockComment.resize(1, false);
+
+        markIdFactory = marks.size();
     }
 
     File::~File(void) {}
@@ -695,6 +697,8 @@ namespace CBLT {
 
         InfileMark im = InfileMark(l);
 
+        im.ReIndex(markIdFactory++);
+
         marks.push_back(im);
 
         return true; // created
@@ -711,7 +715,7 @@ namespace CBLT {
                     mark.ReIndex(index++);
                 }
     
-                gMarkIDFactory = marks.size();
+                markIdFactory = marks.size();
     
                 return true;
             }

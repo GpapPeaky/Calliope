@@ -104,8 +104,6 @@ namespace CBLT {
                 }
             }
 
-            // FIXME: Segmentation when switching to another file from a marked one
-
             // Mark at
             if (dir == "mat") {
                 UT::ui32 lineNum = (UT::ui32)std::atoi(directiveParam.c_str());
@@ -740,7 +738,6 @@ namespace CBLT {
                 if (entry.n == directiveLine) {
                     File F;
                     F.Load(entry.n, cwd);
-
                     Q.LoadFileToQueue(F); // Add it to the queue
 
                     dr.message = "CBLT_LOG: SWITCHED TO " + directiveLine;

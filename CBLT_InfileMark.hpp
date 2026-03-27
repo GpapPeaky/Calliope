@@ -7,8 +7,6 @@
 #include "CBLT_Util.hpp"
 
 namespace CBLT {
-    extern UT::ui32 gMarkIDFactory;
-
     class InfileMark {
         private:
             UT::ui32 id;    // Mark identifier

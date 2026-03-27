@@ -503,3 +503,25 @@ CBLT_LOG: NAFname: U=jPh-NUYTRsw`v(@Cd$Cb)d7`@D'QB9}+tPg4<`k:d(GP(=_UVN]QNrc2l"{
 
 CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: vF9&q+1NXvT_bI_6cy&I3X NUw}?Zfnhh(8n[=:Qs8lNA6%/|DcBfE5xsPw/i*=%6)ee@+>nqpJXDt72Z"YI.-R"};O3fFBcLZVb
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E,\V";z/84;[#)*_SbBD#>u1]8dfg8*w41O?Ue0+b[m|B{=87-Y)5Cjm)gW];RoLU$s@_P%gO8V()o&j_o^FS5Sc[Ye$1p\Ok\)zY9!N3jjOY]W_kJsEvFjGYb}}0ZUr@D[}vJr~;-hHh9lN4mogV@k\Q&@j6qD[9h)sW:*!*
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: {$#nEzn8G9@9@?w3g&1$_LJjU}H
+
+CBLT_LOG: DIRECTIVE FAIL: NQ <NOTFOUND>
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: EXIT

@@ -33,6 +33,7 @@ namespace CBLT {
             FileExtension ext;                                  // File's extension, required for language support and tokenization
             InfileAutocomplete autocomplete;                    // Autocomplete system for the file
             std::vector<InfileMark> marks;                      // Infile markings
+            UT::ui32 markIdFactory;                             // Mark id factory
 
             // TODO: Infile markings
             //       :gm     m GOTO MARK ID

@@ -3,8 +3,6 @@
 // TODO: Add to readme
 
 namespace CBLT {
-    UT::ui32 gMarkIDFactory = 0;
-
     UT::ui32 InfileMark::Line(void) const {
         return line;
     }
@@ -34,7 +32,7 @@ namespace CBLT {
     }
     
     InfileMark::InfileMark(UT::ui32 l) {
-        this->id = gMarkIDFactory++;        
+        this->id = 0;    
 
         this->line = l;
     }
