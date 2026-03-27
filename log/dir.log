@@ -381,3 +381,125 @@ CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
 CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
 CBLT_LOG: DIRECTIVE: NQ a.c
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: {VG1Ks<#e5lz}h"gc9ZHO4-=MLN!h$EAo8^-nAualJ^!^<qDj$H4Iiw4j-&9LOlLuvCR?+?AfZqVG>U4>'N?>5.S\ ~2NpKVSSf7[RV5zo70
+
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: FBO8 dU,.M6-wx( 3~I,%"jx-E{+K}0fZPrt7A
+
+CBLT_LOG: DIRECTIVE FAIL: MARK 2 <NOLINE>
+CBLT_LOG: DIRECTIVE: MARK 2
+CBLT_LOG: DIRECTIVE: MARK 0
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: MARK 1
+CBLT_LOG: DIRECTIVE: MARK 0
+CBLT_LOG: DIRECTIVE FAIL: MARK 2 <NOLINE>
+CBLT_LOG: DIRECTIVE: MARK 2
+CBLT_LOG: DIRECTIVE FAIL: MARK 2 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: MARK 2
+CBLT_LOG: DIRECTIVE FAIL: MARK 2 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: MARK 2
+CBLT_LOG: DIRECTIVE FAIL: MARK 0 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: MARK 0
+CBLT_LOG: DIRECTIVE FAIL: MARK 5 <NOLINE>
+CBLT_LOG: DIRECTIVE: MARK 5
+CBLT_LOG: DIRECTIVE FAIL: MARK 6 <NOLINE>
+CBLT_LOG: DIRECTIVE: MARK 6
+CBLT_LOG: DIRECTIVE FAIL: MARK 0 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: MARK 0
+CBLT_LOG: DIRECTIVE FAIL: MARK 2 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: MARK 2
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: QYCn?[1Q~e%TLbi@e`3<`Fr0mW)"l:w8&lA?\-EWdwVcmo-nsD6|; w[bf}}YZg{ItNOoV#r?7x\bC.*0
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE FAIL: MARK 1 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: MARK 2
+CBLT_LOG: DIRECTIVE FAIL: MARK 6 <NOLINE>
+CBLT_LOG: DIRECTIVE FAIL: MARK 6 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE FAIL: MARK 7 <NOLINE>
+CBLT_LOG: DIRECTIVE FAIL: MARK 7 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: >4c.QXlfyUM{hiO%T=|)d(IJANbdW;t1"VEO-aXFY-R^+4_M5eOGB|(k>8 j],)WE3?}&0p%LYUR,)vTQ(YrT.U\r@qg;:|Pb:O2^o=\{zFyuIm4+eSp1{/+7M'AYe2W}A]BSK~7~ds V$!L1>;GAQd@'|Bvq*Y8^<"I0b4/(hQ><]WP@-p5%|#dOG(N&7<?]M%p,$_l)LP96vjYw]hg@;OcDmIgQgqmLcW{#z5hVV(r
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE FAIL: MARK 20 <NOLINE>
+CBLT_LOG: DIRECTIVE FAIL: MARK 20 <NOLINE>
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: q\3&tg{7-*M%4hSoU&;8oR$9rRrF^%<Y|nZ[#4:J[Lwt.dBeku2Gi;!BhWxr##B.H5,.>%HEj"JKIrR;u!,DX/_{!S
+
+CBLT_LOG: DIRECTIVE FAIL: MARK 5656 <NOLINE>
+CBLT_LOG: DIRECTIVE FAIL: NQ <NOTFOUND>
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE FAIL: MARK 25 <NOLINE>
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: *TRsT~sOtSS+2*&`#dn\DO-fS25pBLkw|oQbfN_}Z/CH(""T@WOo)"y`#8U!2Dv9Eu~o#GO5+L1zF*+!pW~]{|uz3=`#OetzFlq-Zj|>LT!GH"Fakv'o]|sw&o4'MtZFjjmSOQ<!DF(dHyVz?gGdxs@x%Kex
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: MARK 1
+CBLT_LOG: DIRECTIVE FAIL: MARK 1 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE FAIL: MARK 21 <NOLINE>
+CBLT_LOG: DIRECTIVE: MARK 18
+CBLT_LOG: DIRECTIVE FAIL: MARK 19 <NOLINE>
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 7jx-]C/W<.6Ce8]Lfo955pn~g&,iaFU;V~_d(8f-(+EH,43XD~0L!ixarbwJa2}8/1-'zlU<z>*=Fvq~T%XE&%%l*[)U-%"A'i.8cTINgT[\QT.>!+<sM!8t?
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 12m8x
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: MARK 1
+CBLT_LOG: DIRECTIVE FAIL: MARK 1 <MARKEXISTS>
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: q/R5[\H:&Yf69&V+<aHy0DJ&O152Lc@]zk3`i5jPc1k{v-20~T;)'(oMjBMRaNSSCiin-8Or)q?RB&m2a@RG-ZIqoUFd:&<RT-
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: UNMARK 0
+CBLT_LOG: DIRECTIVE FAIL: NQ <NOTFOUND>
+CBLT_LOG: DIRECTIVE FAIL: UNMARK 0 <MARKNOTEXISTS>
+CBLT_LOG: DIRECTIVE FAIL: MARK 10 <NOLINE>
+CBLT_LOG: DIRECTIVE: MARK 1
+CBLT_LOG: DIRECTIVE: UNMARK 1
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: U=jPh-NUYTRsw`v(@Cd$Cb)d7`@D'QB9}+tPg4<`k:d(GP(=_UVN]QNrc2l"{d:(Gfe];=iGbD/
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: EXIT

@@ -35,10 +35,6 @@ namespace CBLT {
             std::vector<InfileMark> marks;                      // Infile markings
 
             // TODO: Infile markings
-            //       :mat    line MARK LINE
-            //       :umat   line UNMARK LINE
-            //       :mcl    MARK CURRENT LINE
-            //       :umcl   UNMARK CURRENT LINE
             //       :gm     m GOTO MARK ID
             //       :gml    GO TO LAST MARK
             //       :uml    UMARK LAST
@@ -139,7 +135,7 @@ namespace CBLT {
             UT::b AddMark(UT::ui32 l);
             
             // Remove a specific mark via position
-            void RemoveMark(UT::ui32 l);
+            UT::b RemoveMark(UT::ui32 l);
     }; // File class
 
     // Fallback file for when there is no active file!

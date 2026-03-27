@@ -104,6 +104,72 @@ namespace CBLT {
                 }
             }
 
+            // FIXME: Segmentation when switching to another file from a marked one
+
+            // Mark at
+            if (dir == "mat") {
+                UT::ui32 lineNum = (UT::ui32)std::atoi(directiveParam.c_str());
+            
+                if (lineNum >= f.GetLineCount()) {
+                    dr.message = "CBLT_ERR: INVALID LINE TO MARK";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: MARK " + directiveParam + " <NOLINE>");
+                
+                    dirRes = dr;
+                    directive.Clear();
+
+                    return;
+                }
+            
+                UT::b added = f.AddMark(lineNum);
+            
+                if (!added) {
+                    dr.message = "CBLT_ERR: MARK ALREADY EXISTS";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: MARK " + directiveParam + " <MARKEXISTS>");
+                    
+                    dirRes = dr;
+                } else {
+                    CBLT::Utils::Err::Log("DIRECTIVE: MARK " + directiveParam);
+                }
+            
+                directive.Clear();
+                
+                return;
+            }
+
+            // Unmark line
+            if (dir == "umat") {
+                UT::ui32 lineNum = (UT::ui32)std::atoi(directiveParam.c_str());
+            
+                if (lineNum >= f.GetLineCount()) {
+                    dr.message = "CBLT_ERR: INVALID LINE TO MARK";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: MARK " + directiveParam + " <NOLINE>");
+                    
+                    dirRes = dr;
+                    directive.Clear();
+                    
+                    return;
+                }
+
+                UT::b removed = f.RemoveMark(lineNum);
+
+                if (!removed) {
+                    dr.message = "CBLT_ERR: MARK DOESN'T EXIST";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: UNMARK " + directiveParam + " <MARKNOTEXISTS>");
+                    
+                    dirRes = dr;
+                } else {
+                    CBLT::Utils::Err::Log("DIRECTIVE: UNMARK " + directiveParam);
+                }
+
+                directive.Clear();
+
+                return;
+            }
+
             // Exit
             else if (dir == "e") {
                 CBLT::Utils::Err::Log("DIRECTIVE: EXIT");

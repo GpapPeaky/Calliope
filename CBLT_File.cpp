@@ -700,7 +700,7 @@ namespace CBLT {
         return true; // created
     }
     
-    void File::RemoveMark(UT::ui32 l) {
+    UT::b File::RemoveMark(UT::ui32 l) {
         for (auto it = marks.begin(); it != marks.end(); ++it) {
             if (it->Line() == l) {
                 marks.erase(it);
@@ -713,8 +713,10 @@ namespace CBLT {
     
                 gMarkIDFactory = marks.size();
     
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 } // CBLT
