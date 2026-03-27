@@ -723,4 +723,12 @@ namespace CBLT {
 
         return false;
     }
+
+    std::vector<InfileMark>& File::Marks(void) {
+        return marks;
+    }
+
+    UT::ui32& File::MarkIdFactory(void) {
+        return markIdFactory;
+    }
 } // CBLT

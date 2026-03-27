@@ -34,13 +34,6 @@ namespace CBLT {
             InfileAutocomplete autocomplete;                    // Autocomplete system for the file
             std::vector<InfileMark> marks;                      // Infile markings
             UT::ui32 markIdFactory;                             // Mark id factory
-
-            // TODO: Infile markings
-            //       :gm     m GOTO MARK ID
-            //       :gml    GO TO LAST MARK
-            //       :uml    UMARK LAST
-            //       :uma    UNMARK ALL
-            //       :im     DISPLAY INFILE MARKS IN SPECIAL MESSAGE AND NEAR LINES
         public:
             // Constructor
             File(void);
@@ -137,6 +130,12 @@ namespace CBLT {
             
             // Remove a specific mark via position
             UT::b RemoveMark(UT::ui32 l);
+
+            // Get the file marks
+            std::vector<InfileMark>& Marks(void);
+
+            // Mark id factory
+            UT::ui32& MarkIdFactory(void);
     }; // File class
 
     // Fallback file for when there is no active file!

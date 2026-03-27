@@ -105,7 +105,7 @@ namespace CBLT {
             }
 
             // Mark at
-            if (dir == "mat") {
+            else if (dir == "mat") {
                 UT::ui32 lineNum = (UT::ui32)std::atoi(directiveParam.c_str());
             
                 if (lineNum >= f.GetLineCount()) {
@@ -137,7 +137,7 @@ namespace CBLT {
             }
 
             // Unmark line
-            if (dir == "umat") {
+            else if (dir == "umat") {
                 UT::ui32 lineNum = (UT::ui32)std::atoi(directiveParam.c_str());
             
                 if (lineNum >= f.GetLineCount()) {
@@ -165,6 +165,109 @@ namespace CBLT {
 
                 directive.Clear();
 
+                return;
+            }
+
+            // Go to mark
+            else if (dir == "gm") {
+                UT::ui32 markId = (UT::ui32)std::atoi(directiveParam.c_str());
+
+                std::vector<InfileMark> marks = f.Marks();
+                
+                if (markId >= marks.size()) {
+                    dr.message = "CBLT_ERR: INVALID MARK TO GO TO";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <NOTFOUND>");
+
+                    dirRes = dr;
+                } else {
+                    UT::ui32 lineNum = marks.at(markId).Line();
+
+                    // Pass the valid goto directive
+                    directive.Becomes(":g " + std::to_string(lineNum));
+
+                    Execute(Q, cwd, c);
+                }
+
+                directive.Clear();
+
+                return;
+            }
+
+            // Go to last mark
+            else if (dir == "gml") {
+                std::vector<InfileMark> marks = f.Marks();
+
+                UT::ui32 markId = marks.size() - 1;
+
+                // Give it to goto mark to figure it out
+                directive.Becomes(":gm " + std::to_string(markId));
+
+                Execute(Q, cwd, c);
+            }
+
+            // Remove last mark
+            else if (dir == "uml") {
+                if (f.Marks().empty()) {
+                    dr.message = "CBLT_ERR: NO MARKS TO REMOVE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: UNMARK <MARKNOTEXISTS>");
+                    
+                    dirRes = dr;
+                    directive.Clear();
+                    
+                    return;
+                }
+            
+                UT::ui32 lastLine = f.Marks().back().Line();
+                f.RemoveMark(lastLine); // operates on the real vector
+            
+                CBLT::Utils::Err::Log("DIRECTIVE: UNMARK LAST " + std::to_string(lastLine));
+                
+                directive.Clear();
+
+                return;
+            }
+
+            // Unmark all
+            else if (dir == "uma") {
+                if (f.Marks().empty()) {
+                    dr.message = "CBLT_ERR: NO MARKS TO REMOVE";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: UNMARK <MARKNOTEXISTS>");
+                    
+                    dirRes = dr;
+                    directive.Clear();
+                    
+                    return;
+                }
+
+                // Logging requirement
+                while (!f.Marks().empty()) {
+                    directive.Becomes(":uml");
+
+                    Execute(Q, cwd, c); // Recursively remove the last elements so we do not run to indexing problems
+                }
+
+                dr.message = "CBLT_LOG: REMOVED ALL INFILE MARKS";
+                dr.messageType = ConsoleMessage::INFO;
+                
+                dirRes = dr;
+
+                // Hardline removal
+
+                f.Marks().clear();
+                f.MarkIdFactory() = 0;
+
+                directive.Clear();
+
+                return;
+            }
+
+            // TODO:
+            // Display Infile Marks with nearby data
+            else if (dir == "im") {
                 return;
             }
 
@@ -587,7 +690,6 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    // FIXME: "" Bad
                     c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
@@ -616,7 +718,6 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    // FIXME: "" Bad
                     c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
@@ -645,7 +746,6 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    // FIXME: "" Bad
                     c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
@@ -670,7 +770,6 @@ namespace CBLT {
 
                     Q.CloseFile(Q.Index());
 
-                    // FIXME: "" Bad
                     c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents

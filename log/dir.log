@@ -525,3 +525,169 @@ CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
 CBLT_LOG: DIRECTIVE: NQ file.txt
 CBLT_LOG: DIRECTIVE: NQ new.c
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: B{n~|ih-r!8.m=cF2I,YL.%~S+gF^`eP?nveh7s,Q>Q{etD[G|f_lTtI0,I'_.$;i9.7Rm{6%<K^e=qAV|0VTZfL(U|@:U,%lE|V[L%ml#_^^,C)]nCYBo9s,3w<6YI$>ox)u4p(y)i fml4H8^C3H%E~>+rDJ@z}KkzFZ[Wk
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: ?"SN;Q8NT{zD?f@.q?^B0/mx+cO"40-
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: K<1yL+bh-u3cDaP;Mi<:zO[-Qc}I"7E1]8l
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: #ad0HC3dE8sNfC@|v>t@H{:&9#n &Cv;t=At S[?yYq1kX6o"U*;&am'KtcWMlKxWV#]i/YV-V@q|s5 _<<pa\!],&Z[P4#AnJ)shZ.(/q.ktz$OYC?MTGaU}X^^Jw_=QQ.mKFsxAmu Oi;tz"[.UB\!#t\-7=Nujc=G%,V:267<f6Gbm.wm6+CC5)F<PqRFhc#PW8ed5CL8#?{%M!N-z9K6ptE.IvUWmW8WVMpz@8.EB"01CPrU
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: ;n*tGV&h^"O{f.$KSgfO+-cPf;O j|C{ftJF_W0QNgcT@b6Bz@~=<xu^y8T3 3HO6Sr< l3?S[KYR<`\w@t *p%^W{px{2HF:xgQz;[X!l\\OnH,
+
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: g/k8mZ%`2<WLpR@=3K<ujJ$_ZqX966M2E)_N@hm}:YXA<VoWSsA"9Ck:IrkXa_12GNXlk"3,!^@=D_mKsV$'*l&M6(Nojm\U;PS]rjOWQ+;r(pMVP'BQ"^I5^&Af&crc.vDRGXAUn?Z?f6S&QC7m00hh&vB-d_=;y*/jZ!&Ug8ej-3=>dF[6nM`nQIB]~}z_D2q[%w@IiO}G"9N>dMX"Uy0R(+4r?DJ:|wQ6=BUS/<l6e$I
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: GOTO 17
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: Mj9
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: GOTO 4
+CBLT_LOG: DIRECTIVE: GOTO 31
+CBLT_LOG: DIRECTIVE: GOTO 4
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: .^ncSOSp-XJg+qFkA _2iD>d?Su`E{O1(c-0s6gi_]x?I3#Zrm.hY"8beUE2
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: UNMARK 1
+CBLT_LOG: DIRECTIVE: GOTO 6
+CBLT_LOG: DIRECTIVE: GOTO 8
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ huge_file.c
+CBLT_LOG: DIRECTIVE: UNMARK 8
+CBLT_LOG: DIRECTIVE: UNMARK 8
+CBLT_LOG: DIRECTIVE: UNMARK 8
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: D"M<JZ_:bwxBp~c$^ZL#4pl^dO[|?+fW3p!g>9u)Zg7*9k,We:x(?.Xh3YZ?{+E~_<Pa#',1h};kPdO/5Y}bcP:FdSVy}K-7etTDz)`uK2{?``j=MdHm;n[pg*'%s:aN3U!Zt#QC9X`?@$<gf%+/h]uIXPwP9Q:lh=v`!FD'BC^}R<M65H&a~W#IW
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 10
+CBLT_LOG: DIRECTIVE: UNMARK LAST 9
+CBLT_LOG: DIRECTIVE: UNMARK LAST 8
+CBLT_LOG: DIRECTIVE: UNMARK LAST 7
+CBLT_LOG: DIRECTIVE: UNMARK LAST 6
+CBLT_LOG: DIRECTIVE: UNMARK LAST 5
+CBLT_LOG: DIRECTIVE: UNMARK LAST 4
+CBLT_LOG: DIRECTIVE FAIL: UNMARK <MARKNOTEXISTS>
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 0>&pEjPvEWBPhJhE5c*E!:6we OSU(56`'P,EWHID-M(\Uz\=871jrQ+h%lZ' oziW
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: UNMARK LAST 12
+CBLT_LOG: DIRECTIVE: GOTO 11
+CBLT_LOG: DIRECTIVE: UNMARK LAST 11
+CBLT_LOG: DIRECTIVE: UNMARK 0
+CBLT_LOG: DIRECTIVE: UNMARK 1
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 3
+CBLT_LOG: DIRECTIVE: UNMARK 4
+CBLT_LOG: DIRECTIVE: UNMARK 5
+CBLT_LOG: DIRECTIVE: UNMARK 6
+CBLT_LOG: DIRECTIVE: UNMARK 0
+CBLT_LOG: DIRECTIVE: UNMARK 1
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 3
+CBLT_LOG: DIRECTIVE: UNMARK 4
+CBLT_LOG: DIRECTIVE: UNMARK 5
+CBLT_LOG: DIRECTIVE: UNMARK 6
+CBLT_LOG: DIRECTIVE: NQ temp.py
+CBLT_LOG: DIRECTIVE: UNMARK 0
+CBLT_LOG: DIRECTIVE: UNMARK 1
+CBLT_LOG: DIRECTIVE: UNMARK 2
+CBLT_LOG: DIRECTIVE: UNMARK 3
+CBLT_LOG: DIRECTIVE: UNMARK 4
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: i&8'Nms2DeCFjP\R9JqdF7{sZ!$C"\4Umt{bh"1!f3=D8~;77yMQpa^d~;AyQ{{H|+z|QA7AZMebXY)Y]Kcd]G}?>Qv7`ZKxk,9r'3j;*Bpj+;ZHD-0igv>
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T\.tests
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 14
+CBLT_LOG: DIRECTIVE: UNMARK LAST 13
+CBLT_LOG: DIRECTIVE: UNMARK LAST 12
+CBLT_LOG: DIRECTIVE: UNMARK LAST 11
+CBLT_LOG: DIRECTIVE: UNMARK LAST 10
+CBLT_LOG: DIRECTIVE: UNMARK LAST 9
+CBLT_LOG: DIRECTIVE: UNMARK LAST 8
+CBLT_LOG: DIRECTIVE: UNMARK LAST 7
+CBLT_LOG: DIRECTIVE: UNMARK LAST 6
+CBLT_LOG: DIRECTIVE: UNMARK LAST 2
+CBLT_LOG: DIRECTIVE: UNMARK LAST 1
+CBLT_LOG: DIRECTIVE: UNMARK LAST 7
+CBLT_LOG: DIRECTIVE: UNMARK LAST 4
+CBLT_LOG: DIRECTIVE: GOTO 8
+CBLT_LOG: DIRECTIVE: EXIT
