@@ -39,7 +39,7 @@ UT::i32 main() {
             ctrl.Update();
 
             // No heap alloc, no copies, no runtime cost
-            CBLT::CursorManager& cm = ctrl.GetCursorManager();
+            CBLT::CursorManager& cm = ctrl.GetActiveCursorManager();
             CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
             CBLT::FileQueue& fq = ctrl.LoadedFileQueue();

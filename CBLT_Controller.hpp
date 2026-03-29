@@ -18,7 +18,6 @@ namespace CBLT {
     // Basic controller and input handling
     class Controller {
         private:
-            CBLT::CursorManager cursorManager;            // Cursor manager
             CBLT::Keyboard keyboard;                      // Keyboard
             CBLT::FileQueue Q;                            // Current open document
             CBLT::Console console;                        // Console
@@ -62,14 +61,8 @@ namespace CBLT {
             // Get the console, mutable access
             Console& GetConsole(void);
 
-            // Get the cursor manager, read only
-            const CBLT::CursorManager& GetCursorManager(void) const;
-
-            // Get the cursor manager, mutable access
-            CBLT::CursorManager& GetCursorManager(void);
-
-            // Check line and file lengths to limit cursor movement
-            void ClampCursor(Cursor& cursor);
+            // Get the cursor manager of the active file, mutable access
+            CBLT::CursorManager& GetActiveCursorManager(void);
 
             // Get pressed key queue so as to not consume instantly anything
             std::vector<char> GetKeyQueue(void);

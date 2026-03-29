@@ -544,7 +544,7 @@ namespace CBLT {
             // Draw infile marks
             for (auto& im : marks) {
                 Vector2 pos = {
-                    GetScreenWidth() - 15.0f,
+                    GetScreenWidth() - 40.0f,
                     textBaseY + im.Line() * lineHeight + lineHeight + gOffsets.y
                 };
 
@@ -555,9 +555,8 @@ namespace CBLT {
                 if (!cam.Contains(pos.x, pos.y, (UT::f32)gFont.size, lineHeight))
                 continue;
 
-                im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, 15); // Kind of shit, might be better for files to OWN their cursors?
+                im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, 40); // Kind of shit, might be better for files to OWN their cursors?
             }
-        
         EndScissorMode();
         
         autocomplete.DrawSuggestions(cursorX, cursorY);
@@ -730,5 +729,19 @@ namespace CBLT {
 
     UT::ui32& File::MarkIdFactory(void) {
         return markIdFactory;
+    }
+
+    CursorManager& File::Cursors(void) {
+        return cursors;
+    }
+
+    void File::ClampCursor(Cursor& c) {
+        UT::ui32 newLine = std::min(c.Line(), static_cast<UT::ui32>(GetLineCount()) - 1);
+
+        c.SetAt(
+            std::min(c.Col(), static_cast<UT::ui32>(GetLineLength(c.Line()))),
+            newLine,
+            GetCurrentLine(newLine)
+        );
     }
 } // CBLT

@@ -113,7 +113,6 @@ namespace CBLT {
         UT::ui32 col = cursor.Col();
         File& f = Q.Active();
 
-
         if (col == 0) return false; // No identation to check
 
         const std::string& line = f.GetCurrentLine(cursor.Line());
@@ -473,7 +472,6 @@ namespace CBLT {
         // ESCAPE ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
         
         // Close message
         if (IsKeyPressed(KEY_ESCAPE) && console.Message().messageType != ConsoleMessage::NONE) {
@@ -509,7 +507,7 @@ namespace CBLT {
         // Create cursors down
         if (keyboard.m.ctrl && keyboard.m.alt && (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN))) {
             gSound.Play(SoundClass::SOUND_INFILE_NAV);
-            cursorManager.RequestLead();
+            GetActiveCursorManager().RequestLead();
 
             return true;
         }
@@ -517,7 +515,7 @@ namespace CBLT {
         // Create cursors up
         if (keyboard.m.ctrl && keyboard.m.alt && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
             gSound.Play(SoundClass::SOUND_INFILE_NAV);
-            cursorManager.RequestTrail();
+            GetActiveCursorManager().RequestTrail();
 
             return true;
         } // FIXME: They are not clipped and show on top of the topbar
@@ -528,11 +526,22 @@ namespace CBLT {
 
         // Delete current line
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
+            File& f = Q.Active();
+            UT::ui32 lineToDel = cursor.Line();
+
             gSound.Play(SoundClass::SOUND_INFILE_DELETE);
             
-            SetClipboardText(Q.Active().GetCurrentLine(cursor.Line()).c_str());
+            SetClipboardText(f.GetCurrentLine(lineToDel).c_str());
             
-            Q.Active().DeleteLine(cursor.Line());
+            for (auto& im : f.Marks()) {
+                if (lineToDel == im.Line()) {
+                    f.RemoveMark(lineToDel); // Matching line to mark -> delete mark and ReIndex all other marks
+                    break;
+                }
+            }
+            
+            // Delete the actual line after removing any marks
+            f.DeleteLine(lineToDel);
 
             if (cursor.Line() > 0 && cursor.Line() < Q.Active().GetLineCount()) {
                 cursor.SetAt(cursor.Col(), cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
@@ -548,7 +557,7 @@ namespace CBLT {
         }
 
         // Remove current fragment
-        if (keyboard.m.ctrl && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_X))) {
+        if (keyboard.m.ctrl && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))) {
             return true;
         }
 
@@ -580,7 +589,7 @@ namespace CBLT {
 
         // Reset to primary cursor
         if (keyboard.m.ctrl && IsKeyPressed(KEY_P)) {
-            cursorManager.RequestReset();
+            GetActiveCursorManager().RequestReset();
 
             return true;
         }
@@ -589,7 +598,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_H)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":h";
-            console.Execute(Q, cwd, cursor);
+             console.Execute(Q, cwd);
 
             return true;
         }
@@ -598,7 +607,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_G)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":ge";
-            console.Execute(Q, cwd, cursor);
+             console.Execute(Q, cwd);
 
             return true;
         }
@@ -607,7 +616,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_O)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":o";
-            console.Execute(Q, cwd, cursor);
+             console.Execute(Q, cwd);
 
             return true;
         }
@@ -616,7 +625,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_I)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":i";
-            console.Execute(Q, cwd, cursor);
+             console.Execute(Q, cwd);
 
             return true;
         }
@@ -677,36 +686,36 @@ namespace CBLT {
 
         // Go to next loaded file
         if (keyboard.m.ctrl && IsKeyPressed(KEY_PERIOD)) {
-            UT::ui32 currentLine = cursor.Line();
+            // UT::ui32 currentLine = cursor.Line();
             
             Q.SetActiveNext();
             
-            File& newFile = Q.Active();
-            UT::ui32 newLineCount = newFile.GetLineCount();
+            // File& newFile = Q.Active();
+            // UT::ui32 newLineCount = newFile.GetLineCount();
             
-            if (currentLine >= newLineCount && newLineCount > 0) {
-                cursor.SetAt(0, newLineCount - 1, newFile.GetCurrentLine(newLineCount - 1));
-            } else {
-                cursor.SetAt(0, currentLine, newFile.GetCurrentLine(currentLine));
-            }
+            // if (currentLine >= newLineCount && newLineCount > 0) {
+            //     cursor.SetAt(0, newLineCount - 1, newFile.GetCurrentLine(newLineCount - 1));
+            // } else {
+            //     cursor.SetAt(0, currentLine, newFile.GetCurrentLine(currentLine));
+            // }
 
             return true;
         }
 
         // Go to previous loaded file
         if (keyboard.m.ctrl && IsKeyPressed(KEY_COMMA)) {
-            UT::ui32 currentLine = cursor.Line();
+            // UT::ui32 currentLine = cursor.Line();
             
             Q.SetActivePrev();
             
-            File& newFile = Q.Active();
-            UT::ui32 newLineCount = newFile.GetLineCount();
+            // File& newFile = Q.Active();
+            // UT::ui32 newLineCount = newFile.GetLineCount();
             
-            if (currentLine >= newLineCount && newLineCount > 0) {
-                cursor.SetAt(0, newLineCount - 1, newFile.GetCurrentLine(newLineCount - 1));
-            } else {
-                cursor.SetAt(0, currentLine, newFile.GetCurrentLine(currentLine));
-            }
+            // if (currentLine >= newLineCount && newLineCount > 0) {
+            //     cursor.SetAt(0, newLineCount - 1, newFile.GetCurrentLine(newLineCount - 1));
+            // } else {
+            //     cursor.SetAt(0, currentLine, newFile.GetCurrentLine(currentLine));
+            // }
         
             return true;
         }
@@ -715,7 +724,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_Q)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":q";
-            console.Execute(Q, cwd, cursor);
+             console.Execute(Q, cwd);
         
             return true;
         }
@@ -765,7 +774,7 @@ namespace CBLT {
 
             // Execute written directive
             if (IsKeyPressed(KEY_ENTER)) {
-                console.Execute(Q, cwd, cursorManager.Primary());
+                console.Execute(Q, cwd);
             }
 
             // Delete
@@ -836,9 +845,9 @@ namespace CBLT {
         // Get pressed keys
         std::vector<char> keyQueue = GetKeyQueue();
 
-        cursorManager.HandlePendingRequests(Q.Active().GetLineCount());
+        GetActiveCursorManager().HandlePendingRequests(Q.Active().GetLineCount());
 
-        for(auto& c : cursorManager.activeCursors) {
+        for(auto& c : GetActiveCursorManager().activeCursors) {
             // HandleShorcuts();
             CBLT::CursorMode m = c.GetMode();
 
@@ -861,7 +870,7 @@ namespace CBLT {
                     }
 
 
-                    ClampCursor(c); // Clamp cursor inside file bounds
+                    Q.Active().ClampCursor(c); // Clamp cursor inside file bounds
                     c.ClampToCamera(camera, Q.Active().GetCurrentLine(c.Line()));
 
                     break;
@@ -889,26 +898,8 @@ namespace CBLT {
         return console;
     }
 
-    const CBLT::CursorManager& Controller::GetCursorManager(void) const {
-        return cursorManager;
-    }
-
-    CBLT::CursorManager& Controller::GetCursorManager(void) {
-        return cursorManager;
-    }
-
-    void Controller::ClampCursor(Cursor& c) {
-        File& f = Q.Active();
-
-        if (Q.Size() == 0) return; // Nothing to do
-
-        UT::ui32 newLine = std::min(c.Line(), static_cast<UT::ui32>(f.GetLineCount()) - 1);
-
-        c.SetAt(
-            std::min(c.Col(), static_cast<UT::ui32>(f.GetLineLength(c.Line()))),
-            newLine,
-            f.GetCurrentLine(newLine)
-        );
+    CBLT::CursorManager& Controller::GetActiveCursorManager(void) {
+        return Q.Active().Cursors();
     }
 
     std::vector<char> Controller::GetKeyQueue(void) {
@@ -964,13 +955,14 @@ namespace CBLT {
         UT::i32 scroll = (UT::i32)GetMouseWheelMove();
         File& f = Q.Active();
     
-        for (auto& cursor : cursorManager.activeCursors) {
+        for (auto& cursor : GetActiveCursorManager().activeCursors) {
             if (scroll < 0 && cursor.Line() + 1 < f.GetLineCount()) {
                 cursor.SetAt(cursor.Col(), cursor.Line() + 1, f.GetCurrentLine(cursor.Line() + 1));
             } else if (scroll > 0 && cursor.Line() > 0) {
                 cursor.SetAt(cursor.Col(), cursor.Line() - 1, f.GetCurrentLine(cursor.Line() - 1));
             }
-            ClampCursor(cursor);
+
+            f.ClampCursor(cursor);
         }
     }
 
@@ -988,7 +980,7 @@ namespace CBLT {
             return;
     
         File& f = Q.Active();
-        Cursor& c = cursorManager.Primary();
+        Cursor& c = GetActiveCursorManager().Primary();
     
         // Base offsets (same ones used in DrawSelection / File::Draw)
         UT::ui32 baseX =
@@ -1048,7 +1040,7 @@ namespace CBLT {
             col = f.GetLineLength(line);
     
         // Reset other cursors
-        cursorManager.RemoveSecondaries();
+        GetActiveCursorManager().RemoveSecondaries();
     
         c.SetAt(col, line, f.GetCurrentLine(line));
         c.StopSelection(); // ensure we exit select mode

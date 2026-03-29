@@ -34,6 +34,7 @@ namespace CBLT {
             InfileAutocomplete autocomplete;                    // Autocomplete system for the file
             std::vector<InfileMark> marks;                      // Infile markings
             UT::ui32 markIdFactory;                             // Mark id factory
+            CursorManager cursors;                              // Cursor manager for the file, handles cursor position and movement
         public:
             // Constructor
             File(void);
@@ -136,6 +137,12 @@ namespace CBLT {
 
             // Mark id factory
             UT::ui32& MarkIdFactory(void);
+
+            // Get the file's cursors
+            CursorManager& Cursors(void);
+
+            // Check line and file lengths to limit cursor movement
+            void ClampCursor(Cursor& cursor);
     }; // File class
 
     // Fallback file for when there is no active file!

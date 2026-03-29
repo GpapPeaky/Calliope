@@ -47,11 +47,12 @@ namespace CBLT {
         return toggled;
     }
 
-    void Console::Execute(FileQueue& Q, std::string& cwd, Cursor& c) {
+    void Console::Execute(FileQueue& Q, std::string& cwd) {
         namespace fs = std::filesystem;
 
         File& f = Q.Active();
-        
+        Cursor& c = f.Cursors().Primary(); // Primary cursor of file object
+
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
 
         std::string directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
@@ -187,7 +188,7 @@ namespace CBLT {
                     // Pass the valid goto directive
                     directive.Becomes(":g " + std::to_string(lineNum));
 
-                    Execute(Q, cwd, c);
+                    Execute(Q, cwd);
                 }
 
                 directive.Clear();
@@ -204,7 +205,7 @@ namespace CBLT {
                 // Give it to goto mark to figure it out
                 directive.Becomes(":gm " + std::to_string(markId));
 
-                Execute(Q, cwd, c);
+                Execute(Q, cwd);
             }
 
             // Remove last mark
@@ -247,7 +248,7 @@ namespace CBLT {
                 while (!f.Marks().empty()) {
                     directive.Becomes(":uml");
 
-                    Execute(Q, cwd, c); // Recursively remove the last elements so we do not run to indexing problems
+                    Execute(Q, cwd); // Recursively remove the last elements so we do not run to indexing problems
                 }
 
                 dr.message = "CBLT_LOG: REMOVED ALL INFILE MARKS";
@@ -320,7 +321,7 @@ namespace CBLT {
             else if (dir == "up") {
                 // cd .. 
                 directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":cd ..";
-                Execute(Q, cwd, c); // Retry, absolute shit code, but ehh..
+                Execute(Q, cwd); // Retry, absolute shit code, but ehh..
             }
 
             // Create a directory, check if directory exists
