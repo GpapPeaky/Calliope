@@ -452,7 +452,7 @@ namespace CBLT {
                     F.Load(directiveParam, cwd);
                     Q.LoadFileToQueue(F);
 
-                    c.SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Move main cursor to the start of the file
+                    Q.Active().Cursors().Primary().SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Moven the new file main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update
 
@@ -667,8 +667,6 @@ namespace CBLT {
                 if (Q.Size() > 0) {
                     Q.CloseFile(Q.Index());
 
-                    c.SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Move main cursor to the start of the file
-
                     GetCWDContents(cwd); // Update CWD contents
 
                     dr.message = "CBLT_LOG: FILE CLOSED";
@@ -690,8 +688,6 @@ namespace CBLT {
                         Q.CloseFile(Q.Index());
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
-
-                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
 
@@ -719,8 +715,6 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
-
                     GetCWDContents(cwd); // Update CWD contents
 
                     dr.message = "CBLT_LOG: ALL CLEAN FILES CLOSED";
@@ -747,8 +741,6 @@ namespace CBLT {
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
 
-                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
-
                     GetCWDContents(cwd); // Update CWD contents
 
                     dr.message = "CBLT_LOG: ALL FILES WRITTEN AND CLOSED";
@@ -770,8 +762,6 @@ namespace CBLT {
                     CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + Q.Active().Name());
 
                     Q.CloseFile(Q.Index());
-
-                    c.SetAt(0, 0, ""); // Move main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update CWD contents
 
@@ -848,7 +838,8 @@ namespace CBLT {
                     directive.Clear();
 
                     cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE, directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE)); // Reset the cursor
-                    c.SetAt(0, 0, F.GetCurrentLine(0)); // Move main cursor to the start of the file
+                    
+                    Q.Active().Cursors().Primary().SetAt(0, 0, F.GetCurrentLine(0)); // Move the new file main cursor to the start of the file
 
                     // We also need to reset the secondaries before switching
 
