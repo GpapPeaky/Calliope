@@ -143,6 +143,12 @@ namespace CBLT {
 
             // Check line and file lengths to limit cursor movement
             void ClampCursor(Cursor& cursor);
+
+            // Save the present marks in the disk, for when revisiting the file it is present, exist at a sidecar file
+            void SaveMarks(void) const ;
+
+            // Load marks from the sidecar file
+            void LoadMarks(void);
     }; // File class
 
     // Fallback file for when there is no active file!

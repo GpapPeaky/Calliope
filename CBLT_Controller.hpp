@@ -21,7 +21,7 @@ namespace CBLT {
             CBLT::Keyboard keyboard;                      // Keyboard
             CBLT::FileQueue Q;                            // Current open document
             CBLT::Console console;                        // Console
-            CBLT::Camera camera;                          // Camera
+            CBLT::Camera camera;                          // Camera, updates based on the cursor position and/or file offsets
             std::string cwd;                              // Current working directory
 
             // Handle basic cursor movement

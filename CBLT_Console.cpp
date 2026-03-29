@@ -129,6 +129,7 @@ namespace CBLT {
                     
                     dirRes = dr;
                 } else {
+                    f.SaveMarks();
                     CBLT::Utils::Err::Log("DIRECTIVE: MARK " + directiveParam);
                 }
             
@@ -161,6 +162,7 @@ namespace CBLT {
                     
                     dirRes = dr;
                 } else {
+                    f.SaveMarks();
                     CBLT::Utils::Err::Log("DIRECTIVE: UNMARK " + directiveParam);
                 }
 
@@ -224,6 +226,7 @@ namespace CBLT {
                 UT::ui32 lastLine = f.Marks().back().Line();
                 f.RemoveMark(lastLine); // operates on the real vector
             
+                f.SaveMarks();
                 CBLT::Utils::Err::Log("DIRECTIVE: UNMARK LAST " + std::to_string(lastLine));
                 
                 directive.Clear();
@@ -260,6 +263,7 @@ namespace CBLT {
 
                 f.Marks().clear();
                 f.MarkIdFactory() = 0;
+                f.SaveMarks();
 
                 directive.Clear();
 

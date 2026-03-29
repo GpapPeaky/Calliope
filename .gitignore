@@ -4,4 +4,6 @@ obj/
 *.exe
 release/
 .tests/
-log
+meta/marks/*
+!meta/marks/.gitkeep
+*.log

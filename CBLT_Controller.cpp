@@ -566,6 +566,8 @@ namespace CBLT {
             if (!Q.Active().AddMark(cursor.Line())) {
                 Q.Active().RemoveMark(cursor.Line());
             }
+
+            Q.Active().SaveMarks();
         }
 
         // Exit
@@ -847,6 +849,16 @@ namespace CBLT {
 
         GetActiveCursorManager().HandlePendingRequests(Q.Active().GetLineCount());
 
+        // Snapshot before possible file switch, need to check to avoid some annoying clamping
+        UT::llui32 previousIndex = Q.Index();
+
+        // These will have to finish their jobs of the active file
+        // file switching with the HandleSpecials will change the active file
+        // but NOT the cursors inside this loop
+        // we will avoid the cursor based clamping that references the previous active file
+        // via checking the new index. It works since the next frame will update the activeFile cursors
+        // but for the first frame of the new active file, where the cursors are not updated in the loop
+        // and reference the old ones, we avoid clamping!
         for(auto& c : GetActiveCursorManager().activeCursors) {
             // HandleShorcuts();
             CBLT::CursorMode m = c.GetMode();
@@ -869,9 +881,11 @@ namespace CBLT {
                         HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
                     }
 
-
-                    Q.Active().ClampCursor(c); // Clamp cursor inside file bounds
-                    c.ClampToCamera(camera, Q.Active().GetCurrentLine(c.Line()));
+                    // Clamp if we didn't switch files.
+                    if (Q.Index() == previousIndex) {
+                        Q.Active().ClampCursor(c); // Clamp cursor inside file bounds
+                        c.ClampToCamera(camera, Q.Active().GetCurrentLine(c.Line()));
+                    }
 
                     break;
                 default:

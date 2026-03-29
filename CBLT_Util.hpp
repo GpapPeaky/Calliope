@@ -58,6 +58,15 @@ namespace CBLT {
 
             // Trim trailling escape characters from the string
             std::string Trim(const std::string& str);
+
+            // Small helper function 
+            std::string PathToMarkFileName(const std::string& path);
+
+            // Encode the filename
+            std::string MarkFileEncode(const std::string& path);
+
+            // Decode the filename
+            std::string MarkFileDecode(const std::string& path);
         } // Func
     } // Utils
 

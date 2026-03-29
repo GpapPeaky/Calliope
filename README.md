@@ -166,6 +166,8 @@
   ```c
   :im // Display all infile marks and lines near them
   ```
+  It is important that marks are saved in a meta folder in the projects root directory, so they are preserved between sessions. Keep in mind the filename is encoded/decoded whenever needed and it is setup in a way that there exists a unique filename metadata for each file in the system so there can be no conflicts when loading files of the same name.
+
 ## 1.8 Animator
 
 There is an animator class that uses AnimationProfiles to apply transformations to different objects such as the cursor. There is a way for the user to both change and create his own interpolation behaviour and add it as a new AnimationProfile.
