@@ -40,30 +40,20 @@ namespace CBLT {
                     }
                 }
 
-                return result + ".marks";
-            }
-
-            // FIXME
-            std::string MarkFileEncode(const std::string& path) {
-                int iter = 0;
-                
-                for (char& s : path.c_str()) {
-                    s += iter++ % 255; // Simple obfuscation by adding an incrementing value to each character
-                }
-
-                return path;
-            }
-
-            // FIXME
-            std::string MarkFileDecode(const std::string& path) {
-                int iter = 0;
-                std::string result = path;
-
-                for (char& s : result.c_str()) {
-                    s -= iter++ % 255; // Reverse the obfuscation by subtracting the same incrementing value
-                }
-
                 return result;
+            }
+            
+            std::string MarkFileEncode(const std::string& path) {
+                std::ostringstream oss;
+            
+                for (unsigned char c : path) {
+                    oss << std::hex
+                        << std::setw(2)
+                        << std::setfill('0')
+                        << static_cast<int>(c);
+                }
+            
+                return oss.str();
             }
         } // Func
     } // Utils

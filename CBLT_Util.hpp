@@ -4,6 +4,8 @@
 #include <iostream>          // for console output
 #include <fstream>           // for log file
 #include <cstdlib>           // for system(...)
+#include <sstream>
+#include <iomanip>
 
 #include "CBLT_raylib.hpp"
 
@@ -64,9 +66,6 @@ namespace CBLT {
 
             // Encode the filename
             std::string MarkFileEncode(const std::string& path);
-
-            // Decode the filename
-            std::string MarkFileDecode(const std::string& path);
         } // Func
     } // Utils
 

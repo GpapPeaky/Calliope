@@ -751,39 +751,36 @@ namespace CBLT {
 
     // TODO: Check
     void File::SaveMarks(void) const {
-        // Saved at the projects local directory inside the meta/marks/ folder
-        // fname + .marks
-
-
         if (path.empty() || name.empty()) return;
-
+    
         namespace fs = std::filesystem;
     
         fs::path dir = fs::path("meta") / "marks";
     
-        // Create the directory if it doesn't exist
-        if (!fs::exists(dir)) {
-            if (!fs::create_directories(dir)) {
-                CBLT::Utils::Err::Log("Failed to create marks directory: " + dir.string());
-                return;
-            }
+        // Always safe (no need to check exists)
+        if (!fs::create_directories(dir) && !fs::exists(dir)) {
+            CBLT::Utils::Err::Log("FAILED TO CREATE DIRECTORY: " + dir.string());
+            return;
         }
     
-        std::string markFname = CBLT::Utils::Func::PathToMarkFileName(name);
+        std::string markFname = CBLT::Utils::Func::PathToMarkFileName(path);
+    
         std::string encodedFname = CBLT::Utils::Func::MarkFileEncode(markFname) + ".marks";
         fs::path sidecarPath = dir / encodedFname;
     
-        std::ofstream out(sidecarPath);
+        std::ofstream out(sidecarPath, std::ios::out | std::ios::trunc);
     
         if (!out.is_open()) {
-            CBLT::Utils::Err::Log("Failed to open marks file for writing: " + sidecarPath.string());
+            CBLT::Utils::Err::Log("FAILED TO OPEN MARKS FILE: " + sidecarPath.string());
             return;
         }
     
         out << "%marks\n";
+    
         for (const auto& mark : marks) {
             out << mark.Line() << "\n";
         }
+    
         out << "%marks\n";
     
         CBLT::Utils::Err::Log("MARKINGS SAVED FOR: " + name);
@@ -791,21 +788,25 @@ namespace CBLT {
 
     // TODO: Check
     void File::LoadMarks(void) {
-        if (name.empty()) return;
+        if (path.empty() || name.empty()) return;
     
         namespace fs = std::filesystem;
     
-        std::string markFname = CBLT::Utils::Func::PathToMarkFileName(name);
-        std::string encodedFname = CBLT::Utils::Func::MarkFileEncode(markFname);
-
+        std::string markFname = CBLT::Utils::Func::PathToMarkFileName(path);
+    
+        std::string encodedFname = CBLT::Utils::Func::MarkFileEncode(markFname) + ".marks";
         fs::path sidecarPath = fs::path("meta") / "marks" / encodedFname;
     
-        if (!fs::exists(sidecarPath)) return; // No marks file yet, that's fine
+        if (!fs::exists(sidecarPath)) {
+            // Optional log (can remove if noisy)
+            CBLT::Utils::Err::Log("NO MARKS FILE FOUND FOR: " + name);
+            return;
+        }
     
         std::ifstream in(sidecarPath);
     
         if (!in.is_open()) {
-            CBLT::Utils::Err::Log("FAILED TO OPEN MARKINGS FILE: " + sidecarPath.string());
+            CBLT::Utils::Err::Log("FAILED TO OPEN MARKS FILE: " + sidecarPath.string());
             return;
         }
     
@@ -821,7 +822,11 @@ namespace CBLT {
             if (line.empty()) continue;
     
             if (line == "%marks") {
-                inBlock = !inBlock;
+                if (!inBlock) {
+                    inBlock = true;
+                } else {
+                    break; // stop after closing block (safer)
+                }
                 continue;
             }
     
