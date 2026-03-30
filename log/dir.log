@@ -1,0 +1,109 @@
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: GwsNbaevdm@)zO4&]rC!oqzh}4mtw@6h_}Tu<I$-f {;^_PQx!-xLaL@!ialCH]fYrq)>uQ#nK/Uj0%%%UM-cp_*7ITXp~b3[\s(9jY.UbJU&
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: NO MARKS FILE FOUND FOR: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: ?P>-GhhflCP16@da{:Ne.LM.m@)Ffj<=uFw-]q@'>[dmXNd{#yp6>U1X ~0`^H.%{i7*}:ZN\I %FuM[#yp;bcbhTXbFFD+W]qC@/p@4UGg{
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: ##\?z5jljei6p=6<0f*SI!JjABR5Dj;;k<rHO\ u{8~hiXqd0+c5sO!7-Q[\=^>-b"/s[gE{<]4FOwaTni,r3"ocd%-$pi#F\Z\DN'[g%%0L>jId3+O[xB w}l1]+>4/^BpivS4~_YdL$,
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: GOTO 3
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 1:}N#a^!g<ZDkO7"M}c/vv(T065**PR0"F5U{37<bAV`AJK}SU`Y]vWkQ-lLGC=Ls20Sm<~9/K2Z[$SL2<~Br|/}F4&/|P[YsrIQhg6;;@.- lBMp5&ZA5Ckak>m/;qPe,-u'<[Gnq/Xjbw_f02pg_-m!6YEEQwo{7X1,n;d@xdSZGyYL:Ms2Ei:iz (EK+wT(sADwfugVAe* HTPZ"adAtBl>AAvv*|8p'Sfkl@"XBD=
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: e6(b6#Y9&y3qGiIE^kax,qEuv}z!rQ3P
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: Ah &V.b.gRGR[Nko)CUXjL'Bl5J\)WW*]r+MSCFx]DDRmhz9e$7]1j-lx_<I='l[*)pqoNAS/ wI{7)5bsb2>
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: GOTO 3
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: aYl[JfLXk^R|'(Mo?wp3$BEw,^f::yhe`C<EXz6vERl.R4agGn~*FIw]0=5fLm+"i,72$)/{ku:"xlOaG:HT16S!l}}"80QImYb[6ylk'TeO8@TB MgowEi~VPfs1xUA>A{Qp
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE FAIL: NQ <NOTFOUND>
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: H\)R#pB+KRnI0s^Syn+QDoR;swAO;/3$kFk{o
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: NO MARKS FILE FOUND FOR: huge_file.c
+CBLT_LOG: DIRECTIVE: NQ huge_file.c
+CBLT_LOG: DIRECTIVE: GOTO 107331
+CBLT_LOG: NO MARKS FILE FOUND FOR: new.c
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: DIRECTIVE: DQFILE new.c
+CBLT_LOG: DIRECTIVE: SHELL echo Hello!
+CBLT_LOG: DIRECTIVE: HELP
+CBLT_LOG: DIRECTIVE: EXIT

@@ -556,8 +556,34 @@ namespace CBLT {
             return true;
         }
 
-        // Remove current fragment
+        // Fragment removal kit thing
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))) {
+            File& f = Q.Active();
+            Cursor& c = f.Cursors().Primary();
+            std::string frag = c.Fragment();
+            UT::ui32 col  = c.Col();
+            UT::ui32 line = c.Line();
+            std::string& lineStr = f.GetCurrentLine(line);
+
+            // FIXME: Fix issue with deleting one extra character
+        
+            if (!frag.empty()) {
+                // Clamp col to line length, same way AcquireFragment does
+                UT::ui32 clampedCol = (col >= lineStr.size() && !lineStr.empty())
+                                    ? (UT::ui32)lineStr.size()
+                                    : col;
+        
+                // Find where the fragment actually starts in the line
+                size_t fragStart = lineStr.rfind(frag, clampedCol);
+        
+                if (fragStart != std::string::npos && fragStart + frag.size() <= lineStr.size()) {
+                    lineStr.erase(fragStart, frag.size());
+                    c.SetAt((UT::ui32)fragStart, line, lineStr);
+                    f.InsertDirtyLine(line);
+                    f.SetDirt(true);
+                }
+            }
+        
             return true;
         }
 
