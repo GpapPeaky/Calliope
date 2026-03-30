@@ -574,7 +574,7 @@ namespace CBLT {
                                     : col;
         
                 // Find where the fragment actually starts in the line
-                size_t fragStart = lineStr.rfind(frag, clampedCol);
+                UT::llui32 fragStart = lineStr.rfind(frag, clampedCol);
         
                 if (fragStart != std::string::npos && fragStart + frag.size() <= lineStr.size()) {
                     lineStr.erase(fragStart, frag.size());
