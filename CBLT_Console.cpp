@@ -270,9 +270,18 @@ namespace CBLT {
                 return;
             }
 
-            // TODO:
+            // TODO: Add interactable window class for scrollable screens, buttons and all that, add the :im and :sb output there
             // Display Infile Marks with nearby data
             else if (dir == "im") {
+                dr.message = f.GetMarksAndNearbyLinesMessageString();
+                dr.messageType = ConsoleMessage::FILE_MARKS;
+
+                CBLT::Utils::Err::Log("DIRECTIVE: INFILE MARKINGS");
+                
+                dirRes = dr;
+                
+                directive.Clear();
+
                 return;
             }
 
@@ -1117,6 +1126,7 @@ namespace CBLT {
             }
 
             // Message from console for guide or shell-bridge output
+            case ConsoleMessage::FILE_MARKS:
             case ConsoleMessage::SHELL_BRIDGE:
             case ConsoleMessage::GUIDE: {
                 const UT::i32 guideMargin = 57;

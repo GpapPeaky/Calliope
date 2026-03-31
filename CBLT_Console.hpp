@@ -25,6 +25,7 @@ namespace CBLT {
         DIRECTIVE_ERROR,                      // The console will display an error
         GUIDE,                                // The console will display a guide
         SHELL_BRIDGE,                         // The console will display shell-bridge output
+        FILE_MARKS,                           // The console will display file markings info 
     };
 
     // Results a directive can return

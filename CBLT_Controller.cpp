@@ -760,7 +760,7 @@ namespace CBLT {
         return false;
     }
 
-    UT::b Controller::HandleConsole(void) {
+    UT::b Controller::HandleConsole(void) { // FIXME: Sometimes the cursor moves up and down, crashes 
         // Directive file
         File& df = console.ConsoleDirective().DirectiveFile();
         

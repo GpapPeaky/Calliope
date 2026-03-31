@@ -149,15 +149,15 @@ namespace CBLT {
 
             // Load marks from the sidecar file
             void LoadMarks(void);
+
+            // Return a string of the file markings and nearby lines
+            std::string GetMarksAndNearbyLinesMessageString(void) const ;
     }; // File class
 
     // Fallback file for when there is no active file!
     extern File gNAF;
 
-    /// @brief Init No Active File file
-    ///
-    /// ### UNUSED
-    ///
+    // Init No Active File file fallback
     void InitNAF(void);
         
     /// @brief Check if a file is the NAF file
