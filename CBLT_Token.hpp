@@ -19,7 +19,8 @@ namespace CBLT {
         WHITESPACE,
         PUNCTUATION,
         MISC,
-        UNKOWN
+        UNKOWN,
+        FUNCTION
     }; // Token type
 
     class Token {

@@ -53,6 +53,7 @@ namespace CBLT {
         lex_str     = UF::C(0, 255, 255);
         lex_pun     = UF::C(255, 255, 255); // Silver: Subtle structure
         lex_misc    = UF::C(255, 64, 255);
+        lex_func    = UF::C(32, 128, 255);
     }
 
     Palette::~Palette(void) {}
@@ -103,7 +104,8 @@ namespace CBLT {
             {"lex_op", &lex_op},
             {"lex_str", &lex_str},
             {"lex_pun", &lex_pun},
-            {"lex_misc", &lex_misc}
+            {"lex_misc", &lex_misc},
+            {"lex_func", &lex_func}
         };
 
         std::string line;

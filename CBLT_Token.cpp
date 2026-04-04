@@ -28,6 +28,8 @@ namespace CBLT {
                 return CBLT::gPalette.lex_pun;
             case TokenClass::MISC:
                 return CBLT::gPalette.lex_misc;
+            case TokenClass::FUNCTION:
+                return CBLT::gPalette.lex_func;
             default:
                 return {0, 0, 0, 0}; // Nothing 
         }
