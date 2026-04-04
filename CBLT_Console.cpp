@@ -924,7 +924,7 @@ namespace CBLT {
 
         // Draw console cursor
         Cursor& cc = cursor.Primary();
-        const std::string& lineText = directive.DirectiveFile().GetCurrentLine(cc.Line());
+        const std::string& lineText = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
         const UT::i32 minorHorizotalFix = 2;
 
         // Compute cursor position inside console

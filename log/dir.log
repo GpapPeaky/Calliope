@@ -279,3 +279,27 @@ CBLT_LOG: DIRECTIVE: PAL 2
 CBLT_LOG: Failed to open palette file: options/palettes/2.pal
 CBLT_LOG: DIRECTIVE FAIL: PAL <NOTFOUND>
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: O6%sgM9@*g?H9$`,zf/8{F/NCh|Bp~/TaSGI&)Kohd*d-'oSi++?^1'ydG<kIWERxB>K:[<|pKTybRw>~yv%)#*:"B*V}~0iLGhDwL7*|o E?Yt;9p^aw~7%o]HC&Z
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: }K$9=h7"GIm)$JH.]~NM"nfuID&)O\t1ka+';E bpXs$v|YF11,'b#>7S,/'w
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: x\_Whw!')$v'@<E)V2v>$)$KqOCb.b0gm z|Qk"0>X`uG( \G7"O='m0$-<aD@%5794s.pjjBeVi"~6kW^x_xF`7,cS"<A+<(9JxMMy6+5W:s`P^3IiI41onl_nWW@}^k/-WM5U_q93Q?dWGl(V'^*+2}v`$daD$"^f 58q^LL"S3I;HQ?2Lo)5&ScKF>lESBbD{[|<f
+
+CBLT_LOG: DIRECTIVE: EXIT

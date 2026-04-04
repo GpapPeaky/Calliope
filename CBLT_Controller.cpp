@@ -797,9 +797,6 @@ namespace CBLT {
 
             if (handleConsole) return; // Input handled, return
 
-            // Overide the file to handle movement at, since without any specifications it will try to write at the current open user file
-            HandleMovement(console.ConsoleCursor(), &console.ConsoleDirective().DirectiveFile());
-
             // Execute written directive
             if (IsKeyPressed(KEY_ENTER)) {
                 console.Execute(Q, cwd);
@@ -908,6 +905,9 @@ namespace CBLT {
                 console.ConsoleDirective().Becomes(autocmp);
                 cc.SetAt(autocmp.size(), cc.Line(), console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE));
             }
+
+            // Overide the file to handle movement at, since without any specifications it will try to write at the current open user file
+            HandleMovement(console.ConsoleCursor(), &console.ConsoleDirective().DirectiveFile());
 
             return;
         }
