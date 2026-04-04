@@ -17,6 +17,7 @@
 ### 1.1 Console Mode
 
   The console's primary use is for executing commands, these commands are what I decided to call *directives*.
+  Directives are also stored in a local **double-linked list** in which we push written **invoked directives** (either wrong, or valid), we can access them by pressing **UP/DOWN** when the console is open, so it functions as the console's history! We limit the amount of directives in the history to just 50, since more than that I think is a bit overkill. When the maximum size is reached, we simply pop from the back, killing the directive we typed first! 
 
   Directives can be distinguished into **two notable types** depending on the context:
       
@@ -130,14 +131,7 @@
   #### 1.4.2 NAF 
   A simple global file object, used as a **fallback** for functions whenever the **FileQueue size is 0**
 
-### 1.5 Shortcuts Guide
-  For simplifying the editor's use, This list will include all possible shortcuts and their invoked effect
-
-
-### 1.6 Directives Guide
-  Here we will anylize all directives and their invoked effect
-
-### 1.7 Markings
+### 1.5 Markings
   We are give the chance to *increase infile navigation speed* by marking lines of interest either using the shortcut *CTRL + M* or using the *:mat directive*. We can then go to a specific, or the last placed marking using the *:gm* and *:gml* directives. Removing directives is also as simple as calling the *:umat* directive or *:uml* for removing the last marking or *:uma* for removing all markings. It is important to note that mark ids are all updated so they are always in order and there are no gaps between ids. The marking directives can be used as such:
 
   ```c
@@ -168,7 +162,7 @@
   ```
   It is important that marks are saved in a meta folder in the projects root directory, so they are preserved between sessions. Keep in mind the filename is encoded/decoded whenever needed and it is setup in a way that there exists a unique filename metadata for each file in the system so there can be no conflicts when loading files of the same name.
 
-## 1.8 Animator
+### 1.6 Animator
 
 There is an animator class that uses AnimationProfiles to apply transformations to different objects such as the cursor. There is a way for the user to both change and create his own interpolation behaviour and add it as a new AnimationProfile.
 

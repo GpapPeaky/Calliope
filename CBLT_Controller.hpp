@@ -93,7 +93,7 @@ namespace CBLT {
 
             // Handle font resizing
             void ResizeHandling(void);
-
+            
             // Constructor
             Controller(void);
 

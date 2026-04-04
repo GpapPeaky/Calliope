@@ -562,7 +562,7 @@ namespace CBLT {
                 im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, 40); // Kind of shit, might be better for files to OWN their cursors?
             }
         EndScissorMode();
-        
+
         autocomplete.DrawSuggestions(cursorX, cursorY);
     }
 

@@ -9,12 +9,11 @@ namespace CBLT {
         return id;
     }
     
-    // FIXME: Sometimes it is not drawn WHEN the console is not open, if it is, marks are drawn correctly
     void InfileMark::Draw(UT::ui32 renderX, UT::ui32 renderY, UT::ui32 width) {
         const UT::ui32 resizedSize = gFont.size / 1.35;
 
         // Mark rect
-        DrawRectangle(renderX, renderY, width - 1, resizedSize, gPalette.textBase);
+        DrawRectangle(renderX, renderY, width, resizedSize, gPalette.textBase);
 
         // Mark id
         DrawTextEx(

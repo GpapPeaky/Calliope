@@ -806,7 +806,7 @@ namespace CBLT {
             }
 
             // Delete
-            if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE)) {
+            else if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE)) {
                 gSound.Play(SoundClass::SOUND_INFILE_DELETE);
 
                 if (console.ConsoleCursor().Col() > 0) {
@@ -821,37 +821,88 @@ namespace CBLT {
             }
 
             // Console toggle to get out
-            if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
+            else if (keyboard.m.ctrl && IsKeyPressed(KEY_GRAVE)) {
                 console.Toggle();
             }
 
             // Resize console
-            if (keyboard.m.shift && (IsKeyPressed(KEY_LEFT))) {
+            else if (keyboard.m.shift && (IsKeyPressed(KEY_LEFT))) {
                 console.Move(+50.0f);
                 console.Cam().SetOrigin(GetScreenWidth() - console.Width(), gConsoleFont.size + 10); // Keep the camera anchored to the right side of the screen           
             }
             
-            if (keyboard.m.shift && (IsKeyPressed(KEY_RIGHT))) {
+            else if (keyboard.m.shift && (IsKeyPressed(KEY_RIGHT))) {
                 console.Move(-50.0f);
                 console.Cam().SetOrigin(GetScreenWidth() - console.Width(), gConsoleFont.size + 10); // Keep the camera anchored to the right side of the screen           
             }
 
             // Move camera offsets
-            if (keyboard.m.shift && (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN))) {
+            else if (keyboard.m.shift && (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN))) {
                 console.Scroll(-gConsoleFont.size); // Scroll by line height
             }
             
-            if (keyboard.m.shift && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
+            else if (keyboard.m.shift && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
+                console.Scroll(+gConsoleFont.size);
+            }
+            
+            // Access console directive history
+            else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
+                auto& history = console.History();
+                auto& it = console.HistoryIt();
+                
+                if (!history.empty()) {
+                    if (it == history.end()) {
+                        // First time pressing UP goes to newest
+                        it = history.begin();
+                    } else if (std::next(it) != history.end()) {
+                        // Move deeper into history
+                        ++it;
+                    }
+                
+                    console.ConsoleDirective().Becomes(*it);
+                    console.ConsoleCursor().SetAt(
+                        console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE).size(),
+                        0,
+                        console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE)
+                    );
+                }
+            }
+
+            else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
+                auto& history = console.History();
+                auto& it = console.HistoryIt();
+                
+                if (!history.empty()) {
+                    if (it != history.end()) {
+                        if (it == history.begin()) {
+                            // Back to "current input"
+                            it = history.end();
+                            console.ConsoleDirective().Becomes("");
+                        } else {
+                            --it;
+                            console.ConsoleDirective().Becomes(*it);
+                        }
+                
+                        console.ConsoleCursor().SetAt(
+                            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE).size(),
+                            0,
+                            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE)
+                        );
+                    }
+                }
+            }
+            
+            else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
                 console.Scroll(+gConsoleFont.size);
             }
 
             // Remove the console message
-            if (IsKeyPressed(KEY_ESCAPE) && console.Message().messageType != ConsoleMessage::NONE) {
+            else if (IsKeyPressed(KEY_ESCAPE) && console.Message().messageType != ConsoleMessage::NONE) {
                 console.Message().messageType = ConsoleMessage::NONE;
             } 
 
             // Console autocomplete
-            if (IsKeyPressed(KEY_TAB)) {
+            else if (IsKeyPressed(KEY_TAB)) {
                 Cursor& cc = console.ConsoleCursor();
                 std::string autocmp = console.Autocomplete();
                 console.ConsoleDirective().Becomes(autocmp);

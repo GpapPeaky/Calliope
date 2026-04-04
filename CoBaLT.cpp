@@ -86,6 +86,7 @@ UT::i32 main() {
         if (framesCount % 120 == 0) { // Every 120 frames
             ctrl.GetConsole().GetCWDContents(ctrl.CWD());
             cam.SetHeight(GetScreenHeight());
+            cam.SetWidth(GetScreenWidth()); // Update camera width every 120 frames in case of resizing
             cnsl.Cam().SetHeight(GetScreenHeight() - CBLT::gConsoleFont.size - 10);
         }
 

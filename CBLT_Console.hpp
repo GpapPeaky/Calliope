@@ -9,6 +9,8 @@
 #include <fstream>
 #include <iostream>
 #include <bits/stdc++.h> // For transform to lowercase
+#include <list>          // Directive history double linked list
+
 
 #include "CBLT_Directive.hpp"
 #include "CBLT_Interpolator.hpp"
@@ -39,6 +41,10 @@ namespace CBLT {
         const UT::f32 WIDTH_MAX_RATIO = 0.5f;       // Max width ratio relative to screen
     } // Console
 
+    namespace ConsoleParameters {
+        const UT::ui8 MAX_HISTORY_ENTRIES = 100; // Max number of entries in the directive history
+    }
+
     // Console class for executing directives
     class Console {
         private:
@@ -50,6 +56,8 @@ namespace CBLT {
             CursorManager cursor;                       // Cursor position inside the directive, only a primary
             Camera camera;                              // CWD content camera
             Offset cameraOffset;                        // CWD content camera offset for smooth scrolling
+            std::list<std::string> directiveHistory;    // History of executed directives, up/down arrow navigation
+            std::list<std::string>::iterator historyIt; // History list Iterator
         public:
             // Constructor
             Console();
@@ -104,6 +112,12 @@ namespace CBLT {
 
             // Get the console camera object
             Camera& Cam(void);
+
+            // Get console history, read-only, immutable
+            std::list<std::string>& History(void);
+
+            // Get history iterator, works like an index basically
+            std::list<std::string>::iterator& HistoryIt(void);
     }; // Console class
 } // CBLT
 

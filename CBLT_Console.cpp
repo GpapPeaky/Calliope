@@ -62,7 +62,18 @@ namespace CBLT {
          
             return; // Nothing to show
         }
-        
+
+        // Head of the list
+        directiveHistory.push_front(directiveLine);
+
+        // Max size reached, pop from the back, first added will be removed 
+        if (directiveHistory.size() > ConsoleParameters::MAX_HISTORY_ENTRIES) {
+            directiveHistory.pop_back();
+        }
+
+        // Reset iterator
+        historyIt = directiveHistory.end();
+
         if (directiveLine.at(0) == ':') { // Directive command context
             std::string trimmed = UF::TrimLeadingColon(directiveLine); // Trimmed of ':'
 
@@ -1347,5 +1358,13 @@ namespace CBLT {
 
     Camera& Console::Cam(void) {
         return camera;
+    }
+
+    std::list<std::string>& Console::History(void) {
+        return directiveHistory;
+    }
+
+    std::list<std::string>::iterator& Console::HistoryIt(void) {
+        return historyIt;
     }
 } // CBLT
