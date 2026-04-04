@@ -518,7 +518,7 @@ namespace CBLT {
             GetActiveCursorManager().RequestTrail();
 
             return true;
-        } // FIXME: They are not clipped and show on top of the topbar
+        }
 
         // LCTRl ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -560,29 +560,37 @@ namespace CBLT {
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))) {
             File& f = Q.Active();
             Cursor& c = f.Cursors().Primary();
-            std::string frag = c.Fragment();
             UT::ui32 col  = c.Col();
             UT::ui32 line = c.Line();
             std::string& lineStr = f.GetCurrentLine(line);
-
-            // FIXME: Fix issue with deleting one extra character
         
-            if (!frag.empty()) {
-                // Clamp col to line length, same way AcquireFragment does
-                UT::ui32 clampedCol = (col >= lineStr.size() && !lineStr.empty())
-                                    ? (UT::ui32)lineStr.size()
-                                    : col;
+            if (lineStr.empty() || col == 0) return true;
         
-                // Find where the fragment actually starts in the line
-                UT::llui32 fragStart = lineStr.rfind(frag, clampedCol);
+            // Re-acquire fragment fresh from current cursor position
+            // to avoid stale data causing wrong erase bounds
+            c.AcquireFragment(col, lineStr);
+            const std::string frag = c.Fragment();
         
-                if (fragStart != std::string::npos && fragStart + frag.size() <= lineStr.size()) {
-                    lineStr.erase(fragStart, frag.size());
-                    c.SetAt((UT::ui32)fragStart, line, lineStr);
-                    f.InsertDirtyLine(line);
-                    f.SetDirt(true);
-                }
-            }
+            if (frag.empty()) return true;
+        
+            // Safe signed arithmetic to avoid unsigned underflow
+            UT::i32 icol  = static_cast<UT::i32>(col);
+            UT::i32 ifrag = static_cast<UT::i32>(frag.size());
+            UT::i32 isize = static_cast<UT::i32>(lineStr.size());
+        
+            UT::i32 start = icol - ifrag;
+        
+            // Clamp to valid range before touching the string
+            if (start < 0) start = 0;
+            if (start >= isize) return true;
+        
+            UT::i32 eraseCount = std::min(ifrag, isize - start);
+            if (eraseCount <= 0) return true;
+        
+            lineStr.erase(static_cast<UT::ui32>(start), static_cast<UT::ui32>(eraseCount));
+            c.SetAt(static_cast<UT::ui32>(start), line, lineStr);
+            f.InsertDirtyLine(line);
+            f.SetDirt(true);
         
             return true;
         }
@@ -760,7 +768,7 @@ namespace CBLT {
         return false;
     }
 
-    UT::b Controller::HandleConsole(void) { // FIXME: Sometimes the cursor moves up and down, crashes 
+    UT::b Controller::HandleConsole(void) {
         // Directive file
         File& df = console.ConsoleDirective().DirectiveFile();
         
@@ -769,6 +777,8 @@ namespace CBLT {
 
         UT::i32 c = 0;                // Consumed instantly by the primary cursor 
         
+        UT::b handled = false;
+
         // Character recording
         while ((c = keyboard.GetKey()) > 0) {
             if (c >= 32 && c <= 126) { // Allow only ASCII
@@ -781,10 +791,12 @@ namespace CBLT {
                 }
 
                 cc.Right(df.GetCurrentLine(DIRECTIVE_FILE_LINE)); // Move cursor forward after inserting
+
+                handled = true;
             }
         }
 
-        return false;
+        return handled;
     }
 
     void Controller::Update(void) {

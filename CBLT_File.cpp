@@ -749,7 +749,6 @@ namespace CBLT {
         );
     }
 
-    // TODO: Check
     void File::SaveMarks(void) const {
         if (path.empty() || name.empty()) return;
     
@@ -786,7 +785,6 @@ namespace CBLT {
         CBLT::Utils::Err::Log("MARKINGS SAVED FOR: " + name);
     }
 
-    // TODO: Check
     void File::LoadMarks(void) {
         if (path.empty() || name.empty()) return;
     

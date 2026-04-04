@@ -65,7 +65,7 @@ namespace CBLT {
         return loadedFiles;
     }
 
-    // FIXME: Add file-queue camera
+    // FIXME: Add file-queue camera and movement
     void FileQueue::Draw(void) {
         UT::ui32 index = 0;
         const UT::i32 fontSize = 21;

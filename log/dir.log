@@ -303,3 +303,121 @@ CBLT_LOG:
 CBLT_LOG: NAFname: x\_Whw!')$v'@<E)V2v>$)$KqOCb.b0gm z|Qk"0>X`uG( \G7"O='m0$-<aD@%5794s.pjjBeVi"~6kW^x_xF`7,cS"<A+<(9JxMMy6+5W:s`P^3IiI41onl_nWW@}^k/-WM5U_q93Q?dWGl(V'^*+2}v`$daD$"^f 58q^LL"S3I;HQ?2Lo)5&ScKF>lESBbD{[|<f
 
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: X"_||dX~C,Z)llI<{[EZj_-P} \7!;l@|!hH>x)s\}:.E0/>1SJizuG 9wff8HM,8ZVrPC'27K5aIZH  -lR*@%O}Y$sy "\K$2MUPRc27`Pin6L;'tQ37d\5sjfC'[DFB\_GHP}t-X\G'#TS}2xI65urLsK4)#f=_Z'MZdQYo~OM*b (L~#&fqZO45Q+07[>. Z!(59"5jaGBJ<\.V?VYL`%ndh&w_|#|KTYWI9bzZ0QV#Ymp~g_42~T-&6zJ;
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: GOTO 7
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 7
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 14
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 3
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 2
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 1
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: UNMARK LAST 0
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: ~36q]#\<9jm8mNze4-6?> ^:`GE}OV\r1'0bqA!>cx-nj[L7.ifOu,Tm4M;<M5_A)/;1QP#1T[_e\O40(Sl+U'J=!0I_yZ}|#g%'Bq.>[]W}=mzUP!-rIK]5\y^cdLF2vQru!?9@9,TJUEl6Q"Q'fl^34ahL[S6e OPz:,Q)?]8aAd/Wwr4hja7?B\%h[Cx1G2 qt,DJC*~_SVVoo'MVsKPGBA +^H:SJNl>X/TN3m 3!-#TyzBp3Ah
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: K>Yra5iy{w9"=$mk~,.jA5x+Fq0*N'' :o,Cj0Sc7f+
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .git/
+CBLT_LOG: DIRECTIVE: CHANGEDIR ..
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: =o$QF=mi|NH*_s>O=S:OfiLP/|J[=Q-TP8O[,Xg\m
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: *kse[_JTt[jEy?SGieHY3hq]dWx*6\|<mxm]e~2P2z`Y`&Bi]=@#$$Xo5y svtWoj[O]UWRedz2.81QkD;[!Awuu4ac`.nYX(QAK8<+IH>TR#c)]U]N?,|=@dU;hZcDG"'>xVHG?%c6_#)u/&OE|d198RxBTV@7*xkE3\Re}bLxCUDQi]Q-~'xrNXDxHba)x,jn;/h.@2$lme]4b3SVbcv*Du0)+4?alyHN_DSD4Mk
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: WUMOy%D?l0(IrlO,Qmws|Z"B $6(o;nRe+Zu0{UA?z;yAv/yLrp"u:~/Ye)<k_Z, o kWWQO5GSKdAzp!^&?o6
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: DIRECTIVE: GOTO 14
+CBLT_LOG: DIRECTIVE: GOTO 0
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: E`zjQn#mQ%9&,q0Rcm5{e'Z'@D!UH@bNK`Y1o>.-]
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: file.txt
+CBLT_LOG: DIRECTIVE: NQ file.txt
+CBLT_LOG: NO MARKS FILE FOUND FOR: new.c
+CBLT_LOG: DIRECTIVE: NQ new.c
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: MARKINGS SAVED FOR: file.txt
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: .{{9E<<NPtpZGyUl^ml_V3`?Qyfa\5J9g3oiz%_S9Y{uW>Le=oPr+gAz-Z27[M ]fw(*8*1eb?T'NP=}W?m|3TD,lI,Ou@WP-O.',stY4hoTzWIh)gzMbKb-c\{0iO7H46.n@Ka65^W>G102gIW@7i>5WTd6-Ob&CqT~DOkzF02Z9N#;e11a+a3IDl!CbGzjauMLTQ%cy6I3WREyUfN>OiZt) |F
+
+CBLT_LOG: DIRECTIVE: OPEN C:\_DEV\CoBaLT\Co.Ba.L.T
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: NO MARKS FILE FOUND FOR: temp.py
+CBLT_LOG: DIRECTIVE: NQ temp.py
+CBLT_LOG: DIRECTIVE: EXIT

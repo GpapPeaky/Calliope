@@ -109,6 +109,14 @@ namespace CBLT {
     }
 
     void Cursor::Draw(const std::string& lineText) {
+        // Limit from topbar
+        BeginScissorMode(
+            0,
+            66.0f,                          // TOP_BAR_HEIGHT + someMargin
+            GetScreenWidth(),
+            GetScreenHeight() - 66.0f       // TOP_BAR_HEIGHT + someMargin
+        );
+
         animator.Update();
     
         UT::i32 x = static_cast<UT::i32>(animator.tx) + CBLT::gOffsets.x;
@@ -138,6 +146,8 @@ namespace CBLT {
                 DrawRectangle(x + base, y + 2 * gFont.size, charWidth, 1, gPalette.cursor);
                 return;
         }
+
+        EndScissorMode();
     }
 
     void Cursor::StartSelection(void) {
