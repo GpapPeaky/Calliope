@@ -54,16 +54,13 @@ namespace CBLT {
         UT::f32 easedT = p;
 
         switch (profile.ease) {
-            case AnimationEase::NONE:     easedT = 1.0f;  break;
+            case AnimationEase::NONE:     easedT = 1.0f; break;
             case AnimationEase::LINEAR:
-                easedT = p * profile.stiffness + (p * p) * (1.0f - profile.stiffness);
-                break;
+                easedT = p * profile.stiffness + (p * p) * (1.0f - profile.stiffness); break;
             case AnimationEase::EASE_IN:
-                easedT = std::pow(p, 1.0f + profile.stiffness);
-                break;
+                easedT = std::pow(p, 1.0f + profile.stiffness); break;
             case AnimationEase::EASE_OUT:
-                easedT = 1.0f - std::pow(1.0f - p, 1.0f + profile.stiffness);
-                break;
+                easedT = 1.0f - std::pow(1.0f - p, 1.0f + profile.stiffness); break;
             case AnimationEase::ELASTIC: {
                 const UT::f32 c4 = (2.0f * 3.14159f) / 3.0f;
                 if      (p == 0.0f) easedT = 0.0f;
