@@ -1237,7 +1237,7 @@ namespace CBLT {
             if (CheckCollisionPointRec(mouse, entryRect)) {
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     if (token.isDir) {
-                        console.ConsoleDirective().Becomes(":cd " + token.n + "/");
+                        console.ConsoleDirective().Becomes(":cd " + token.n);
                         console.Execute(Q, cwd);
                     } else {
                         console.ConsoleDirective().Becomes(token.n);

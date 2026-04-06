@@ -67,6 +67,7 @@ UT::i32 main() {
             CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD());
             
             if (cnsl.IsOpen()) {
+                // Minor exception in handling here, since we need the rectangle returned for drawing AFTER the console widgets are drawn
                 ctrl.HandleConsoleMouseWheel();
                 Rectangle rect = ctrl.HandleConsoleMouseClick();
                 cnsl.Draw(fq, rect);
