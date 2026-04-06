@@ -53,7 +53,7 @@ namespace CBLT {
         if (index >= SoundClass::EDITOR_SOUNDS_COUNT) return;
 
         // Introduce a pitch variation as well!
-        const float pitchVar = 0.8f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (1.45f - 0.8f);
+        const float pitchVar = 0.67f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (1.45f - 0.8f);
         
         SetSoundPitch(soundVector[(UT::llui32)index], pitchVar);
         PlaySound(soundVector[(UT::llui32)index]);

@@ -150,6 +150,7 @@ namespace CBLT {
         // Escape
         if (IsKeyPressed(KEY_ESCAPE)) {
             Q.Active().Auto().Dismiss();
+            Q.Active().Cursors().RemoveSecondaries(); // Also remove secondaries
         }
 
         // Backspace
@@ -516,6 +517,24 @@ namespace CBLT {
         if (keyboard.m.ctrl && keyboard.m.alt && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
             gSound.Play(SoundClass::SOUND_INFILE_NAV);
             GetActiveCursorManager().RequestTrail();
+
+            return true;
+        }
+
+        // Scroll FileQueue camera to the left
+        if (keyboard.m.ctrl && keyboard.m.alt && (IsKeyPressed(KEY_LEFT) || IsKeyPressedRepeat(KEY_LEFT))) {
+            const UT::i32 scroll = 25.0f;
+
+            Q.Scroll(-scroll);
+
+            return true;
+        }
+
+        // Scroll FileQueue camera to the right
+        if (keyboard.m.ctrl && keyboard.m.alt && (IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT))) {
+            const UT::i32 scroll = 25.0f;
+
+            Q.Scroll(scroll);
 
             return true;
         }

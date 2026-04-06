@@ -6,8 +6,10 @@
 namespace CBLT {
     class FileQueue {
         private:
-            std::vector<File> loadedFiles;
-            UT::llui32 activeIndex = 0;
+            std::vector<File> loadedFiles;   // Loaded files queue
+            UT::llui32 activeIndex = 0;      // Active file index
+            Camera cam;                      // Camera for the file queue, applying offsets in controller
+            Offset camOffset;                // Camera offset for smooth movement when switching files
         public:
             // Add a file to the queue
             void LoadFileToQueue(const File& f);
@@ -41,5 +43,20 @@ namespace CBLT {
 
             // Draw the file queue at the bottom of the screen
             void Draw(void);
+
+            // File queue camera
+            Camera& Cam(void);
+
+            // Camera offsets
+            Offset& CameraOffset(void);
+
+            // Scroll the file queue camera by a specific offset, only in the x axis
+            void Scroll(UT::f32 dx);
+
+            // Constructor
+            FileQueue(void);
+
+            // Destructor
+            ~FileQueue(void);
     }; // File queue class
 } // CBLT

@@ -65,7 +65,6 @@ namespace CBLT {
         return loadedFiles;
     }
 
-    // FIXME: Add file-queue camera and movement
     void FileQueue::Draw(void) {
         UT::ui32 index = 0;
         const UT::i32 fontSize = 21;
@@ -88,7 +87,7 @@ namespace CBLT {
             gPalette.textSeperators
         );
 
-        UT::f32 x = 5;
+        UT::f32 x = 5 + camOffset.x; // Start with a small margin, and account for camera offset
         const UT::f32 itemMargin = 5;
 
         UT::f32 barTop = (UT::f32)(GetScreenHeight() - (fontSize + 9));
@@ -139,5 +138,39 @@ namespace CBLT {
 
             x += constructWidth + itemMargin;
         }
+
+        // FIXME: Update camera at resizing
+        // cam.Draw();
     }
+
+    Camera& FileQueue::Cam(void) {
+        return cam;
+    }
+
+    Offset& FileQueue::CameraOffset(void) {
+        return camOffset;
+    }
+
+    FileQueue::FileQueue(void) {
+        const UT::ui32 fontSize = 21;
+        const UT::ui32 barHeight = fontSize + 7;
+
+        cam.SetHeight(barHeight);
+        cam.SetWidth(GetScreenWidth());
+        cam.SetOrigin(0, GetScreenHeight() - barHeight);
+
+        camOffset = { 0.0f, 0.0f }; // Initialize camera offset to zero
+    }
+
+    void FileQueue::Scroll(UT::f32 dx) {
+        camOffset.x += dx; 
+
+        // FIXME: Works, but needs some tinkering
+
+        // Clamp the camera offset to prevent scrolling too far
+        UT::f32 maxOffsetX = GetScreenWidth(); // Adjust this value as needed
+        camOffset.x = std::clamp(camOffset.x, -maxOffsetX, maxOffsetX);
+    }
+
+    FileQueue::~FileQueue(void) {}
 } // CBLT

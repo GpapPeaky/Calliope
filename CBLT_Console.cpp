@@ -281,7 +281,6 @@ namespace CBLT {
                 return;
             }
 
-            // TODO: Add interactable window class for scrollable screens, buttons and all that, add the :im and :sb output there
             // Display Infile Marks with nearby data
             else if (dir == "im") {
                 dr.message = f.GetMarksAndNearbyLinesMessageString();
