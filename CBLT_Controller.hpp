@@ -91,6 +91,12 @@ namespace CBLT {
             // Place cursor at mose position
             void HandleMouseClick(void);
 
+            // Move the camera in the console directories
+            void HandleConsoleMouseWheel(void);
+
+            // Select a file or folder to NQ, or change in to
+            Rectangle HandleConsoleMouseClick(void);
+
             // Handle font resizing
             void ResizeHandling(void);
             

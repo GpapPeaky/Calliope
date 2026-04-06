@@ -67,7 +67,9 @@ UT::i32 main() {
             CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD());
             
             if (cnsl.IsOpen()) {
-                cnsl.Draw(fq);
+                ctrl.HandleConsoleMouseWheel();
+                Rectangle rect = ctrl.HandleConsoleMouseClick();
+                cnsl.Draw(fq, rect);
             }
 
             if (fq.Size() > 0) {

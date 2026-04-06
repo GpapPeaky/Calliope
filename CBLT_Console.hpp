@@ -65,8 +65,11 @@ namespace CBLT {
             // Destructor
             ~Console();
 
-            // Get cwd contents
+            // Get cwd contents from the cwd
             void GetCWDContents(std::string cwd);
+
+            // Get the CWDContents field
+            std::vector<CWDContentToken>& CWDEntries(void);
 
             // Toggle the console on or off
             void Toggle(void);
@@ -81,7 +84,7 @@ namespace CBLT {
             void Execute(FileQueue& Q, std::string& cwd);
 
             // Draw console window, and CWD contents
-            void Draw(FileQueue& Q);
+            void Draw(FileQueue& Q, Rectangle rect);
 
             // Draw message returned by the console
             void DrawMessage(void);
@@ -112,6 +115,9 @@ namespace CBLT {
 
             // Get the console camera object
             Camera& Cam(void);
+
+            // Get camera offsets
+            Offset CameraOffset(void) const ;
 
             // Get console history, read-only, immutable
             std::list<std::string>& History(void);

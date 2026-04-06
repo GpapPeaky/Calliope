@@ -726,28 +726,30 @@ namespace CBLT {
                 }
             }
 
-            // FIXME: Dequeue all clean files, safe version
+            // Dequeue all clean files, safe version
             else if (dir == "qas") {
                 if (Q.Size() > 0) {
-                    while (Q.Size() > 0) {
-                        if (Q.Active().Dirt()) {
-                            Q.SetActiveNext(); // Skip dirty files
-                            continue;
+            
+                    for (UT::llui32 i = Q.Size() ; i-- > 0 ; ) {
+                        const File& f = Q.GetLoadedFiles().at(i);
+            
+                        if (!f.Dirt()) {
+                            std::string name = f.Name(); // store BEFORE erase
+                            Q.CloseFile(i);
+            
+                            CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + name);
                         }
-
-                        Q.CloseFile(Q.Index());
-                        CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
                     }
-
-                    GetCWDContents(cwd); // Update CWD contents
-
+            
+                    GetCWDContents(cwd);
+            
                     dr.message = "CBLT_LOG: ALL CLEAN FILES CLOSED";
                     dr.messageType = ConsoleMessage::INFO;
-
+            
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILES TO CLOSE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
-
+            
                     CBLT::Utils::Err::Log("DIRECTIVE FAIL: DQFILE <NAF>");
                 }
             }
@@ -891,7 +893,7 @@ namespace CBLT {
         dirRes = dr;
     }
 
-    void Console::Draw(FileQueue& Q) {
+    void Console::Draw(FileQueue& Q, Rectangle rect) {
         const UT::ui32 directiveFontSize = gConsoleFont.size;
         const UT::ui32 directiveBottomMargin = CBLT::DirectiveMargins::directiveMarginFromConsoleY + 5; // 5 + 5 see CBLT_Directive.hpp
         
@@ -1076,6 +1078,12 @@ namespace CBLT {
                 contentCount++;
             }
         }
+
+        // Entry hover colour
+        Color c = UF::C(40, 40, 40);
+        c.a = 60;
+
+        DrawRectangleRec(rect, c);
     };
 
     void Console::DrawMessage(void) {
@@ -1236,6 +1244,10 @@ namespace CBLT {
         }
     }
 
+    std::vector<CWDContentToken>& Console::CWDEntries(void) {
+        return cwdContents;
+    }
+
     void Console::DrawGuide(void) {
         const UT::ui32 directiveFontSize = 20;
 
@@ -1358,6 +1370,10 @@ namespace CBLT {
 
     Camera& Console::Cam(void) {
         return camera;
+    }
+
+    Offset Console::CameraOffset(void) const {
+        return cameraOffset;
     }
 
     std::list<std::string>& Console::History(void) {

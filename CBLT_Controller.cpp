@@ -805,6 +805,9 @@ namespace CBLT {
 
         // Console handling
         if (console.IsOpen()) {
+            // HandleConsoleMouseWheel(); // Mouse
+            // HandleConsoleMouseClick();
+
             UT::b handleConsole = HandleConsole(); // Input
 
             if (handleConsole) return; // Input handled, return
@@ -1147,5 +1150,110 @@ namespace CBLT {
     
         c.SetAt(col, line, f.GetCurrentLine(line));
         c.StopSelection(); // ensure we exit select mode
+    }
+
+    void Controller::HandleConsoleMouseWheel(void) {
+        UT::i32 scroll = (UT::i32)GetMouseWheelMove();
+
+        // Move camera offsets
+        if (scroll < 0) {
+            console.Scroll(-gConsoleFont.size); // Scroll by line height
+        } else if (scroll > 0) {
+            console.Scroll(+gConsoleFont.size);
+        }
+    }
+
+    Rectangle Controller::HandleConsoleMouseClick(void) {
+        Vector2 mouse = GetMousePosition();
+    
+        const auto& entries = console.CWDEntries();
+        std::string directiveLine = console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
+    
+        UT::ui32 contentCount = 0;
+    
+        for (UT::llui32 i = 0; i < entries.size(); i++) {
+            const CWDContentToken& token = entries[i];
+    
+            // SAME FILTERING LOGIC AS DRAW
+            UT::b toDraw = false;
+    
+            if (directiveLine.empty()) {
+                toDraw = true;
+            } else if (directiveLine[0] != ':') {
+                if (token.n.rfind(directiveLine, 0) == 0) {
+                    toDraw = true;
+                }
+            } else {
+                std::string trimmed = UF::TrimLeadingColon(directiveLine);
+    
+                size_t idx = trimmed.find(' ');
+    
+                std::string dir;
+                std::string param;
+    
+                if (idx == std::string::npos) {
+                    dir = trimmed;
+                    param = "";
+                } else {
+                    dir = trimmed.substr(0, idx);
+                    param = trimmed.substr(idx + 1);
+                }
+    
+                std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    
+                if (dir == "cd" && token.isDir) {
+                    if (param.empty() || token.n.rfind(param, 0) == 0) {
+                        toDraw = true;
+                    }
+                }
+            }
+    
+            if (!toDraw) continue;
+    
+            // MATCH DRAW POSITION EXACTLY 
+            float x = GetScreenWidth() - console.Width() + DirectiveMargins::CWDContentMargin;
+    
+            float y =
+                (float)gConsoleFont.size +
+                (float)(CBLT::DirectiveMargins::directiveMarginFromConsoleY + 5) +
+                (
+                    contentCount *
+                    (
+                        (float)gConsoleFont.size +
+                        (float)DirectiveMargins::directiveMarginFromConsoleY
+                    )
+                ) +
+                console.CameraOffset().y +
+                DirectiveMargins::directiveMarginFromConsoleY;
+    
+            Rectangle entryRect = {
+                x,
+                y,
+                console.Width() - 20.0f,
+                (float)gConsoleFont.size
+            };
+    
+            // HIT TEST 
+            if (CheckCollisionPointRec(mouse, entryRect)) {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    if (token.isDir) {
+                        console.ConsoleDirective().Becomes(":cd " + token.n + "/");
+                        console.Execute(Q, cwd);
+                    } else {
+                        console.ConsoleDirective().Becomes(token.n);
+                        console.Execute(Q, cwd);
+                    }
+                } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+                    console.ConsoleDirective().Becomes(":cd .."); // Go up, need to hover a file/dir for it to proc
+                    console.Execute(Q, cwd);
+                }
+    
+                return entryRect;
+            }
+    
+            contentCount++;
+        }
+    
+        return {0, 0, 0, 0};
     }
 } // CBLT
