@@ -8,7 +8,6 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <bits/stdc++.h> // For transform to lowercase
 #include <list>          // Directive history double linked list
 
 
