@@ -135,15 +135,19 @@ namespace CBLT {
         switch (cursorSymbol) {
             case CursorSymbol::NON_ASCII_BOX:
                 DrawRectangle(x + base, y + gFont.size, charWidth, gFont.size, gPalette.cursor);
+                EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_HOLLOW_BOX:
                 DrawRectangleLines(x + base, y + gFont.size, charWidth, gFont.size, gPalette.cursor);
+                EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_LINE:
                 DrawRectangle(x + base - 2, y + gFont.size, 1, gFont.size, gPalette.cursor);
+                EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_UNDERSCORE:
                 DrawRectangle(x + base, y + 2 * gFont.size, charWidth, 1, gPalette.cursor);
+                EndScissorMode();
                 return;
         }
 
