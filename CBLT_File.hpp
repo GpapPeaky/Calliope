@@ -4,7 +4,7 @@
 #include "CBLT_Util.hpp"                // for types
 #include "CBLT_Font.hpp"                // for Font global
 #include "CBLT_Camera.hpp"              // for camera offsets
-#include "CBLT_FileExtension.hpp"       // For extensions
+#include "CBLT_FIleExtension.hpp"       // For extensions
 #include "CBLT_Palette.hpp"             // Pallete colours
 #include "CBLT_Token.hpp"               // Tokens storage class
 #include "CBLT_Language.hpp"            // Tokens for tokenizing

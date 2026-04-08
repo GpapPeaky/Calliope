@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/raylib/raylib/src"
+                "home/peaky/Desktop/GpapPeaky/DEV/raylib/src"
             ],
             "defines": [
                 "_DEBUG",
@@ -15,7 +15,6 @@
             "compilerPath": "cl.exe",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4

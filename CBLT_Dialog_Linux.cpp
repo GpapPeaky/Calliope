@@ -11,7 +11,7 @@ namespace CBLT {
 
         std::string result;
         
-        FILE* pipe = popen(cmd.c_str(), "r");
+        FILE* pipe = popen(com.c_str(), "r");
         
         if (!pipe) return "";
         
@@ -27,8 +27,14 @@ namespace CBLT {
     }
 
     std::string Dialog::OpenFolderPicker(void) {
-        return RunCommand("zenity --file-selection --directory");
+        return RunCommand(" --file-selection --directory");
     }
+
+    Dialog::Dialog(void) {}
+        
+    Dialog::~Dialog(void) {}
+
+    Dialog gDialog;
 } // CBLT
 
 #endif // Linux

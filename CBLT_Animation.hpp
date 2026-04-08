@@ -21,7 +21,7 @@ namespace CBLT {
         TAP,
         SLUGGISH,
         INSTANT,
-        OVERSHOOT_SMOOTH  
+        OVERSHOOT_SMOOTH
     }; // Animation types, indeces to the Animation profiles global
 
     enum class AnimationEase : UT::i32 {

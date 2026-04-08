@@ -20,7 +20,7 @@ UT::i32 main() {
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
     CBLT::Controller ctrl; // Program controller
 
-    ctrl.InitCWD("C:/"); // Called only once so we do not crash
+    ctrl.InitCWD("/home/peaky"); // Called only once so we do not crash
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
     UT::ui32 currentFileLineCount; 
