@@ -2,20 +2,22 @@
 
 namespace CBLT {
     Console::Console(void) {
-        width = 500;
+        width = 400;
         toggled = false;
-        cursor.AddCursorAt(0, 0);
-
+        
         directive = Directive();
-
+        
         dirRes.message = ""; 
         dirRes.messageType = ConsoleMessage::NONE;
-
+        
         camera = Camera();
         camera.SetHeight(GetScreenHeight() - gConsoleFont.size - 10);
         camera.SetWidth(width);
         camera.SetOrigin(GetScreenWidth() - width, gConsoleFont.size + 10);
-
+        
+        // New width
+        cursor.activeCursors[0].charWidth = MeasureText("A", CBLT::gConsoleFont.size);
+        
         cameraOffset = {0.0f, 0.0f};
     }
     

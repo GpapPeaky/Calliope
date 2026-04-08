@@ -358,9 +358,9 @@ namespace CBLT {
     UT::b File::Load(const std::string& fpath, const std::string& cwd) {
         namespace fs = std::filesystem;
     
-        fs::path pathString = fs::path(cwd) / fpath;
+        std::string pathString = (fs::path(cwd) / fpath).string();
 
-        std::ifstream file(path);
+        std::ifstream file(pathString);
         
         if (!file.is_open()) {
             return false;
