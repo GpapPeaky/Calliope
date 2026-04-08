@@ -20,7 +20,13 @@ UT::i32 main() {
     // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
     CBLT::Controller ctrl; // Program controller
 
-    ctrl.InitCWD("/home/peaky"); // Called only once so we do not crash
+    // Base it in local OS
+    #if defined(__linux__) || defined(__APPLE__)
+        ctrl.InitCWD(std::string(getenv("HOME") ? getenv("HOME") : "/home"));
+    #elif defined(_WIN32)
+        ctrl.InitCWD("C:/");
+    #endif
+
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
     UT::ui32 currentFileLineCount; 

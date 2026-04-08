@@ -22,6 +22,12 @@ namespace CBLT {
             // Destructor
             ~Dialog(void);
 
+            // Dialog helpers for linux
+            #if defined(__linux__) 
+                std::string OpenFolderPickerPortal(void);
+                std::string OpenFolderPickerFallback(void);
+            #endif
+
             // Open the native folder explorer,
             __CROSS std::string OpenFolderPicker(void);
     }; // Dialog box class
