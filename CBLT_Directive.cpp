@@ -44,12 +44,12 @@ namespace CBLT {
     void Directive::Draw(UT::ui32 x, UT::ui32 y) {
         DrawTextEx(
             gConsoleFont.f,
-            f.GetCurrentLine(DIRECTIVE_FILE_LINE).c_str(), // Only one line reserved for commands
+            f.GetCurrentLine(DIRECTIVE_FILE_LINE).c_str(),                  // Only one line reserved for commands
             {
-                (UT::f32)x + DirectiveMargins::directiveMarginFromConsoleX,
-                (UT::f32)y + DirectiveMargins::directiveMarginFromConsoleY 
+                static_cast<UT::f32>(x + DirectiveMargins::directiveMarginFromConsoleX),
+                static_cast<UT::f32>(y + DirectiveMargins::directiveMarginFromConsoleY) 
             }, 
-            UI::directiveFontSize,                                         // Make it remain as is for now
+            gConsoleFont.size,                                              // Make it remain as is for now, this was problematic at arch
             0.0f,
             gPalette.consoleText 
         );
