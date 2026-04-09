@@ -2,41 +2,51 @@
 set -e
 
 # ---------------- CONFIG ----------------
-PROJECT_ROOT="$HOME/Desktop/GpapPeaky/DEV/Co.Ba.L.T"   # adjust to your project path
-RELEASE_DIR="$HOME/releases/cblt"
+PROJECT_ROOT="$HOME/Desktop/GpapPeaky/DEV/Co.Ba.L.T"  # adjust to your project path
+RELEASE_BASE="$PROJECT_ROOT/release"
+RELEASE_NAME="cblt-release"
+RELEASE_DIR="$RELEASE_BASE/$RELEASE_NAME"
 BIN_NAME="cblt"
-ASSETS=("assets" "themes" "config")             # folders to include in release
-LINK_GLOBAL=true                                # set false if you don't want global symlink
+FOLDERS=("log" "assets" "meta" "options")  # folders to include
+LINK_GLOBAL=true
+# ----------------------------------------
 
-echo "Starting release process..."
+echo "=== Starting release packaging ==="
 
-echo "Building release library..."
+rm -rf "$RELEASE_DIR"
+mkdir -p "$RELEASE_DIR"
+
+echo "Building shared library..."
 make -f "$PROJECT_ROOT/makeLinux.mk" release
 
 echo "Building executable..."
 make -f "$PROJECT_ROOT/makeLinux.mk" all
 
-echo "Creating release folder..."
-mkdir -p "$RELEASE_DIR/bin"
-
 echo "Copying binary..."
-cp "$PROJECT_ROOT/$BIN_NAME" "$RELEASE_DIR/bin/"
+cp "$PROJECT_ROOT/$BIN_NAME" "$RELEASE_DIR/"
+chmod +x "$RELEASE_DIR/$BIN_NAME"
 
-echo "Copying assets..."
-for d in "${ASSETS[@]}"; do
+echo "Copying folders..."
+for d in "${FOLDERS[@]}"; do
     if [ -d "$PROJECT_ROOT/$d" ]; then
         cp -r "$PROJECT_ROOT/$d" "$RELEASE_DIR/"
     else
-        echo "Warning: $d not found, skipping"
+        echo "Warning: $d folder not found, skipping"
     fi
 done
 
-WRAPPER="$RELEASE_DIR/run.sh"
-echo "Creating wrapper script at $WRAPPER..."
-cat > "$WRAPPER" << 'EOF'
+if [ -f "$PROJECT_ROOT/release/libCoBaLT.so" ]; then
+    cp "$PROJECT_ROOT/release/libCoBaLT.so" "$RELEASE_DIR/"
+fi
+
+RUN_SCRIPT="$RELEASE_DIR/run.sh"
+echo "Creating run.sh wrapper..."
+cat > "$RUN_SCRIPT" << 'EOF'
 #!/bin/bash
-# This wrapper works even if symlinked globally
-# Resolve the real path to the release folder
+# Robust wrapper for CBLT
+# Works from anywhere and ensures assets/fonts/logs are found
+
+# Resolve real path of this script (symlink-safe)
 SOURCE="${BASH_SOURCE[0]}"
 while [ -L "$SOURCE" ]; do
     DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
@@ -44,16 +54,27 @@ while [ -L "$SOURCE" ]; do
     [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
-# Run the binary relative to the release folder, start in current terminal directory
-"$DIR/bin/cblt" "$PWD"
-EOF
-chmod +x "$WRAPPER"
 
-# 6️⃣ Optional: symlink to /usr/local/bin
+# Store terminal's current working directory
+USER_PWD="$PWD"
+
+# Switch to release folder so binary finds assets/fonts/logs
+cd "$DIR" || exit 1
+
+# Run binary with original terminal directory as argument
+./cblt "$USER_PWD"
+EOF
+
+chmod +x "$RUN_SCRIPT"
+
 if [ "$LINK_GLOBAL" = true ]; then
-    echo "Linking wrapper to /usr/local/bin/$BIN_NAME"
-    sudo ln -sf "$WRAPPER" "/usr/local/bin/$BIN_NAME"
+    echo "Linking run.sh to /usr/local/bin/cblt"
+    sudo ln -sf "$RUN_SCRIPT" "/usr/local/bin/cblt"
 fi
 
-echo "✅ Release completed!"
-echo "You can now run '$BIN_NAME' from any terminal."
+cd "$RELEASE_BASE"
+tar -czvf "$RELEASE_NAME.tar.gz" "$RELEASE_NAME"
+
+echo "✅ Release complete: $RELEASE_BASE/$RELEASE_NAME.tar.gz"
+echo "Contents of release folder:"
+tree "$RELEASE_DIR" 2>/dev/null || ls -R "$RELEASE_DIR"
