@@ -6,6 +6,9 @@
     #include <limits.h>  // For PATH_MAX
 #endif
 
+// TODO: Finish palette handling and palette editor along with animations
+// TODO: Finish AnimationProfile editor 
+
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
 
