@@ -6,12 +6,42 @@
     #include <limits.h>  // For PATH_MAX
 #endif
 
-UT::i32 main() {
+UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
 
     CBLT::Utils::Err::Init();
     CBLT::InitNAF();
 
+
+    // ----------------- Previous / Linux asset handling -----------------
+#if defined(__linux__)
+    CBLT::Controller ctrl;
+
+    std::string userDir = (argc > 1) ? std::string(argv[1]) : "/home";
+    ctrl.InitCWD(userDir);
+
+    const char* resource_path = getenv("CBLT_RESOURCES");
+    std::string resourceDir = resource_path ? std::string(resource_path) : ".";
+
+    CBLT::gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFont.Config();
+    CBLT::gFont.size = 23;
+
+    CBLT::gConsoleFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gConsoleFont.Config();
+    CBLT::gConsoleFont.size = 20;
+
+    CBLT::gSound.Load(resourceDir + "/assets/audio/"); // <--- pass resourceDir here
+#elif defined(__APPLE__)
+    CBLT::Controller ctrl; // Controller instance
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+        ctrl.InitCWD(std::string(cwd));
+    } else {
+        ctrl.InitCWD("/"); 
+    }
+
+    // Previous asset loading (macOS)
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
     CBLT::gFont.Config();
     CBLT::gFont.size = 23;
@@ -22,21 +52,23 @@ UT::i32 main() {
 
     CBLT::gSound.Load();
 
-    // CBLT::Controller ctrl; // Automatically calls the constructor
-    // CBLT::Controller ctrl(fields...); // Automatically calls the constructor
-    CBLT::Controller ctrl; // Program controller
+#elif defined(_WIN32)
+    CBLT::Controller ctrl; // Controller instance
+    ctrl.InitCWD("C:/");
 
-    // Base it in local OS
-    #if defined(__linux__) || defined(__APPLE__)
-        char cwd[PATH_MAX];
-        if (getcwd(cwd, sizeof(cwd)) != nullptr) {
-            ctrl.InitCWD(std::string(cwd));
-        } else {
-            ctrl.InitCWD("/");                      // Fallback if getcwd fails
-        }
-    #elif defined(_WIN32)
-        ctrl.InitCWD("C:/");
-    #endif
+    // Previous asset loading (Windows)
+    CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFont.Config();
+    CBLT::gFont.size = 23;
+
+    CBLT::gConsoleFont.Load("assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gConsoleFont.Config();
+    CBLT::gConsoleFont.size = 20;
+
+    CBLT::gSound.Load();
+
+#endif
+// -------------------------------------------------------------------
 
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
@@ -44,7 +76,7 @@ UT::i32 main() {
     UT::b currentFileDirt; 
     std::string currentFileName;
 
-    // Default
+    // Default palette
     CBLT::gPalette.ReadPaletteFile("Stockholm");
 
     UT::ui32 framesCount = 0;
@@ -55,7 +87,7 @@ UT::i32 main() {
 
             ctrl.Update();
 
-            // No heap alloc, no copies, no runtime cost
+            // Cursor & console references
             CBLT::CursorManager& cm = ctrl.GetActiveCursorManager();
             CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
@@ -63,50 +95,42 @@ UT::i32 main() {
             CBLT::File& f = fq.Active();
             CBLT::Camera& cam = ctrl.GetCamera();
 
-            // Draw open file
+            // Draw file
             if (fq.Size() > 0) {
-                if (framesCount % 10 == 0) { // Every 10 frames
-                    f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
+                if (framesCount % 10 == 0) {
+                    f.RetokenizeDirtyLines();
                     c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
-                    // f.Auto().GetSuggestions(c.Fragment()); // We will get suggestions only per insertion
                 }
                 cm.DrawCursors(f.GetLines());
                 f.Draw(cam, c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
                 currentFileLineCount = f.GetLineCount();
                 currentFileDirt      = f.Dirt();
                 currentFileName      = f.Name();
-            } else { // Safety
+            } else {
                 currentFileLineCount = 0;
                 currentFileDirt      = false;
                 currentFileName      = "";
             }
 
             CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD());
-            
+
             if (cnsl.IsOpen()) {
-                // Minor exception in handling here, since we need the rectangle returned for drawing AFTER the console widgets are drawn
                 ctrl.HandleConsoleMouseWheel();
                 Rectangle rect = ctrl.HandleConsoleMouseClick();
                 cnsl.Draw(fq, rect);
             }
 
-            if (fq.Size() > 0) {
-                fq.Draw();
-            } else { // No open fles, display the guide message
-                cnsl.DrawGuide(); // Simply draws the guide text
-            }
+            if (fq.Size() > 0) fq.Draw();
+            else cnsl.DrawGuide();
 
-            cnsl.DrawMessage(); // Normal console message
-            
-            // cam.Draw();
+            cnsl.DrawMessage();
 
-            // DrawFPS(950, 0);
         EndDrawing();
 
-        if (framesCount % 120 == 0) { // Every 120 frames
+        if (framesCount % 120 == 0) {
             ctrl.GetConsole().GetCWDContents(ctrl.CWD());
             cam.SetHeight(GetScreenHeight());
-            cam.SetWidth(GetScreenWidth()); // Update camera width every 120 frames in case of resizing
+            cam.SetWidth(GetScreenWidth());
             cnsl.Cam().SetHeight(GetScreenHeight() - CBLT::gConsoleFont.size - 10);
         }
 
@@ -114,6 +138,5 @@ UT::i32 main() {
     }
 
     CBLT::Win::Destroy();
-
     return 0;
 }

@@ -15,32 +15,32 @@ namespace CBLT {
         CloseAudioDevice();
     }
         
-    void SoundSystem::Load(void) {
+    void SoundSystem::Load(std::string path) {
         // Inflile sounds
         
         // TODO: Finish the samples, replace them, and add them where needed
 
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_INSERT]       = LoadSound("assets/audio/infile/insert.wav"); // C
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_DELETE]       = LoadSound("assets/audio/infile/del.wav");    // C
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_NAV]          = LoadSound("assets/audio/infile/nav.wav");    // C
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_RETURN]       = LoadSound("assets/audio/infile/return.wav"); // C           
-        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_SPACE]        = LoadSound("assets/audio/infile/space.wav");  // C       
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_INSERT]       = LoadSound((path + "infile/insert.wav").c_str()); // C
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_DELETE]       = LoadSound((path + "infile/del.wav").c_str());    // C
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_NAV]          = LoadSound((path + "infile/nav.wav").c_str());    // C
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_RETURN]       = LoadSound((path + "infile/return.wav").c_str()); // C           
+        soundVector[(UT::llui32)SoundClass::SOUND_INFILE_SPACE]        = LoadSound((path + "infile/space.wav").c_str());  // C       
 
         // Console sounds
-        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_OPEN]        = LoadSound("assets/audio/console/copen.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_CLOSE]       = LoadSound("assets/audio/console/cclose.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_EXECUTE]     = LoadSound("assets/audio/console/cexec.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_FILE_SWITCH] = LoadSound("assets/audio/console/cfswitch.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_ERROR]       = LoadSound("assets/audio/console/cerr.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_INFO]        = LoadSound("assets/audio/console/cinfo.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_GUIDE]       = LoadSound("assets/audio/console/cguide.wav");
+        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_OPEN]        = LoadSound((path + "console/copen.wav").c_str());
+        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_CLOSE]       = LoadSound((path + "console/cclose.wav").c_str());
+        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_EXECUTE]     = LoadSound((path + "console/cexec.wav").c_str());
+        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_FILE_SWITCH] = LoadSound((path + "console/cfswitch.wav").c_str());
+        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_ERROR]       = LoadSound((path + "console/cerr.wav").c_str());
+        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_INFO]        = LoadSound((path + "console/cinfo.wav").c_str());
+        soundVector[(UT::llui32)SoundClass::SOUND_CONSOLE_GUIDE]       = LoadSound((path + "console/cguide.wav").c_str());
 
         // File queue sounds
-        soundVector[(UT::llui32)SoundClass::SOUND_FQ_TRAVERSE]         = LoadSound("assets/audio/fq/fqnav.wav");
-        soundVector[(UT::llui32)SoundClass::SOUND_FQ_DEQUEUE]          = LoadSound("assets/audio/fq/fqdq.wav");             
+        soundVector[(UT::llui32)SoundClass::SOUND_FQ_TRAVERSE]         = LoadSound((path + "fq/fqnav.wav").c_str());
+        soundVector[(UT::llui32)SoundClass::SOUND_FQ_DEQUEUE]          = LoadSound((path + "fq/fqdq.wav").c_str());             
 
         // Other
-        soundVector[(UT::llui32)SoundClass::SOUND_EXIT]                = LoadSound("assets/audio/other/cbltexit.wav");
+        soundVector[(UT::llui32)SoundClass::SOUND_EXIT]                = LoadSound((path + "other/cbltexit.wav").c_str());
 
         for (UT::llui32 i = 0 ; i < (UT::llui32)SoundClass::EDITOR_SOUNDS_COUNT ; i++) {
             if (!IsSoundValid(soundVector[i])) {

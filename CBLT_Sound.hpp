@@ -43,7 +43,7 @@ namespace CBLT {
             ~SoundSystem(void);
             
             // Load all sounds
-            void Load(void);
+            void Load(std::string path);
             
             // Play a sound            
             void Play(CBLT::SoundClass index);

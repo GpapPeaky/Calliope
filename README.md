@@ -174,11 +174,11 @@ There is an animator class that uses AnimationProfiles to apply transformations 
 You can either download the compiled build in the **releases** section, or compile it manually. Note that it requires compiling both raylib and source with a **64-bit compiler**.
 
 ### POSIX
-please download and uncompress the contents, then run the **run.sh** command, ie
+please download and uncompress the contents, then run the **install.sh** command, ie
 ```sh
 tar -xzvf cblt-linux-x86_64.tar.gz
-cd cblt
-./run.sh
+cd cblt-linux-x86_64/
+sh ./install.sh
 ```
 
 ## License
