@@ -1,5 +1,11 @@
 #include "CoBaLT_INCLUDES.hpp"
 
+// Minor POSIX system fix for easier use
+#if defined(__linux__) || defined(__APPLE__)
+    #include <unistd.h>
+    #include <limits.h>  // For PATH_MAX
+#endif
+
 UT::i32 main() {
     CBLT::Win::Init();
 
@@ -22,7 +28,12 @@ UT::i32 main() {
 
     // Base it in local OS
     #if defined(__linux__) || defined(__APPLE__)
-        ctrl.InitCWD(std::string(getenv("HOME") ? getenv("HOME") : "/home"));
+        char cwd[PATH_MAX];
+        if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+            ctrl.InitCWD(std::string(cwd));
+        } else {
+            ctrl.InitCWD("/");                      // Fallback if getcwd fails
+        }
     #elif defined(_WIN32)
         ctrl.InitCWD("C:/");
     #endif
