@@ -11,7 +11,7 @@ DLL_LDFLAGS = -shared -Wl,--export-dynamic
 RAYLIB_PATH = /home/peaky/Desktop/GpapPeaky/DEV/raylib/src/
 
 # Compiler flags
-CXXFLAGS = -std=c++23 -Wall -Wextra -O3 -I$(RAYLIB_PATH)
+CXXFLAGS = -std=c++23 -fPIC -Wall -Wextra -O3 -I$(RAYLIB_PATH)
 
 # Common source files
 CPP_SRCS_COMMON := $(filter-out CBLT_Dialog_Win32.cpp CBLT_Dialog_Linux.cpp CBLT_Dialog_MacOS.cpp, $(wildcard *.cpp))

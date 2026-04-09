@@ -170,7 +170,16 @@ There is an animator class that uses AnimationProfiles to apply transformations 
 
 ## Building and Installation
 
+### WIN32
 You can either download the compiled build in the **releases** section, or compile it manually. Note that it requires compiling both raylib and source with a **64-bit compiler**.
+
+### POSIX
+please download and uncompress the contents, then run the **run.sh** command, ie
+```sh
+tar -xzvf cblt-linux-x86_64.tar.gz
+cd cblt
+./run.sh
+```
 
 ## License
 
