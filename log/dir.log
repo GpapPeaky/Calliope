@@ -539,3 +539,56 @@ CBLT_LOG:
 CBLT_LOG: NAFname: {6\Pavw[:mO4=ZvMD^bvU;e'Rrs^4LJ1_$^A{S|3AIG["<)Czi:N%!UTpI0%u[6S\qtUEofc9.@8GF\@-vn2tAgejwk]P~1+q$`4pGx
 
 CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: QKhXrW3x&0[XLc|Hc^\[8":vQF2Ib>Ta!-{q~?^h#?Wf6k{4-~Q:r>}rg9]lNT+/WF=aHnDnD#M@oB'>J$+oJKLMQ$4sq,,*ulDGo8x2toS[FBr\~bZ.m:'_-I1$Z/7p'zr?#@Od5EwC48'uk){Di>fAA,h8NNT`+H9?{2\)JQo
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: #EP;D`VQ.ju=YNqSTC4/2|93g_^{!hc?(Q6V[`(_"-p;.J Q)xa+`(07E{'s#VZ"KO[g4T6$E'1M3L(<d>l
+
+CBLT_LOG: DIRECTIVE: EXIT
+CBLT_LOG: 
+###############################################################################
+
+CBLT_LOG: NAFname: 5`"s '94R,@7,><>`@x^E9wU9n=c>-V=$Ec`t?0 2PPrf/qAm mYIgc8`)tCarqc[B8P\sVDvU=I?3O@~E`X|KdFOC{fRgkAcXIOsCilt64p9P;}sHrM&':EEm"!tBwr*v<VCLuuF&}gc+>YOU6
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 0
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 1
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 2
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 3
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 4
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 5
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 6
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 7
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 8
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 9
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 10
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 11
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 12
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 13
+
+CBLT_LOG: BAD SOUND DATA AT INDEX 14
+
+CBLT_LOG: DIRECTIVE: OPEN C:\Users\Peaky\Desktop\GpapPeaky\Code\RUST\rakey
+CBLT_LOG: DIRECTIVE: CHANGEDIR .tests/
+CBLT_LOG: LOADED MARKS: a.c
+CBLT_LOG: DIRECTIVE: NQ a.c
+CBLT_LOG: DIRECTIVE: GOTO 5
+CBLT_LOG: DIRECTIVE: EXIT
