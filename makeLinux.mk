@@ -1,6 +1,6 @@
 # 64-bit Linux g++
 CXX = g++
-TARGET = CoBaLT
+TARGET = cblt
 
 # Release shared library
 RELEASE_DIR = release

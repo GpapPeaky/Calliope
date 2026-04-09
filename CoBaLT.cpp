@@ -54,7 +54,7 @@ UT::i32 main() {
 
             // Draw open file
             if (fq.Size() > 0) {
-                if (framesCount % 60 == 0) { // Every 60 frames
+                if (framesCount % 10 == 0) { // Every 10 frames
                     f.RetokenizeDirtyLines(); // Will tokenize only dirty lines
                     c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
                     // f.Auto().GetSuggestions(c.Fragment()); // We will get suggestions only per insertion
