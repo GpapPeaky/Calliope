@@ -69,7 +69,7 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
 
-    CBLT::gSound.Load();
+    CBLT::gSound.Load("assets/audio/");
 
 #endif
 // -------------------------------------------------------------------

@@ -52,4 +52,4 @@ clean:
 	@if exist $(RELEASE_DIR) rmdir /s /q $(RELEASE_DIR)
 
 # Release target
-rel: clean $(RELEASE_DIR)/$(DLL_TARGET)
+rel: $(RELEASE_DIR)/$(DLL_TARGET)
