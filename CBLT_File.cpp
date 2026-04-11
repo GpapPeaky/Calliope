@@ -753,10 +753,17 @@ namespace CBLT {
         if (path.empty() || name.empty()) return;
     
         namespace fs = std::filesystem;
+
+        std::string installationPath;
+
+        #if defined(__linux__)
+            const char* resource_path = getenv("CBLT_RESOURCES");
+            installationPath = std::string(resource_path);
+        #endif
     
-        fs::path dir = fs::path("meta") / "marks";
+        fs::path dir = fs::path(installationPath) / "meta" / "marks";
     
-        // Always safe (no need to check exists)
+        // Always safe
         if (!fs::create_directories(dir) && !fs::exists(dir)) {
             CBLT::Utils::Err::Log("FAILED TO CREATE DIRECTORY: " + dir.string());
             return;
@@ -790,13 +797,20 @@ namespace CBLT {
     
         namespace fs = std::filesystem;
     
+        std::string installationPath;
+
+        #if defined(__linux__)
+            const char* resource_path = getenv("CBLT_RESOURCES");
+            installationPath = std::string(resource_path);
+        #endif
+
         std::string markFname = CBLT::Utils::Func::PathToMarkFileName(path);
     
         std::string encodedFname = CBLT::Utils::Func::MarkFileEncode(markFname) + ".marks";
-        fs::path sidecarPath = fs::path("meta") / "marks" / encodedFname;
+        fs::path sidecarPath = fs::path(installationPath) / "meta" / "marks" / encodedFname;
     
         if (!fs::exists(sidecarPath)) {
-            // Optional log (can remove if noisy)
+            // Optional log
             CBLT::Utils::Err::Log("NO MARKS FILE FOUND FOR: " + name);
             return;
         }

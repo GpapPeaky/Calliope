@@ -8,6 +8,7 @@
 
 // TODO: Finish palette handling and palette editor along with animations
 // TODO: Finish AnimationProfile editor 
+// FIXME: meta/marks/ folders are generated eveywhere, they SHOULD only generate in ONE and ONLY ONE Place, the root of the exec at cblt-linux-x86_64/meta/marks and check from there always
 
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
