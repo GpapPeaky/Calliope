@@ -59,8 +59,6 @@ namespace CBLT {
 
             f.Auto().Close(); // Close in infile navigation
         } else if (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP)) {
-            File& f = Q.Active();
-            
             if (!f.Auto().IsOpen()) {
                 if (line > 0 && col != len + 1) {
                     UT::ui32 newLine = line - 1;
@@ -83,8 +81,6 @@ namespace CBLT {
                 f.Auto().Up();
             }
         } else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
-            File& f = Q.Active();
-
             if (!f.Auto().IsOpen()) {
                 if (line + 1 < f.GetLineCount() && col != len + 1) {
                     UT::ui32 newLine = line + 1;
@@ -779,8 +775,26 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_Q)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":q";
-             console.Execute(Q, cwd);
+            
+            console.Execute(Q, cwd);
+
+            // Maybe some other time
+            // if (Q.Size() == 0) {
+            //      goto DEQUEUED_LAST_FILE_VIA_SHORTCUT;
+            // }
         
+            // WOW, CRAZY STUFF
+            // if this dequeues the LAST Filequeue node
+            // and somewhere after the HandleShorcuts function
+            // tries to get the Q.Active()
+            // because we haven't exited the normal 
+            // no-NAF loop, we simply and ungraciously crash.
+
+            // Using the :q, :qa, :qas directives is safe, since
+            // the console is conservative with using the 
+            // loaded files, and directives in general ONLY execute
+            // when there is an active file
+
             return true;
         }
 
@@ -923,10 +937,6 @@ namespace CBLT {
                 }
             }
             
-            else if (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN)) {
-                console.Scroll(+gConsoleFont.size);
-            }
-
             // Remove the console message
             else if (IsKeyPressed(KEY_ESCAPE) && console.Message().messageType != ConsoleMessage::NONE) {
                 console.Message().messageType = ConsoleMessage::NONE;
@@ -950,6 +960,8 @@ namespace CBLT {
             console.Toggle();
             return;
         }
+
+        if (Q.Size() == 0) return; // No controller update, except for the console
 
         // Mouse (stoopid af)
         HandleMouseWheel();
@@ -981,6 +993,20 @@ namespace CBLT {
                 case CBLT::CursorMode::SELECT:
                 case CBLT::CursorMode::INSERT:
                     handledShort = HandleShorcuts(c);
+
+                    // As seen by the CTRL + Q shortcut
+                    // since calling the Console::Execute will yield the
+                    // exact invoked effects, the last active file is DQ'ed
+                    // and later we try to call Q.Active() somewhere else,
+                    // really bad... use DEQUEUED_LAST_FILE_VIA_SHORTCUT label
+                    // to get the fuck outta there
+
+                    // OR, check size again
+                    // boohoo you fucking idiot
+                    // should have used a client/server method
+
+                    if (Q.Size() == 0) return; // Nothing is safe to call after the shortcuts, possibility the last NQ'ed file was DQ'ed, Q.Active() won't shut the fuck up 
+
                     HandleSpecials(c);
                     
                     // Shortcuts include ctrl + arrow key presses so we need to omit movement

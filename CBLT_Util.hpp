@@ -6,6 +6,7 @@
 #include <cstdlib>           // for system(...)
 #include <sstream>
 #include <iomanip>
+#include <cassert>           // assert
 
 #include "CBLT_raylib.hpp"
 

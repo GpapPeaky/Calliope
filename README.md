@@ -128,9 +128,6 @@
   :wqa  // Write and dequeue all loaded files
   ```
 
-  #### 1.4.2 NAF 
-  A simple global file object, used as a **fallback** for functions whenever the **FileQueue size is 0**
-
 ### 1.5 Markings
   We are give the chance to *increase infile navigation speed* by marking lines of interest either using the shortcut *CTRL + M* or using the *:mat directive*. We can then go to a specific, or the last placed marking using the *:gm* and *:gml* directives. Removing directives is also as simple as calling the *:umat* directive or *:uml* for removing the last marking or *:uma* for removing all markings. It is important to note that mark ids are all updated so they are always in order and there are no gaps between ids. The marking directives can be used as such:
 

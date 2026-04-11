@@ -13,7 +13,6 @@ UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
 
     CBLT::Utils::Err::Init();
-    CBLT::InitNAF();
 
     //  Previous / Linux asset handling
 #if defined(__linux__)
@@ -89,31 +88,29 @@ UT::i32 main(int argc, char** argv) {
             ctrl.Update();
 
             // Cursor & console references
-            CBLT::CursorManager& cm = ctrl.GetActiveCursorManager();
-            CBLT::Cursor& c = cm.Primary();
             CBLT::Console& cnsl = ctrl.GetConsole();
             CBLT::FileQueue& fq = ctrl.LoadedFileQueue();
-            CBLT::File& f = fq.Active();
             CBLT::Camera& cam = ctrl.GetCamera();
 
             // Draw file
             if (fq.Size() > 0) {
+                CBLT::File& f = fq.Active();
+                CBLT::CursorManager& cm = ctrl.GetActiveCursorManager();
+                CBLT::Cursor& c = cm.Primary();
+
                 if (framesCount % 10 == 0) {
                     f.RetokenizeDirtyLines();
                     c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
                 }
                 cm.DrawCursors(f.GetLines());
                 f.Draw(cam, c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
+                
                 currentFileLineCount = f.GetLineCount();
                 currentFileDirt      = f.Dirt();
                 currentFileName      = f.Name();
-            } else {
-                currentFileLineCount = 0;
-                currentFileDirt      = false;
-                currentFileName      = "";
-            }
 
-            CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD());
+                CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD());
+            }
 
             if (cnsl.IsOpen()) {
                 ctrl.HandleConsoleMouseWheel();

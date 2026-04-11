@@ -36,17 +36,15 @@ namespace CBLT {
     }
 
     File& FileQueue::Active(void) {
-        if(Size() > 0)
-            return loadedFiles.at(activeIndex);
+        assert(false && "CBLT_ASSERT: FileQueue::Active() called on empty queue");
 
-        return CBLT::gNAF;
+        return loadedFiles.at(activeIndex);
     }
 
     const File& FileQueue::Active(void) const {
-        if(Size() > 0)
-            return loadedFiles.at(activeIndex);
-    
-        return CBLT::gNAF;    
+        assert(false && "CBLT_ASSERT: FileQueue::Active() called on empty queue");
+
+        return loadedFiles.at(activeIndex);
     }
 
     UT::llui32 FileQueue::Index(void) const  {
@@ -165,7 +163,7 @@ namespace CBLT {
     void FileQueue::Scroll(UT::f32 dx) {
         camOffset.x += dx; 
 
-        // FIXME: Works, but needs some tinkering
+        // FIXME: Works, but needs some tinkering with the clamping
 
         // Clamp the camera offset to prevent scrolling too far
         UT::f32 maxOffsetX = GetScreenWidth(); // Adjust this value as needed

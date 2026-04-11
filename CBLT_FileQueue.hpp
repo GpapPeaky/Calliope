@@ -3,6 +3,8 @@
 #include "CBLT_Util.hpp"
 #include "CBLT_File.hpp"
 
+#include <execinfo.h>
+
 namespace CBLT {
     class FileQueue {
         private:

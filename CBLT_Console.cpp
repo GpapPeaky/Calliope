@@ -52,9 +52,6 @@ namespace CBLT {
     void Console::Execute(FileQueue& Q, std::string& cwd) {
         namespace fs = std::filesystem;
 
-        File& f = Q.Active();
-        Cursor& c = f.Cursors().Primary(); // Primary cursor of file object
-
         DirectiveResult dr = { "", ConsoleMessage::NONE }; // Write here for any messages that need to be displayed, info, error, guide or none if all's well
 
         std::string directiveLine = directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE);
@@ -121,6 +118,20 @@ namespace CBLT {
             // Mark at
             else if (dir == "mat") {
                 UT::ui32 lineNum = (UT::ui32)std::atoi(directiveParam.c_str());
+
+                if (Q.Size() == 0) {
+                    dr.message = "CBLT_ERR: NO FILE TO MARK";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: MARK " + directiveParam + " <NAF>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                }
+            
+                File& f = Q.Active();
             
                 if (lineNum >= f.GetLineCount()) {
                     dr.message = "CBLT_ERR: INVALID LINE TO MARK";
@@ -154,7 +165,21 @@ namespace CBLT {
             // Unmark line
             else if (dir == "umat") {
                 UT::ui32 lineNum = (UT::ui32)std::atoi(directiveParam.c_str());
+
+                if (Q.Size() == 0) {
+                    dr.message = "CBLT_ERR: NO FILE TO UNMARK";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: UNMARK " + directiveParam + " <NAF>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                }
             
+                File& f = Q.Active();
+
                 if (lineNum >= f.GetLineCount()) {
                     dr.message = "CBLT_ERR: INVALID LINE TO MARK";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
@@ -188,6 +213,20 @@ namespace CBLT {
             else if (dir == "gm") {
                 UT::ui32 markId = (UT::ui32)std::atoi(directiveParam.c_str());
 
+                if (Q.Size() == 0) {
+                    dr.message = "CBLT_ERR: NO FILE TO GO TO";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO " + directiveParam + " <NAF>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                }
+            
+                File& f = Q.Active();
+
                 std::vector<InfileMark> marks = f.Marks();
                 
                 if (markId >= marks.size()) {
@@ -213,6 +252,20 @@ namespace CBLT {
 
             // Go to last mark
             else if (dir == "gml") {
+                if (Q.Size() == 0) {
+                    dr.message = "CBLT_ERR: NO FILE TO GO TO";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: GOTO <NAF>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                }
+
+                File& f = Q.Active();
+
                 std::vector<InfileMark> marks = f.Marks();
 
                 UT::ui32 markId = marks.size() - 1;
@@ -225,6 +278,20 @@ namespace CBLT {
 
             // Remove last mark
             else if (dir == "uml") {
+                if (Q.Size() == 0) {
+                    dr.message = "CBLT_ERR: NO FILE TO UMARK";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: UMARK <NAF>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                }
+            
+                File& f = Q.Active();
+
                 if (f.Marks().empty()) {
                     dr.message = "CBLT_ERR: NO MARKS TO REMOVE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
@@ -249,6 +316,20 @@ namespace CBLT {
 
             // Unmark all
             else if (dir == "uma") {
+                if (Q.Size() == 0) {
+                    dr.message = "CBLT_ERR: NO FILE TO UNMARK";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: UNMARK <NAF>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                }
+            
+                File& f = Q.Active();
+
                 if (f.Marks().empty()) {
                     dr.message = "CBLT_ERR: NO MARKS TO REMOVE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
@@ -285,6 +366,20 @@ namespace CBLT {
 
             // Display Infile Marks with nearby data
             else if (dir == "im") {
+                if (Q.Size() == 0) {
+                    dr.message = "CBLT_ERR: NO FILE TO DISPLAY MARKS";
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: INFILEMARKS <NAF>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                }
+            
+                File& f = Q.Active();
+
                 dr.message = f.GetMarksAndNearbyLinesMessageString();
                 dr.messageType = ConsoleMessage::FILE_MARKS;
 
@@ -314,6 +409,8 @@ namespace CBLT {
             // Save and exit
             else if (dir == "we") {
                 if (Q.Size() > 0) {
+                    File& f = Q.Active();
+
                     CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + f.Name());
                     f.Save();
                 } else {
@@ -327,6 +424,8 @@ namespace CBLT {
             // Write to file
             else if (dir == "w") {
                 if (Q.Size() > 0) {
+                    File& f = Q.Active();
+
                     CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + f.Name());
                     f.Save();
                 } else {
@@ -631,6 +730,8 @@ namespace CBLT {
             // Display file info and metadata
             else if (dir == "i") {
                 if (Q.Size() > 0) {
+                    File& f = Q.Active();
+
                     dr.message = f.Info();
                     dr.messageType = ConsoleMessage::INFO;
 
@@ -668,6 +769,9 @@ namespace CBLT {
                         return; // Early out
                     }
 
+                    File& f = Q.Active();
+                    Cursor& c = f.Cursors().Primary();
+
                     UT::ui32 line = atoi(directiveParam.c_str());
 
                     if (line < Q.Active().GetLineCount()) {
@@ -690,14 +794,14 @@ namespace CBLT {
             // Dequeue file
             else if (dir == "q") {
                 if (Q.Size() > 0) {
-                    Q.CloseFile(Q.Index());
-
                     GetCWDContents(cwd); // Update CWD contents
-
+                    
                     dr.message = "CBLT_LOG: FILE CLOSED";
                     dr.messageType = ConsoleMessage::INFO;
-
+                    
                     CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                    
+                    Q.CloseFile(Q.Index());
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE TO CLOSE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
@@ -710,8 +814,8 @@ namespace CBLT {
             else if (dir == "qa") {
                 if (Q.Size() > 0) {
                     while (Q.Size() > 0) {
-                        Q.CloseFile(Q.Index());
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                        Q.CloseFile(Q.Index());
                     }
 
                     GetCWDContents(cwd); // Update CWD contents
@@ -730,15 +834,14 @@ namespace CBLT {
             // Dequeue all clean files, safe version
             else if (dir == "qas") {
                 if (Q.Size() > 0) {
-            
                     for (UT::llui32 i = Q.Size() ; i-- > 0 ; ) {
                         const File& f = Q.GetLoadedFiles().at(i);
             
                         if (!f.Dirt()) {
                             std::string name = f.Name(); // store BEFORE erase
-                            Q.CloseFile(i);
-            
                             CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + name);
+                            
+                            Q.CloseFile(i);
                         }
                     }
             
@@ -763,9 +866,9 @@ namespace CBLT {
 
                         CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + Q.Active().Name());
 
-                        Q.CloseFile(Q.Index());
-
                         CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                        
+                        Q.CloseFile(Q.Index());
                     }
 
                     GetCWDContents(cwd); // Update CWD contents
@@ -788,14 +891,14 @@ namespace CBLT {
 
                     CBLT::Utils::Err::Log("DIRECTIVE: WRITE " + Q.Active().Name());
 
-                    Q.CloseFile(Q.Index());
-
+                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                    
                     GetCWDContents(cwd); // Update CWD contents
-
+                    
                     dr.message = "CBLT_LOG: FILE CLOSED";
                     dr.messageType = ConsoleMessage::INFO;
-
-                    CBLT::Utils::Err::Log("DIRECTIVE: DQFILE " + Q.Active().Name());
+                    
+                    Q.CloseFile(Q.Index());
                 } else {
                     dr.message = "CBLT_ERR: NO CURRENT FILE TO CLOSE";
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
@@ -807,6 +910,9 @@ namespace CBLT {
             // Goto start
             else if (dir == "gs") {
                 if (Q.Size() > 0) {
+                    File& f = Q.Active();
+                    Cursor& c = f.Cursors().Primary();
+
                     c.SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Go to start of file
 
                     if (IsOpen()) Toggle();
@@ -830,6 +936,8 @@ namespace CBLT {
             else if (dir == "ge") {
                 if (Q.Size() > 0) {
                     File& f = Q.Active();
+                    Cursor& c = f.Cursors().Primary();
+
                     UT::ui32 fileLength = f.GetLineCount() - 1;
                     c.SetAt(0, fileLength, f.GetCurrentLine(fileLength)); // Go to end of file
 
@@ -1038,7 +1146,8 @@ namespace CBLT {
             if (toDraw) {
                 Color c = current.c;
 
-                if (current.n == Q.Active().Name()) {
+                // Size check for queue
+                if (Q.Size() > 0 && current.n == Q.Active().Name()) {
                     c = gPalette.openFileColor;
                 }
 

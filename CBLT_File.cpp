@@ -1,8 +1,6 @@
 #include "CBLT_File.hpp"
 
 namespace CBLT {
-    File gNAF;
-    
     void File::InsertDirtyLine(UT::ui32 line) {
         if (line >= lines.size()) return;
     
@@ -302,29 +300,6 @@ namespace CBLT {
         return inBlock;
     }
 
-    void InitNAF(void) {
-        const UT::ui32 nameSize = rand() % 256;
-        std::string NAFname;
-        
-        for (unsigned int i = 0; i < nameSize; i++) {
-            char c = 32 + (rand() % (127 - 32)); // random printable ASCII
-            NAFname.push_back(c);
-        }
-        
-        gNAF.SetName(NAFname);
-
-        CBLT::Utils::Err::Log("\n###############################################################################\n");
-        CBLT::Utils::Err::Log("NAFname: " + NAFname + "\n");
-    }
-
-    UT::b IsNAF(std::string filename) {
-        if (filename == gNAF.Name()) {
-            return true;
-        }
-
-        return false;
-    }
-
     File::File(void) {
         lines.emplace_back("");
 
@@ -387,9 +362,7 @@ namespace CBLT {
     
         Tokenize(); // Suck ass
 
-        if (!IsNAF(name)) {
-            autocomplete.LoadTokens(tokens, lines);
-        }
+        autocomplete.LoadTokens(tokens, lines);
 
         LoadMarks();
 
