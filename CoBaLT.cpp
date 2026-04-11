@@ -136,5 +136,6 @@ UT::i32 main(int argc, char** argv) {
     }
 
     CBLT::Win::Destroy();
-    return 0;
+    
+    return UDef::GRACEFUL_EXIT;
 }

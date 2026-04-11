@@ -2,7 +2,13 @@
 
 namespace CBLT {
     void FileQueue::LoadFileToQueue(const File& f) {
+        if (loadedFiles.size() >= UDef::MAX_FILE_Q_NODES) {
+            UE::Log("FQFULL");
+            return; // TODO: Add boolean success/fail for dr.msg from the console
+        }
+    
         loadedFiles.push_back(f);
+
         activeIndex = Size() - 1;
     }
 
@@ -158,6 +164,8 @@ namespace CBLT {
         cam.SetOrigin(0, GetScreenHeight() - barHeight);
 
         camOffset = { 0.0f, 0.0f }; // Initialize camera offset to zero
+    
+        loadedFiles.reserve(UDef::MAX_FILE_Q_NODES); // I don't get it, reserve memory for 16 nodes??
     }
 
     void FileQueue::Scroll(UT::f32 dx) {

@@ -1,5 +1,7 @@
 #include "CBLT_Console.hpp"
 
+// FIXME: File NQ is completely broken, both in the file-switch directive, and the creation directive.
+
 namespace CBLT {
     Console::Console(void) {
         width = 400;
@@ -576,7 +578,9 @@ namespace CBLT {
                     F.Load(directiveParam, cwd);
                     Q.LoadFileToQueue(F);
 
-                    Q.Active().Cursors().Primary().SetAt(0, 0, Q.Active().GetCurrentLine(0)); // Moven the new file main cursor to the start of the file
+                    File& f = Q.Active();
+
+                    f.Cursors().Primary().SetAt(0, 0, f.GetCurrentLine(0)); // Moven the new file main cursor to the start of the file
 
                     GetCWDContents(cwd); // Update
 
@@ -965,6 +969,12 @@ namespace CBLT {
                     F.Load(entry.n, cwd);
                     Q.LoadFileToQueue(F); // Add it to the queue
 
+                    // Complete queue mutations, bind a reference
+                    File& f = Q.Active();
+                    
+                    // We also need to reset the secondaries before switching
+                    f.Cursors().Primary().SetAt(0, 0, f.GetCurrentLine(0)); // Move the new file main cursor to the start of the file
+
                     dr.message = "CBLT_LOG: SWITCHED TO " + directiveLine;
                     dr.messageType = ConsoleMessage::INFO;
         
@@ -972,11 +982,9 @@ namespace CBLT {
 
                     directive.Clear();
 
+                    // Console cursor manager
                     cursor.Primary().SetAt(0, DIRECTIVE_FILE_LINE, directive.DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE)); // Reset the cursor
                     
-                    Q.Active().Cursors().Primary().SetAt(0, 0, F.GetCurrentLine(0)); // Move the new file main cursor to the start of the file
-
-                    // We also need to reset the secondaries before switching
 
                     CBLT::Utils::Err::Log("DIRECTIVE: NQ " + directiveLine);
 
