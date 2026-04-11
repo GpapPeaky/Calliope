@@ -35,7 +35,7 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
 
-    CBLT::gSound.Load(resourceDir + "/assets/audio/"); // <--- pass resourceDir here
+    CBLT::gSound.Load(resourceDir + "/assets/audio/"); // Pass resourceDir here
 #elif defined(__APPLE__)
     CBLT::Controller ctrl; // Controller instance
     char cwd[PATH_MAX];
@@ -54,7 +54,7 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
 
-    CBLT::gSound.Load();
+    CBLT::gSound.Load("assets/audio/");
 
 #elif defined(_WIN32)
     CBLT::Controller ctrl; // Controller instance
