@@ -758,7 +758,7 @@ namespace CBLT {
 
         #if defined(__linux__)
             const char* resource_path = getenv("CBLT_RESOURCES");
-            installationPath = std::string(resource_path);
+            installationPath = resource_path ? std::string(resource_path) : ".";
         #endif
     
         fs::path dir = fs::path(installationPath) / "meta" / "marks";
@@ -801,7 +801,7 @@ namespace CBLT {
 
         #if defined(__linux__)
             const char* resource_path = getenv("CBLT_RESOURCES");
-            installationPath = std::string(resource_path);
+            installationPath = resource_path ? std::string(resource_path) : ".";
         #endif
 
         std::string markFname = CBLT::Utils::Func::PathToMarkFileName(path);

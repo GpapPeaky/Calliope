@@ -59,11 +59,11 @@ namespace CBLT {
     Palette::~Palette(void) {}
 
     UT::b Palette::ReadPaletteFile(const std::string& path) {  // The key to the palette file is the .pal file name without the extension, located in options/palettes/
-        std::string resourcePath;    
+        std::string resourcePath;
 
         #if defined(__linux__)
             const char* resource_path = getenv("CBLT_RESOURCES");
-            resourcePath = std::string(resource_path);
+            resourcePath = resource_path ? std::string(resource_path) : ".";
         #endif
 
         std::string fullPath = resourcePath + "/options/palettes/" + path + ".pal";

@@ -41,7 +41,7 @@ if [ -f "$PROJECT_ROOT/release/libCoBaLT.so" ]; then
     cp "$PROJECT_ROOT/release/libCoBaLT.so" "$RELEASE_DIR/"
 fi
 
-# ---------------- Create run.sh ----------------
+# Create run.sh
 RUN_SCRIPT="$RELEASE_DIR/run.sh"
 echo "Creating run.sh..."
 cat > "$RUN_SCRIPT" << 'EOF'
@@ -69,7 +69,7 @@ export CBLT_RESOURCES="$RELEASE_DIR"
 EOF
 chmod +x "$RUN_SCRIPT"
 
-# ---------------- Create install.sh ----------------
+# Create install.sh
 INSTALL_SCRIPT="$RELEASE_DIR/install.sh"
 echo "Creating install.sh..."
 cat > "$INSTALL_SCRIPT" << 'EOF'
@@ -105,7 +105,7 @@ echo "You can now run 'cblt' from any terminal."
 EOF
 chmod +x "$INSTALL_SCRIPT"
 
-# ---------------- Package ----------------
+# Package
 echo "Creating tar.gz release..."
 cd "$RELEASE_BASE"
 tar -czvf "$RELEASE_NAME.tar.gz" "$RELEASE_NAME"
