@@ -14,7 +14,7 @@ namespace CBLT {
             Offset camOffset;                // Camera offset for smooth movement when switching files
         public:
             // Add a file to the queue
-            void LoadFileToQueue(const File& f);
+            void LoadFileToQueue(const std::string& name, const std::string& cwd);
 
             // Remove a file from the queue
             void CloseFile(UT::llui32 idx);

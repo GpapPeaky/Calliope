@@ -1,14 +1,16 @@
 #include "CBLT_FileQueue.hpp"
 
 namespace CBLT {
-    void FileQueue::LoadFileToQueue(const File& f) {
+    void FileQueue::LoadFileToQueue(const std::string& name, const std::string& cwd) {
         if (loadedFiles.size() >= UDef::MAX_FILE_Q_NODES) {
             UE::Log("FQFULL");
-            return; // TODO: Add boolean success/fail for dr.msg from the console
+            return;
         }
     
-        loadedFiles.push_back(f);
-
+        // Construct directly
+        loadedFiles.emplace_back();
+        loadedFiles.back().Load(name, cwd);
+    
         activeIndex = Size() - 1;
     }
 
@@ -42,13 +44,13 @@ namespace CBLT {
     }
 
     File& FileQueue::Active(void) {
-        assert(false && "CBLT_ASSERT: FileQueue::Active() called on empty queue");
+        assert(!loadedFiles.empty() && "CBLT_ASSERT: FileQueue::Active() called on empty queue");
 
         return loadedFiles.at(activeIndex);
     }
 
     const File& FileQueue::Active(void) const {
-        assert(false && "CBLT_ASSERT: FileQueue::Active() called on empty queue");
+        assert(!loadedFiles.empty() && "CBLT_ASSERT: FileQueue::Active() called on empty queue");
 
         return loadedFiles.at(activeIndex);
     }
@@ -143,7 +145,6 @@ namespace CBLT {
             x += constructWidth + itemMargin;
         }
 
-        // FIXME: Update camera at resizing
         // cam.Draw();
     }
 

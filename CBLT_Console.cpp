@@ -1,7 +1,5 @@
 #include "CBLT_Console.hpp"
 
-// FIXME: File NQ is completely broken, both in the file-switch directive, and the creation directive.
-
 namespace CBLT {
     Console::Console(void) {
         width = 400;
@@ -574,9 +572,7 @@ namespace CBLT {
                     }
 
                     // Load the new file
-                    File F;
-                    F.Load(directiveParam, cwd);
-                    Q.LoadFileToQueue(F);
+                    Q.LoadFileToQueue(directiveParam, cwd);
 
                     File& f = Q.Active();
 
@@ -965,9 +961,7 @@ namespace CBLT {
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
                 if (entry.n == directiveLine) {
-                    File F;
-                    F.Load(entry.n, cwd);
-                    Q.LoadFileToQueue(F); // Add it to the queue
+                    Q.LoadFileToQueue(entry.n, cwd); // Add it to the queue, constructs it inside it
 
                     // Complete queue mutations, bind a reference
                     File& f = Q.Active();
