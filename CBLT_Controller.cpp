@@ -156,20 +156,26 @@ namespace CBLT {
             if (cursor.Col() > 0) {
                 std::string& line = Q.Active().GetCurrentLine(cursor.Line());
                 UT::i32 col = cursor.Col();
+
                 UT::i32 tabSize = keyboard.tabSize;
+
+                // Clamp
+                if (col > (UT::i32)line.size()) col = line.size();
         
                 // If previous char is space -> delete indentation block
                 if (line.at(col - 1) == ' ') {
-                    UT::i32 deleteCount = 0;
-                    UT::i32 startCol = col;
+                    UT::ui32 deleteCount = 0;
+                    UT::ui32 startCol = col;
         
                     // Walk left while:
                     // still spaces
                     // not past column 0
                     // not past a tab stop
                     while (startCol > 0 &&
+                        startCol <= (UT::ui32)line.size() &&
                         line.at(startCol - 1) == ' ' &&
                         ((startCol - 1) % tabSize != 0)) {
+
                         startCol--;
                         deleteCount++;
                     }
@@ -179,9 +185,9 @@ namespace CBLT {
                         startCol--;
                         deleteCount = 1;
                     }
-        
+
                     line.erase(startCol, deleteCount);
-                    cursor.SetAt(startCol, cursor.Line(), Q.Active().GetCurrentLine(cursor.Line()));
+                    cursor.SetAt(startCol, cursor.Line(), line);
                     Q.Active().InsertDirtyLine(cursor.Line());
 
                 } else { // Normal character delete
@@ -310,6 +316,8 @@ namespace CBLT {
             } else {
                 gSound.Play(SoundClass::SOUND_INFILE_INSERT); // Per queue element
             }
+
+            // FIXME: Very weird bug that breaks backspace indentation after pressing '}' again?
 
             // Closers omit
             if (typed == '}') {
@@ -535,9 +543,16 @@ namespace CBLT {
             return true;
         }
 
-        // LCTRl ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // LCtrl ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+    
+        // Open token search
+        if (keyboard.m.ctrl && (IsKeyPressed(KEY_F))) {
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":f";
+            console.Execute(Q, cwd);            
+        }
 
         // Delete current line
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
@@ -568,45 +583,6 @@ namespace CBLT {
 
             Q.Active().SetDirt(true);
 
-            return true;
-        }
-
-        // Fragment removal kit thing
-        if (keyboard.m.ctrl && (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressedRepeat(KEY_BACKSPACE))) {
-            File& f = Q.Active();
-            Cursor& c = f.Cursors().Primary();
-            UT::ui32 col  = c.Col();
-            UT::ui32 line = c.Line();
-            std::string& lineStr = f.GetCurrentLine(line);
-        
-            if (lineStr.empty() || col == 0) return true;
-        
-            // Re-acquire fragment fresh from current cursor position
-            // to avoid stale data causing wrong erase bounds
-            c.AcquireFragment(col, lineStr);
-            const std::string frag = c.Fragment();
-        
-            if (frag.empty()) return true;
-        
-            // Safe signed arithmetic to avoid unsigned underflow
-            UT::i32 icol  = static_cast<UT::i32>(col);
-            UT::i32 ifrag = static_cast<UT::i32>(frag.size());
-            UT::i32 isize = static_cast<UT::i32>(lineStr.size());
-        
-            UT::i32 start = icol - ifrag;
-        
-            // Clamp to valid range before touching the string
-            if (start < 0) start = 0;
-            if (start >= isize) return true;
-        
-            UT::i32 eraseCount = std::min(ifrag, isize - start);
-            if (eraseCount <= 0) return true;
-        
-            lineStr.erase(static_cast<UT::ui32>(start), static_cast<UT::ui32>(eraseCount));
-            c.SetAt(static_cast<UT::ui32>(start), line, lineStr);
-            f.InsertDirtyLine(line);
-            f.SetDirt(true);
-        
             return true;
         }
 
@@ -649,7 +625,7 @@ namespace CBLT {
         if (keyboard.m.ctrl && IsKeyPressed(KEY_H)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":h";
-             console.Execute(Q, cwd);
+            console.Execute(Q, cwd);
 
             return true;
         }

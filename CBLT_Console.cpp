@@ -96,7 +96,67 @@ namespace CBLT {
             // Match the remainder after converting to lowercase
             std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
 
-            if (dir == "pal") {
+            // Search token, this is token by token search, very expensive but ehh 
+            if (dir == "f") {
+                if (directiveParam.empty()) {
+                    dr.message = "CBLT_ERR: NO TOKEN GIVEN TO FIND";        
+                    dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;        
+
+                    CBLT::Utils::Err::Log("DIRECTIVE FAIL: FIND <NOTOKEN>");
+
+                    dirRes = dr;
+
+                    directive.Clear();
+
+                    return;
+                } else {
+                    if (Q.Size() > 0) {
+                        CBLT::Utils::Err::Log("DIRECTIVE: FIND " + directiveParam);
+
+                        File& f = Q.Active();
+                        std::vector<std::string> lines = f.GetLines();
+                        std::vector<std::vector<Token>> tokens = f.Tokens();
+
+                        for (UT::llui32 i = 0 ; i < lines.size() ; i++) {
+                            for (Token t : tokens.at(i)) {
+                                // Extract the tokens
+                                std::string_view lineView(lines[i]);
+                                std::string_view tokenText = lineView.substr(t.col, t.len);
+                            
+                                std::string tokenScouted = std::string(tokenText);
+
+                                if (tokenScouted == directiveParam) {
+                                    f.Cursors().Primary().SetAt(t.col, i, f.GetCurrentLine(i)); // Set cursor there immediately
+                                    return;
+                                }
+                            }
+                        }
+
+                        dr.message = "CBLT_ERR: TOKEN GIVEN NOT FOUND INSIDE " + f.Name();
+                        dr.messageType = ConsoleMessage::INFO;
+
+                        dirRes = dr;
+    
+                        directive.Clear();
+    
+                        return;
+                    } else {
+                        dr.message = "CBLT_ERR: NO OPEN FILE TO SEARCH";
+                        dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;        
+    
+                        CBLT::Utils::Err::Log("DIRECTIVE FAIL: FIND <NAF>");   
+                    
+                        dirRes = dr;
+
+                        directive.Clear();
+
+                        return;
+                    }
+                }
+            }
+            
+            // Palette switch
+            else if (dir == "pal") {
                 if (directiveParam.empty()) {
                     dr.message = "CBLT_ERR: NO PALETTE NAME GIVEN TO SWITCH :" + dir;
                     dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;

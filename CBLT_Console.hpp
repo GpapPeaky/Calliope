@@ -10,7 +10,6 @@
 #include <iostream>
 #include <list>          // Directive history double linked list
 
-
 #include "CBLT_Directive.hpp"
 #include "CBLT_Interpolator.hpp"
 #include "CBLT_CWDContentToken.hpp"

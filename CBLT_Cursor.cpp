@@ -70,6 +70,11 @@ namespace CBLT {
     }
 
     void Cursor::SetAt(UT::ui32 col, UT::ui32 line, const std::string& targetLine) {
+        // Clamping, just in case
+        if (col > targetLine.size()) {
+            col = targetLine.size();
+        }
+        
         this->column = col;
         this->line = line;
 
