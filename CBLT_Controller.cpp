@@ -155,12 +155,11 @@ namespace CBLT {
 
             if (cursor.Col() > 0) {
                 std::string& line = Q.Active().GetCurrentLine(cursor.Line());
-                UT::i32 col = cursor.Col();
-
-                UT::i32 tabSize = keyboard.tabSize;
+                UT::ui32 col = cursor.Col();
+                UT::cui8 tabSize = keyboard.tabSize;
 
                 // Clamp
-                if (col > (UT::i32)line.size()) col = line.size();
+                if (col > (UT::ui32)line.size()) col = line.size();
         
                 // If previous char is space -> delete indentation block
                 if (line.at(col - 1) == ' ') {
@@ -189,7 +188,6 @@ namespace CBLT {
                     line.erase(startCol, deleteCount);
                     cursor.SetAt(startCol, cursor.Line(), line);
                     Q.Active().InsertDirtyLine(cursor.Line());
-
                 } else { // Normal character delete
                     line.erase(col - 1, 1);
                     cursor.Left(line);

@@ -98,10 +98,10 @@ UT::i32 main(int argc, char** argv) {
                 CBLT::CursorManager& cm = ctrl.GetActiveCursorManager();
                 CBLT::Cursor& c = cm.Primary();
 
-                if (framesCount % 10 == 0) {
-                    f.RetokenizeDirtyLines();
-                    c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
-                }
+                // Need to retokenize every frame, else non updated tokens with invalid lengths will crash the program
+                f.RetokenizeDirtyLines();
+                c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
+
                 cm.DrawCursors(f.GetLines());
                 f.Draw(cam, c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
                 
