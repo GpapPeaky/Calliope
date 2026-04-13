@@ -541,15 +541,28 @@ namespace CBLT {
             return true;
         }
 
+        // LCtrl + Shift  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        // Go to the start of the file
+        if (keyboard.m.ctrl && keyboard.m.shift && (IsKeyPressed(KEY_G))) {
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":gs";
+            console.Execute(Q, cwd);
+        
+            return true;        
+        }
+
         // LCtrl ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        
     
         // Open token search
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_F))) {
-            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":f";
-            console.Execute(Q, cwd);            
+            console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":f ";
+            console.Toggle();
+        
+            return true;
         }
 
         // Delete current line
@@ -628,11 +641,11 @@ namespace CBLT {
             return true;
         }
 
-        // Guide pull-up
+        // Go to end of file
         if (keyboard.m.ctrl && IsKeyPressed(KEY_G)) {
             // Call the console to execute the directive
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":ge";
-             console.Execute(Q, cwd);
+            console.Execute(Q, cwd);
 
             return true;
         }
