@@ -211,7 +211,6 @@ namespace CBLT {
             Q.Active().SetDirt(true);
         }
 
-        // FIXME: Multi-cursor indentation is problematic
         // Return
         if (IsKeyPressedRepeat(KEY_ENTER) || IsKeyPressed(KEY_ENTER)) {
             if (cursor.Col() == 0) {
@@ -314,8 +313,6 @@ namespace CBLT {
             } else {
                 gSound.Play(SoundClass::SOUND_INFILE_INSERT); // Per queue element
             }
-
-            // FIXME: Very weird bug that breaks backspace indentation after pressing '}' again?
 
             // Closers omit
             if (typed == '}') {
@@ -566,7 +563,7 @@ namespace CBLT {
         }
 
         // Delete current line
-        if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) { // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
+        if (keyboard.m.ctrl && (IsKeyPressed(KEY_X) || IsKeyPressedRepeat(KEY_X))) {
             File& f = Q.Active();
             UT::ui32 lineToDel = cursor.Line();
 

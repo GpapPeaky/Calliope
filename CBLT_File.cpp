@@ -39,8 +39,7 @@ namespace CBLT {
         dirtyLines.clear();
     }
 
-    // TODO: Add a token type for function calls
-    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) { // FIXME: Multiline comments and strings are a bit iffy
+    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) {
         if (line >= lines.size()) return false;
 
         tokens[line].clear();
@@ -159,8 +158,6 @@ namespace CBLT {
             // -------------------------------------------------------------------------------------------------------------------------------------------------
             // Lang specific lexing (comments, misc)
             // -------------------------------------------------------------------------------------------------------------------------------------------------
-
-            // FIXME: Move this to a function
 
             switch (ext) {
                 case EXT(C):

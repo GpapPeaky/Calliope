@@ -18,8 +18,6 @@ namespace CBLT {
     void SoundSystem::Load(std::string path) {
         // Inflile sounds
         
-        // TODO: Finish the samples, replace them, and add them where needed
-
         soundVector[(UT::llui32)SoundClass::SOUND_INFILE_INSERT]       = LoadSound((path + "infile/insert.wav").c_str()); // C
         soundVector[(UT::llui32)SoundClass::SOUND_INFILE_DELETE]       = LoadSound((path + "infile/del.wav").c_str());    // C
         soundVector[(UT::llui32)SoundClass::SOUND_INFILE_NAV]          = LoadSound((path + "infile/nav.wav").c_str());    // C

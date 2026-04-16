@@ -172,8 +172,6 @@ namespace CBLT {
     void FileQueue::Scroll(UT::f32 dx) {
         camOffset.x += dx; 
 
-        // FIXME: Works, but needs some tinkering with the clamping
-
         // Clamp the camera offset to prevent scrolling too far
         UT::f32 maxOffsetX = GetScreenWidth(); // Adjust this value as needed
         camOffset.x = std::clamp(camOffset.x, -maxOffsetX, maxOffsetX);

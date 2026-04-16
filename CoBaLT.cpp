@@ -8,6 +8,14 @@
 
 // TODO: Finish palette handling and palette editor along with animations
 // TODO: Finish AnimationProfile editor 
+// FIXME: Multi-cursor indentation is problematic
+// FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
+// FIXME: Very weird bug that breaks backspace indentation after pressing '}' again?
+// TODO: Add a token type for function calls
+// FIXME: Multiline comments and strings are a bit iffy
+// FIXME: Move the line-comment checking in the file lexer to a function
+// TODO: Finish the sound samples, replace them, and add them where needed
+
 
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
