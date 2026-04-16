@@ -25,7 +25,7 @@ namespace CBLT {
             std::string cwd;                              // Current working directory
 
             // Handle basic cursor movement
-            void HandleMovement(Cursor& cursor, File* fileOverride = nullptr);
+            void HandleMovement(Cursor& cursor, UT::b inConsole, File* fileOverride = nullptr);
 
             // Handle special cursor movement, return true if special movement was handled
             UT::b HandleSpecialMovement(Cursor& cursor);

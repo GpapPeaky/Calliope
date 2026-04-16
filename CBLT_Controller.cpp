@@ -27,12 +27,12 @@ namespace CBLT {
         return false;
     }
 
-    void Controller::HandleMovement(Cursor& cursor, File* fileOverride) {
+    void Controller::HandleMovement(Cursor& cursor, UT::b inConsole, File* fileOverride) {
         // Need a reference, else it copies it, bad for performance
         File& f = fileOverride ? *fileOverride : Q.Active(); // Override if required
         
         // We need to check specifics AND THEN check for general key presses
-        if (HandleSpecialMovement(cursor)) return; // Already handled movement, via LCtrl, skip applying any more movement
+        if (!inConsole && HandleSpecialMovement(cursor)) return; // Already handled movement, via LCtrl, skip applying any more movement
         
         const UT::ui32 line = cursor.Line();
         const UT::ui32 col  = cursor.Col();
@@ -822,6 +822,8 @@ namespace CBLT {
 
         // Console handling
         if (console.IsOpen()) {
+            // Move to main in order to render some data returned by the handling
+            // rectangles of entries
             // HandleConsoleMouseWheel(); // Mouse
             // HandleConsoleMouseClick();
 
@@ -935,7 +937,7 @@ namespace CBLT {
             }
 
             // Overide the file to handle movement at, since without any specifications it will try to write at the current open user file
-            HandleMovement(console.ConsoleCursor(), &console.ConsoleDirective().DirectiveFile());
+            HandleMovement(console.ConsoleCursor(), true, &console.ConsoleDirective().DirectiveFile());
 
             return;
         }
@@ -994,7 +996,7 @@ namespace CBLT {
                     HandleSpecials(c);
                     
                     // Shortcuts include ctrl + arrow key presses so we need to omit movement
-                    if (!handledShort) HandleMovement(c);
+                    if (!handledShort) HandleMovement(c, false);
                     
                     // Shortcuts include letters so it makes sense that we need to omit any leftover I/O's
                     // so they won't spill over to the insert function
