@@ -10,9 +10,6 @@
     namespace CBLT {
     
         std::string ShellBridge::Execute(const std::string& com, std::string& cwd) {
-            std::array<char, 256> buffer;
-            std::string result;
-    
             // Use bash for consistent behavior
             std::string cmd =
                 "/bin/bash -c \"cd '" + cwd + "' && " + com + "\"";
@@ -25,11 +22,7 @@
                 throw std::runtime_error("Failed to run command");
             }
     
-            while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-                result += buffer.data();
-            }
-    
-            return result;
+            return "EXECUTED: `" + com + "`";
         }
     
         ShellBridge::ShellBridge(void) {}

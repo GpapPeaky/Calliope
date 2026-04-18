@@ -16,6 +16,7 @@
 // FIXME: Move the line-comment checking in the file lexer to a function
 // TODO: Finish the sound samples, replace them, and add them where needed
 // FIXME: :sb might as well be integrated? Or something like the :! command in vim
+// TODO: Fix the shell bridge, NOT to put the editor in a while loop
 
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
