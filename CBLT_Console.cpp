@@ -1020,7 +1020,7 @@ namespace CBLT {
 
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
-                if (entry.n == directiveLine) {
+                if (entry.n.compare(0, directiveLine.length(), directiveLine) == 0) {
                     Q.LoadFileToQueue(entry.n, cwd); // Add it to the queue, constructs it inside it
 
                     // Complete queue mutations, bind a reference
