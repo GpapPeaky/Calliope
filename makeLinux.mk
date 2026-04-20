@@ -2,6 +2,8 @@
 CXX = g++
 TARGET = cblt
 
+# FIXME: Add docker for compiling against other linux distros
+
 # Release shared library
 RELEASE_DIR = release
 DLL_TARGET  = libCoBaLT.so
@@ -25,7 +27,9 @@ CPP_OBJS := $(CPP_SRCS:%.cpp=$(OBJDIR)/%.o)
 OBJS := $(CPP_OBJS)
 
 # Linker flags for Linux
-LDFLAGS := -L$(RAYLIB_PATH) -lraylib -lGL -lm -ldl -lpthread -lrt -lX11 -lXrandr -lXi -lXxf86vm -lXinerama -lXcursor
+LDFLAGS := -L$(RAYLIB_PATH) -l:libraylib.a -lGL -lm -ldl -lpthread -lrt \
+		-lX11 -lXrandr -lXi -lXxf86vm -lXinerama -lXcursor 				\
+		-static-libstdc++ -static-libgcc
 
 # Default target
 all: $(TARGET)
