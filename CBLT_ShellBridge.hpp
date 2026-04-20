@@ -7,9 +7,9 @@
 #include <filesystem>
 
 namespace CBLT {
-
     // Cross platform function
     #define __CROSS
+
     class ShellBridge {
         public:
             // Run a command based on the OS

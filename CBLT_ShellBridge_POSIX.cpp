@@ -6,26 +6,27 @@
     #include <memory>
     #include <array>
     #include <stdexcept>
+    #include <unistd.h>
+    #include <sys/wait.h>
 
     namespace CBLT {
-    
         std::string ShellBridge::Execute(const std::string& com, std::string& cwd) {
             // Use bash for consistent behavior
-            std::string cmd =
-                "/bin/bash -c \"cd '" + cwd + "' && " + com + "\"";
-    
-            std::unique_ptr<FILE, decltype(&pclose)> pipe(
-                popen(cmd.c_str(), "r"), pclose
-            );
-    
-            if (!pipe) {
-                throw std::runtime_error("Failed to run command");
+            pid_t pid = fork();
+
+            if (pid == 0) {
+                // Child process
+                execlp("sh", "sh", (char*)NULL);
+            } else {
+                // Parent waits
+                wait(NULL);
             }
-    
-            return "EXECUTED: `" + com + "`";
+
+            return com;
         }
     
         ShellBridge::ShellBridge(void) {}
+
         ShellBridge::~ShellBridge(void) {}
     
         ShellBridge gShellBridge;

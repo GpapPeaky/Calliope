@@ -16,27 +16,27 @@
 
     namespace CBLT {
         std::string ShellBridge::Execute(const std::string& com, std::string& cwd) {
-            std::array<char, 128> buffer;
-            std::string result;
+            // std::array<char, 128> buffer;
+            // std::string result;
         
-            // Wrap command to run in PowerShell
-            // We need to execute at our vitual path of course.
-            std::string cmd =
-                "powershell -NoProfile -Command \""
-                "Set-Location -LiteralPath '" + cwd + "'; " + com +
-                "\"";
+            // // Wrap command to run in PowerShell
+            // // We need to execute at our vitual path of course.
+            // std::string cmd =
+            //     "powershell -NoProfile -Command \""
+            //     "Set-Location -LiteralPath '" + cwd + "'; " + com +
+            //     "\"";
         
-            std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
+            // std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
         
-            if (!pipe) {
-                throw std::runtime_error("Failed to run command");
-            }
+            // if (!pipe) {
+            //     throw std::runtime_error("Failed to run command");
+            // }
         
-            while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-                result += buffer.data();
-            }
+            // while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+            //     result += buffer.data();
+            // }
         
-            return result;
+            return com;
         }
                 
         ShellBridge::ShellBridge(void) {}
