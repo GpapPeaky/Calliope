@@ -6,7 +6,6 @@
     #include <limits.h>  // For PATH_MAX
 #endif
 
-// TODO: Finish palette handling and palette editor along with animations
 // TODO: Finish AnimationProfile editor 
 // FIXME: Multi-cursor indentation is problematic
 // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
@@ -15,8 +14,6 @@
 // FIXME: Multiline comments and strings are a bit iffy
 // FIXME: Move the line-comment checking in the file lexer to a function
 // TODO: Finish the sound samples, replace them, and add them where needed
-// FIXME: :sb might as well be integrated? Or something like the :! command in vim
-// TODO: Fix the shell bridge, NOT to put the editor in a while loop
 
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
@@ -79,6 +76,8 @@ UT::i32 main(int argc, char** argv) {
 
 #endif
 
+    CBLT::gSettings.ReadSettings();
+
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
     UT::ui32 currentFileLineCount; 
@@ -86,7 +85,7 @@ UT::i32 main(int argc, char** argv) {
     std::string currentFileName;
 
     // Default palette
-    CBLT::gPalette.ReadPaletteFile("Stockholm");
+    CBLT::gPalette.ReadPaletteFile(CBLT::gSettings.OPTION_Palette);
 
     UT::ui32 framesCount = 0;
     while(!WindowShouldClose()) {

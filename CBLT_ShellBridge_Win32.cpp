@@ -13,6 +13,7 @@
     #include <stdexcept>
     #include <array>
 
+    #include "CBLT_Settings.hpp"
 
     namespace CBLT {
         std::string ShellBridge::Execute(const std::string& com, std::string& cwd) {

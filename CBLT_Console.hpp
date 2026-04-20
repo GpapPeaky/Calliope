@@ -2,6 +2,8 @@
 
 #include "CBLT_Dialog.hpp"
 
+#include "CBLT_Settings.hpp"
+
 #include <string>
 #include <vector>
 #include <algorithm>

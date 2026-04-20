@@ -1018,6 +1018,44 @@ namespace CBLT {
                 return; // Early out
             }
 
+            else if (dir == "set") {
+                namespace fs = std::filesystem;
+
+                std::string installationPath;
+
+                #if defined(__linux__)
+                    const char* resource_path = getenv("CBLT_RESOURCES");
+                    installationPath = resource_path ? std::string(resource_path) : ".";
+                #endif
+
+                fs::path optionsDir = fs::path(installationPath) / "options";
+
+                Q.LoadFileToQueue("settings.conf", optionsDir.string());
+
+                directive.Clear();
+
+                CBLT::Utils::Err::Log("DIRECTIVE: NQ" + optionsDir.string() + "setting.conf");
+
+                return;
+            }
+
+            else if (dir == "rst") {
+                CBLT::gSettings.ReadSettings();
+                
+                // Reload the palette option
+                std::string palOp = gSettings.OPTION_Palette;
+
+                directive.Becomes(":pal " + palOp);
+
+                Execute(Q, cwd);
+
+                dr.message = "CBLT_LOG: RELOADED SETTINGS";
+                dr.messageType = ConsoleMessage::INFO;
+
+                dirRes = dr;
+
+                return;
+            }
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
                 if (entry.n.compare(0, directiveLine.length(), directiveLine) == 0) {

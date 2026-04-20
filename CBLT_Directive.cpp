@@ -31,7 +31,9 @@ namespace CBLT {
                     ":gml  - Go to the last mark           |                \n"
                     ":uml  - Unmark last                   |                \n"
                     ":uma  - Unmark all                    |                \n"
-                    ":im   - Display marks                 |                \n";
+                    ":im   - Display marks                 |                \n"
+                    ":set  - Open the settings file        |                \n"
+                    ":rst  - Reload the settings file      |                \n";
 
     Directive::Directive(void) {}
 

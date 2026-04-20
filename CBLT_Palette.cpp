@@ -122,7 +122,7 @@ namespace CBLT {
             line = UF::Trim(line);
     
             if (line.empty()) continue;
-            if (line[0] == '!') continue;
+            if (line.at(0) == '!') continue;
     
             if (line == "%pal") {
                 inPalBlock = !inPalBlock;
@@ -131,7 +131,7 @@ namespace CBLT {
 
             if (!inPalBlock) continue;
     
-            size_t colonPos = line.find(':');
+            UT::llui32 colonPos = line.find(':');
             if (colonPos == std::string::npos) continue;
     
             std::string key = UF::Trim(line.substr(0, colonPos));

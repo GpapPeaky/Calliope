@@ -1,13 +1,14 @@
 #include "CBLT_ShellBridge.hpp"
 
-#if defined(__APPLE__) || defined(__linux__)
-
+#if defined(__APPLE__) || defined(__linux__)    
     #include <cstdio>
     #include <memory>
     #include <array>
     #include <stdexcept>
     #include <unistd.h>
     #include <sys/wait.h>
+
+    #include "CBLT_Settings.hpp"
 
     namespace CBLT {
         std::string ShellBridge::Execute(const std::string& com, std::string& cwd) {
@@ -16,10 +17,7 @@
 
             if (pid == 0) {
                 // Child process
-                execlp("sh", "sh", (char*)NULL);
-            } else {
-                // Parent waits
-                wait(NULL);
+                execlp(gSettings.OPTION_POSIX_Term.c_str(), cwd.c_str(), (char*)NULL);
             }
 
             return com;
