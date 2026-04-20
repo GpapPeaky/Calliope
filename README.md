@@ -1,4 +1,4 @@
-# CoBaLT (v2.0.0)
+# CoBaLT (v2.1.0 Svedberg)
 
 **The Console-Oriented Basic Line Transformer** (formerly known as Muse) is a lightweight console-based editor that allows users to manage files, directories, and editor configurations directly from a command-line interface. The editor supports switching between console mode and insert mode seamlessly, along with a wide range of file, directory, and editor management directives. The basic idea behind it is that today's editor are simply too bloated with unwanted features, at the other hand switching to something like vim takes years of experience to fully master and to work productively. So with that in mind, I set out to capture the best of both worlds, notably the **lightweightness, customization, handilng** and **visual simplicity** of vim, vi like editors, as well as the **flexibility** of modern editors like VS Code.
 
