@@ -106,8 +106,6 @@ namespace CBLT {
 
                     dirRes = dr;
 
-                    directive.Clear();
-
                     return;
                 } else {
                     if (Q.Size() > 0) {
@@ -127,6 +125,8 @@ namespace CBLT {
 
                                 if (tokenScouted == directiveParam) {
                                     f.Cursors().Primary().SetAt(t.col, i, f.GetCurrentLine(i)); // Set cursor there immediately
+
+                                    Toggle();
                                     return;
                                 }
                             }
@@ -136,8 +136,6 @@ namespace CBLT {
                         dr.messageType = ConsoleMessage::INFO;
 
                         dirRes = dr;
-    
-                        directive.Clear();
     
                         return;
                     } else {
@@ -149,7 +147,7 @@ namespace CBLT {
                         dirRes = dr;
 
                         directive.Clear();
-
+                        
                         return;
                     }
                 }
@@ -463,7 +461,13 @@ namespace CBLT {
                 CBLT::Utils::Err::Log("DIRECTIVE: SHELL " + directiveParam);
                 
                 dr.message = gShellBridge.Execute(directiveParam, cwd);
-                dr.messageType = ConsoleMessage::SHELL_BRIDGE;
+                dr.messageType = ConsoleMessage::INFO;
+                
+                dirRes = dr;
+                
+                directive.Clear();
+                
+                return;
             }
 
             // Save and exit

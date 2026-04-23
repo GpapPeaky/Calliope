@@ -6,6 +6,8 @@
     #include <limits.h>  // For PATH_MAX
 #endif
 
+// TODO: Make handling and handle function a bit more uniform in Controller::Update, both modes and the console IsOpen(...) block
+// TODO: Write the HandleSelectionSpecial(...) function
 // TODO: Finish AnimationProfile editor 
 // FIXME: Multi-cursor indentation is problematic
 // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines

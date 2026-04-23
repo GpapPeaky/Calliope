@@ -99,6 +99,15 @@ namespace CBLT {
 
             // Handle font resizing
             void ResizeHandling(void);
+
+            // Handle select exit
+            UT::b HandleSelectExit(UT::b insertion);
+            
+            // Handle select entry;
+            UT::b HandleSelectEntry(Cursor& c);
+
+            // Selection special keys
+            void HandleSelectionSpecials(Cursor& cursor);
             
             // Constructor
             Controller(void);

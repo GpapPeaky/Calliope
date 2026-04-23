@@ -162,15 +162,11 @@ namespace CBLT {
     void Cursor::StartSelection(void) {
         startSelectColumn = column;
         startSelectLine = line;
-
-        m = CursorMode::SELECT;
     }
 
     void Cursor::StopSelection(void) {
         finalSelectColumn = column;
         finalSelectLine = line;
-
-        m = CursorMode::INSERT;
     }
 
     UT::ui32 Cursor::SFCol() const {

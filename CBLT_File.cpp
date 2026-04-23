@@ -839,7 +839,7 @@ namespace CBLT {
 
         for (const auto& mark : marks) {
             UT::ui32 lineNum = mark.Line();
-            result += "MARK" + std::to_string(mark.Id()) + " AT LINE:" + std::to_string(lineNum) + "\n"
+            result += "MARK " + std::to_string(mark.Id()) + " AT LINE:" + std::to_string(lineNum) + "\n"
             + "     | " + (lineNum > 0 ? lines[lineNum - 1] : "<START OF FILE>") + "\n"
             + "->   | " + lines[lineNum] + "\n"
             + "     | " + (lineNum + 1 < lines.size() ? lines[lineNum + 1] : "<END OF FILE>") + "\n\n";

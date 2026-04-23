@@ -816,6 +816,31 @@ namespace CBLT {
         return handled;
     }
 
+    UT::b Controller::HandleSelectEntry(Cursor& c) {
+        if (keyboard.m.shift) {
+            c.StartSelection(); // Start
+            return true;
+        }
+    
+        return false;    
+    }
+
+    UT::b Controller::HandleSelectExit(UT::b insertion) {
+        if (insertion) return true;
+
+        // Termination condition
+        bool bareArrow = !keyboard.m.shift && (IsKeyPressed(KEY_LEFT)  || IsKeyPressedRepeat(KEY_LEFT)  ||
+            IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT) ||
+            IsKeyPressed(KEY_UP)    || IsKeyPressedRepeat(KEY_UP)    ||
+            IsKeyPressed(KEY_DOWN)  || IsKeyPressedRepeat(KEY_DOWN)
+        );
+
+        if (bareArrow) return true;
+        if (IsKeyPressed(KEY_ESCAPE)) return true;
+
+        return false;
+    }
+
     void Controller::Update(void) {
         keyboard.UpdateModifiers(); // Update modifiers
         console.Update();           // Update console
@@ -974,9 +999,37 @@ namespace CBLT {
 
             // Handling booleans
             UT::b handledShort;
+            UT::b handledInsert = false;
 
             switch(m) {
                 case CBLT::CursorMode::SELECT:
+                    handledShort = HandleShorcuts(c);
+
+                    if (Q.Size() == 0) return;
+            
+                    HandleSelectionSpecials(c);
+                    
+                    if (!handledShort) HandleMovement(c, false);
+
+                    c.StopSelection(); // Update Stop col/line fields, doesn't terminate the mode
+
+                    // Camera clamp
+                    if (Q.Index() == previousIndex) {
+                        Q.Active().ClampCursor(c);
+                        c.ClampToCamera(camera, Q.Active().GetCurrentLine(c.Line()));
+                    }
+                    
+                    // Only handle insertion after shortcuts        
+                    if (!handledShort) {
+                        handledInsert = HandleInsert(c, keyQueue);
+                    }
+            
+                    // Typed an exit-selection valid key or key combination
+                    if (HandleSelectExit(handledInsert)) {
+                        c.SetMode(CBLT::CursorMode::INSERT); // Change mode exit selection
+                    }
+
+                    break;
                 case CBLT::CursorMode::INSERT:
                     handledShort = HandleShorcuts(c);
 
@@ -1008,6 +1061,11 @@ namespace CBLT {
                     if (Q.Index() == previousIndex) {
                         Q.Active().ClampCursor(c); // Clamp cursor inside file bounds
                         c.ClampToCamera(camera, Q.Active().GetCurrentLine(c.Line()));
+                    }
+                    
+                    // Select entry
+                    if (HandleSelectEntry(c)) {
+                        c.SetMode(CBLT::CursorMode::SELECT); // Change mode enter selection
                     }
 
                     break;
@@ -1286,5 +1344,69 @@ namespace CBLT {
         }
     
         return {0, 0, 0, 0};
+    }
+
+    void Controller::HandleSelectionSpecials(Cursor& cursor) {
+        // Backspace
+        if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
+            gSound.Play(SoundClass::SOUND_INFILE_DELETE);
+
+            if (cursor.Col() > 0) {
+                std::string& line = Q.Active().GetCurrentLine(cursor.Line());
+                UT::ui32 col = cursor.Col();
+                UT::cui8 tabSize = keyboard.tabSize;
+
+                // Clamp
+                if (col > (UT::ui32)line.size()) col = line.size();
+        
+                // If previous char is space -> delete indentation block
+                if (line.at(col - 1) == ' ') {
+                    UT::ui32 deleteCount = 0;
+                    UT::ui32 startCol = col;
+        
+                    // Walk left while:
+                    // still spaces
+                    // not past column 0
+                    // not past a tab stop
+                    while (startCol > 0 &&
+                        startCol <= (UT::ui32)line.size() &&
+                        line.at(startCol - 1) == ' ' &&
+                        ((startCol - 1) % tabSize != 0)) {
+
+                        startCol--;
+                        deleteCount++;
+                    }
+        
+                    // Always delete at least one space
+                    if (deleteCount == 0) {
+                        startCol--;
+                        deleteCount = 1;
+                    }
+
+                    line.erase(startCol, deleteCount);
+                    cursor.SetAt(startCol, cursor.Line(), line);
+                    Q.Active().InsertDirtyLine(cursor.Line());
+                } else { // Normal character delete
+                    line.erase(col - 1, 1);
+                    cursor.Left(line);
+                    Q.Active().InsertDirtyLine(cursor.Line());
+                }
+            } else if (cursor.Col() == 0 && cursor.Line() > 0) {
+                UT::ui32 originalLine = cursor.Line(); // capture
+                UT::ui32 prevLineLen  = Q.Active().GetLineLength(originalLine - 1);
+                UT::b    isEmpty      = Q.Active().GetCurrentLine(originalLine).empty();
+            
+                cursor.SetAt(prevLineLen, originalLine - 1, Q.Active().GetCurrentLine(originalLine - 1));
+            
+                if (isEmpty) {
+                    Q.Active().DeleteLine(originalLine);
+                } else {
+                    Q.Active().PushBackLineFragment(originalLine, originalLine - 1);
+                    Q.Active().DeleteLine(originalLine);
+                }
+            }
+
+            Q.Active().SetDirt(true);
+        }
     }
 } // CBLT
