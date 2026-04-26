@@ -30,9 +30,6 @@ namespace CBLT {
             // Handle special cursor movement, return true if special movement was handled
             UT::b HandleSpecialMovement(Cursor& cursor);
 
-            // Handle indentation
-            UT::b HandleIndentation(Cursor& cursor);
-
             // Handle presses like TAB, RETURN and BACKSPACE
             void HandleSpecials(Cursor& cursor);
 

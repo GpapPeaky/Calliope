@@ -105,43 +105,6 @@ namespace CBLT {
         }
     }
 
-    UT::b Controller::HandleIndentation(Cursor& cursor) {
-        UT::ui32 col = cursor.Col();
-        File& f = Q.Active();
-
-        if (col == 0) return false; // No identation to check
-
-        const std::string& line = f.GetCurrentLine(cursor.Line());
-        
-        if (line.at(cursor.Col() - 1) == '{') {
-            UT::ui32 currentIndent = GetIndentation(cursor.Line());
-            UT::ui32 innerIndent = currentIndent + 1;
-            UT::ui32 closerIndent = currentIndent;
-
-            // Inner line
-            std::string inner(innerIndent * keyboard.tabSize, ' ');
-    
-            // Closing line
-            std::string closer(closerIndent * keyboard.tabSize, ' ');
-            closer += '}';
-
-            UT::ui32 innerLine = cursor.Line() + 1;
-            
-            // Insert inner indented line
-            f.CreateLine(innerLine, inner);
-            
-            // Set cursor at the inner line
-            cursor.SetAt(inner.size(), innerLine, f.GetCurrentLine(innerLine));
-            
-            // Closer after the inner line
-            f.CreateLine(innerLine + 1, closer);
-
-            return true;
-        }
-
-        return false;
-    }
-
     void Controller::HandleSpecials(Cursor& cursor) {
         // Escape
         if (IsKeyPressed(KEY_ESCAPE)) {
@@ -217,19 +180,12 @@ namespace CBLT {
                 Q.Active().CreateLine(cursor.Line()); 
 
                 cursor.Down(Q.Active().GetCurrentLine(cursor.Line() + 1));
-            } else if (cursor.Col()) {
+            } else {
                 UT::ui32 originalLine = cursor.Line(); // capture
             
                 std::string fragment = Q.Active().SplitLine(originalLine, cursor.Col());
             
-                UT::b indentationHandle = HandleIndentation(cursor);
-                if (indentationHandle) return;
-            
                 UT::ui32 indent = GetIndentation(originalLine);
-            
-                if (Q.Active().GetCurrentLine(originalLine).at(cursor.Col() - 1) == '}') {
-                    indent--;
-                }
             
                 std::string indentString(indent * keyboard.tabSize, ' ');
                 std::string indentedFragment = indentString + fragment;

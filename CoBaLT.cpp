@@ -6,6 +6,8 @@
     #include <limits.h>  // For PATH_MAX
 #endif
 
+// FIXME: for some reason pressing enter after '}' doesn't do anything, till the cursor moves again
+// TODO: Add line swap with Alt + arrowKeys
 // TODO: Make handling and handle function a bit more uniform in Controller::Update, both modes and the console IsOpen(...) block
 // TODO: Write the HandleSelectionSpecial(...) function
 // TODO: Finish AnimationProfile editor 
