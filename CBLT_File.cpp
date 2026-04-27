@@ -167,7 +167,7 @@ namespace CBLT {
         DrawLineV(
             { 
                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                CBLT::FileMargins::UI::TOP_BAR_HEIGHT + gFont.size - 6
+                CBLT::FileMargins::UI::TOP_BAR_HEIGHT + gConsoleFont.size
             },{ 
                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
                 static_cast<UT::f32>(GetScreenHeight())

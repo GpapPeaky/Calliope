@@ -101,11 +101,11 @@ namespace CBLT {
 
         for (index = 0 ; index < Size() ; index++) {
             std::string construct = "[" + std::to_string(index) + "] " + std::string(loadedFiles.at(index).Name());
-            UT::f32 constructWidth = MeasureTextEx(gFont.f, construct.c_str(), gFont.size, 0.0f).x;
+            UT::f32 constructWidth = MeasureTextEx(gFileQueueFont.f, construct.c_str(), gFileQueueFont.size, 0.0f).x;
 
             if (index == activeIndex) {
                 DrawTextEx(
-                    gFont.f,
+                    gFileQueueFont.f,
                     construct.c_str(),
                     { 
                         x,
@@ -117,7 +117,7 @@ namespace CBLT {
                 );
             } else {
                 DrawTextEx(
-                    gFont.f,
+                    gFileQueueFont.f,
                     construct.c_str(),
                     {
                         x,
@@ -157,8 +157,7 @@ namespace CBLT {
     }
 
     FileQueue::FileQueue(void) {
-        const UT::ui32 fontSize = 21;
-        const UT::ui32 barHeight = fontSize + 7;
+        UT::ui32 barHeight = gFileQueueFont.size + 7;
 
         cam.SetHeight(barHeight);
         cam.SetWidth(GetScreenWidth());

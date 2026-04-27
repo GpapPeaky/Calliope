@@ -519,6 +519,7 @@ namespace CBLT {
 
             gFont.size -= 2; // Update size, reload font
             gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+            gFont.Config();
 
             cursor.charWidth = MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x;
         
@@ -534,6 +535,7 @@ namespace CBLT {
 
             gFont.size += 2; // Update size, reload font
             gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+            gFont.Config();
         
             cursor.charWidth = MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x;
 

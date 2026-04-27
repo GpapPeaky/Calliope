@@ -50,4 +50,7 @@ namespace CBLT {
 
     // Seperate top bar font, stays constant
     extern EditorFont gTopBarFont;
+
+    // Seperate file queue font
+    extern EditorFont gFileQueueFont;
 } // CBLT

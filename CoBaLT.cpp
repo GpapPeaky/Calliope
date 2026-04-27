@@ -18,6 +18,7 @@
 // TODO: Multiline comments and strings are a bit iffy
 // TODO: Add a token type for function call
 
+// TODO: Add font resizing to docs
 // TODO: Finish AnimationProfile editor 
 // TODO: Finish the sound samples, replace them, and add them where need
 
@@ -37,16 +38,20 @@ UT::i32 main(int argc, char** argv) {
     std::string resourceDir = resource_path ? std::string(resource_path) : ".";
 
     CBLT::gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gFont.Config();
     CBLT::gFont.size = 23;
+    CBLT::gFont.Config();
 
     CBLT::gConsoleFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
+    CBLT::gConsoleFont.Config();
 
     CBLT::gTopBarFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gTopBarFont.Config();
     CBLT::gTopBarFont.size = 23;
+    CBLT::gTopBarFont.Config();
+
+    CBLT::gFileQueueFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFileQueueFont.size = 21;
+    CBLT::gFileQueueFont.Config();
 
     CBLT::gSound.Load(resourceDir + "/assets/audio/"); // Pass resourceDir here
 #elif defined(__APPLE__)
@@ -60,12 +65,20 @@ UT::i32 main(int argc, char** argv) {
 
     // Previous asset loading (macOS)
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gFont.Config();
     CBLT::gFont.size = 23;
+    CBLT::gFont.Config();
 
     CBLT::gConsoleFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
+    CBLT::gConsoleFont.Config();
+
+    CBLT::gTopBarFont.Load("assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gTopBarFont.size = 20;
+    CBLT::gTopBarFont.Config();
+
+    CBLT::gFileQueueFont.Load("/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFileQueueFont.size = 21;
+    CBLT::gFileQueueFont.Config();
 
     CBLT::gSound.Load("assets/audio/");
 
@@ -75,16 +88,20 @@ UT::i32 main(int argc, char** argv) {
 
     // Previous asset loading (Windows)
     CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gFont.Config();
     CBLT::gFont.size = 23;
+    CBLT::gFont.Config();
 
     CBLT::gConsoleFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
+    CBLT::gConsoleFont.Config();
 
     CBLT::gTopBarFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gTopBarFont.Config();
     CBLT::gTopBarFont.size = 20;
+    CBLT::gTopBarFont.Config();
+
+    CBLT::gFileQueueFont.Load("/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFileQueueFont.size = 21;
+    CBLT::gFileQueueFont.Config();
 
     CBLT::gSound.Load("assets/audio/");
 

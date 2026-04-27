@@ -98,4 +98,6 @@ namespace CBLT {
     EditorFont gConsoleFont;
 
     EditorFont gTopBarFont;
+
+    EditorFont gFileQueueFont;
 } // CBLT
