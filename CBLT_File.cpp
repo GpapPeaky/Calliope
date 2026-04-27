@@ -231,6 +231,7 @@ namespace CBLT {
                     }
                     break;
 
+                case EXT(SH):
                 case EXT(ASM): 
                     if (c == ';' || c == '#') {
                         tokens[line].push_back({
@@ -243,7 +244,6 @@ namespace CBLT {
                         return inBlock;
                     }
                     break;
-
                 case EXT(PY):
                     if (c == '#') {
                         tokens[line].push_back({
@@ -254,7 +254,7 @@ namespace CBLT {
                         });
 
                         return inBlock;
-                    }
+                    }                    
                 default:
                     break;
             }
