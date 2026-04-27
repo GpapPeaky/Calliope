@@ -1158,7 +1158,7 @@ namespace CBLT {
                     cursorX - horizontalFix,
                     cursorY,
                     cc.charWidth,
-                    gFont.size,
+                    gConsoleFont.size,
                     gPalette.consoleCursor
                 );
 
@@ -1168,7 +1168,7 @@ namespace CBLT {
                     cursorX,
                     cursorY,
                     cc.charWidth,
-                    gFont.size,
+                    gConsoleFont.size,
                     gPalette.consoleCursor
                 );
 
@@ -1178,7 +1178,7 @@ namespace CBLT {
                     cursorX,
                     cursorY,
                     1,
-                    gFont.size,
+                    gConsoleFont.size,
                     gPalette.consoleCursor
                 );
 
@@ -1186,7 +1186,7 @@ namespace CBLT {
             case CursorSymbol::NON_ASCII_UNDERSCORE:
                 DrawRectangle(
                     cursorX,
-                    cursorY + gFont.size,
+                    cursorY + gConsoleFont.size,
                     cc.charWidth,
                     1,
                     gPalette.consoleCursor
@@ -1344,7 +1344,7 @@ namespace CBLT {
     
                 // Message
                 DrawTextEx(
-                    gFont.f,
+                    gConsoleFont.f,
                     dirRes.message.c_str(),
                     {
                         textX,
@@ -1394,7 +1394,7 @@ namespace CBLT {
                 textY = guideY + textMargin;
             
                 DrawTextEx(
-                    gFont.f,
+                    gConsoleFont.f,
                     dirRes.message.c_str(),
                     { textX, textY },
                     directiveFontSize,
@@ -1442,7 +1442,7 @@ namespace CBLT {
             
                 // Message
                 DrawTextEx(
-                    gFont.f,
+                    gConsoleFont.f,
                     dirRes.message.c_str(),
                     { textX, textY },
                     directiveFontSize,
@@ -1479,7 +1479,7 @@ namespace CBLT {
         textY = guideY + textMargin;
     
         DrawTextEx(
-            gFont.f,
+            gConsoleFont.f,
             gGuideMessage.c_str(),
             { textX, textY },
             directiveFontSize,

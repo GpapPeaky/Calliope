@@ -9,8 +9,8 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     const UT::ui32 topBarCWDFilePathSeperatorX = 210;
     const UT::ui32 topBarThirdColumnX = 220;
 
-    const UT::ui32 filenameLen = MeasureTextEx(gFont.f, fname.c_str(), topBarFontSize, 0.0f).x;
-    // const UT::ui32 CWDLen = MeasureTextEx(gFont.f, cwd.c_str(), topBarFontSize, 0.0f).x;
+    const UT::ui32 filenameLen = MeasureTextEx(gTopBarFont.f, fname.c_str(), topBarFontSize, 0.0f).x;
+    // const UT::ui32 CWDLen = MeasureTextEx(gTopBarFont.f, cwd.c_str(), topBarFontSize, 0.0f).x;
 
     const UT::ui32 filenameToModeMargin = 10;
     const UT::ui32 modePosition = filenameLen + filenameToModeMargin; 
@@ -39,7 +39,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
         modeString = std::string("SELECT");
     }
 
-    const UT::ui32 modeAndFilenameWidth = modePosition + MeasureTextEx(gFont.f, modeString.c_str(), topBarFontSize, 0.0f).x;
+    const UT::ui32 modeAndFilenameWidth = modePosition + MeasureTextEx(gTopBarFont.f, modeString.c_str(), topBarFontSize, 0.0f).x;
     
     // Seperators
 
@@ -63,7 +63,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
 
     // Draw cursor column and line data
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         (std::string("c: ") + std::to_string(col)).c_str(),
         {topBarInfoHorizontalShift, 0},
         topBarFontSize,
@@ -72,7 +72,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     );
     
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         (std::string("l: ") + std::to_string(line)).c_str(),
         {topBarInfoHorizontalShift, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
         topBarFontSize,
@@ -81,7 +81,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     );
     
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         (std::string("lc: ") + std::to_string(lineCount)).c_str(),
         {topBarInfoHorizontalShift + topBarSecondColumnX, 0},
         topBarFontSize,
@@ -90,7 +90,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     );
 
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         (std::string("d: ") + dirtyFile).c_str(),
         {topBarInfoHorizontalShift + topBarSecondColumnX, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
         topBarFontSize,
@@ -100,7 +100,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
 
     // Draw current mode
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         modeString.c_str(),
         {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX + modePosition), 0.0f},
         topBarFontSize,
@@ -110,7 +110,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
 
     // Current file
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         fname.c_str(),
         {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX), 0},
         topBarFontSize,
@@ -120,7 +120,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
 
     // Cursor fragment
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         cursorFragment.c_str(),
         {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX + modeAndFilenameWidth + fragmentMarginFromMode), 0},
         topBarFontSize,
@@ -130,7 +130,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
 
     // CWD
     DrawTextEx(
-        gFont.f,
+        gTopBarFont.f,
         cwd.c_str(),
         {topBarInfoHorizontalShift + topBarThirdColumnX, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
         topBarFontSize,

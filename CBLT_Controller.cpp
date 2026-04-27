@@ -510,6 +510,36 @@ namespace CBLT {
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
+        // Decrease text font size
+        if (keyboard.m.ctrl && (IsKeyPressed(KEY_MINUS))) {
+            if (gFont.size - 2 <= 7) return true; // No effect
+            
+            const char* resource_path = getenv("CBLT_RESOURCES");
+            std::string resourceDir = resource_path ? std::string(resource_path) : ".";
+
+            gFont.size -= 2; // Update size, reload font
+            gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+
+            cursor.charWidth = MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x;
+        
+            return true;
+        }
+
+        // Increase text font size
+        if (keyboard.m.ctrl && (IsKeyPressed(KEY_EQUAL))) {
+            if (gFont.size + 2 >= 45) return true; // No effect
+
+            const char* resource_path = getenv("CBLT_RESOURCES");
+            std::string resourceDir = resource_path ? std::string(resource_path) : ".";
+
+            gFont.size += 2; // Update size, reload font
+            gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+        
+            cursor.charWidth = MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x;
+
+            return true;
+        }
+
         // Open token search
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_F))) {
             console.ConsoleDirective().DirectiveFile().GetCurrentLine(DIRECTIVE_FILE_LINE) = ":f ";

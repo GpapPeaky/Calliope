@@ -99,7 +99,7 @@ namespace CBLT {
             void Right(const std::string& targetLine);
 
             // Draw cursor
-            void Draw(const std::string& lineText);
+            void Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff);
 
             // Start selection
             void StartSelection(void);
@@ -157,7 +157,7 @@ namespace CBLT {
             void RemoveSecondaries(void);
 
             // Draw all active cursors
-            void DrawCursors(std::vector<std::string>& lines);
+            void DrawCursors(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff);
 
             // Request cursor reset
             void RequestReset(void);

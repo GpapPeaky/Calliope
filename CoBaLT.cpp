@@ -44,6 +44,10 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
 
+    CBLT::gTopBarFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gTopBarFont.Config();
+    CBLT::gTopBarFont.size = 23;
+
     CBLT::gSound.Load(resourceDir + "/assets/audio/"); // Pass resourceDir here
 #elif defined(__APPLE__)
     CBLT::Controller ctrl; // Controller instance
@@ -77,6 +81,10 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gConsoleFont.Load("assets/font/IBMPlexMono-Regular.ttf");
     CBLT::gConsoleFont.Config();
     CBLT::gConsoleFont.size = 20;
+
+    CBLT::gTopBarFont.Load("assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gTopBarFont.Config();
+    CBLT::gTopBarFont.size = 20;
 
     CBLT::gSound.Load("assets/audio/");
 
@@ -116,7 +124,12 @@ UT::i32 main(int argc, char** argv) {
                 f.RetokenizeDirtyLines();
                 c.AcquireFragment(c.Col(), f.GetCurrentLine(c.Line()));
 
-                cm.DrawCursors(f.GetLines());
+                // File cursors
+                UT::ui32 baseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
+                    CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
+                    CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
+
+                cm.DrawCursors(CBLT::gFont, baseX, 0);
                 f.Draw(cam, c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
                 
                 currentFileLineCount = f.GetLineCount();

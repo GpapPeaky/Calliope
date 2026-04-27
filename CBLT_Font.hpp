@@ -47,4 +47,7 @@ namespace CBLT {
 
     // Current usable console font global
     extern EditorFont gConsoleFont;
+
+    // Seperate top bar font, stays constant
+    extern EditorFont gTopBarFont;
 } // CBLT

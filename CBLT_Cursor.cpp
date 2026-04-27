@@ -11,7 +11,7 @@ namespace CBLT {
         m(CursorMode::INSERT),                                     // Default
         fragment(""),
         animator(),
-        charWidth(MeasureText("A", CBLT::gFont.size)),             // Measure once
+        charWidth(MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x), // Measure once
         cursorSymbol(CursorSymbol::NON_ASCII_BOX)                  // Default
     {
         animator.Snap(0.0f, ln * gFont.size);
@@ -113,7 +113,7 @@ namespace CBLT {
         SetAt(this->column + 1, this->line, targetLine);
     }
 
-    void Cursor::Draw(const std::string& lineText) {
+    void Cursor::Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff) {
         // Limit from topbar
         BeginScissorMode(
             0,
@@ -125,33 +125,32 @@ namespace CBLT {
         animator.Update();
     
         UT::i32 x = static_cast<UT::i32>(animator.tx) + CBLT::gOffsets.x;
-        UT::i32 y = static_cast<UT::i32>(animator.ty) + CBLT::gOffsets.y;
+        UT::i32 y = static_cast<UT::i32>(animator.ty) + CBLT::gOffsets.y + yOff;
     
-        const UT::i32 base = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI +
-                            CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
-                            CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
+        // Get the base from the offset
+        const UT::i32 base = xOff;
 
         // Needed for the suggestions vector draw call
         renderX = x;
         renderY = y;
     
-        DrawRectangle(0, y + gFont.size, GetScreenWidth(), gFont.size, gPalette.cursorPosHighlight);
+        DrawRectangle(0, y + font.size, GetScreenWidth(), font.size, gPalette.cursorPosHighlight);
     
         switch (cursorSymbol) {
             case CursorSymbol::NON_ASCII_BOX:
-                DrawRectangle(x + base, y + gFont.size, charWidth, gFont.size, gPalette.cursor);
+                DrawRectangle(x + base, y + font.size, charWidth, font.size, gPalette.cursor);
                 EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_HOLLOW_BOX:
-                DrawRectangleLines(x + base, y + gFont.size, charWidth, gFont.size, gPalette.cursor);
+                DrawRectangleLines(x + base, y + font.size, charWidth, font.size, gPalette.cursor);
                 EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_LINE:
-                DrawRectangle(x + base - 2, y + gFont.size, 1, gFont.size, gPalette.cursor);
+                DrawRectangle(x + base - 2, y + font.size, 1, font.size, gPalette.cursor);
                 EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_UNDERSCORE:
-                DrawRectangle(x + base, y + 2 * gFont.size, charWidth, 1, gPalette.cursor);
+                DrawRectangle(x + base, y + 2 * font.size, charWidth, 1, gPalette.cursor);
                 EndScissorMode();
                 return;
         }
@@ -357,10 +356,9 @@ namespace CBLT {
         }
     }
 
-    void CursorManager::DrawCursors(std::vector<std::string>& lines) {
+    void CursorManager::DrawCursors(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff) {
         for (UT::llui32 i = 0 ; i < activeCursors.size() ; i++) {
-            const std::string& lineText = lines.at(activeCursors[i].Line());
-            activeCursors[i].Draw(lineText);
+            activeCursors[i].Draw(font, xOff, yOff);
         }
     }
 

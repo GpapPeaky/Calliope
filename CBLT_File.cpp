@@ -39,264 +39,6 @@ namespace CBLT {
         dirtyLines.clear();
     }
 
-    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) {
-        if (line >= lines.size()) return false;
-
-        tokens[line].clear();
-
-        UT::b inBlock = startInBlockComment;
-        UT::ui32 i = 0;
-
-        while (i < s.size()) {
-            char c = s[i];
-
-            if (inBlock) {
-                UT::ui32 start = i;
-            
-                while (i < s.size()) {
-                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
-                        i += 2;
-                        inBlock = false;
-                        break;
-                    }
-                    ++i;
-                }
-            
-                tokens[line].push_back({ TokenClass::COMMENT, line, start, i - start });
-                continue;
-            }
-            
-            // Comment block entry
-            if (!inBlock && c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
-                inBlock = true;
-                UT::ui32 start = i;
-                i += 2;
-                
-                // Inline check
-                while (i < s.size()) {
-                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
-                        i += 2;
-                        inBlock = false;
-                        break;
-                    }
-                    ++i;
-                }
-            
-                tokens[line].push_back({
-                    TokenClass::COMMENT,
-                    line,
-                    start,
-                    i - start
-                });
-                continue;
-            }
-
-            // String literal
-            if (c == '"' || c == '\'' || c == '`') {
-                char quote = c;
-                UT::ui32 start = i++;
-            
-                UT::b escaped = false;
-                while (i < s.size()) {
-                    char ch = s[i++];
-            
-                    if (escaped) {
-                        escaped = false;
-                        continue;
-                    }
-            
-                    if (ch == '\\') {
-                        escaped = true;
-                        continue;
-                    }
-            
-                    if (ch == quote) {
-                        break; // closing quote
-                    }
-                }
-            
-                tokens[line].push_back({
-                    TokenClass::STRING,
-                    line,
-                    start,
-                    i - start
-                });
-                continue;
-            }
-
-            // Identifier / keyword
-            if (std::isalpha(c) || c == '_') {
-                UT::ui32 start = i++;
-                while (i < s.size() && (std::isalnum(s[i]) || s[i] == '_')) i++;
-    
-                TokenClass type = IsKeyword(s.substr(start, i - start))
-                                ? TokenClass::KEYWORD
-                                : TokenClass::ID;
-    
-                tokens[line].push_back({ type, line, start, i - start });
-                continue;
-            }
-    
-            // Number
-            if (std::isdigit(c)) {
-                UT::ui32 start = i++;
-                while (i < s.size() && std::isdigit(s[i])) i++;
-    
-                tokens[line].push_back({ TokenClass::NUM, line, start, i - start });
-                continue;
-            }
-    
-            // Whitespace
-            if (std::isspace(c)) {
-                UT::ui32 start = i++;
-                while (i < s.size() && std::isspace(s[i])) i++;
-    
-                tokens[line].push_back({ TokenClass::WHITESPACE, line, start, i - start });
-                continue;
-            }
-
-            // -------------------------------------------------------------------------------------------------------------------------------------------------
-            // Lang specific lexing (comments, misc)
-            // -------------------------------------------------------------------------------------------------------------------------------------------------
-
-            switch (ext) {
-                case EXT(C):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-
-                    if (c == '#' && i + 1 < s.size()) {
-                        tokens[line].push_back({
-                            TokenClass::MISC,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(CPP):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-
-                    if (c == '#' && i + 1 < s.size()) {
-                        tokens[line].push_back({
-                            TokenClass::MISC,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(CS):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(JAVA):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-
-                case EXT(SH):
-                case EXT(ASM): 
-                    if (c == ';' || c == '#') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(PY):
-                    if (c == '#') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }                    
-                default:
-                    break;
-            }
-
-            // -------------------------------------------------------------------------------------------------------------------------------------------------
-
-            // Operators
-            if (
-                c == '+' ||
-                c == '-' ||
-                c == '/' ||
-                c == '%' ||
-                c == '*' ||
-                c == '=' ||
-                c == '>' ||
-                c == '<' ||
-                c == '^' ||
-                c == '&' ||
-                c == '|' ||
-                c == '!' ||
-                c == '~'
-            ) {
-                tokens[line].push_back({
-                    TokenClass::OPERATOR,
-                    line,
-                    i,
-                    1
-                });
-                ++i;
-                continue;
-            }
-
-            // Default on
-            //
-            // Punctuation
-            tokens[line].push_back({ TokenClass::PUNCTUATION, line, i, 1 });
-            ++i;
-        }
-
-        return inBlock;
-    }
-
     File::File(void) {
         lines.emplace_back("");
 
@@ -846,5 +588,263 @@ namespace CBLT {
         }
 
         return result;
+    }
+
+    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) {
+        if (line >= lines.size()) return false;
+
+        tokens[line].clear();
+
+        UT::b inBlock = startInBlockComment;
+        UT::ui32 i = 0;
+
+        while (i < s.size()) {
+            char c = s[i];
+
+            if (inBlock) {
+                UT::ui32 start = i;
+            
+                while (i < s.size()) {
+                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
+                        i += 2;
+                        inBlock = false;
+                        break;
+                    }
+                    ++i;
+                }
+            
+                tokens[line].push_back({ TokenClass::COMMENT, line, start, i - start });
+                continue;
+            }
+            
+            // Comment block entry
+            if (!inBlock && c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
+                inBlock = true;
+                UT::ui32 start = i;
+                i += 2;
+                
+                // Inline check
+                while (i < s.size()) {
+                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
+                        i += 2;
+                        inBlock = false;
+                        break;
+                    }
+                    ++i;
+                }
+            
+                tokens[line].push_back({
+                    TokenClass::COMMENT,
+                    line,
+                    start,
+                    i - start
+                });
+                continue;
+            }
+
+            // String literal
+            if (c == '"' || c == '\'' || c == '`') {
+                char quote = c;
+                UT::ui32 start = i++;
+            
+                UT::b escaped = false;
+                while (i < s.size()) {
+                    char ch = s[i++];
+            
+                    if (escaped) {
+                        escaped = false;
+                        continue;
+                    }
+            
+                    if (ch == '\\') {
+                        escaped = true;
+                        continue;
+                    }
+            
+                    if (ch == quote) {
+                        break; // closing quote
+                    }
+                }
+            
+                tokens[line].push_back({
+                    TokenClass::STRING,
+                    line,
+                    start,
+                    i - start
+                });
+                continue;
+            }
+
+            // Identifier / keyword
+            if (std::isalpha(c) || c == '_') {
+                UT::ui32 start = i++;
+                while (i < s.size() && (std::isalnum(s[i]) || s[i] == '_')) i++;
+    
+                TokenClass type = IsKeyword(s.substr(start, i - start))
+                                ? TokenClass::KEYWORD
+                                : TokenClass::ID;
+    
+                tokens[line].push_back({ type, line, start, i - start });
+                continue;
+            }
+    
+            // Number
+            if (std::isdigit(c)) {
+                UT::ui32 start = i++;
+                while (i < s.size() && std::isdigit(s[i])) i++;
+    
+                tokens[line].push_back({ TokenClass::NUM, line, start, i - start });
+                continue;
+            }
+    
+            // Whitespace
+            if (std::isspace(c)) {
+                UT::ui32 start = i++;
+                while (i < s.size() && std::isspace(s[i])) i++;
+    
+                tokens[line].push_back({ TokenClass::WHITESPACE, line, start, i - start });
+                continue;
+            }
+
+            // -------------------------------------------------------------------------------------------------------------------------------------------------
+            // Lang specific lexing (comments, misc)
+            // -------------------------------------------------------------------------------------------------------------------------------------------------
+
+            switch (ext) {
+                case EXT(C):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens[line].push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
+
+                    if (c == '#' && i + 1 < s.size()) {
+                        tokens[line].push_back({
+                            TokenClass::MISC,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
+                    break;
+                case EXT(CPP):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens[line].push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
+
+                    if (c == '#' && i + 1 < s.size()) {
+                        tokens[line].push_back({
+                            TokenClass::MISC,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
+                    break;
+                case EXT(CS):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens[line].push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
+                    break;
+                case EXT(JAVA):
+                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
+                        tokens[line].push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
+                    break;
+
+                case EXT(SH):
+                case EXT(ASM): 
+                    if (c == ';' || c == '#') {
+                        tokens[line].push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }
+                    break;
+                case EXT(PY):
+                    if (c == '#') {
+                        tokens[line].push_back({
+                            TokenClass::COMMENT,
+                            line,
+                            i,
+                            static_cast<UT::ui32>(s.size() - i)
+                        });
+
+                        return inBlock;
+                    }                    
+                default:
+                    break;
+            }
+
+            // -------------------------------------------------------------------------------------------------------------------------------------------------
+
+            // Operators
+            if (
+                c == '+' ||
+                c == '-' ||
+                c == '/' ||
+                c == '%' ||
+                c == '*' ||
+                c == '=' ||
+                c == '>' ||
+                c == '<' ||
+                c == '^' ||
+                c == '&' ||
+                c == '|' ||
+                c == '!' ||
+                c == '~'
+            ) {
+                tokens[line].push_back({
+                    TokenClass::OPERATOR,
+                    line,
+                    i,
+                    1
+                });
+                ++i;
+                continue;
+            }
+
+            // Default on
+            //
+            // Punctuation
+            tokens[line].push_back({ TokenClass::PUNCTUATION, line, i, 1 });
+            ++i;
+        }
+
+        return inBlock;
     }
 } // CBLT
