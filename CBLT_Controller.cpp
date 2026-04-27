@@ -764,6 +764,8 @@ namespace CBLT {
             Q.Active().InsertDirtyLine(currentLineIdx);
             Q.Active().InsertDirtyLine(prevLineIdx);
 
+            Q.Active().SetDirt(true);
+
             return true;
         }
         
@@ -788,6 +790,8 @@ namespace CBLT {
 
             Q.Active().InsertDirtyLine(currentLineIdx);
             Q.Active().InsertDirtyLine(nextLineIdx);
+
+            Q.Active().SetDirt(true);
 
             return true;
         }
