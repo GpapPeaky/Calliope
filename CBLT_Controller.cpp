@@ -742,6 +742,7 @@ namespace CBLT {
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         
+        // Swap with prev line
         if (keyboard.m.alt && (IsKeyPressed(KEY_UP) || IsKeyPressedRepeat(KEY_UP))) {
             if (cursor.Line() == 0) {
                 return true;
@@ -766,6 +767,7 @@ namespace CBLT {
             return true;
         }
         
+        // Swap with next line
         if (keyboard.m.alt && (IsKeyPressed(KEY_DOWN) || IsKeyPressedRepeat(KEY_DOWN))) {
             if (cursor.Line() == Q.Active().GetLineCount() - 1) {
                 return true;

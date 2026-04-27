@@ -7,15 +7,18 @@
 #endif
 
 // FIXME: For some reason pressing enter after '}' doesn't do anything, till the cursor moves again
+
 // FIXME: Multi-cursor indentation is problematic
 // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
-// FIXME: Multiline comments and strings are a bit iffy
-// FIXME: Move the line-comment checking in the file lexer to a function
-// TODO: Add line swap with Alt + arrowKeys
+
 // TODO: Make handling and handle function a bit more uniform in Controller::Update, both modes and the console IsOpen(...) block
 // TODO: Write the HandleSelectionSpecial(...) function
-// TODO: Finish AnimationProfile editor 
+
+// TODO: Move the line-comment checking in the file lexer to a function
+// TODO: Multiline comments and strings are a bit iffy
 // TODO: Add a token type for function call
+
+// TODO: Finish AnimationProfile editor 
 // TODO: Finish the sound samples, replace them, and add them where need
 
 UT::i32 main(int argc, char** argv) {
