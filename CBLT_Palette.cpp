@@ -64,9 +64,10 @@ namespace CBLT {
         #if defined(__linux__)
             const char* resource_path = getenv("CBLT_RESOURCES");
             resourcePath = resource_path ? std::string(resource_path) : ".";
+            resourcePath += '/';
         #endif
 
-        std::string fullPath = resourcePath + "/options/palettes/" + path + ".pal";
+        std::string fullPath = resourcePath + "options/palettes/" + path + ".pal";
 
         std::ifstream f(fullPath);
 

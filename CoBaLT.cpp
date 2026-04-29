@@ -99,7 +99,7 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gTopBarFont.size = 20;
     CBLT::gTopBarFont.Config();
 
-    CBLT::gFileQueueFont.Load("/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFileQueueFont.Load("assets/font/IBMPlexMono-Regular.ttf");
     CBLT::gFileQueueFont.size = 21;
     CBLT::gFileQueueFont.Config();
 

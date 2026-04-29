@@ -456,8 +456,8 @@ namespace CBLT {
                 exit(EXIT_SUCCESS);
             }
 
-            // Shell bridge with native shell
-            else if (dir == "sb") {
+            // Shell bridge with native terminal
+            else if (dir == "sh") {
                 CBLT::Utils::Err::Log("DIRECTIVE: SHELL " + directiveParam);
                 
                 dr.message = gShellBridge.Execute(directiveParam, cwd);

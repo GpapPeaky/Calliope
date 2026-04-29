@@ -24,7 +24,7 @@ namespace CBLT {
                     ":qa  - Close all files                |                \n"
                     ":qas - Close all clean files          |                \n"
                     ":pal - Switch palette                 |                \n"
-                    ":sb  - Execute a shell command        |                \n"
+                    ":sh  - Open local shell               |                \n"
                     ":mat  - Mark a line                   |                \n"
                     ":umat - Unmark a line                 |                \n"
                     ":gm   - Go to mark                    |                \n"

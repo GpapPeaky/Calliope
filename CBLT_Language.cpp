@@ -11,14 +11,14 @@ void Language::ReadLangFile(std::string fname) {
     
         fpath = resourceDir + "/meta/lang/" + fname;
     #elif defined(_WIN32)     // WIN32
-        fpath =  "/meta/lang/" + fname;
+        fpath =  "meta/lang/" + fname;
     #elif  defined(__APPLE__) // APPLE
-        fpath =  "/meta/lang/" + fname;
+        fpath =  "meta/lang/" + fname;
     #endif
 
     std::ifstream file(fpath);
     if (!file.is_open()) {
-        UE::Log("CBLT_ERR: FAILED TO PARSE " + fname + " LANG CONF");
+        UE::Log("CBLT_ERR: FAILED TO PARSE " + fpath + " LANG CONF");
         
         return;
     }

@@ -1,7 +1,14 @@
 #include "CBLT_Settings.hpp"
 
 namespace CBLT {
-    void Settings::ReadSettings(void) {
+    static std::string Trim(const std::string& str) {
+        size_t start = str.find_first_not_of(" \t\r\n");
+        size_t end   = str.find_last_not_of(" \t\r\n");
+
+        return (start == std::string::npos) ? "" : str.substr(start, end - start + 1);
+    }
+
+    void EditorSettings::ReadSettings(void) {
         namespace fs = std::filesystem;
     
         std::string installationPath;
@@ -17,14 +24,14 @@ namespace CBLT {
     
         if (!fs::exists(settingsPath)) {
             // Optional log
-            CBLT::Utils::Err::Log("NO SETTINGS FILE FOUND " + fname);
+            std::cerr << ("NO SETTINGS FILE FOUND " + fname + "\n");
             return;
         }
     
         std::ifstream in(settingsPath);
     
         if (!in.is_open()) {
-            CBLT::Utils::Err::Log("FAILED TO OPEN SETTINGS FILE: " + settingsPath.string());
+            std::cerr << ("FAILED TO OPEN SETTINGS FILE: " + settingsPath.string() + "\n");
             return;
         }
     
@@ -32,7 +39,7 @@ namespace CBLT {
         bool inBlock = false;
     
         while (std::getline(in, line)) {
-            line = UF::Trim(line);
+            line = Trim(line);
     
             if (line.empty()) continue;
 
@@ -50,7 +57,7 @@ namespace CBLT {
             }
 
             // Delimeter
-            UT::llui32 delimPos = line.find(':');
+            size_t delimPos = line.find(':');
 
             // Token
             std::string token = "";
@@ -59,34 +66,34 @@ namespace CBLT {
 
             // Valid string
             if (delimPos != std::string().npos) {
-                token = Utils::Func::Trim(line.substr(0, delimPos));
-                value = Utils::Func::Trim(line.substr(delimPos + 1, line.length()));
+                token = Trim(line.substr(0, delimPos));
+                value = Trim(line.substr(delimPos + 1, line.length()));
 
                 if (token == "USER_TERMINAL_POSIX") {
                     this->OPTION_POSIX_Term = value;
 
-                    CBLT::Utils::Err::Log("READ SETTING " + token + " AS " + value);
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                 }
                 else if (token == "USER_TERMINAL_WIN32") {
                     this->OPTION_WIN32_Term = value;
 
-                    CBLT::Utils::Err::Log("READ SETTING " + token + " AS " + value);
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                 }
                 else if (token == "PALETTE") {
                     this->OPTION_Palette = value;
 
-                    CBLT::Utils::Err::Log("READ SETTING " + token + " AS " + value);
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                 }
                 else {
-                    CBLT::Utils::Err::Log ("INVALID SETTINGS TOKEN AT LINE: " + line);
+                    std::cerr <<  ("INVALID SETTINGS TOKEN AT LINE: " + line + "\n");
                 } 
             } else {
-                CBLT::Utils::Err::Log("INVALID SETTINGS SYNTAX AT LINE: " + line);
+                std::cerr << ("INVALID SETTINGS SYNTAX AT LINE: " + line + "\n");
             }
             
             if (!inBlock) continue;
         }
     }
 
-    Settings gSettings;
+    EditorSettings gSettings;
 }

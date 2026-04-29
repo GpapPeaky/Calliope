@@ -12,10 +12,6 @@ namespace CBLT {
 
     class ShellBridge {
         public:
-            #if defined(__linux__)
-                std::string term = "kitty";
-            #endif  // Linux terminal name, can be configured by the user
-
             // Run a command based on the OS
             __CROSS std::string Execute(const std::string& com, std::string& cwd);
             
