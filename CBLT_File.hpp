@@ -11,13 +11,14 @@
 #include "CBLT_Camera.hpp"
 #include "CBLT_InfileAutocomplete.hpp"
 #include "CBLT_InfileMark.hpp"
+#include "CBLT_Lex.hpp"                 // Einai aseveia rr
 
-#include <cctype>                   // for tokenizing
-#include <unordered_set>            // for std::unordered_set<> ...
-#include <vector>                   // for std::vector<> ...
-#include <string>                   // for std::string ...
-#include <fstream>                  // File stream
-#include <filesystem>               // For CWD
+#include <cctype>                       // for tokenizing
+#include <unordered_set>                // for std::unordered_set<> ...
+#include <vector>                       // for std::vector<> ...
+#include <string>                       // for std::string ...
+#include <fstream>                      // File stream
+#include <filesystem>                   // For CWD
 
 namespace CBLT {
     // Basic document/file class
@@ -26,15 +27,16 @@ namespace CBLT {
             std::vector<std::string> lines;                     // Most elemental storage class of a file/document
             std::vector<std::vector<Token>> tokens;             // File tokens
             std::unordered_set<UT::ui32> dirtyLines;            // Lines to retokenize infile change
-            std::vector<UT::b> lineStartsInBlockComment;        // Comment block vector
+            std::vector<LexerState> lineStates;                 // Line states for lexer
             std::string path;                                   // File path, will include its name and parent folder
             std::string name;                                   // Only the name
             UT::b dirty;                                        // File's original contents have been changed and have not been saved
-            FileExtension ext;                                  // File's extension, required for language support and tokenization
             InfileAutocomplete autocomplete;                    // Autocomplete system for the file
             std::vector<InfileMark> marks;                      // Infile markings
             UT::ui32 markIdFactory;                             // Mark id factory
             CursorManager cursors;                              // Cursor manager for the file, handles cursor position and movement
+            Language lang = Language(FileExtension::TXT);       // File's language loaded via the extension
+            std::string langConf;                               // Language conf file name
         public:
             // Constructor
             File(void);
@@ -105,17 +107,21 @@ namespace CBLT {
             // Set the file name to something else
             void SetName(std::string name);
 
-            // Return the extesion of the file
-            FileExtension Extension(void) const;
+            // LANGUAGE AND HIGHLIGHTING
 
-            // Run the lexer through the line, returns if the line is in a comment block
-            UT::b LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment = false);
+                // Return the language of the file
+                Language& FileLanguage(void);
+    
+                // Set a line as dirty and push it back to the dirty line vector for retokenization
+                void InsertDirtyLine(UT::ui32 line);
+    
+                // Retokenize lines marked as dirty
+                void RetokenizeDirtyLines(void);
 
-            // Set a line as dirty and push it back to the dirty line vector for retokenization
-            void InsertDirtyLine(UT::ui32 line);
+                // Language conf file
+                std::string LangConf(void);
 
-            // Retokenize lines marked as dirty
-            void RetokenizeDirtyLines(void);
+            // LANGUAGE AND HIGHLIGHTING
 
             // Get all the lines of the file
             std::vector<std::string>& GetLines(void);

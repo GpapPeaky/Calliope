@@ -1,69 +1,18 @@
 #include "CBLT_File.hpp"
 
 namespace CBLT {
-    void File::InsertDirtyLine(UT::ui32 line) {
-        if (line >= lines.size()) return;
-    
-        dirtyLines.insert(line);
-    }
-
-    void File::RetokenizeDirtyLines(void) {
-        if (dirtyLines.empty()) return;
-    
-        UT::ui32 minDirty = *std::min_element(dirtyLines.begin(), dirtyLines.end());
-    
-        // Seed block comment state from the line just before the first dirty line
-        UT::b inBlock = (minDirty > 0) ? lineStartsInBlockComment[minDirty - 1] : false;
-    
-        // Run from minDirty to end of file, since a block comment change
-        // at line N can affect every line after it
-        for (UT::ui32 i = minDirty; i < lines.size(); ++i) {
-            UT::b isDirty   = dirtyLines.count(i) > 0;
-    
-            if (isDirty || lineStartsInBlockComment[i] != inBlock) {
-                lineStartsInBlockComment[i] = inBlock;
-                inBlock = LexLine(lines[i], i, inBlock);
-            } else {
-                // Line is clean and block state matches — no further propagation needed
-                inBlock = lineStartsInBlockComment[i]; // keep inBlock consistent
-                // Early exit only if we're past all dirty lines and state is stable
-                if (i > *std::max_element(dirtyLines.begin(), dirtyLines.end())) break;
-            }
-        }
-    
-        // Update dirty autocomplete lines
-        for (auto line : dirtyLines) {
-            autocomplete.UpdateLine(line, tokens[line], lines[line]);
-        }
-
-        dirtyLines.clear();
-    }
-
     File::File(void) {
         lines.emplace_back("");
 
         tokens.resize(1);
-        lineStartsInBlockComment.resize(1, false);
+        lineStates.resize(1, LexerState::NONE);
+
+        lang = Language(FileExtension::TXT);
 
         markIdFactory = marks.size();
     }
 
     File::~File(void) {}
-
-    void File::Tokenize(void) {
-        tokens.clear();
-        lineStartsInBlockComment.clear();
-    
-        tokens.resize(lines.size());
-        lineStartsInBlockComment.resize(lines.size());
-    
-        UT::b inBlock = false;
-    
-        for (UT::ui32 line = 0; line < lines.size(); ++line) {
-            lineStartsInBlockComment[line] = inBlock;
-            inBlock = LexLine(lines[line], line, inBlock);
-        }
-    }
 
     void File::SetName(std::string name) {
         this->name = name;
@@ -94,14 +43,23 @@ namespace CBLT {
             lines.emplace_back("");
 
         // Seek file extension, and assign the correct language keywords for language support.
-        ext = AssignExtension(path);
-        AssignLanguageKeywords(ext);
+        FileExtension ext = AssignExtension(path);
+
+        // Seek cong name in the gLangFiles
+        auto it = gLangFiles.find(ext);
+        if (it != gLangFiles.end()) {
+            lang.ReadLangFile(it->second); // Load language
+            langConf = it->second;
+        } else {
+            lang.ReadLangFile("txt.conf"); // TXT as base Fallback, extension unrecognized
+            langConf = "txt.conf";
+        }
 
         dirty = false;
     
         Tokenize(); // Suck ass
 
-        autocomplete.LoadTokens(tokens, lines);
+        autocomplete.LoadTokens(tokens, lines, lang);
 
         LoadMarks();
 
@@ -132,7 +90,7 @@ namespace CBLT {
         lines.clear();
 
         tokens.clear();
-        lineStartsInBlockComment.clear();
+        lineStates.clear();
     
         dirtyLines.clear();
 
@@ -207,20 +165,29 @@ namespace CBLT {
                 
                 // Draw colored tokens
                 for (Token& t : tokens.at(i)) {
-                    // if (t.line != i) continue;
-                
                     Color col = t.TokenColor();
-                    if (col.a == 0) continue; // skips whitespaces
+
+                    // skips whitespaces
+                    if (col.a == 0) continue;
                 
-                    std::string_view lineView(lines[i]);
-                    std::string_view tokenText = lineView.substr(t.col, t.len);
-                    
-                    // By counting glyphs
-                    UT::f32 tokX = pos.x + t.GetCursorX(lineView, gFont.size, t.col);
-                    
+                    const std::string& lineStr = lines[i];
+                
+                    if (t.col >= lineStr.size())
+                        continue;
+                
+                    UT::ui32 maxLen = lineStr.size() - t.col;
+                    UT::ui32 len = std::min(t.len, maxLen);
+                
+                    if (len == 0)
+                        continue;
+                
+                    std::string_view tokenText(lineStr.data() + t.col, len);
+                
+                    UT::f32 tokX = pos.x + t.GetCursorX(std::string_view(lines[i]), gFont.size, t.col);
+                
                     DrawTextEx(
                         gFont.f,
-                        std::string(tokenText).c_str(), // convert to null-terminated C-string
+                        std::string(tokenText).c_str(),
                         { tokX, pos.y },
                         gFont.size,
                         0.0f,
@@ -292,13 +259,16 @@ namespace CBLT {
         tokens.emplace(tokens.begin() + line);
     
         // Inherit block comment state from previous line, not false
-        UT::b inheritedState = (line > 0 && line - 1 < lineStartsInBlockComment.size())
-            ? lineStartsInBlockComment[line - 1]
-            : false;
+        LexerState inheritedState = (line > 0 && line - 1 < lineStates.size())
+            ? lineStates[line - 1]
+            : LexerState::NONE;
     
-        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, inheritedState);
+        lineStates.emplace(lineStates.begin() + line, inheritedState);
     
         InsertDirtyLine(line);
+
+        assert(lines.size() == tokens.size());
+        assert(lines.size() == lineStates.size());
     }
 
     void File::CreateLine(UT::ui32 line, std::string content) {
@@ -306,11 +276,11 @@ namespace CBLT {
         tokens.emplace(tokens.begin() + line);
     
         // Inherit block comment state from previous line, not false
-        UT::b inheritedState = (line > 0 && line - 1 < lineStartsInBlockComment.size())
-            ? lineStartsInBlockComment[line - 1]
-            : false;
+        LexerState inheritedState = (line > 0 && line - 1 < lineStates.size())
+            ? lineStates[line - 1]
+            : LexerState::NONE;
     
-        lineStartsInBlockComment.emplace(lineStartsInBlockComment.begin() + line, inheritedState);
+        lineStates.emplace(lineStates.begin() + line, inheritedState);
     
         InsertDirtyLine(line);
     }
@@ -335,7 +305,7 @@ namespace CBLT {
         if (lines.size() > 1) {
             lines.erase(lines.begin() + line);
             tokens.erase(tokens.begin() + line);
-            lineStartsInBlockComment.erase(lineStartsInBlockComment.begin() + line);
+            lineStates.erase(lineStates.begin() + line);
     
             // Mark the line at this position now (previously line+1) as dirty
             // Also mark line-1 so the seed is recalculated correctly
@@ -385,10 +355,6 @@ namespace CBLT {
             "Dirty:      " + (dirty ? "Yes" : "No");
         
         return info;
-    }
-
-    FileExtension File::Extension(void) const {
-        return ext;
     }
 
     std::vector<std::string>& File::GetLines(void) {
@@ -590,261 +556,59 @@ namespace CBLT {
         return result;
     }
 
-    UT::b File::LexLine(const std::string& s, UT::ui32 line, UT::b startInBlockComment) {
-        if (line >= lines.size()) return false;
+    // File lang support and tokenization
 
-        tokens[line].clear();
-
-        UT::b inBlock = startInBlockComment;
-        UT::ui32 i = 0;
-
-        while (i < s.size()) {
-            char c = s[i];
-
-            if (inBlock) {
-                UT::ui32 start = i;
-            
-                while (i < s.size()) {
-                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
-                        i += 2;
-                        inBlock = false;
-                        break;
-                    }
-                    ++i;
-                }
-            
-                tokens[line].push_back({ TokenClass::COMMENT, line, start, i - start });
-                continue;
-            }
-            
-            // Comment block entry
-            if (!inBlock && c == '/' && i + 1 < s.size() && s[i + 1] == '*') {
-                inBlock = true;
-                UT::ui32 start = i;
-                i += 2;
-                
-                // Inline check
-                while (i < s.size()) {
-                    if (s[i] == '*' && i + 1 < s.size() && s[i + 1] == '/') {
-                        i += 2;
-                        inBlock = false;
-                        break;
-                    }
-                    ++i;
-                }
-            
-                tokens[line].push_back({
-                    TokenClass::COMMENT,
-                    line,
-                    start,
-                    i - start
-                });
-                continue;
-            }
-
-            // String literal
-            if (c == '"' || c == '\'' || c == '`') {
-                char quote = c;
-                UT::ui32 start = i++;
-            
-                UT::b escaped = false;
-                while (i < s.size()) {
-                    char ch = s[i++];
-            
-                    if (escaped) {
-                        escaped = false;
-                        continue;
-                    }
-            
-                    if (ch == '\\') {
-                        escaped = true;
-                        continue;
-                    }
-            
-                    if (ch == quote) {
-                        break; // closing quote
-                    }
-                }
-            
-                tokens[line].push_back({
-                    TokenClass::STRING,
-                    line,
-                    start,
-                    i - start
-                });
-                continue;
-            }
-
-            // Identifier / keyword
-            if (std::isalpha(c) || c == '_') {
-                UT::ui32 start = i++;
-                while (i < s.size() && (std::isalnum(s[i]) || s[i] == '_')) i++;
+    void File::Tokenize(void) {
+        tokens.clear();
+        lineStates.clear();
     
-                TokenClass type = IsKeyword(s.substr(start, i - start))
-                                ? TokenClass::KEYWORD
-                                : TokenClass::ID;
+        tokens.resize(lines.size());
+        lineStates.resize(lines.size());
     
-                tokens[line].push_back({ type, line, start, i - start });
-                continue;
-            }
+        LexerState state = LexerState::NONE;
     
-            // Number
-            if (std::isdigit(c)) {
-                UT::ui32 start = i++;
-                while (i < s.size() && std::isdigit(s[i])) i++;
-    
-                tokens[line].push_back({ TokenClass::NUM, line, start, i - start });
-                continue;
-            }
-    
-            // Whitespace
-            if (std::isspace(c)) {
-                UT::ui32 start = i++;
-                while (i < s.size() && std::isspace(s[i])) i++;
-    
-                tokens[line].push_back({ TokenClass::WHITESPACE, line, start, i - start });
-                continue;
-            }
-
-            // -------------------------------------------------------------------------------------------------------------------------------------------------
-            // Lang specific lexing (comments, misc)
-            // -------------------------------------------------------------------------------------------------------------------------------------------------
-
-            switch (ext) {
-                case EXT(C):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-
-                    if (c == '#' && i + 1 < s.size()) {
-                        tokens[line].push_back({
-                            TokenClass::MISC,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(CPP):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-
-                    if (c == '#' && i + 1 < s.size()) {
-                        tokens[line].push_back({
-                            TokenClass::MISC,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(CS):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(JAVA):
-                    if (c == '/' && i + 1 < s.size() && s[i + 1] == '/') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-
-                case EXT(SH):
-                case EXT(ASM): 
-                    if (c == ';' || c == '#') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }
-                    break;
-                case EXT(PY):
-                    if (c == '#') {
-                        tokens[line].push_back({
-                            TokenClass::COMMENT,
-                            line,
-                            i,
-                            static_cast<UT::ui32>(s.size() - i)
-                        });
-
-                        return inBlock;
-                    }                    
-                default:
-                    break;
-            }
-
-            // -------------------------------------------------------------------------------------------------------------------------------------------------
-
-            // Operators
-            if (
-                c == '+' ||
-                c == '-' ||
-                c == '/' ||
-                c == '%' ||
-                c == '*' ||
-                c == '=' ||
-                c == '>' ||
-                c == '<' ||
-                c == '^' ||
-                c == '&' ||
-                c == '|' ||
-                c == '!' ||
-                c == '~'
-            ) {
-                tokens[line].push_back({
-                    TokenClass::OPERATOR,
-                    line,
-                    i,
-                    1
-                });
-                ++i;
-                continue;
-            }
-
-            // Default on
-            //
-            // Punctuation
-            tokens[line].push_back({ TokenClass::PUNCTUATION, line, i, 1 });
-            ++i;
+        for (UT::ui32 line = 0; line < lines.size(); ++line) {
+            lineStates[line] = state;
+            state = LexLine(lines[line], line, state, lang, tokens[line]);
         }
+    }
 
-        return inBlock;
+    void File::RetokenizeDirtyLines() {
+        if (dirtyLines.empty()) return;
+    
+        UT::ui32 minDirty = *std::min_element(dirtyLines.begin(), dirtyLines.end());
+        UT::ui32 maxDirty = *std::max_element(dirtyLines.begin(), dirtyLines.end());
+    
+        LexerState state = (minDirty > 0)
+            ? lineStates[minDirty - 1]
+            : LexerState::NONE;
+    
+        for (UT::ui32 i = minDirty; i < lines.size(); ++i) {
+            LexerState prev = lineStates[i];
+            tokens[i].clear();
+            state = LexLine(lines[i], i, state, lang, tokens[i]);
+            lineStates[i] = state;
+    
+            if (i > maxDirty && state == prev) break; // Stabilized
+        }
+    
+        for (auto line : dirtyLines)
+            autocomplete.UpdateLine(line, tokens[line], lines[line]);
+
+        dirtyLines.clear();
+    }
+
+    std::string File::LangConf(void) {
+        return langConf;
+    }
+
+    void File::InsertDirtyLine(UT::ui32 line) {
+        if (line >= lines.size()) return;
+    
+        dirtyLines.insert(line);
+    }
+
+    Language& File::FileLanguage(void) {
+        return lang;
     }
 } // CBLT

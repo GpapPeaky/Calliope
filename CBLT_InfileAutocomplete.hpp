@@ -25,7 +25,7 @@ namespace CBLT {
             ~InfileAutocomplete(void);
 
             // Load tokens from a file
-            void LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText);
+            void LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText, Language& lang);
 
             // Update a specific line's tokens, notably the dirty ones
             void UpdateLine(UT::ui32 line, std::vector<Token>& tokensLine, const std::string& text);

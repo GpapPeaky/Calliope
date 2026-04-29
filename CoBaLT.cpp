@@ -114,6 +114,7 @@ UT::i32 main(int argc, char** argv) {
     UT::ui32 currentFileLineCount; 
     UT::b currentFileDirt; 
     std::string currentFileName;
+    std::string currentFileLangConfName;
 
     // Default palette
     CBLT::gPalette.ReadPaletteFile(CBLT::gSettings.OPTION_Palette);
@@ -149,11 +150,12 @@ UT::i32 main(int argc, char** argv) {
                 cm.DrawCursors(CBLT::gFont, baseX, 0);
                 f.Draw(cam, c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
                 
-                currentFileLineCount = f.GetLineCount();
-                currentFileDirt      = f.Dirt();
-                currentFileName      = f.Name();
+                currentFileLineCount        = f.GetLineCount();
+                currentFileDirt             = f.Dirt();
+                currentFileName             = f.Name();
+                currentFileLangConfName     = f.LangConf();
 
-                CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD());
+                CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD(), currentFileLangConfName);
             }
 
             if (cnsl.IsOpen()) {

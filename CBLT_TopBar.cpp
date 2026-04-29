@@ -1,6 +1,6 @@
 #include "CBLT_TopBar.hpp"
 
-void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd) {
+void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd, std::string conf) {
     const UT::ui32 topBarFontSize = 25;
     const UT::ui32 topBarSeperatorY = (UT::ui32)CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y;
     const UT::ui32 topBarInfoVerticalShift = 12;
@@ -9,7 +9,9 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     const UT::ui32 topBarCWDFilePathSeperatorX = 210;
     const UT::ui32 topBarThirdColumnX = 220;
 
-    const UT::ui32 filenameLen = MeasureTextEx(gTopBarFont.f, fname.c_str(), topBarFontSize, 0.0f).x;
+    const std::string fnameAndConf = fname + " " + conf;
+    // We also render the file's lang .conf name
+    const UT::ui32 filenameLen = MeasureTextEx(gTopBarFont.f, fnameAndConf.c_str(), topBarFontSize, 0.0f).x;
     // const UT::ui32 CWDLen = MeasureTextEx(gTopBarFont.f, cwd.c_str(), topBarFontSize, 0.0f).x;
 
     const UT::ui32 filenameToModeMargin = 10;
@@ -111,7 +113,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     // Current file
     DrawTextEx(
         gTopBarFont.f,
-        fname.c_str(),
+        (fnameAndConf).c_str(),
         {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX), 0},
         topBarFontSize,
         0.0f,

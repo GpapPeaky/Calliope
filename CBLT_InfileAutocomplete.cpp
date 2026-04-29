@@ -8,7 +8,7 @@ namespace CBLT {
 
     InfileAutocomplete::~InfileAutocomplete(void) {}
 
-    void InfileAutocomplete::LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText) {
+    void InfileAutocomplete::LoadTokens(std::vector<std::vector<Token>>& fileTokens, std::vector<std::string>& fileText, Language& lang) {
         lineTokens.resize(fileTokens.size());
     
         for (UT::llui32 i = 0; i < fileTokens.size(); i++) {
@@ -29,9 +29,24 @@ namespace CBLT {
             }
         }
     
-        if (!gKeywords.empty())
-            allTokens.insert(gKeywords.begin(), gKeywords.end());
+        if (!lang.keywords.controlFlow.empty())
+            allTokens.insert(lang.keywords.controlFlow.begin(), lang.keywords.controlFlow.end());
+
+        if (!lang.keywords.dataTypes.empty())
+            allTokens.insert(lang.keywords.dataTypes.begin(), lang.keywords.dataTypes.end());
     
+        if (!lang.keywords.storageClass.empty())
+            allTokens.insert(lang.keywords.storageClass.begin(), lang.keywords.storageClass.end());
+
+        if (!lang.keywords.typeQualifiers.empty())
+            allTokens.insert(lang.keywords.typeQualifiers.begin(), lang.keywords.typeQualifiers.end());
+
+        if (!lang.keywords.userDefinedClass.empty())
+            allTokens.insert(lang.keywords.userDefinedClass.begin(), lang.keywords.userDefinedClass.end());
+
+        if (!lang.keywords.utility.empty())
+            allTokens.insert(lang.keywords.utility.begin(), lang.keywords.utility.end());
+
         tokens.assign(allTokens.begin(), allTokens.end());
     }
     
