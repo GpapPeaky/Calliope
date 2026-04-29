@@ -1,0 +1,98 @@
+! Stockholm, nano / ANSI strict terminal palette
+
+%pal
+
+    background : [0, 0, 0]
+
+    console : [200, 200, 200]
+
+    console_text : [200, 200, 200]
+
+    console_background : [0, 0, 0]
+
+    console_cursor : [255, 255, 255]
+
+    cursor : [255, 255, 255]
+
+    cursor_mode : [0, 255, 0]
+
+    text_seperators : [90, 90, 90]
+
+    line_info : [110, 110, 110]
+
+    file : [255, 255, 0]
+
+    cwd : [0, 255, 0]
+
+    cwd_dir : [80, 80, 80]
+
+    cwd_file : [180, 180, 180]
+
+    dirty : [255, 0, 0]
+
+    clean : [0, 255, 0]
+
+    text_base : [180, 180, 180]
+
+    text_lines : [70, 70, 70]
+
+
+    selection_colour : [0, 100, 255]
+
+    msg_background : [0, 0, 0]
+
+    msg_foreground : [200, 200, 200]
+
+    msg_err : [255, 0, 0]
+
+    msg_guide : [0, 255, 0]
+
+    msg_info : [0, 150, 255]
+
+
+    ! file queue entry
+
+    file_q_entry : [100, 100, 100]
+
+
+    ! current open file in queue
+
+    current_file_entry : [255, 255, 255]
+
+
+    ! file queue background
+
+    file_q_color : [0, 0, 0]
+
+
+    ! open file in console
+
+    open_file_color : [200, 200, 200]
+
+
+    ! cursor fragment
+
+    frag : [0, 255, 0]
+
+
+    ! lexical highlighting (ANSI semantic mapping)
+
+    lex_id : [200, 200, 200]
+
+    lex_comm : [0, 180, 0]
+
+    lex_key : [0, 120, 255]
+
+    lex_num : [255, 140, 0]
+
+    lex_op : [255, 255, 255]
+
+    lex_str : [0, 255, 255]
+
+    lex_pun : [160, 160, 160]
+
+    lex_misc : [255, 0, 200]
+
+    lex_func : [0, 200, 255]
+
+%pal

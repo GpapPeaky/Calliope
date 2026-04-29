@@ -1,0 +1,97 @@
+
+! Stockholm, basic editor palette (nano / ANSI inspired)
+
+%pal
+
+    background : [0, 0, 0]
+
+    console : [220, 220, 220]
+
+    console_text : [220, 220, 220]
+
+    console_background : [0, 0, 0]
+
+    console_cursor : [192, 192, 192]
+
+    cursor : [192, 192, 192]
+
+    cursor_mode : [0, 255, 128]
+
+    text_seperators : [128, 128, 128]
+
+    line_info : [128, 128, 128]
+
+    file : [255, 255, 0]
+
+    cwd : [0, 255, 128]
+
+    cwd_dir : [96, 96, 96]
+
+    cwd_file : [192, 192, 192]
+
+    dirty : [255, 64, 64]
+
+    clean : [0, 255, 128]
+
+    text_base : [192, 192, 192]
+
+    text_lines : [96, 96, 96]
+
+
+    selection_colour : [0, 128, 255]
+
+    msg_background : [0, 0, 0]
+
+    msg_foreground : [220, 220, 220]
+
+    msg_err : [255, 64, 64]
+
+    msg_guide : [0, 255, 128]
+
+    msg_info : [0, 128, 255]
+
+    ! file q entry
+
+    file_q_entry : [96, 96, 96]
+
+
+    ! current open file in the q
+
+    current_file_entry : [220, 220, 220]
+
+
+    ! file q background colour
+
+    file_q_color : [0, 0, 0]
+
+
+    ! Open file colour in the console
+
+    open_file_color : [220, 220, 220]
+
+
+    ! cursor fragment color
+
+    frag : [0, 255, 128]
+
+    ! post-lexical analysis, highlighting
+
+    lex_id : [220, 220, 220]
+
+    lex_comm : [0, 200, 100]
+
+    lex_key : [0, 128, 255]
+
+    lex_num : [255, 128, 0]
+
+    lex_op : [255, 255, 255]
+
+    lex_str : [0, 255, 255]
+
+    lex_pun : [192, 192, 192]
+
+    lex_misc : [255, 64, 128]
+
+    lex_func : [0, 180, 255]
+
+%pal

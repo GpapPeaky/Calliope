@@ -85,6 +85,14 @@ CBLT::LexerState CBLT::LexLine(const std::string& s, UT::ui32 line, LexerState l
             }
         }
 
+        // Annotations are coloured with the same color as macros
+        for (const auto& prefix : lang.annotations) {
+            if (s.compare(i, prefix.size(), prefix) == 0) {
+                push(TokenClass::MISC, i, s.size());
+                return state;
+            }
+        }
+
         // String
         for (const auto& [open, close] : str) {
             if (s.compare(i, open.size(), open) == 0) {

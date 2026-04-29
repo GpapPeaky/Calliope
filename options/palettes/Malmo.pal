@@ -1,0 +1,80 @@
+! Stockholm, Cyberpunk 2077 neon palette (fully unified, no black gaps)
+
+%pal
+
+    background : [18, 0, 35]        
+
+    console : [255, 210, 255]       
+    console_text : [255, 210, 255]
+    console_background : [18, 0, 35]
+
+    console_cursor : [255, 0, 200]  
+    cursor : [255, 0, 200]
+
+    cursor_mode : [255, 255, 0]     
+
+    text_seperators : [140, 0, 180] 
+
+    line_info : [200, 140, 255]     
+
+    file : [255, 255, 0]            
+
+    cwd : [255, 0, 180]             
+    cwd_dir : [150, 0, 200]         
+    cwd_file : [255, 170, 255]      
+
+    dirty : [255, 70, 130]          
+    clean : [0, 255, 200]           
+
+    text_base : [235, 200, 255]     
+    text_lines : [110, 0, 160]      
+
+
+    selection_colour : [255, 0, 200]
+
+    msg_background : [35, 0, 60]    
+    msg_foreground : [255, 220, 255]
+
+    msg_err : [255, 50, 90]         
+    msg_guide : [255, 0, 200]       
+    msg_info : [0, 255, 255]        
+
+
+    ! file queue entry
+    file_q_entry : [180, 0, 220]      
+
+    ! current open file in the q
+    current_file_entry : [255, 255, 0]
+
+    ! file queue background colour
+    file_q_color : [25, 0, 50]        
+
+    ! Open file colour in the console
+    open_file_color : [255, 180, 255] 
+
+
+    ! cursor fragment color
+    frag : [255, 0, 200]              
+
+
+    ! lexical analysis highlighting (fully cyberpunk unified)
+
+    lex_id : [235, 200, 255]          
+
+    lex_comm : [160, 0, 200]          
+
+    lex_key : [255, 0, 200]           
+
+    lex_num : [255, 255, 0]           
+
+    lex_op : [0, 255, 255]            
+
+    lex_str : [255, 120, 220]         
+
+    lex_pun : [200, 120, 255]         
+
+    lex_misc : [255, 0, 120]          
+
+    lex_func : [180, 0, 255]          
+
+%pal
