@@ -19,12 +19,12 @@ namespace CBLT {
         CRS,  //          CoBaLT Runtime Script         //
               ////////////////////////////////////////////
 
-        C,
-        CPP,
+        C,          // conf C
+        CPP,        // conf C
         CS,
-        ASM,
-        JAVA,
-        RS,
+        ASM,        // conf C
+        JAVA,       // conf C
+        RS,         // conf C
         D,
         GO,
         ZIG,
@@ -47,7 +47,7 @@ namespace CBLT {
         PHP,
         PL,
         LUA,
-        SH,
+        SH,       // conf C
         PS1,
         JSON,
         YAML,
@@ -60,7 +60,7 @@ namespace CBLT {
         GRAPHQL,
         MD,
         RST,
-        TXT,
+        TXT,      // conf C
         HCL,
         HS,
         ML,
