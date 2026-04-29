@@ -63,29 +63,59 @@ void Language::ReadLangFile(std::string fname) {
                 break;
             }
 
-            case LanguageLoaderSection::CONTROL_FLOW:
-                keywords.controlFlow.insert(line);
+            case LanguageLoaderSection::CONTROL_FLOW: {
+                std::stringstream ss(line);
+                std::string word;
+                while (ss >> word) {
+                    keywords.controlFlow.insert(word);
+                }
                 break;
+            }
 
-            case LanguageLoaderSection::STORAGE_CLASS:
-                keywords.storageClass.insert(line);
+            case LanguageLoaderSection::STORAGE_CLASS: {
+                std::stringstream ss(line);
+                std::string word;
+                while (ss >> word) {
+                    keywords.storageClass.insert(word);
+                }
                 break;
-
-            case LanguageLoaderSection::TYPE_QUALIFIERS:
-                keywords.typeQualifiers.insert(line);
+            }
+            
+            case LanguageLoaderSection::TYPE_QUALIFIERS: {
+                std::stringstream ss(line);
+                std::string word;
+                while (ss >> word) {
+                    keywords.typeQualifiers.insert(word);
+                }
                 break;
-
-            case LanguageLoaderSection::USER_DEFINED:
-                keywords.userDefinedClass.insert(line);
+            }
+            
+            case LanguageLoaderSection::USER_DEFINED: {
+                std::stringstream ss(line);
+                std::string word;
+                while (ss >> word) {
+                    keywords.userDefinedClass.insert(word);
+                }
                 break;
-
-            case LanguageLoaderSection::UTILITY:
-                keywords.utility.insert(line);
+            }
+            
+            case LanguageLoaderSection::UTILITY: {
+                std::stringstream ss(line);
+                std::string word;
+                while (ss >> word) {
+                    keywords.utility.insert(word);
+                }
                 break;
-
-            case LanguageLoaderSection::DATA_TYPES:
-                keywords.dataTypes.insert(line);
+            }
+            
+            case LanguageLoaderSection::DATA_TYPES: {
+                std::stringstream ss(line);
+                std::string word;
+                while (ss >> word) {
+                    keywords.dataTypes.insert(word);
+                }
                 break;
+            }
 
             case LanguageLoaderSection::OPERATORS: {
                 std::stringstream ss(line);
@@ -104,9 +134,14 @@ void Language::ReadLangFile(std::string fname) {
                 break;
             }
 
-            case LanguageLoaderSection::COMMENT_LINE:
-                commentLine.push_back(line);
+            case LanguageLoaderSection::COMMENT_LINE: {
+                std::stringstream ss(line);
+                std::string cl;
+                while (ss >> cl) {
+                    commentLine.emplace_back(cl);
+                }
                 break;
+            }
 
             case LanguageLoaderSection::STRING_DELIM: {
                 std::stringstream ss(line);
@@ -116,10 +151,12 @@ void Language::ReadLangFile(std::string fname) {
                 break;
             }
 
+            // Per line definition
             case LanguageLoaderSection::ANNOTATIONS:
                 annotations.push_back(line);
                 break;
 
+            // Per line definition
             case LanguageLoaderSection::MACROS:
                 macros.push_back(line);
                 break;
