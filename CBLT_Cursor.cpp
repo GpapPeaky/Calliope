@@ -113,6 +113,67 @@ namespace CBLT {
         SetAt(this->column + 1, this->line, targetLine);
     }
 
+    void Cursor::DrawSelection(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff) {
+        UT::ui32 startColumn = SSCol();
+        UT::ui32 startLine   = SSLine();
+        UT::ui32 endColumn   = SFCol();
+        UT::ui32 endLine     = SFLine();
+    
+        // Normalize selection (important!)
+        if (startLine > endLine || (startLine == endLine && startColumn > endColumn)) {
+            std::swap(startLine, endLine);
+            std::swap(startColumn, endColumn);
+        }
+    
+        UT::i32 baseY = CBLT::gOffsets.y + yOff;
+        UT::i32 baseX = xOff + CBLT::gOffsets.x;
+    
+        for (UT::ui32 line = startLine; line <= endLine; ++line) {
+            UT::i32 y = baseY + line * font.size + font.size;
+    
+            if (line == startLine && line == endLine) {
+                // Single line selection
+                DrawRectangle(
+                    baseX + startColumn * charWidth,
+                    y,
+                    (endColumn - startColumn) * charWidth,
+                    font.size,
+                    gPalette.selectionColor
+                );
+            }
+            else if (line == startLine) {
+                // First line
+                DrawRectangle(
+                    baseX + startColumn * charWidth,
+                    y,
+                    GetScreenWidth() - (baseX + startColumn * charWidth),
+                    font.size,
+                    gPalette.selectionColor
+                );
+            }
+            else if (line == endLine) {
+                // Last line
+                DrawRectangle(
+                    baseX,
+                    y,
+                    endColumn * charWidth,
+                    font.size,
+                    gPalette.selectionColor
+                );
+            }
+            else {
+                // Middle lines
+                DrawRectangle(
+                    baseX,
+                    y,
+                    GetScreenWidth(),
+                    font.size,
+                    gPalette.selectionColor
+                );
+            }
+        }
+    }
+
     void Cursor::Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff) {
         // Limit from topbar
         BeginScissorMode(
@@ -121,6 +182,8 @@ namespace CBLT {
             GetScreenWidth(),
             GetScreenHeight() - 66.0f       // TOP_BAR_HEIGHT + someMargin
         );
+
+        if (GetMode() == CursorMode::SELECT) DrawSelection(font, xOff, yOff);
 
         animator.Update();
     
@@ -182,6 +245,13 @@ namespace CBLT {
 
     UT::ui32 Cursor::SSLine() const {
         return startSelectLine;
+    }
+
+    void Cursor::ResetSelection(void) {
+        startSelectColumn = 0;
+        finalSelectColumn = 0;
+        startSelectLine = 0;
+        finalSelectLine = 0;
     }
 
     UT::ui32 Cursor::GetCursorX(const std::string& lineText, UT::ui32 fontSize){

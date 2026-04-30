@@ -101,6 +101,9 @@ namespace CBLT {
             // Draw cursor
             void Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff);
 
+            // Draw cursor's selection
+            void DrawSelection(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff);
+
             // Start selection
             void StartSelection(void);
 
@@ -130,6 +133,9 @@ namespace CBLT {
 
             // Clamp cursor to camera view
             void ClampToCamera(Camera& cam, std::string currentLine);
+
+            // Reset selection fields
+            void ResetSelection(void);
     }; // Cursor class
 
     class CursorManager {

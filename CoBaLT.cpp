@@ -6,17 +6,12 @@
     #include <limits.h>  // For PATH_MAX
 #endif
 
-// FIXME: For some reason pressing enter after '}' doesn't do anything, till the cursor moves again
+// FIXME: For some reason pressing enter after '}' or '/' doesn't do anything, till the cursor moves again
 
 // FIXME: Multi-cursor indentation is problematic
 // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
 
-// TODO: Make handling and handle function a bit more uniform in Controller::Update, both modes and the console IsOpen(...) block
-// TODO: Write the HandleSelectionSpecial(...) function
-
-// TODO: Add font resizing to docs
 // TODO: Finish AnimationProfile editor 
-// TODO: Finish the sound samples, replace them, and add them where need
 
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();

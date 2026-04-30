@@ -94,9 +94,6 @@ namespace CBLT {
             // Select a file or folder to NQ, or change in to
             Rectangle HandleConsoleMouseClick(void);
 
-            // Handle font resizing
-            void ResizeHandling(void);
-
             // Handle select exit
             UT::b HandleSelectExit(UT::b insertion);
             
@@ -104,7 +101,13 @@ namespace CBLT {
             UT::b HandleSelectEntry(Cursor& c);
 
             // Selection special keys
-            void HandleSelectionSpecials(Cursor& cursor);
+            UT::b HandleSelectionSpecials(Cursor& cursor);
+
+            // Deleted selected text
+            void DeleteSelected(void);
+
+            // Wrap around selection deletion by a cursor
+            void DeleteSelectionIfActive(Cursor& cursor);
             
             // Constructor
             Controller(void);

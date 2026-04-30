@@ -680,30 +680,100 @@ namespace CBLT {
 
         // Paste from clipboard
         if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) {
-            UT::ui32 linesPasted = 0;
-
             std::string clipboard = GetClipboardText();
-
             if (clipboard.empty()) return false;
-
-            // Automatically splits per line
-            std::stringstream ss(clipboard);
-            std::string line;
-            UT::ui32 lineIdx = cursor.Line();
-            std::vector<std::string> lines;
-
-            while (std::getline(ss, line)) {
-                // Remove trailing '\r' if coming from Windows clipboard
-                if (!line.empty() && line.back() == '\r')
-                    line.pop_back();
-
-                Q.Active().InsertDirtyLine(lineIdx);
-                Q.Active().CreateLine(lineIdx++, line);
-                linesPasted++;
+        
+            Cursor& cursor = Q.Active().Cursors().Primary();
+            File& file = Q.Active();
+        
+            // Replace selection if active
+            if (cursor.GetMode() == CursorMode::SELECT) {
+                DeleteSelected(); // Replace existing selection
             }
+        
+            UT::ui32 line = cursor.Line();
+            UT::ui32 col  = cursor.Col();
+        
+            // Split current line at cursor
+            std::string rightFragment = file.SplitLine(line, col);
+        
+            // Parse clipboard
+            std::stringstream ss(clipboard);
+            std::vector<std::string> lines;
+            std::string tmp;
+        
+            while (std::getline(ss, tmp)) {
+                if (!tmp.empty() && tmp.back() == '\r')
+                    tmp.pop_back();
+                lines.push_back(tmp);
+            }
+        
+            if (lines.empty()) return false;
+        
+            // Insert first line (append to left part)
+            file.GetCurrentLine(line) += lines[0];
+        
+            UT::ui32 currentLine = line;
+        
+            // Insert middle lines
+            for (size_t i = 1; i < lines.size(); ++i) {
+                file.CreateLine(++currentLine, lines[i]);
+            }
+        
+            // Attach original right side to last line
+            file.GetCurrentLine(currentLine) += rightFragment;
+        
+            file.InsertDirtyLine(currentLine);
+        
+            // Move cursor
+            cursor.SetAt(
+                lines.back().size(),
+                currentLine,
+                file.GetCurrentLine(currentLine)
+            );
+        
+            return true;
+        }
 
-            cursor.SetAt(cursor.Col(), cursor.Line() + linesPasted - 1, Q.Active().GetCurrentLine(cursor.Line() + linesPasted - 1));
-
+        // Copy selection
+        if (keyboard.m.ctrl && IsKeyPressed(KEY_C)) {
+            UT::ui32 startColumn = cursor.SSCol();
+            UT::ui32 startLine   = cursor.SSLine();
+            UT::ui32 endColumn   = cursor.SFCol();
+            UT::ui32 endLine     = cursor.SFLine();
+        
+            // Normalize selection
+            if (startLine > endLine || (startLine == endLine && startColumn > endColumn)) {
+                std::swap(startLine, endLine);
+                std::swap(startColumn, endColumn);
+            }
+        
+            std::string result;
+        
+            for (UT::ui32 line = startLine; line <= endLine; ++line) {
+                const std::string& current = Q.Active().GetCurrentLine(line);
+        
+                if (line == startLine && line == endLine) {
+                    // Single line
+                    result += current.substr(startColumn, endColumn - startColumn);
+                }
+                else if (line == startLine) {
+                    // First line
+                    result += current.substr(startColumn);
+                    result += '\n';
+                }
+                else if (line == endLine) {
+                    // Last line
+                    result += current.substr(0, endColumn);
+                }
+                else {
+                    // Middle lines
+                    result += current;
+                    result += '\n';
+                }
+            }
+        
+            SetClipboardText(result.c_str());
             return true;
         }
 
@@ -1045,18 +1115,47 @@ namespace CBLT {
             CBLT::CursorMode m = c.GetMode();
 
             // Handling booleans
-            UT::b handledShort;
+            UT::b handledShort = false;
             UT::b handledInsert = false;
+            UT::b handledSelectionSpecials = false;
 
             switch(m) {
+                // Very weird and complex, might need to rewrite it, but it works for now
                 case CBLT::CursorMode::SELECT:
-                    handledShort = HandleShorcuts(c);
-
                     if (Q.Size() == 0) return;
-            
-                    HandleSelectionSpecials(c);
+                
+                    // Possible exit
+                    handledSelectionSpecials = HandleSelectionSpecials(c);
+                
+                    if (!handledSelectionSpecials) {
+                        handledShort = HandleShorcuts(c); // Priority, safeguard from bad overwrites
+                    } 
                     
-                    if (!handledShort) HandleMovement(c, false);
+                    if (!handledShort) {
+                        // Record movement
+                        HandleMovement(c, false);
+                    }
+
+                    if (handledShort && !handledSelectionSpecials) {
+                        c.ResetSelection();
+                        c.SetMode(CursorMode::INSERT);
+
+                        break; // Skip that cursor, transitioned to INSERT mode
+                    }
+                    
+                    // Key press recorded
+                    if (!keyQueue.empty()) {
+                        DeleteSelected();                    // → sets mode to INSERT, repositions cursor
+                        HandleInsert(c, keyQueue);           // → inserts at correct position
+                        break;
+                    }
+                    
+                    // Check for insertion valid keys after special handling 
+                    if (c.GetMode() == CursorMode::INSERT) {
+                        handledInsert = HandleInsert(c, keyQueue);
+                        // skip HandleSelectExit, already in INSERT
+                        break;
+                    }
 
                     c.StopSelection(); // Update Stop col/line fields, doesn't terminate the mode
 
@@ -1067,13 +1166,12 @@ namespace CBLT {
                     }
                     
                     // Only handle insertion after shortcuts        
-                    if (!handledShort) {
-                        handledInsert = HandleInsert(c, keyQueue);
-                    }
+                    handledInsert = HandleInsert(c, keyQueue);
             
                     // Typed an exit-selection valid key or key combination
                     if (HandleSelectExit(handledInsert)) {
-                        c.SetMode(CBLT::CursorMode::INSERT); // Change mode exit selection
+                        c.ResetSelection();                  // Reset indeces
+                        c.SetMode(CBLT::CursorMode::INSERT); // Change mode exit selection, no deletions
                     }
 
                     break;
@@ -1199,8 +1297,10 @@ namespace CBLT {
     
         for (auto& cursor : GetActiveCursorManager().activeCursors) {
             if (scroll < 0 && cursor.Line() + 1 < f.GetLineCount()) {
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(cursor.Col(), cursor.Line() + 1, f.GetCurrentLine(cursor.Line() + 1));
             } else if (scroll > 0 && cursor.Line() > 0) {
+                gSound.Play(SoundClass::SOUND_INFILE_NAV);
                 cursor.SetAt(cursor.Col(), cursor.Line() - 1, f.GetCurrentLine(cursor.Line() - 1));
             }
 
@@ -1285,6 +1385,9 @@ namespace CBLT {
         GetActiveCursorManager().RemoveSecondaries();
     
         c.SetAt(col, line, f.GetCurrentLine(line));
+
+        gSound.Play(SoundClass::SOUND_INFILE_NAV);
+
         c.StopSelection(); // ensure we exit select mode
     }
 
@@ -1393,67 +1496,98 @@ namespace CBLT {
         return {0, 0, 0, 0};
     }
 
-    void Controller::HandleSelectionSpecials(Cursor& cursor) {
-        // Backspace
+    UT::b Controller::HandleSelectionSpecials(Cursor& cursor) {
         if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
             gSound.Play(SoundClass::SOUND_INFILE_DELETE);
-
-            if (cursor.Col() > 0) {
-                std::string& line = Q.Active().GetCurrentLine(cursor.Line());
-                UT::ui32 col = cursor.Col();
-                UT::cui8 tabSize = keyboard.tabSize;
-
-                // Clamp
-                if (col > (UT::ui32)line.size()) col = line.size();
-        
-                // If previous char is space -> delete indentation block
-                if (line.at(col - 1) == ' ') {
-                    UT::ui32 deleteCount = 0;
-                    UT::ui32 startCol = col;
-        
-                    // Walk left while:
-                    // still spaces
-                    // not past column 0
-                    // not past a tab stop
-                    while (startCol > 0 &&
-                        startCol <= (UT::ui32)line.size() &&
-                        line.at(startCol - 1) == ' ' &&
-                        ((startCol - 1) % tabSize != 0)) {
-
-                        startCol--;
-                        deleteCount++;
-                    }
-        
-                    // Always delete at least one space
-                    if (deleteCount == 0) {
-                        startCol--;
-                        deleteCount = 1;
-                    }
-
-                    line.erase(startCol, deleteCount);
-                    cursor.SetAt(startCol, cursor.Line(), line);
-                    Q.Active().InsertDirtyLine(cursor.Line());
-                } else { // Normal character delete
-                    line.erase(col - 1, 1);
-                    cursor.Left(line);
-                    Q.Active().InsertDirtyLine(cursor.Line());
-                }
-            } else if (cursor.Col() == 0 && cursor.Line() > 0) {
-                UT::ui32 originalLine = cursor.Line(); // capture
-                UT::ui32 prevLineLen  = Q.Active().GetLineLength(originalLine - 1);
-                UT::b    isEmpty      = Q.Active().GetCurrentLine(originalLine).empty();
-            
-                cursor.SetAt(prevLineLen, originalLine - 1, Q.Active().GetCurrentLine(originalLine - 1));
-            
-                if (isEmpty) {
-                    Q.Active().DeleteLine(originalLine);
-                } else {
-                    Q.Active().PushBackLineFragment(originalLine, originalLine - 1);
-                    Q.Active().DeleteLine(originalLine);
-                }
-            }
-
+            DeleteSelected(); // Just delete the selection wholesale
             Q.Active().SetDirt(true);
+
+            return true;
+        }
+
+        if (keyboard.m.ctrl && (IsKeyPressedRepeat(KEY_X) || IsKeyPressed(KEY_X))) {
+            gSound.Play(SoundClass::SOUND_INFILE_DELETE);
+            DeleteSelected(); // Just delete the selection wholesale
+            Q.Active().SetDirt(true);
+
+            return true;
+        }
+
+        if (IsKeyPressedRepeat(KEY_ENTER) || IsKeyPressed(KEY_ENTER)) {
+            gSound.Play(SoundClass::SOUND_INFILE_RETURN);
+            DeleteSelected();
+            // Now fall through — but HandleSpecials runs on INSERT mode cursors,
+            // so you need to either duplicate the enter logic here, or set mode
+            // to INSERT and let the next frame handle it.
+            Q.Active().SetDirt(true);
+
+            return true;
+        }
+
+        // We will fallback inside the ::SELECT part in Update()
+        return false;
+    }
+
+    void Controller::DeleteSelected(void) {
+        Cursor& cursor = Q.Active().Cursors().Primary();
+        File& file = Q.Active();
+    
+        UT::ui32 startCol = cursor.SSCol();
+        UT::ui32 startLine = cursor.SSLine();
+        UT::ui32 endCol = cursor.SFCol();
+        UT::ui32 endLine = cursor.SFLine();
+    
+        // Normalize
+        if (startLine > endLine || (startLine == endLine && startCol > endCol)) {
+            std::swap(startLine, endLine);
+            std::swap(startCol, endCol);
+        }
+    
+        // Single-line case
+        if (startLine == endLine) {
+            std::string& line = file.GetCurrentLine(startLine);
+            line.erase(startCol, endCol - startCol);
+            file.InsertDirtyLine(startLine);
+    
+            cursor.SetAt(startCol, startLine, line);
+
+            cursor.ResetSelection();
+
+            cursor.SetMode(CursorMode::INSERT); // Switch in order to fully reset the selection, else it keeps deleting the selected text
+
+            return;
+        }
+    
+        // Multi-line case
+    
+        // Trim start line
+        std::string& start = file.GetCurrentLine(startLine);
+        start.erase(startCol);
+    
+        // Capture tail of end line
+        std::string endFragment = file.GetCurrentLine(endLine).substr(endCol);
+    
+        // Delete lines in between
+        for (UT::ui32 l = endLine ; l > startLine ; --l) {
+            file.DeleteLine(l);
+        }
+    
+        // Merge
+        file.GetCurrentLine(startLine) += endFragment;
+        file.InsertDirtyLine(startLine);
+    
+        // Move cursor
+        cursor.SetAt(startCol, startLine, file.GetCurrentLine(startLine));
+
+        cursor.ResetSelection();
+
+        cursor.SetMode(CursorMode::INSERT); // Switch in order to fully reset the selection, else it keeps deleting the selected text
+    }
+
+    // Add this as a private helper
+    void Controller::DeleteSelectionIfActive(Cursor& cursor) {
+        if (cursor.GetMode() == CursorMode::SELECT) {
+            DeleteSelected(); // cursor is already repositioned after this
         }
     }
 } // CBLT
