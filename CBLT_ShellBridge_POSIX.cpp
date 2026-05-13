@@ -21,7 +21,7 @@
 
                 // We use a C++ Raw String Literal R"(...)" to completely bypass backslash escaping issues.
                 // This passes the exact string to bash without C++ modifying the quotes or slashes.
-                std::string bashCommand = R"(exec bash --init-file <(echo "[ -f ~/.bashrc ] && source ~/.bashrc; printf '\e CBLT CALLED LOCAL SHELL\n'"))";
+                std::string bashCommand = R"(exec bash --init-file <(echo "[ -f ~/.bashrc ] && source ~/.bashrc; echo -e '\e[33mCBLT CALLED LOCAL SHELL\n\e[0m'"))";
 
                 // Child process
                 // Syntax for many terminals: terminal -e bash -c "command"

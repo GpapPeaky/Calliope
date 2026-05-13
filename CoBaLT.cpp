@@ -8,7 +8,6 @@
 
 // FIXME: Add colours to the installation scripts
 // FIXME: Fix some issues with SELECTION MODE bugging out, and selecting from 0,0  
-// FIXME: Fix the ':sh' directive shell print
 // FIXME: Fix issues with multicursor selection, when pressing shift with multiple cursors, the primary resets
 // FIXME: Fix issues with selection pasting cursor position
 
