@@ -680,15 +680,17 @@ namespace CBLT {
 
         // Paste from clipboard
         if (keyboard.m.ctrl && IsKeyPressed(KEY_V)) {
-            std::string clipboard = GetClipboardText();
-            if (clipboard.empty()) return false;
+            const char* rawClipboard = GetClipboardText();
+            if (rawClipboard == nullptr) return false; // Safeguard string construction
         
-            Cursor& cursor = Q.Active().Cursors().Primary();
+            std::string clipboard = std::string(rawClipboard);
+            if (clipboard.empty()) return false;
+
             File& file = Q.Active();
         
             // Replace selection if active
             if (cursor.GetMode() == CursorMode::SELECT) {
-                DeleteSelected(); // Replace existing selection
+                DeleteSelected(cursor); // Replace existing selection
             }
         
             UT::ui32 line = cursor.Line();
@@ -1145,7 +1147,7 @@ namespace CBLT {
                     
                     // Key press recorded
                     if (!keyQueue.empty()) {
-                        DeleteSelected();                    // → sets mode to INSERT, repositions cursor
+                        DeleteSelected(c);                    // → sets mode to INSERT, repositions cursor
                         HandleInsert(c, keyQueue);           // → inserts at correct position
                         break;
                     }
@@ -1499,7 +1501,7 @@ namespace CBLT {
     UT::b Controller::HandleSelectionSpecials(Cursor& cursor) {
         if (IsKeyPressedRepeat(KEY_BACKSPACE) || IsKeyPressed(KEY_BACKSPACE)) {
             gSound.Play(SoundClass::SOUND_INFILE_DELETE);
-            DeleteSelected(); // Just delete the selection wholesale
+            DeleteSelected(cursor); // Just delete the selection wholesale
             Q.Active().SetDirt(true);
 
             return true;
@@ -1507,7 +1509,7 @@ namespace CBLT {
 
         if (keyboard.m.ctrl && (IsKeyPressedRepeat(KEY_X) || IsKeyPressed(KEY_X))) {
             gSound.Play(SoundClass::SOUND_INFILE_DELETE);
-            DeleteSelected(); // Just delete the selection wholesale
+            DeleteSelected(cursor); // Just delete the selection wholesale
             Q.Active().SetDirt(true);
 
             return true;
@@ -1515,7 +1517,7 @@ namespace CBLT {
 
         if (IsKeyPressedRepeat(KEY_ENTER) || IsKeyPressed(KEY_ENTER)) {
             gSound.Play(SoundClass::SOUND_INFILE_RETURN);
-            DeleteSelected();
+            DeleteSelected(cursor);
             // Now fall through — but HandleSpecials runs on INSERT mode cursors,
             // so you need to either duplicate the enter logic here, or set mode
             // to INSERT and let the next frame handle it.
@@ -1528,8 +1530,7 @@ namespace CBLT {
         return false;
     }
 
-    void Controller::DeleteSelected(void) {
-        Cursor& cursor = Q.Active().Cursors().Primary();
+    void Controller::DeleteSelected(Cursor& cursor) {
         File& file = Q.Active();
     
         UT::ui32 startCol = cursor.SSCol();
@@ -1587,7 +1588,7 @@ namespace CBLT {
     // Add this as a private helper
     void Controller::DeleteSelectionIfActive(Cursor& cursor) {
         if (cursor.GetMode() == CursorMode::SELECT) {
-            DeleteSelected(); // cursor is already repositioned after this
+            DeleteSelected(cursor); // cursor is already repositioned after this
         }
     }
 } // CBLT

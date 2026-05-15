@@ -12,7 +12,7 @@ namespace CBLT {
         fragment(""),
         animator(),
         charWidth(MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x), // Measure once
-        cursorSymbol(CursorSymbol::NON_ASCII_BOX)                  // Default
+        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX)            // Default
     {
         animator.Snap(0.0f, ln * gFont.size);
     }

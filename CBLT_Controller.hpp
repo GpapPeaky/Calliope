@@ -104,7 +104,7 @@ namespace CBLT {
             UT::b HandleSelectionSpecials(Cursor& cursor);
 
             // Deleted selected text
-            void DeleteSelected(void);
+            void DeleteSelected(Cursor& cursor);
 
             // Wrap around selection deletion by a cursor
             void DeleteSelectionIfActive(Cursor& cursor);
