@@ -21,6 +21,8 @@ namespace CBLT {
         std::string fname = "settings.conf";
 
         fs::path settingsPath = fs::path(installationPath) / "options" / fname;
+
+        std::cerr << ("READING SETTINGS FROM " + settingsPath.string() + " \n");
     
         if (!fs::exists(settingsPath)) {
             // Optional log
@@ -83,6 +85,39 @@ namespace CBLT {
                     this->OPTION_Palette = value;
 
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                }
+                else if (token == "CURSOR_SYMBOL") {
+                    // this->OPTION_CursorSymbol = value;
+
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                    
+                    if (value == "UNDERSCORE")  { this->OPTION_CursorSymbol = -4; }
+                    else if (value == "BOX")    { this->OPTION_CursorSymbol = -1; }
+                    else if (value == "LINE")   { this->OPTION_CursorSymbol = -3; }
+                    else if (value == "HOLLOW") { this->OPTION_CursorSymbol = -2; }
+                    else {
+                        std::cerr << ("INVALID CURSOR SYMBOL TOKEN AT LINE: " + line + " SELECT ONE OF THESE: \'BOX\', \'LINE\', \'HOLLOW\', \'UNDERSCORE\'\n");
+                    }
+                }
+                else if (token == "ANIM_FILE_CURSOR_PROFILE") {
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                    
+                    this->OPTION_ANIM_FileCursor = ReadAnimationFile(value);
+                }
+                else if (token == "ANIM_CONSOLE_CURSOR_PROFILE") {
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                    
+                    this->OPTION_ANIM_ConsoleCursor = ReadAnimationFile(value);
+                }
+                else if (token == "ANIM_FQ_PROFILE") {
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                    
+                    this->OPTION_ANIM_FQ = ReadAnimationFile(value);
+                }
+                else if (token == "ANIM_CONSOLE_PROFILE") {
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                    
+                    this->OPTION_ANIM_Console = ReadAnimationFile(value);
                 }
                 else {
                     std::cerr <<  ("INVALID SETTINGS TOKEN AT LINE: " + line + "\n");

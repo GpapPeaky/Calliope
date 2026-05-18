@@ -97,4 +97,91 @@ namespace CBLT {
         ty = toY;
         init = true;
     }
+
+    AnimationProfile ReadAnimationFile(const std::string& path) {
+        std::string resourcePath = ".";
+    
+        #if defined(__linux__)
+            if (const char* p = getenv("CBLT_RESOURCES"))
+                resourcePath = p;    
+        
+            resourcePath += '/';
+        #endif
+    
+        AnimationProfile ap;
+    
+        std::ifstream f(
+            resourcePath +
+            "options/anim/" +
+            path +
+            ".conf"
+        );
+    
+        // std::cout << resourcePath + "options/anim/" + path + ".conf\n";
+        
+        if (!f.is_open()) {
+            UE::Log(
+                "Failed to open animation file: " +
+                path
+            );
+        }
+    
+        auto trim = [](std::string s) {
+            s.erase(0, s.find_first_not_of(" \t\r\n"));
+            s.erase(s.find_last_not_of(" \t\r\n") + 1);
+            return s;
+        };
+    
+        auto ease = [](const std::string& v) {
+            if (v == "LINEAR")   return AnimationEase::LINEAR;
+            if (v == "EASE_OUT") return AnimationEase::EASE_OUT;
+            if (v == "EASE_IN")  return AnimationEase::EASE_IN;
+            if (v == "ELASTIC")  return AnimationEase::ELASTIC;
+            if (v == "BOUNCE")   return AnimationEase::BOUNCE;
+    
+            return AnimationEase::NONE;
+        };
+    
+        std::string line;
+        bool block = false;
+    
+        while (std::getline(f, line)) {
+            line = trim(line);
+    
+            if (
+                line.empty() ||
+                line[0] == '!'
+            )
+                continue;
+    
+            if (line == "%anim") {
+                block = !block;
+                continue;
+            }
+    
+            if (!block)
+                continue;
+    
+            size_t p = line.find(':');
+    
+            if (p == std::string::npos)
+                continue;
+    
+            std::string k = trim(
+                line.substr(0, p)
+            );
+    
+            std::string v = trim(
+                line.substr(p + 1)
+            );
+    
+            if      (k == "ease")       ap.ease = ease(v);
+            else if (k == "speed")      ap.speed = std::stof(v);
+            else if (k == "overshoot")  ap.overshoot = std::stof(v);
+            else if (k == "stiffness")  ap.stiffness = std::stof(v);
+            else if (k == "damping")    ap.damping = std::stof(v);
+        }
+    
+        return ap;
+    }
 } // CBLT

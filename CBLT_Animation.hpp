@@ -73,4 +73,7 @@ namespace CBLT {
             // Move to function, initiate movement animation
             void MoveTo(UT::f32 toX, UT::f32 toY);
     }; // Animator class
+
+    // Read animation profile file, animation profiles for console, fq and cursor
+    AnimationProfile ReadAnimationFile(const std::string& path);
 } // CBLT
