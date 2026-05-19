@@ -1,35 +1,16 @@
 #include "CBLT_Animation.hpp"
 
 namespace CBLT {
-    //                             speed   overshoot   stiffness  damping
-    const AnimationProfile gAnimationProfiles[] = {
-        { AnimationEase::NONE,     0.00f,  0.00f,  0.00f,  0.00f },  // NONE             - instant
-        { AnimationEase::EASE_OUT, 0.20f,  0.00f,  -0.25,  0.90f },  // EASE              - gentle ease in, p^0.5 // standard
-        { AnimationEase::ELASTIC,  0.25f,  0.20f,  0.60f,  3.00f },  // SMOOTH           - tiny overshoot, dies immediately
-        { AnimationEase::ELASTIC,  0.12f,  0.80f,  1.00f,  1.20f },  // ELASTIC          - clean overshoot, standard decay
-        { AnimationEase::ELASTIC,  0.08f,  1.40f,  1.20f,  0.60f },  // EXTRA_ELASTIC    - big overshoot, slow decay, wiggles
-        { AnimationEase::BOUNCE,   0.18f,  1.00f,  1.00f,  1.00f },  // BOUNCE           - standard bounce
-        { AnimationEase::LINEAR,   0.25f,  0.00f,  1.00f,  1.00f },  // SNAPPY           - pure linear
-        { AnimationEase::EASE_OUT, 0.10f,  0.00f,  1.50f,  1.00f },  // RUBBER           - heavy ease out, p^2.5
-        { AnimationEase::ELASTIC,  0.20f,  0.15f,  0.80f,  4.00f },  // STIFF            - barely overshoots, snaps back fast
-        { AnimationEase::ELASTIC,  0.06f,  1.80f,  0.70f,  0.15f },  // JELLY            - huge overshoot, oscillates long
-        { AnimationEase::BOUNCE,   0.22f,  1.40f,  1.00f,  1.00f },  // BOING            - exaggerated bounce scale
-        { AnimationEase::BOUNCE,   0.30f,  0.50f,  1.00f,  1.00f },  // TAP              - subtle quick bounce
-        { AnimationEase::EASE_IN,  0.08f,  0.00f,  1.50f,  1.00f },  // SLUGGISH         - very slow, heavy ease in p^2.5
-        { AnimationEase::LINEAR,   0.50f,  0.00f,  1.00f,  1.00f },  // INSTANT          - fast linear, near snap
-        { AnimationEase::ELASTIC,  0.10f,  1.0f,   0.50f,  2.50f },  // OVERSHOOT_SMOOTH - soft overshoot, low freq, dies fast
-    };
-
-    Animator::Animator(void) : tx(0.0f), ty(0.0f), init(false), t(AnimationType::EASE), interp() {}
+    Animator::Animator(void) : tx(0.0f), ty(0.0f), init(false), interp(), anim(nullptr) {}
 
     Animator::~Animator(void) {}
 
-    void Animator::SetType(AnimationType type) {
-        t = type;
+    void Animator::SetProfile(AnimationProfile* profile) {
+        anim = profile;
     }
 
     void Animator::MoveTo(UT::f32 toX, UT::f32 toY) {
-        if (t == AnimationType::NONE || !init) {
+        if (anim == nullptr || !init) {
             tx = toX;
             ty = toY;
             init = true;
@@ -38,7 +19,7 @@ namespace CBLT {
 
         if (tx == toX && ty == toY) return;
 
-        const AnimationProfile& profile = gAnimationProfiles[static_cast<UT::i32>(t)];
+        const AnimationProfile& profile = *anim;
         interp.Start(tx, ty, toX, toY, profile.speed);
     }
 
@@ -49,7 +30,7 @@ namespace CBLT {
 
         if (!interp.IsActive()) return;
 
-        const AnimationProfile& profile = gAnimationProfiles[static_cast<UT::i32>(t)];
+        const AnimationProfile& profile = *anim;
         UT::f32 p = interp.Progress();
         UT::f32 easedT = p;
 

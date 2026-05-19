@@ -91,10 +91,10 @@ namespace CBLT {
 
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                     
-                    if (value == "UNDERSCORE")  { this->OPTION_CursorSymbol = -4; }
-                    else if (value == "BOX")    { this->OPTION_CursorSymbol = -1; }
-                    else if (value == "LINE")   { this->OPTION_CursorSymbol = -3; }
-                    else if (value == "HOLLOW") { this->OPTION_CursorSymbol = -2; }
+                    if      (value == "UNDERSCORE")  { this->OPTION_CursorSymbol = CursorSymbol::NON_ASCII_UNDERSCORE; }
+                    else if (value == "BOX")         { this->OPTION_CursorSymbol = CursorSymbol::NON_ASCII_BOX;        }
+                    else if (value == "LINE")        { this->OPTION_CursorSymbol = CursorSymbol::NON_ASCII_LINE;       }
+                    else if (value == "HOLLOW")      { this->OPTION_CursorSymbol = CursorSymbol::NON_ASCII_HOLLOW_BOX; }
                     else {
                         std::cerr << ("INVALID CURSOR SYMBOL TOKEN AT LINE: " + line + " SELECT ONE OF THESE: \'BOX\', \'LINE\', \'HOLLOW\', \'UNDERSCORE\'\n");
                     }
@@ -103,21 +103,45 @@ namespace CBLT {
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                     
                     this->OPTION_ANIM_FileCursor = ReadAnimationFile(value);
+
+                    std::cerr << ("FILE CURSOR ANIMATION PROFILE: \n");
+                    std::cerr << ("\t    Damping:   " + std::to_string(this->OPTION_ANIM_FileCursor.damping) + "\n");
+                    std::cerr << ("\t    Speed:     " + std::to_string(this->OPTION_ANIM_FileCursor.speed) + "\n");
+                    std::cerr << ("\t    Overshoot: " + std::to_string(this->OPTION_ANIM_FileCursor.overshoot) + "\n");
+                    std::cerr << ("\t    Stiffness: " + std::to_string(this->OPTION_ANIM_FileCursor.stiffness) + "\n");
                 }
                 else if (token == "ANIM_CONSOLE_CURSOR_PROFILE") {
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                     
                     this->OPTION_ANIM_ConsoleCursor = ReadAnimationFile(value);
+
+                    std::cerr << ("CONSOLE CURSOR ANIMATION PROFILE: \n");
+                    std::cerr << ("\t    Damping:   " + std::to_string(this->OPTION_ANIM_ConsoleCursor.damping) + "\n");
+                    std::cerr << ("\t    Speed:     " + std::to_string(this->OPTION_ANIM_ConsoleCursor.speed) + "\n");
+                    std::cerr << ("\t    Overshoot: " + std::to_string(this->OPTION_ANIM_ConsoleCursor.overshoot) + "\n");
+                    std::cerr << ("\t    Stiffness: " + std::to_string(this->OPTION_ANIM_ConsoleCursor.stiffness) + "\n");
                 }
                 else if (token == "ANIM_FQ_PROFILE") {
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                     
                     this->OPTION_ANIM_FQ = ReadAnimationFile(value);
+
+                    std::cerr << ("FILE QUEUE ANIMATION PROFILE: \n");
+                    std::cerr << ("\t    Damping:   " + std::to_string(this->OPTION_ANIM_FQ.damping) + "\n");
+                    std::cerr << ("\t    Speed:     " + std::to_string(this->OPTION_ANIM_FQ.speed) + "\n");
+                    std::cerr << ("\t    Overshoot: " + std::to_string(this->OPTION_ANIM_FQ.overshoot) + "\n");
+                    std::cerr << ("\t    Stiffness: " + std::to_string(this->OPTION_ANIM_FQ.stiffness) + "\n");
                 }
                 else if (token == "ANIM_CONSOLE_PROFILE") {
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                     
                     this->OPTION_ANIM_Console = ReadAnimationFile(value);
+
+                    std::cerr << ("CONSOLE ANIMATION PROFILE: \n");
+                    std::cerr << ("\t    Damping:   " + std::to_string(this->OPTION_ANIM_Console.damping) + "\n");
+                    std::cerr << ("\t    Speed:     " + std::to_string(this->OPTION_ANIM_Console.speed) + "\n");
+                    std::cerr << ("\t    Overshoot: " + std::to_string(this->OPTION_ANIM_Console.overshoot) + "\n");
+                    std::cerr << ("\t    Stiffness: " + std::to_string(this->OPTION_ANIM_Console.stiffness) + "\n");
                 }
                 else {
                     std::cerr <<  ("INVALID SETTINGS TOKEN AT LINE: " + line + "\n");

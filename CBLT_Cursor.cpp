@@ -11,9 +11,10 @@ namespace CBLT {
         m(CursorMode::INSERT),                                     // Default
         fragment(""),
         animator(),
-        charWidth(MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x), // Measure once
-        cursorSymbol(CursorSymbol::NON_ASCII_HOLLOW_BOX)            // Default
+        charWidth(MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x) // Measure once
     {
+        animator.SetProfile(&gSettings.OPTION_ANIM_FileCursor);
+        cursorSymbol = &gSettings.OPTION_CursorSymbol;
         animator.Snap(0.0f, ln * gFont.size);
     }
 
@@ -199,7 +200,7 @@ namespace CBLT {
     
         DrawRectangle(0, y + font.size, GetScreenWidth(), font.size, gPalette.cursorPosHighlight);
     
-        switch (cursorSymbol) {
+        switch (*cursorSymbol) {
             case CursorSymbol::NON_ASCII_BOX:
                 DrawRectangle(x + base, y + font.size, charWidth, font.size, gPalette.cursor);
                 EndScissorMode();

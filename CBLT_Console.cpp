@@ -17,6 +17,9 @@ namespace CBLT {
         
         // New width
         cursor.activeCursors[0].charWidth = MeasureText("A", CBLT::gConsoleFont.size);
+
+        // Bind console cursor animator as well!
+        cursor.activeCursors[0].animator.SetProfile(&gSettings.OPTION_ANIM_ConsoleCursor);
         
         cameraOffset = {0.0f, 0.0f};
     }
@@ -1045,6 +1048,16 @@ namespace CBLT {
 
             else if (dir == "rst") {
                 CBLT::gSettings.ReadSettings();
+
+                // if (Q.Size() > 0) {
+
+                //     // Update file cursor animations
+                //     for (auto& f : Q.GetLoadedFiles()) {
+                //         for (auto& c : f.Cursors().activeCursors) {
+                //             c.animator.SetProfile(&gSettings.OPTION_ANIM_FileCursor);
+                //         }
+                //     }
+                // } 
                 
                 // Reload the palette option
                 std::string palOp = gSettings.OPTION_Palette;
@@ -1152,7 +1165,7 @@ namespace CBLT {
         const UT::i32 horizontalFix = 2;
 
         // Hash on the symbol
-        switch (cc.cursorSymbol) {
+        switch (*(cc.cursorSymbol)) {
             case CursorSymbol::NON_ASCII_BOX:
                 DrawRectangle(
                     cursorX - horizontalFix,

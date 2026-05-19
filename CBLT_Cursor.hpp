@@ -6,18 +6,11 @@
 #include "CBLT_raylib.hpp"      // for MeasureText() ...
 #include "CBLT_Camera.hpp"
 #include "CBLT_Animation.hpp"
+#include "CBLT_Settings.hpp"    // for cursor symbol and file cursor animator settings
 
 #include <vector>        // for std::vector<> ...
 
 namespace CBLT {
-    // Cursor character representation
-    enum class CursorSymbol : UT::i32 {
-        NON_ASCII_UNDERSCORE  = -4,          // Non-ASCII underscore
-        NON_ASCII_LINE        = -3,          // Non-ASCII line
-        NON_ASCII_HOLLOW_BOX  = -2,          // Non-ASCII hollow box
-        NON_ASCII_BOX         = -1,          // Non-ASCII box
-    };
-
     // Cursor mode
     enum class CursorMode : UT::i32 {
         INSERT,                 // Insertion mode
@@ -69,7 +62,7 @@ namespace CBLT {
             // Destructor
             ~Cursor(void);
 
-            CursorSymbol cursorSymbol;    // Cursor symbol to draw
+            CursorSymbol* cursorSymbol;    // Cursor symbol to draw
 
             // Get the current column
             UT::ui32 Col(void) const;

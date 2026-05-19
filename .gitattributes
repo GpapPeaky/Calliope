@@ -48,3 +48,4 @@
 *.h++   linguist-language=cpp
 *.hh    linguist-language=cpp
 *.conf  linguist-language=ini
+*.lang  linguist-language=ini
