@@ -17,8 +17,6 @@
 // FIXME: Multi-cursor indentation is problematic
 // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
 
-// TODO: Finish AnimationProfile editor 
-
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
 

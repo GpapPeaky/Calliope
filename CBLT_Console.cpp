@@ -1025,6 +1025,7 @@ namespace CBLT {
                 return; // Early out
             }
 
+            // Open CBLT Resource file for settings
             else if (dir == "set") {
                 namespace fs = std::filesystem;
 
@@ -1046,6 +1047,7 @@ namespace CBLT {
                 return;
             }
 
+            // Reload settings to globals
             else if (dir == "rst") {
                 CBLT::gSettings.ReadSettings();
 
@@ -1070,6 +1072,18 @@ namespace CBLT {
                 dr.messageType = ConsoleMessage::INFO;
 
                 dirRes = dr;
+
+                return;
+            }
+
+            // Display an info message
+            else if (dir == "msg") {
+                dr.message = directiveParam;
+                dr.messageType = ConsoleMessage::INFO;
+
+                dirRes = dr;
+
+                CBLT::Utils::Err::Log("DIRECTIVE: MSG " + directiveParam);
 
                 return;
             }
