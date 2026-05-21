@@ -210,7 +210,6 @@ UT::b Language::IsOp(const std::string s) {
 }
 
 namespace CBLT {
-
     std::unordered_map<FileExtension, std::string> gLangFiles = {
         {FileExtension::CCF,      "ccf.cbltconf"},
         {FileExtension::C,        "c.cbltconf"},

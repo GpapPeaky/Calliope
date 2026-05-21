@@ -80,13 +80,17 @@ namespace CBLT {
     }
 
     AnimationProfile ReadAnimationFile(const std::string& path) {
-        std::string resourcePath = ".";
-    
+        std::string resourcePath = "";
+        
         #if defined(__linux__)
+            resourcePath = ".";
+
             if (const char* p = getenv("CBLT_RESOURCES"))
                 resourcePath = p;    
         
             resourcePath += '/';
+        #elif defined(_WIN32)
+            // Do nothing, no resource path required
         #endif
     
         AnimationProfile ap;

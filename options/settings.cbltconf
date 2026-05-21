@@ -1,7 +1,7 @@
 %settings
     USER_TERMINAL_POSIX : kitty
     USER_TERMINAL_WIN32 : pwsh.exe
-    PALETTE             : Stockholm
+    PALETTE             : Kalmar
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! AVAILABLE CURSOR MACROS               !
@@ -12,7 +12,7 @@
 ! LINE                                  !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    CURSOR_SYMBOL            : HOLLOW
+    CURSOR_SYMBOL            : LINE
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !

@@ -4,56 +4,54 @@ namespace CBLT {
     Palette gPalette;
 
     Palette::Palette(void) {
-        key = "Stockholm";
-        
-        background          = UF::C(0, 0, 0);
-        console             = UF::C(255, 255, 255);
-        consoleText         = UF::C(255, 255, 255);
-        consoleBackground   = UF::C(0, 0, 0);
-        consoleCursor       = UF::C(160, 160, 160);
-        cursor              = UF::C(160, 160, 160);
-        cursorMode          = UF::C(0, 255, 255);
-        textSeperators      = UF::C(255, 255, 255);
-        lineInfo            = UF::C(128, 128, 128); 
-        file                = UF::C(255, 255, 0);
-        cwd                 = UF::C(255, 0, 255);
-        cwdDir              = UF::C(96, 96, 96);
-        cwdFile             = UF::C(160, 160, 160);
-        dirty               = UF::C(192, 192, 192);
-        clean               = UF::C(255, 255, 255);
-        textBase            = UF::C(192, 192, 192);
-        textLines           = UF::C(192, 192, 192);
+        background          = toCol(UF::C(0, 0, 0));
+        console             = toCol(UF::C(255, 255, 255));
+        consoleText         = toCol(UF::C(255, 255, 255));
+        consoleBackground   = toCol(UF::C(0, 0, 0));
+        consoleCursor       = toCol(UF::C(160, 160, 160));
+        cursor              = toCol(UF::C(160, 160, 160));
+        cursorMode          = toCol(UF::C(0, 255, 255));
+        textSeperators      = toCol(UF::C(255, 255, 255));
+        lineInfo            = toCol(UF::C(128, 128, 128)); 
+        file                = toCol(UF::C(255, 255, 0));
+        cwd                 = toCol(UF::C(255, 0, 255));
+        cwdDir              = toCol(UF::C(96, 96, 96));
+        cwdFile             = toCol(UF::C(160, 160, 160));
+        dirty               = toCol(UF::C(192, 192, 192));
+        clean               = toCol(UF::C(255, 255, 255));
+        textBase            = toCol(UF::C(192, 192, 192));
+        textLines           = toCol(UF::C(192, 192, 192));
         
         cursorPosHighlight   = cursor;
         cursorPosHighlight.a = 24;
         
-        selectionColor      = UF::C(50, 150, 255);
+        selectionColor      = toCol(UF::C(50, 150, 255));
         selectionColor.a    = 64;
         
-        msgBackground       = UF::C(0, 0, 0);
-        msgForeground       = UF::C(255, 255, 255); 
-        msgErr              = UF::C(255, 64, 64); 
-        msgGuide            = UF::C(64, 255, 64);
-        msgInfo             = UF::C(64, 64, 255);
+        msgBackground       = toCol(UF::C(0, 0, 0));
+        msgForeground       = toCol(UF::C(255, 255, 255)); 
+        msgErr              = toCol(UF::C(255, 64, 64)); 
+        msgGuide            = toCol(UF::C(64, 255, 64));
+        msgInfo             = toCol(UF::C(64, 64, 255));
         
-        fileQueueEntry      = UF::C(64, 64, 64);
-        currentFile         = UF::C(192, 192, 192);
+        fileQueueEntry      = toCol(UF::C(64, 64, 64));
+        currentFile         = toCol(UF::C(192, 192, 192));
 
-        fileQueueColour     = UF::C(0, 0, 0);
+        fileQueueColour     = toCol(UF::C(0, 0, 0));
 
-        openFileColor       = UF::C(255, 255, 255);
+        openFileColor       = toCol(UF::C(255, 255, 255));
 
-        frag                = UF::C(0, 128, 192);
+        frag                = toCol(UF::C(0, 128, 192));
 
-        lex_id      = UF::C(192, 192, 192); // White: Clear, standard text
-        lex_comm    = UF::C(0, 255, 64);
-        lex_key     = UF::C(64, 128, 255);  // Sky Blue: Distinct from Cyan cursor
-        lex_num     = UF::C(255, 128, 64);  // Orange: High visibility for data
-        lex_op      = UF::C(255, 255, 0);   // Yellow: Stands out for logic
-        lex_str     = UF::C(0, 255, 255);
-        lex_pun     = UF::C(255, 255, 255); // Silver: Subtle structure
-        lex_misc    = UF::C(255, 64, 255);
-        lex_func    = UF::C(32, 128, 255);
+        lex_id      = toCol(UF::C(192, 192, 192)); // White: Clear, standard text
+        lex_comm    = toCol(UF::C(0, 255, 64));
+        lex_key     = toCol(UF::C(64, 128, 255));  // Sky Blue: Distinct from Cyan cursor
+        lex_num     = toCol(UF::C(255, 128, 64));  // Orange: High visibility for data
+        lex_op      = toCol(UF::C(255, 255, 0));   // Yellow: Stands out for logic
+        lex_str     = toCol(UF::C(0, 255, 255));
+        lex_pun     = toCol(UF::C(255, 255, 255)); // Silver: Subtle structure
+        lex_misc    = toCol(UF::C(255, 64, 255));
+        lex_func    = toCol(UF::C(32, 128, 255));
     }
 
     Palette::~Palette(void) {}
@@ -151,7 +149,7 @@ namespace CBLT {
             ss >> r >> comma >> g >> comma >> b;
     
             if (fieldMap.count(key)) {
-                *fieldMap[key] = UF::C(r, g, b);
+                *fieldMap[key] = toCol(UF::C(r, g, b));
             }
         }
     

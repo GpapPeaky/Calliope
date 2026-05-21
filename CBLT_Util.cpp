@@ -21,8 +21,8 @@ namespace CBLT {
                 return str;
             }
 
-            Color C(Types::ui8 r, Types::ui8 g, Types::ui8 b) {
-                return Color {r, g, b, 255};
+            Types::cblt_color C(Types::ui8 r, Types::ui8 g, Types::ui8 b) {
+                return Types::cblt_color {r, g, b, 255};
             }
 
             std::string Trim(const std::string& str) {

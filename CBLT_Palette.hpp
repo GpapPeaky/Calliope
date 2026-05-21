@@ -11,8 +11,6 @@ namespace CBLT {
     // Palette class for changing colours
     class Palette {
         public:
-            std::string key;            // Palette name key 
-
             Color background;           // Background color
             Color console;              // Console window colour
             Color consoleText;          // Console text
@@ -65,5 +63,10 @@ namespace CBLT {
 
     // Palette global
     extern Palette gPalette;
+
+    // ToColor helper from cblt_color to Color, need to avoid WIN32 api problems
+    inline Color toCol(UT::cblt_color cc) {
+        return Color{cc.r, cc.g, cc.b, cc.a};
+    }
 
 } // CBLT

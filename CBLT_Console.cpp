@@ -1320,9 +1320,17 @@ namespace CBLT {
             }
         }
 
+        // Win32 api problems, of course, fuck them!
+        UT::cblt_color colorInit = UF::C(40, 40, 40);
+        colorInit.a = 60;
+        
         // Entry hover colour
-        Color c = UF::C(40, 40, 40);
-        c.a = 60;
+        Color c {
+            colorInit.r,
+            colorInit.g,
+            colorInit.b,
+            colorInit.a
+        };
 
         DrawRectangleRec(rect, c);
     };

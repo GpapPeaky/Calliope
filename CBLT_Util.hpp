@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <cassert>           // assert
 
-#include "CBLT_raylib.hpp"
+// #include "CBLT_raylib.hpp"
 
 namespace CBLT {
     namespace Utils {
@@ -35,6 +35,11 @@ namespace CBLT {
             typedef bool b; // Boolean
     
             typedef float f32; // Floating point
+
+            // Minor raylib override, cannot import raylib color here since it collides with WIN32 definitions inside the shell bridge
+            typedef struct cblt_color {
+                ui8 r, g, b, a;
+            } cblt_color;
         } // Types
 
         namespace Err {
@@ -54,7 +59,7 @@ namespace CBLT {
 
         namespace Func {
             // Raylib colour constructor thing
-            Color C(Types::ui8 r, Types::ui8 g, Types::ui8 b);
+            Types::cblt_color C(Types::ui8 r, Types::ui8 g, Types::ui8 b);
             
             // Trim the semi colon from a string, used in the console to execute ':' commands
             std::string TrimLeadingColon(const std::string& str);
