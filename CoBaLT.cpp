@@ -7,7 +7,7 @@
 #endif
 
 // TODO: Add the animator to the console cursor as well
-// TODO: Add animators to the filequeue and console resizing and contents movement 
+// TODO: Add animators to the filequeue and console resizing and contents movement
 
 // FIXME: Fix some issues with SELECTION MODE bugging out, and selecting from 0,0  
 // FIXME: Fix issues with selection pasting cursor position
@@ -76,7 +76,6 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gFileQueueFont.Config();
 
     CBLT::gSound.Load("assets/audio/");
-
 #elif defined(_WIN32)
     CBLT::Controller ctrl; // Controller instance
     ctrl.InitCWD("C:/");
@@ -99,9 +98,7 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gFileQueueFont.Config();
 
     CBLT::gSound.Load("assets/audio/");
-
 #endif
-
     CBLT::gSettings.ReadSettings();
 
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
