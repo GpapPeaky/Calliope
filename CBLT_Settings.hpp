@@ -22,7 +22,7 @@ namespace CBLT {
             AnimationProfile OPTION_ANIM_Console;                                  // Animation profile for console movement
             AnimationProfile OPTION_ANIM_ConsoleCursor;                            // Animation profile for console cursor
 
-            // Read options/settings.conf
+            // Read options/settings.cbltconf
             void ReadSettings(void);
     }; // Settings class
 

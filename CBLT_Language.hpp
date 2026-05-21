@@ -80,6 +80,6 @@ namespace CBLT {
             UT::b IsOp(const std::string s);
     }; // Language class
 
-    // File extension to .conf name map
+    // File extension to .cbltconf name map
     extern std::unordered_map<FileExtension, std::string> gLangFiles;
 } // CBLT

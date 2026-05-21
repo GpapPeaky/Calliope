@@ -17,8 +17,8 @@ namespace CBLT {
         // CBLT::Utils::Err::Log("Assigning file extension for file " + path + " with extension " + extStr);
 
         // Cobalt scripting language
-        if (extStr == ".crs") {
-            ext = EXT(CRS);
+        if (extStr == ".cbltconf" || extStr == ".marks" || extStr == ".pal") {
+            ext = EXT(CCF);
         }
 
         // Other

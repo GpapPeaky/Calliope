@@ -51,8 +51,8 @@ namespace CBLT {
             lang.ReadLangFile(it->second); // Load language
             langConf = it->second;
         } else {
-            lang.ReadLangFile("txt.conf"); // TXT as base Fallback, extension unrecognized
-            langConf = "txt.conf";
+            lang.ReadLangFile("txt.cbltconf"); // TXT as base Fallback, extension unrecognized
+            langConf = "txt.cbltconf";
         }
 
         dirty = false;

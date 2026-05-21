@@ -10,7 +10,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     const UT::ui32 topBarThirdColumnX = 220;
 
     const std::string fnameAndConf = fname + " " + conf;
-    // We also render the file's lang .conf name
+    // We also render the file's lang .cbltconf name
     const UT::ui32 filenameLen = MeasureTextEx(gTopBarFont.f, fnameAndConf.c_str(), topBarFontSize, 0.0f).x;
     // const UT::ui32 CWDLen = MeasureTextEx(gTopBarFont.f, cwd.c_str(), topBarFontSize, 0.0f).x;
 

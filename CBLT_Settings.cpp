@@ -18,7 +18,7 @@ namespace CBLT {
             installationPath = resource_path ? std::string(resource_path) : ".";
         #endif
 
-        std::string fname = "settings.conf";
+        std::string fname = "settings.cbltconf";
 
         fs::path settingsPath = fs::path(installationPath) / "options" / fname;
 

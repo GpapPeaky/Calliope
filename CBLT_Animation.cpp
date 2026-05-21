@@ -95,10 +95,10 @@ namespace CBLT {
             resourcePath +
             "options/anim/" +
             path +
-            ".conf"
+            ".cbltconf"
         );
     
-        // std::cout << resourcePath + "options/anim/" + path + ".conf\n";
+        // std::cout << resourcePath + "options/anim/" + path + ".cbltconf\n";
         
         if (!f.is_open()) {
             UE::Log(

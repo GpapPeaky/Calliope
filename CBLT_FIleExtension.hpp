@@ -16,7 +16,7 @@ namespace CBLT {
         // configurations, preferances and macros 
 
               ////////////////////////////////////////////   
-        CRS,  //          CoBaLT Runtime Script         //
+        CCF,  //          CoBaLT Config File            //
               ////////////////////////////////////////////
 
         C,          // conf C

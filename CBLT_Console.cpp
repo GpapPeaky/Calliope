@@ -1038,11 +1038,11 @@ namespace CBLT {
 
                 fs::path optionsDir = fs::path(installationPath) / "options";
 
-                Q.LoadFileToQueue("settings.conf", optionsDir.string());
+                Q.LoadFileToQueue("settings.cbltconf", optionsDir.string());
 
                 directive.Clear();
 
-                CBLT::Utils::Err::Log("DIRECTIVE: NQ" + optionsDir.string() + "setting.conf");
+                CBLT::Utils::Err::Log("DIRECTIVE: NQ" + optionsDir.string() + "setting.cbltconf");
 
                 return;
             }

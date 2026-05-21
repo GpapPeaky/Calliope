@@ -18,7 +18,7 @@
 !
 ! FROM options/anim/ 
 ! 
-! ie file/animation.conf will need to be file/animation in the settings file option
+! ie file/animation.cbltconf will need to be file/animation in the settings file option
 ! 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
