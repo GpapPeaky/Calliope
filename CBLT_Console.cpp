@@ -1080,12 +1080,24 @@ namespace CBLT {
             else if (dir == "msg") {
                 dr.message = directiveParam;
                 dr.messageType = ConsoleMessage::INFO;
-
+                
                 dirRes = dr;
-
                 CBLT::Utils::Err::Log("DIRECTIVE: MSG " + directiveParam);
+                
+                this->directive.Clear();
 
                 return;
+            }
+
+            // UNKOWN
+            else {
+                dr.message = "CBLT_ERR: UNKOWN DIRECTIVE " + directiveLine;
+                dr.messageType = ConsoleMessage::DIRECTIVE_ERROR;
+                
+                dirRes = dr;
+                CBLT::Utils::Err::Log("DIRECTIVE: <UNKOWN> " + directiveParam);
+                
+                this->directive.Clear();
             }
         } else { // Directive file-switch context
             for (auto& entry : cwdContents) {
@@ -1442,8 +1454,12 @@ namespace CBLT {
 
             // Message from console for info
             case ConsoleMessage::INFO: {
-                const UT::i32 infoLines =  dirRes.message.size() / (messageWidth / directiveFontSize) + 1;
-
+                const UT::i32 charsPerLine =
+                std::max(1, messageWidth / (UT::i32)directiveFontSize);
+            
+                const UT::i32 infoLines =
+                    dirRes.message.size() / charsPerLine + 1;
+            
                 const UT::i32 infoPadding = 45;
             
                 const UT::i32 textBlockHeight = infoLines * directiveFontSize;

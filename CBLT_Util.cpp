@@ -7,6 +7,10 @@ namespace CBLT {
         namespace Err {
             // Initialize the log file
             void Init(void) {
+                #if defined(__linux__)
+                    // FIXME
+                #endif
+
                 gLogFile = std::ofstream("log/dir.log", std::ios::app); // Open the log file in append mode
             }
 
