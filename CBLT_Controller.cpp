@@ -245,16 +245,12 @@ namespace CBLT {
 
             UT::cui32 tabSize = *keyboard.tabSize;
 
-            std::cout << " " << tabSize << " \n"; 
-
             UT::cui32 mod = cursor.Col() % tabSize;
 
             UT::cui32 remainingSpace = (mod == 0)
                 ? tabSize
                 : std::max(0U, tabSize - mod);
 
-            std::cout << " " << remainingSpace << " \n";
-        
             // Insert the tab
             std::string& line = f.GetCurrentLine(cursor.Line());
             line.insert(cursor.Col(), remainingSpace, ' ');
