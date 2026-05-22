@@ -67,7 +67,6 @@ UT::i32 main(int argc, char** argv) {
             // Cursor & console references
             CBLT::Console& cnsl = ctrl.GetConsole();
             CBLT::FileQueue& fq = ctrl.LoadedFileQueue();
-            CBLT::Camera& cam = ctrl.GetCamera();
 
             // Draw file
             if (fq.Size() > 0) {
@@ -85,12 +84,17 @@ UT::i32 main(int argc, char** argv) {
                     CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
 
                 cm.DrawCursors(CBLT::gFont, baseX, 0);
-                f.Draw(cam, c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
+                f.Draw(c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
                 
                 currentFileLineCount        = f.GetLineCount();
                 currentFileDirt             = f.Dirt();
                 currentFileName             = f.Name();
                 currentFileLangConfName     = f.LangConf();
+
+                ctrl.GetConsole().GetCWDContents(ctrl.CWD());
+                f.Cam().SetHeight(GetScreenHeight());
+                f.Cam().SetWidth(GetScreenWidth());
+                cnsl.Cam().SetHeight(GetScreenHeight() - CBLT::gConsoleFont.size - 10);
 
                 CBLT::DrawInfo(c, currentFileLineCount, currentFileDirt, currentFileName, ctrl.CWD(), currentFileLangConfName);
             }
@@ -105,15 +109,7 @@ UT::i32 main(int argc, char** argv) {
             else cnsl.DrawGuide();
 
             cnsl.DrawMessage();
-
         EndDrawing();
-
-        if (framesCount % 120 == 0) {
-            ctrl.GetConsole().GetCWDContents(ctrl.CWD());
-            cam.SetHeight(GetScreenHeight());
-            cam.SetWidth(GetScreenWidth());
-            cnsl.Cam().SetHeight(GetScreenHeight() - CBLT::gConsoleFont.size - 10);
-        }
 
         framesCount++;
     }

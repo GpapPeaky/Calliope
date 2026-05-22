@@ -113,13 +113,15 @@ namespace CBLT {
         return path;
     }
 
-    void File::Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY, UT::b consoleOpen, UT::ui32 consoleWidth) {
+    void File::Draw(UT::ui32 cursorX, UT::ui32 cursorY, UT::b consoleOpen, UT::ui32 consoleWidth) {
         UT::f32 lineHeight = gFont.size;
         
         const UT::f32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
                                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
                                 CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
         const UT::f32 textBaseY = 0.0f;
+
+        cam.Draw();
 
         // Seperator
         DrawLineV(
@@ -600,5 +602,9 @@ namespace CBLT {
 
     Language& File::FileLanguage(void) {
         return lang;
+    }
+
+    Camera& File::Cam(void) {
+        return cam;
     }
 } // CBLT

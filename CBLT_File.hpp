@@ -37,6 +37,7 @@ namespace CBLT {
             CursorManager cursors;                              // Cursor manager for the file, handles cursor position and movement
             Language lang = Language(FileExtension::TXT);       // File's language loaded via the extension
             std::string langConf;                               // Language conf file name
+            Camera cam;                                         // Camera for rendering the file, will be used for panning and zooming the file view     
         public:
             // Constructor
             File(void);
@@ -63,7 +64,7 @@ namespace CBLT {
             const std::string& GetPath(void) const;
 
             // Draw the document
-            void Draw(CBLT::Camera& cam, UT::ui32 cursorX, UT::ui32 cursorY, UT::b consoleOpen, UT::ui32 consoleWidth);
+            void Draw(UT::ui32 cursorX, UT::ui32 cursorY, UT::b consoleOpen, UT::ui32 consoleWidth);
 
             // Get line count
             UT::ui32 GetLineCount(void) const;
@@ -155,6 +156,9 @@ namespace CBLT {
 
             // Load marks from the sidecar file
             void LoadMarks(void);
+
+            // Get the file camera
+            Camera& Cam(void);
 
             // Return a string of the file markings and nearby lines
             std::string GetMarksAndNearbyLinesMessageString(void) const ;

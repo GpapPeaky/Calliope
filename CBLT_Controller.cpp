@@ -255,6 +255,8 @@ namespace CBLT {
             std::string& line = f.GetCurrentLine(cursor.Line());
             line.insert(cursor.Col(), remainingSpace, ' ');
             cursor.SetAt(cursor.Col() + remainingSpace, cursor.Line(), line);
+
+            f.InsertDirtyLine(cursor.Line()); // Need to update tokens
         
             f.SetDirt(true);
         }
@@ -1165,8 +1167,10 @@ namespace CBLT {
 
                     // Camera clamp
                     if (Q.Index() == previousIndex) {
-                        Q.Active().ClampCursor(c);
-                        c.ClampToCamera(camera, Q.Active().GetCurrentLine(c.Line()));
+                        File& f = Q.Active();
+
+                        f.ClampCursor(c);
+                        c.ClampToCamera(f.Cam(), f.GetCurrentLine(c.Line()));
                     }
                     
                     // Only handle insertion after shortcuts        
@@ -1208,8 +1212,10 @@ namespace CBLT {
 
                     // Clamp if we didn't switch files.
                     if (Q.Index() == previousIndex) {
-                        Q.Active().ClampCursor(c); // Clamp cursor inside file bounds
-                        c.ClampToCamera(camera, Q.Active().GetCurrentLine(c.Line()));
+                        File& f = Q.Active();
+
+                        f.ClampCursor(c); // Clamp cursor inside file bounds
+                        c.ClampToCamera(f.Cam(), f.GetCurrentLine(c.Line()));
                     }
                     
                     // Select entry
@@ -1292,14 +1298,6 @@ namespace CBLT {
         return cwd;
     }
 
-    const Camera& Controller::GetCamera(void) const {
-        return camera;
-    }
-
-    Camera& Controller::GetCamera(void) {
-        return camera;
-    }
-
     FileQueue& Controller::LoadedFileQueue(void) {
         return Q;
     }
@@ -1329,12 +1327,15 @@ namespace CBLT {
             return;
     
         Vector2 mouse = GetMousePosition();
+
+        File& f = Q.Active();
+
+        Camera& camera = f.Cam();
     
         // Only allow clicking inside text camera region
         if (!camera.Contains((UT::ui32)mouse.x, (UT::ui32)mouse.y, camera.Width(), camera.Height()))
             return;
     
-        File& f = Q.Active();
         Cursor& c = GetActiveCursorManager().Primary();
     
         // Base offsets (same ones used in DrawSelection / File::Draw)

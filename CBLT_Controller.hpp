@@ -21,7 +21,6 @@ namespace CBLT {
             CBLT::Keyboard keyboard;                      // Keyboard
             CBLT::FileQueue Q;                            // Current open document
             CBLT::Console console;                        // Console
-            CBLT::Camera camera;                          // Camera, updates based on the cursor position and/or file offsets
             std::string cwd;                              // Current working directory
 
             // Handle basic cursor movement
@@ -69,12 +68,6 @@ namespace CBLT {
 
             // Get identation depth, check for unmatched '{' before the cursor
             UT::ui32 GetIndentation(UT::ui32 line);
-
-            // Get the camera, read only
-            const Camera& GetCamera(void) const;
-
-            // Get the camera, mutable access
-            Camera& GetCamera(void);
 
             // Initialise CWD
             void InitCWD(const std::string& p);
