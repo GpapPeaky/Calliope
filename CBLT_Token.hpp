@@ -25,10 +25,10 @@ namespace CBLT {
 
     class Token {
         public:
-            TokenClass type; // Token type
-            UT::ui32 line;   // Token at line
-            UT::ui32 col;    // Token at column   
-            UT::ui32 len;    // Token length
+            TokenClass type;       // Token type
+            UT::ui32 line;         // Token at line
+            UT::ui32 col;          // Token at column   
+            UT::ui32 len;          // Token length
 
             // Constructor
             Token(TokenClass tc, UT::ui32 line, UT::ui32 col, UT::ui32 len);

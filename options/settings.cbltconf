@@ -1,7 +1,7 @@
 %settings
     USER_TERMINAL_POSIX : kitty
     USER_TERMINAL_WIN32 : pwsh.exe
-    PALETTE             : Kalmar
+    PALETTE             : Stockholm
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! AVAILABLE CURSOR MACROS               !
@@ -12,7 +12,9 @@
 ! LINE                                  !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    CURSOR_SYMBOL            : LINE
+    CURSOR_SYMBOL            : BOX
+
+    TAB_SIZE                 : 4
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
@@ -22,8 +24,9 @@
 ! 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    ANIM_FILE_CURSOR_PROFILE    : cursor/ease
-    ANIM_CONSOLE_CURSOR_PROFILE : console_cursor/ease
-    ANIM_CONSOLE_PROFILE        : console/ease
-    ANIM_FQ_PROFILE             : fq/ease
+    ANIM_FILE_CURSOR_PROFILE     : cursor/ease
+    ANIM_CONSOLE_CURSOR_PROFILE  : console_cursor/ease
+    ANIM_CONSOLE_CONTENT_PROFILE : console_content/ease
+    ANIM_CONSOLE_PROFILE         : console/ease
+    ANIM_FQ_PROFILE              : fq/ease
 %settings

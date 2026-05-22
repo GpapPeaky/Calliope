@@ -11,6 +11,8 @@
 namespace CBLT {
     class EditorSettings {
         public:
+            UT::ui8 OPTION_TabSize = 4;         // Tab size in spaces   
+
             std::string OPTION_WIN32_Term = ""; // Terminal for win32
             std::string OPTION_POSIX_Term = ""; // Terminal for posix
             std::string OPTION_Palette    = ""; // Palette option
@@ -21,6 +23,7 @@ namespace CBLT {
             AnimationProfile OPTION_ANIM_FQ;                                       // Animation profile for file queue movement
             AnimationProfile OPTION_ANIM_Console;                                  // Animation profile for console movement
             AnimationProfile OPTION_ANIM_ConsoleCursor;                            // Animation profile for console cursor
+            AnimationProfile OPTION_ANIM_ConsoleContent;                           // Animation profile for console content panning
 
             // Read options/settings.cbltconf
             void ReadSettings(void);

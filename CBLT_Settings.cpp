@@ -81,6 +81,11 @@ namespace CBLT {
 
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                 }
+                else if (token == "TAB_SIZE") {
+                    this->OPTION_TabSize = std::stoi(value);
+
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                }
                 else if (token == "PALETTE") {
                     this->OPTION_Palette = value;
 
@@ -143,6 +148,17 @@ namespace CBLT {
                     std::cerr << ("\t    Overshoot: " + std::to_string(this->OPTION_ANIM_Console.overshoot) + "\n");
                     std::cerr << ("\t    Stiffness: " + std::to_string(this->OPTION_ANIM_Console.stiffness) + "\n");
                 }
+                else if (token == "ANIM_CONSOLE_CONTENT_PROFILE") {
+                    std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
+                    
+                    this->OPTION_ANIM_ConsoleContent = ReadAnimationFile(value);
+
+                    std::cerr << ("CONSOLE CONTENT ANIMATION PROFILE: \n");
+                    std::cerr << ("\t    Damping:   " + std::to_string(this->OPTION_ANIM_ConsoleContent.damping) + "\n");
+                    std::cerr << ("\t    Speed:     " + std::to_string(this->OPTION_ANIM_ConsoleContent.speed) + "\n");
+                    std::cerr << ("\t    Overshoot: " + std::to_string(this->OPTION_ANIM_ConsoleContent.overshoot) + "\n");
+                    std::cerr << ("\t    Stiffness: " + std::to_string(this->OPTION_ANIM_ConsoleContent.stiffness) + "\n");
+                }
                 else {
                     std::cerr <<  ("INVALID SETTINGS TOKEN AT LINE: " + line + "\n");
                 } 
@@ -152,6 +168,8 @@ namespace CBLT {
             
             if (!inBlock) continue;
         }
+
+
     }
 
     EditorSettings gSettings;

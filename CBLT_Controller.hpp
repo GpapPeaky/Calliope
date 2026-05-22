@@ -46,6 +46,9 @@ namespace CBLT {
             // Controller update, most functions are called here
             void Update(void);
 
+            // Get keyboard field
+            Keyboard& GetKeyboard(void);
+
             // Get the current open file, read only
             const File& GetFile(void) const;
 

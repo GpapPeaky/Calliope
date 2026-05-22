@@ -119,7 +119,7 @@ namespace CBLT {
             if (cursor.Col() > 0) {
                 std::string& line = Q.Active().GetCurrentLine(cursor.Line());
                 UT::ui32 col = cursor.Col();
-                UT::cui8 tabSize = keyboard.tabSize;
+                UT::cui8 tabSize = keyboard.tabSize ? *(keyboard.tabSize) : 4; // Default to 4 if tabSize is not set
 
                 // Clamp
                 if (col > (UT::ui32)line.size()) col = line.size();
@@ -182,12 +182,14 @@ namespace CBLT {
                 cursor.Down(Q.Active().GetCurrentLine(cursor.Line() + 1));
             } else {
                 UT::ui32 originalLine = cursor.Line(); // capture
+
+                UT::cui8 tabSize = keyboard.tabSize ? *(keyboard.tabSize) : 4;
             
                 std::string fragment = Q.Active().SplitLine(originalLine, cursor.Col());
             
                 UT::ui32 indent = GetIndentation(originalLine);
             
-                std::string indentString(indent * keyboard.tabSize, ' ');
+                std::string indentString(indent * tabSize, ' ');
                 std::string indentedFragment = indentString + fragment;
             
                 Q.Active().CreateLine(originalLine + 1, indentedFragment); // insert first
@@ -237,15 +239,17 @@ namespace CBLT {
                 }
             }
         
+            UT::cui8 tabSize = keyboard.tabSize ? *(keyboard.tabSize) : 4;
+
             // Normal tab indent — only reached if autocomplete is closed or empty
             UT::ui8 remainingSpace;
             
-            if (cursor.Col() % keyboard.tabSize == 0) {
-                remainingSpace = keyboard.tabSize;
-            } else if (cursor.Col() > keyboard.tabSize) {
-                remainingSpace = cursor.Col() % keyboard.tabSize;
+            if (cursor.Col() % tabSize == 0) {
+                remainingSpace = tabSize;
+            } else if (cursor.Col() > tabSize) {
+                remainingSpace = cursor.Col() % tabSize;
             } else {
-                remainingSpace = keyboard.tabSize - cursor.Col();
+                remainingSpace = tabSize - cursor.Col();
             }
         
             for (UT::ui8 i = 0; i < remainingSpace; i++) {
@@ -1590,5 +1594,9 @@ namespace CBLT {
         if (cursor.GetMode() == CursorMode::SELECT) {
             DeleteSelected(cursor); // cursor is already repositioned after this
         }
+    }
+
+    Keyboard& Controller::GetKeyboard(void) {
+        return this->keyboard;
     }
 } // CBLT

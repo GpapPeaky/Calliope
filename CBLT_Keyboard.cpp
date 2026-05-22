@@ -1,12 +1,16 @@
 #include "CBLT_Keyboard.hpp"
 
 namespace CBLT {
-
         Keyboard::Keyboard(void):
-            m { false, false, false }, // Modifiers set to false
-            tabSize(4)                 // Default is 4
+            m { false, false, false } // Modifiers set to false
         {
-            for (UT::llui32 i = 0 ; i < tabSize ; i++) {
+            if (!tabSize) {
+                tab = " ";
+
+                return;
+            }
+
+            for (UT::llui32 i = 0 ; i < *tabSize ; i++) {
                 tab.append(" ");
             } 
         }
@@ -33,5 +37,19 @@ namespace CBLT {
 
         UT::b Keyboard::ShiftActive(void) const {
             return this->m.shift;
+        }
+
+        UT::b Keyboard::AssignTabSize(UT::ui8 size) {
+            if (size == 0 || size > 255) return false;
+
+            this->tabSize = &size;
+            this->tab.clear();
+
+            // Construct the tab
+            for (UT::llui32 i = 0 ; i < *tabSize ; i++) {
+                this->tab.append(" ");
+            }
+
+            return true;
         }
 } // CBLT

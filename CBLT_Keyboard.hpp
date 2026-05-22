@@ -38,8 +38,11 @@ namespace CBLT {
             // Is shift modifier active
             UT::b ShiftActive(void) const;
 
-            // Tab size
-            UT::cui8 tabSize;
+            // Tab size, parsed from settings
+            UT::ui8* tabSize = nullptr;
+
+            // Assign a tab size, constructs the tab string again
+            UT::b AssignTabSize(UT::ui8 size);
 
             // Tab string
             std::string tab;
