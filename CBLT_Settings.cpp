@@ -82,7 +82,13 @@ namespace CBLT {
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                 }
                 else if (token == "TAB_SIZE") {
-                    this->OPTION_TabSize = std::stoi(value);
+                    int v = 0; // Avoid std::stoi(...), throws exceptions -> Ass function.
+                    if (std::sscanf(value.c_str(), "%d", &v) == 1) {
+                        this->OPTION_TabSize = v;
+                    } else {
+                        std::cerr << ("INVALID TAB SIZE VALUE AT LINE: " + line + " DEFAULTING TO 4\n");
+                        this->OPTION_TabSize = 4;
+                    }
 
                     std::cerr << ("READ SETTING " + token + " AS " + value + "\n");
                 }

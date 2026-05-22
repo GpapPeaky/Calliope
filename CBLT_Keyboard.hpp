@@ -39,10 +39,10 @@ namespace CBLT {
             UT::b ShiftActive(void) const;
 
             // Tab size, parsed from settings
-            UT::ui8* tabSize = nullptr;
+            UT::ui32* tabSize = nullptr;
 
             // Assign a tab size, constructs the tab string again
-            UT::b AssignTabSize(UT::ui8 size);
+            void AssignTabSize(UT::ui32* size);
 
             // Tab string
             std::string tab;

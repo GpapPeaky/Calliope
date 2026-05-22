@@ -6,8 +6,6 @@
     #include <limits.h>  // For PATH_MAX
 #endif
 
-// TODO: Tab size problems with tab string being appended too many spaces
-
 // TODO: Add the animator to the console cursor as well
 // TODO: Add animators to the filequeue and console resizing and contents movement
 
@@ -102,7 +100,7 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gSound.Load("assets/audio/");
 #endif
     CBLT::gSettings.ReadSettings();
-    ctrl.GetKeyboard().AssignTabSize(CBLT::gSettings.OPTION_TabSize);
+    ctrl.GetKeyboard().AssignTabSize(&CBLT::gSettings.OPTION_TabSize);
 
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 

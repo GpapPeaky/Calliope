@@ -11,7 +11,7 @@
 namespace CBLT {
     class EditorSettings {
         public:
-            UT::ui8 OPTION_TabSize = 4;         // Tab size in spaces   
+            UT::ui32 OPTION_TabSize = 4;        // Tab size in spaces   
 
             std::string OPTION_WIN32_Term = ""; // Terminal for win32
             std::string OPTION_POSIX_Term = ""; // Terminal for posix

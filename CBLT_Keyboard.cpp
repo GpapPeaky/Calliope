@@ -39,17 +39,18 @@ namespace CBLT {
             return this->m.shift;
         }
 
-        UT::b Keyboard::AssignTabSize(UT::ui8 size) {
-            if (size == 0 || size > 255) return false;
+        void Keyboard::AssignTabSize(UT::ui32* size) {
+            if (*size == 0 || *size > 255){
+                CBLT::Utils::Err::Log("INVALID TAB SIZE: " + std::to_string(*size) + " (MUST BE BETWEEN 1 AND 255) DEFAULTING TO 4\n");
+                *size = 4;
+            }
 
-            this->tabSize = &size;
+            this->tabSize = size;
             this->tab.clear();
 
             // Construct the tab
             for (UT::llui32 i = 0 ; i < *tabSize ; i++) {
                 this->tab.append(" ");
             }
-
-            return true;
         }
 } // CBLT

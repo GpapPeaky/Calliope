@@ -119,7 +119,7 @@ namespace CBLT {
             if (cursor.Col() > 0) {
                 std::string& line = Q.Active().GetCurrentLine(cursor.Line());
                 UT::ui32 col = cursor.Col();
-                UT::cui8 tabSize = keyboard.tabSize ? *(keyboard.tabSize) : 4; // Default to 4 if tabSize is not set
+                UT::ci32 tabSize = keyboard.tabSize ? *(keyboard.tabSize) : 4; // Default to 4 if tabSize is not set
 
                 // Clamp
                 if (col > (UT::ui32)line.size()) col = line.size();
@@ -183,7 +183,7 @@ namespace CBLT {
             } else {
                 UT::ui32 originalLine = cursor.Line(); // capture
 
-                UT::cui8 tabSize = keyboard.tabSize ? *(keyboard.tabSize) : 4;
+                UT::ci32 tabSize = (keyboard.tabSize != nullptr) ? *(keyboard.tabSize) : 4;
             
                 std::string fragment = Q.Active().SplitLine(originalLine, cursor.Col());
             
@@ -202,6 +202,8 @@ namespace CBLT {
 
         // Tab
         if (IsKeyPressedRepeat(KEY_TAB) || IsKeyPressed(KEY_TAB)) {
+            gSound.Play(SoundClass::SOUND_INFILE_SPACE);
+
             File& f = Q.Active();
         
             if (f.Auto().IsOpen()) {  // Only try to autocomplete if open
@@ -209,14 +211,14 @@ namespace CBLT {
         
                 if (!suggestion.empty()) {
                     UT::ui32 line = cursor.Line();
-                    UT::i32 col = cursor.Col();
+                    UT::ui32 col = cursor.Col();
                     
                     const std::string& fragment = cursor.Fragment();
                     if (!fragment.empty()) {
-                        UT::i32 start = std::max(0, col - static_cast<UT::i32>(fragment.size()));
+                        UT::ui32 start = std::max(0U, col - (UT::ui32)fragment.size());
                         
                         std::string& lineStr = f.GetCurrentLine(line);
-                        UT::ui32 lineSize = static_cast<UT::ui32>(lineStr.size());
+                        UT::ui32 lineSize = lineStr.size();
                         
                         if (static_cast<UT::ui32>(start) <= lineSize) {
                             UT::ui32 eraseCount = std::min<UT::ui32>(
@@ -239,24 +241,24 @@ namespace CBLT {
                 }
             }
         
-            UT::cui8 tabSize = keyboard.tabSize ? *(keyboard.tabSize) : 4;
+            if (!keyboard.tabSize) return;
 
-            // Normal tab indent — only reached if autocomplete is closed or empty
-            UT::ui8 remainingSpace;
-            
-            if (cursor.Col() % tabSize == 0) {
-                remainingSpace = tabSize;
-            } else if (cursor.Col() > tabSize) {
-                remainingSpace = cursor.Col() % tabSize;
-            } else {
-                remainingSpace = tabSize - cursor.Col();
-            }
+            UT::cui32 tabSize = *keyboard.tabSize;
+
+            std::cout << " " << tabSize << " \n"; 
+
+            UT::cui32 mod = cursor.Col() % tabSize;
+
+            UT::cui32 remainingSpace = (mod == 0)
+                ? tabSize
+                : std::max(0U, tabSize - mod);
+
+            std::cout << " " << remainingSpace << " \n";
         
-            for (UT::ui8 i = 0; i < remainingSpace; i++) {
-                f.InsertChar(cursor.Col(), cursor.Line(), ' ');
-                cursor.Right(f.GetCurrentLine(cursor.Line()));
-                // f.Auto().Close(); // Autocomplete and close
-            }
+            // Insert the tab
+            std::string& line = f.GetCurrentLine(cursor.Line());
+            line.insert(cursor.Col(), remainingSpace, ' ');
+            cursor.SetAt(cursor.Col() + remainingSpace, cursor.Line(), line);
         
             f.SetDirt(true);
         }
@@ -1264,16 +1266,25 @@ namespace CBLT {
 
     UT::ui32 Controller::GetIndentation(UT::ui32 line) {
         UT::ui32 depth = 0;
-    
-        for (UT::ui32 i = 0 ; i < line ; ++i) {
+
+        for (UT::ui32 i = 0; i < line; ++i) {
             const std::string& l = Q.Active().GetCurrentLine(i);
-    
-            for (char c : l) {
+
+            bool inString = false;
+
+            for (size_t j = 0; j < l.size(); ++j) {
+                char c = l[j];
+
+                // Minimal in string safety
+                if (c == '"') inString = !inString;
+
+                if (inString) continue;
+
                 if (c == '{') ++depth;
                 else if (c == '}' && depth > 0) --depth;
             }
         }
-    
+
         return depth;
     }
 
