@@ -6,8 +6,7 @@ void Language::ReadLangFile(std::string fname) {
     std::string fpath;
 
     #if defined(__linux__)
-        const char* resource_path = getenv("CBLT_RESOURCES");
-        std::string resourceDir = resource_path ? std::string(resource_path) : ".";
+        std::string resourceDir = Sys::ResourcePath();
     
         fpath = resourceDir + "/meta/lang/" + fname;
     #elif defined(_WIN32)     // WIN32

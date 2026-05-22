@@ -7,6 +7,9 @@
 #include <sstream>
 #include <iomanip>
 #include <cassert>           // assert
+#include <filesystem>        // for filesystem operations
+
+#include "CBLT_Sys.hpp"      // for resource path
 
 // #include "CBLT_raylib.hpp"
 

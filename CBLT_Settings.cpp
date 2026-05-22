@@ -11,22 +11,15 @@ namespace CBLT {
     void EditorSettings::ReadSettings(void) {
         namespace fs = std::filesystem;
     
-        std::string installationPath;
+        fs::path base = fs::path(Sys::ResourcePath());
 
-        #if defined(__linux__)
-            const char* resource_path = getenv("CBLT_RESOURCES");
-            installationPath = resource_path ? std::string(resource_path) : ".";
-        #endif
-
-        std::string fname = "settings.cbltconf";
-
-        fs::path settingsPath = fs::path(installationPath) / "options" / fname;
+        fs::path settingsPath = base / "options" / "settings.cbltconf";
 
         std::cerr << ("READING SETTINGS FROM " + settingsPath.string() + " \n");
     
         if (!fs::exists(settingsPath)) {
             // Optional log
-            std::cerr << ("NO SETTINGS FILE FOUND " + fname + "\n");
+            std::cerr << ("NO SETTINGS FILE FOUND " + settingsPath.string() + "\n");
             return;
         }
     

@@ -1,11 +1,5 @@
 #include "CoBaLT_INCLUDES.hpp"
 
-// Minor POSIX system fix for easier use
-#if defined(__linux__) || defined(__APPLE__)
-    #include <unistd.h>
-    #include <limits.h>  // For PATH_MAX
-#endif
-
 // TODO: Add the animator to the console cursor as well
 // TODO: Add animators to the filequeue and console resizing and contents movement
 
@@ -19,18 +13,13 @@
 
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
-
     CBLT::Utils::Err::Init();
 
-    //  Previous / Linux asset handling
-#if defined(__linux__)
     CBLT::Controller ctrl;
 
-    std::string userDir = (argc > 1) ? std::string(argv[1]) : "/home";
-    ctrl.InitCWD(userDir);
+    ctrl.InitCWD(CBLT::Sys::WorkingDirectory(argc, argv));
 
-    const char* resource_path = getenv("CBLT_RESOURCES");
-    std::string resourceDir = resource_path ? std::string(resource_path) : ".";
+    std::string resourceDir = CBLT::Sys::ResourcePath();
 
     CBLT::gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
     CBLT::gFont.size = 23;
@@ -48,62 +37,17 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gFileQueueFont.size = 21;
     CBLT::gFileQueueFont.Config();
 
-    CBLT::gSound.Load(resourceDir + "/assets/audio/"); // Pass resourceDir here
-#elif defined(__APPLE__)
-    CBLT::Controller ctrl; // Controller instance
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
-        ctrl.InitCWD(std::string(cwd));
-    } else {
-        ctrl.InitCWD("/"); 
-    }
+    CBLT::gSound.Load(resourceDir + "/assets/audio/");
 
-    // Previous asset loading (macOS)
-    CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gFont.size = 23;
-    CBLT::gFont.Config();
-
-    CBLT::gConsoleFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gConsoleFont.size = 20;
-    CBLT::gConsoleFont.Config();
-
-    CBLT::gTopBarFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gTopBarFont.size = 20;
-    CBLT::gTopBarFont.Config();
-
-    CBLT::gFileQueueFont.Load("/assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gFileQueueFont.size = 21;
-    CBLT::gFileQueueFont.Config();
-
-    CBLT::gSound.Load("assets/audio/");
-#elif defined(_WIN32)
-    CBLT::Controller ctrl; // Controller instance
-    ctrl.InitCWD("C:/");
-
-    // Previous asset loading (Windows)
-    CBLT::gFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gFont.size = 23;
-    CBLT::gFont.Config();
-
-    CBLT::gConsoleFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gConsoleFont.size = 20;
-    CBLT::gConsoleFont.Config();
-
-    CBLT::gTopBarFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gTopBarFont.size = 20;
-    CBLT::gTopBarFont.Config();
-
-    CBLT::gFileQueueFont.Load("assets/font/IBMPlexMono-Regular.ttf");
-    CBLT::gFileQueueFont.size = 21;
-    CBLT::gFileQueueFont.Config();
-
-    CBLT::gSound.Load("assets/audio/");
-#endif
     CBLT::gSettings.ReadSettings();
     ctrl.GetKeyboard().AssignTabSize(&CBLT::gSettings.OPTION_TabSize);
 
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
+    CBLT::gPalette.ReadPaletteFile(CBLT::gSettings.OPTION_Palette);
+    CBLT::gSound.Load(resourceDir + "/assets/audio/");
+
+    // TopBar info, update each frame
     UT::ui32 currentFileLineCount; 
     UT::b currentFileDirt; 
     std::string currentFileName;

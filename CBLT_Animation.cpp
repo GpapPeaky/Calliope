@@ -80,35 +80,16 @@ namespace CBLT {
     }
 
     AnimationProfile ReadAnimationFile(const std::string& path) {
-        std::string resourcePath = "";
-        
-        #if defined(__linux__)
-            resourcePath = ".";
+        namespace fs = std::filesystem;
 
-            if (const char* p = getenv("CBLT_RESOURCES"))
-                resourcePath = p;    
-        
-            resourcePath += '/';
-        #elif defined(_WIN32)
-            // Do nothing, no resource path required
-        #endif
-    
+        fs::path resourcePath = fs::path(Sys::ResourcePath());
+
         AnimationProfile ap;
     
-        std::ifstream f(
-            resourcePath +
-            "options/anim/" +
-            path +
-            ".cbltconf"
-        );
+        std::ifstream f(resourcePath / "options/anim/" / (path + ".cbltconf"));
     
-        // std::cout << resourcePath + "options/anim/" + path + ".cbltconf\n";
-        
         if (!f.is_open()) {
-            UE::Log(
-                "Failed to open animation file: " +
-                path
-            );
+            UE::Log( "Failed to open animation file: " + path );
         }
     
         auto trim = [](std::string s) {
