@@ -83,7 +83,7 @@ UT::i32 main(int argc, char** argv) {
                     CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y +
                     CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
 
-                cm.DrawCursors(CBLT::gFont, baseX, 0);
+                cm.DrawCursors(CBLT::gFont, baseX, 0, f.Offs());
                 f.Draw(c.renderX, c.renderY, cnsl.IsOpen(), cnsl.Width());
                 
                 currentFileLineCount        = f.GetLineCount();

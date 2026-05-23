@@ -1170,7 +1170,7 @@ namespace CBLT {
                         File& f = Q.Active();
 
                         f.ClampCursor(c);
-                        c.ClampToCamera(f.Cam(), f.GetCurrentLine(c.Line()));
+                        c.ClampToCamera(f.Cam(), f.GetCurrentLine(c.Line()), f.Offs());
                     }
                     
                     // Only handle insertion after shortcuts        
@@ -1215,7 +1215,7 @@ namespace CBLT {
                         File& f = Q.Active();
 
                         f.ClampCursor(c); // Clamp cursor inside file bounds
-                        c.ClampToCamera(f.Cam(), f.GetCurrentLine(c.Line()));
+                        c.ClampToCamera(f.Cam(), f.GetCurrentLine(c.Line()), f.Offs());
                     }
                     
                     // Select entry
@@ -1347,8 +1347,8 @@ namespace CBLT {
         UT::ui32 baseY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT;
     
         // Account for scrolling offsets
-        UT::f32 localY = mouse.y - baseY - CBLT::gOffsets.y + gFont.size;
-        UT::f32 localX = mouse.x - baseX - CBLT::gOffsets.x - 2.5f;
+        UT::f32 localY = mouse.y - baseY - f.Offs().y + gFont.size;
+        UT::f32 localX = mouse.x - baseX - f.Offs().x - 2.5f;
     
         if (localY < 0)
             return;

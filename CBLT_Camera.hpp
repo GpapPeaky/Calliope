@@ -2,7 +2,6 @@
 
 #include "CBLT_Util.hpp"
 #include "CBLT_Palette.hpp"
-#include "CBLT_Cursor.hpp"
 #include "CBLT_Util.hpp" // UI namespace
 
 namespace CBLT {
@@ -11,9 +10,6 @@ namespace CBLT {
         UT::f32 x;  // X coordinate
         UT::f32 y;  // Y coordinate
     } Offset;
-
-    // Global offsets, will increment via camera movement
-    extern Offset gOffsets;
 
     // Just a point type
     typedef struct CameraOrigin {
@@ -46,10 +42,10 @@ namespace CBLT {
             ~Camera(void);
 
             // Set global offsets
-            void Set(UT::f32 x, UT::f32 y);
+            void Set(UT::f32 x, UT::f32 y, Offset& off);
 
             // Apply a delta at the global offsets
-            void Move(UT::f32 dx, UT::f32 dy);
+            void Move(UT::f32 dx, UT::f32 dy, Offset& off);
 
             // Check if a rectangle is within the camera view
             UT::b Contains(UT::f32 x, UT::f32 y, UT::f32 w, UT::f32 h) const;

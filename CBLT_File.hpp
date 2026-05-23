@@ -8,7 +8,7 @@
 #include "CBLT_Palette.hpp"             // Pallete colours
 #include "CBLT_Token.hpp"               // Tokens storage class
 #include "CBLT_Language.hpp"            // Tokens for tokenizing
-#include "CBLT_Camera.hpp"
+#include "CBLT_Cursor.hpp"
 #include "CBLT_InfileAutocomplete.hpp"
 #include "CBLT_InfileMark.hpp"
 #include "CBLT_Lex.hpp"                 // Einai aseveia rr
@@ -37,7 +37,8 @@ namespace CBLT {
             CursorManager cursors;                              // Cursor manager for the file, handles cursor position and movement
             Language lang = Language(FileExtension::TXT);       // File's language loaded via the extension
             std::string langConf;                               // Language conf file name
-            Camera cam;                                         // Camera for rendering the file, will be used for panning and zooming the file view     
+            Camera cam;                                         // Camera for rendering the file, will be used for panning and zooming the file view
+            Offset off = {0.0f, 0.0f};                          // Camera offsets
         public:
             // Constructor
             File(void);
@@ -159,6 +160,9 @@ namespace CBLT {
 
             // Get the file camera
             Camera& Cam(void);
+
+            // Get the camera offsets
+            Offset& Offs(void);
 
             // Return a string of the file markings and nearby lines
             std::string GetMarksAndNearbyLinesMessageString(void) const ;

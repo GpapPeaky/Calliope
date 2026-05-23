@@ -114,7 +114,7 @@ namespace CBLT {
         SetAt(this->column + 1, this->line, targetLine);
     }
 
-    void Cursor::DrawSelection(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff) {
+    void Cursor::DrawSelection(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff, Offset& off) {
         UT::ui32 startColumn = SSCol();
         UT::ui32 startLine   = SSLine();
         UT::ui32 endColumn   = SFCol();
@@ -126,8 +126,8 @@ namespace CBLT {
             std::swap(startColumn, endColumn);
         }
     
-        UT::i32 baseY = CBLT::gOffsets.y + yOff;
-        UT::i32 baseX = xOff + CBLT::gOffsets.x;
+        UT::i32 baseY = off.y + yOff;
+        UT::i32 baseX = xOff + off.x;
     
         for (UT::ui32 line = startLine; line <= endLine; ++line) {
             UT::i32 y = baseY + line * font.size + font.size;
@@ -175,7 +175,7 @@ namespace CBLT {
         }
     }
 
-    void Cursor::Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff) {
+    void Cursor::Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff, Offset& off) {
         // Limit from topbar
         BeginScissorMode(
             0,
@@ -184,12 +184,12 @@ namespace CBLT {
             GetScreenHeight() - 66.0f       // TOP_BAR_HEIGHT + someMargin
         );
 
-        if (GetMode() == CursorMode::SELECT) DrawSelection(font, xOff, yOff);
+        if (GetMode() == CursorMode::SELECT) DrawSelection(font, xOff, yOff, off);
 
         animator.Update();
     
-        UT::i32 x = static_cast<UT::i32>(animator.tx) + CBLT::gOffsets.x;
-        UT::i32 y = static_cast<UT::i32>(animator.ty) + CBLT::gOffsets.y + yOff;
+        UT::i32 x = static_cast<UT::i32>(animator.tx) + off.x;
+        UT::i32 y = static_cast<UT::i32>(animator.ty) + off.y + yOff;
     
         // Get the base from the offset
         const UT::i32 base = xOff;
@@ -356,7 +356,7 @@ namespace CBLT {
         }
     }
 
-    void Cursor::ClampToCamera(Camera& cam, std::string currentLine) {
+    void Cursor::ClampToCamera(Camera& cam, std::string currentLine, Offset& off) {
         const UT::i32 camTop = cam.Origin().y + cam.MarginY();
         const UT::i32 camBottom = cam.Origin().y + cam.Height() - cam.MarginY();
         const UT::i32 camLeft = cam.Origin().x + cam.MarginX();
@@ -374,24 +374,24 @@ namespace CBLT {
         UT::i32 cursorWorldX = textBaseX + GetCursorX(currentLine, gFont.size);
         UT::i32 cursorWorldY = textBaseY + line * lineHeight + lineHeight;
         
-        UT::i32 cursorScreenX = cursorWorldX + CBLT::gOffsets.x;
-        UT::i32 cursorScreenY = cursorWorldY + CBLT::gOffsets.y;
+        UT::i32 cursorScreenX = cursorWorldX + off.x;
+        UT::i32 cursorScreenY = cursorWorldY + off.y;
         
         const UT::i32 charWidth = static_cast<UT::i32>(gFont.size);
         const UT::i32 charHeight = static_cast<UT::i32>(gFont.size);
         
         if (cursorScreenY < camTop) {
-            CBLT::gOffsets.y += camTop - cursorScreenY;
+            off.y += camTop - cursorScreenY;
         }
         else if (cursorScreenY + charHeight > camBottom) {
-            CBLT::gOffsets.y -= (cursorScreenY + charHeight) - camBottom;
+            off.y -= (cursorScreenY + charHeight) - camBottom;
         }
         
         if (cursorScreenX < camLeft) {
-            CBLT::gOffsets.x += camLeft - cursorScreenX;
+            off.x += camLeft - cursorScreenX;
         }
         else if (cursorScreenX + charWidth > camRight) {
-            CBLT::gOffsets.x -= (cursorScreenX + charWidth) - camRight;
+            off.x -= (cursorScreenX + charWidth) - camRight;
         }
     }
 
@@ -427,9 +427,9 @@ namespace CBLT {
         }
     }
 
-    void CursorManager::DrawCursors(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff) {
+    void CursorManager::DrawCursors(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff, Offset& off) {
         for (UT::llui32 i = 0 ; i < activeCursors.size() ; i++) {
-            activeCursors[i].Draw(font, xOff, yOff);
+            activeCursors[i].Draw(font, xOff, yOff, off);
         }
     }
 

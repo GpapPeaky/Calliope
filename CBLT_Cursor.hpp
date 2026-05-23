@@ -92,10 +92,10 @@ namespace CBLT {
             void Right(const std::string& targetLine);
 
             // Draw cursor
-            void Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff);
+            void Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff, Offset& off);
 
             // Draw cursor's selection
-            void DrawSelection(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff);
+            void DrawSelection(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff, Offset& off);
 
             // Start selection
             void StartSelection(void);
@@ -125,7 +125,7 @@ namespace CBLT {
             void SetToWordBoundary(const std::string& lineText, const CursorDirection dir, UT::ui32 lineCount);
 
             // Clamp cursor to camera view
-            void ClampToCamera(Camera& cam, std::string currentLine);
+            void ClampToCamera(Camera& cam, std::string currentLine, Offset& off);
 
             // Reset selection fields
             void ResetSelection(void);
@@ -156,7 +156,7 @@ namespace CBLT {
             void RemoveSecondaries(void);
 
             // Draw all active cursors
-            void DrawCursors(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff);
+            void DrawCursors(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff, Offset& off);
 
             // Request cursor reset
             void RequestReset(void);

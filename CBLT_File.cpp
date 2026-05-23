@@ -137,8 +137,8 @@ namespace CBLT {
     
         for(UT::llui32 i = 0 ; i < lines.size() ; i++) {
             Vector2 pos = {
-                textBaseX + CBLT::gOffsets.x,
-                textBaseY + i * lineHeight + lineHeight + CBLT::gOffsets.y
+                textBaseX + off.x,
+                textBaseY + i * lineHeight + lineHeight + off.y
             };
 
             if (!cam.Contains(
@@ -199,7 +199,7 @@ namespace CBLT {
             EndScissorMode();   
             
             pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
-            pos.y = textBaseY + i * lineHeight + lineHeight + gOffsets.y;
+            pos.y = textBaseY + i * lineHeight + lineHeight + off.y;
             
             BeginScissorMode(
                 cam.Origin().x,
@@ -230,7 +230,7 @@ namespace CBLT {
             for (auto& im : marks) {
                 Vector2 pos = {
                     GetScreenWidth() - 40.0f,
-                    textBaseY + im.Line() * lineHeight + lineHeight + gOffsets.y
+                    textBaseY + im.Line() * lineHeight + lineHeight + off.y
                 };
 
                 if (consoleOpen) {
@@ -606,5 +606,9 @@ namespace CBLT {
 
     Camera& File::Cam(void) {
         return cam;
+    }
+
+    Offset& File::Offs(void) {
+        return off;
     }
 } // CBLT

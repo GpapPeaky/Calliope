@@ -1,8 +1,6 @@
 #include "CBLT_Camera.hpp"
 
 namespace CBLT {
-    Offset gOffsets = { 0.0f, 0.0f };
-
     Camera::Camera(void) {
         originX = 1;
         originY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT + CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y;
@@ -14,14 +12,14 @@ namespace CBLT {
 
     Camera::~Camera(void) {}
 
-    void Camera::Set(UT::f32 x, UT::f32 y) {
-        gOffsets.x = x;
-        gOffsets.y = y;
+    void Camera::Set(UT::f32 x, UT::f32 y, Offset& off) {
+        off.x = x;
+        off.y = y;
     }
 
-    void Camera::Move(UT::f32 dx, UT::f32 dy) {
-        gOffsets.x += dx;
-        gOffsets.y += dy;
+    void Camera::Move(UT::f32 dx, UT::f32 dy, Offset& off) {
+        off.x += dx;
+        off.y += dy;
     }
 
     UT::b Camera::Contains(UT::f32 x, UT::f32 y, UT::f32 w, UT::f32 h) const {
