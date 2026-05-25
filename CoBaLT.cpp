@@ -21,21 +21,23 @@ UT::i32 main(int argc, char** argv) {
 
     std::string resourceDir = CBLT::Sys::ResourcePath();
 
-    CBLT::gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    ////// Fonts //////
+    CBLT::gFont.Load(resourceDir + "/assets/font/TerminessNerdFontMono-Regular.ttf");
     CBLT::gFont.size = 23;
     CBLT::gFont.Config();
 
-    CBLT::gConsoleFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gConsoleFont.Load(resourceDir + "/assets/font/TerminessNerdFontMono-Regular.ttf");
     CBLT::gConsoleFont.size = 20;
     CBLT::gConsoleFont.Config();
 
-    CBLT::gTopBarFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gTopBarFont.Load(resourceDir + "/assets/font/TerminessNerdFontMono-Regular.ttf");
     CBLT::gTopBarFont.size = 23;
     CBLT::gTopBarFont.Config();
 
-    CBLT::gFileQueueFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+    CBLT::gFileQueueFont.Load(resourceDir + "/assets/font/TerminessNerdFontMono-Regular.ttf");
     CBLT::gFileQueueFont.size = 21;
     CBLT::gFileQueueFont.Config();
+    ////// //////
 
     CBLT::gSound.Load(resourceDir + "/assets/audio/");
 
