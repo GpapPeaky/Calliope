@@ -33,6 +33,7 @@ namespace CBLT {
                     ":uma  - Unmark all                     |                \n"
                     ":im   - Display marks                  |                \n"
                     ":set  - Open the settings file         |                \n"
+                    ":log  - Open the log file              |                \n"
                     ":rst  - Reload the settings file       |                \n"
                     ":msg  - Display an info message        |                \n";
 

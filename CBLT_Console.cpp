@@ -1042,6 +1042,23 @@ namespace CBLT {
                 return;
             }
 
+            // Open CBLT Log file
+            else if (dir == "log") {
+                namespace fs = std::filesystem;
+
+                std::string installationPath = Sys::ResourcePath();
+
+                fs::path logDir = fs::path(installationPath) / "log";
+
+                Q.LoadFileToQueue("dir.log", logDir.string());
+
+                directive.Clear();
+
+                CBLT::Utils::Err::Log("DIRECTIVE: NQ " + logDir.string() + "dir.log");
+
+                return;
+            }
+
             // Reload settings to globals
             else if (dir == "rst") {
                 CBLT::gSettings.ReadSettings();
