@@ -165,7 +165,7 @@ namespace CBLT {
 
         camOffset = { 0.0f, 0.0f }; // Initialize camera offset to zero
     
-        loadedFiles.reserve(UDef::MAX_FILE_Q_NODES); // I don't get it, reserve memory for 16 nodes??
+        loadedFiles.reserve(UDef::MAX_FILE_Q_NODES); // I don't get it, reserve memory for 32 nodes??
     }
 
     void FileQueue::Scroll(UT::f32 dx) {
