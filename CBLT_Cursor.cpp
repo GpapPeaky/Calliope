@@ -249,10 +249,10 @@ namespace CBLT {
     }
 
     void Cursor::ResetSelection(void) {
-        startSelectColumn = 0;
-        finalSelectColumn = 0;
-        startSelectLine = 0;
-        finalSelectLine = 0;
+        startSelectColumn = column;
+        finalSelectColumn = column;
+        startSelectLine = line;
+        finalSelectLine = line;
     }
 
     UT::ui32 Cursor::GetCursorX(const std::string& lineText, UT::ui32 fontSize){

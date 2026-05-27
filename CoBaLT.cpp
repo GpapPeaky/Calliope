@@ -3,7 +3,6 @@
 // TODO: Add the animator to the console cursor as well
 // TODO: Add animators to the filequeue and console resizing and contents movement
 
-// FIXME: Fix some issues with SELECTION MODE bugging out, and selecting from 0,0  
 // FIXME: Fix issues with selection pasting cursor position
 
 // FIXME: Multi-cursor indentation is problematic
