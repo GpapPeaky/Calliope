@@ -121,7 +121,7 @@ namespace CBLT {
                                 CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
         const UT::f32 textBaseY = 0.0f;
 
-        cam.Draw();
+        // cam.Draw();
 
         // Seperator
         DrawLineV(
