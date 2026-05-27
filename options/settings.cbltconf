@@ -55,10 +55,10 @@
 ! assets/font/ folder.                 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    TEXT_FONT            : IBMPlexMono-Regular 
-    CONSOLE_FONT         : IBMPlexMono-Regular
-    TOPBAR_FONT          : IBMPlexMono-Regular
-    FQ_FONT              : IBMPlexMono-Regular
+    TEXT_FONT            : TerminessNerdFontMono-Regular 
+    CONSOLE_FONT         : TerminessNerdFontMono-Regular
+    TOPBAR_FONT          : TerminessNerdFontMono-Regular
+    FQ_FONT              : TerminessNerdFontMono-Regular
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! FROM options/anim/                    !
