@@ -10,10 +10,6 @@ UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
     CBLT::Utils::Err::Init();
 
-    CBLT::Controller ctrl;
-
-    ctrl.InitCWD(CBLT::Sys::WorkingDirectory(argc, argv));
-
     std::string resourceDir = CBLT::Sys::ResourcePath();
 
     ////// Fonts //////
@@ -37,21 +33,20 @@ UT::i32 main(int argc, char** argv) {
     CBLT::gSound.Load(resourceDir + "/assets/audio/");
 
     CBLT::gSettings.ReadSettings();
+    
+    // Controller
+    CBLT::Controller ctrl;
+    ctrl.InitCWD(CBLT::Sys::WorkingDirectory(argc, argv));
     ctrl.GetKeyboard().AssignTabSize(&CBLT::gSettings.OPTION_TabSize);
-
     ctrl.GetConsole().GetCWDContents(ctrl.CWD());
 
     CBLT::gPalette.ReadPaletteFile(CBLT::gSettings.OPTION_Palette);
-    CBLT::gSound.Load(resourceDir + "/assets/audio/");
 
     // TopBar info, update each frame
     UT::ui32 currentFileLineCount; 
     UT::b currentFileDirt; 
     std::string currentFileName;
     std::string currentFileLangConfName;
-
-    // Initialize palette
-    CBLT::gPalette.ReadPaletteFile(CBLT::gSettings.OPTION_Palette);
 
     UT::ui32 framesCount = 0;
     while(!WindowShouldClose()) {
