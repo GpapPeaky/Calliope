@@ -6,8 +6,6 @@
 // FIXME: Fix some issues with SELECTION MODE bugging out, and selecting from 0,0  
 // FIXME: Fix issues with selection pasting cursor position
 
-// FIXME: For some reason pressing enter after '}' or '/' doesn't do anything, till the cursor moves again
-
 // FIXME: Multi-cursor indentation is problematic
 // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
 

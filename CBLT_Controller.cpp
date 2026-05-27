@@ -286,7 +286,7 @@ namespace CBLT {
 
                 f.Auto().Close();
 
-                continue;
+                return true;
             }
 
             else if (typed == ']') {
@@ -300,7 +300,7 @@ namespace CBLT {
 
                 f.Auto().Close();
 
-                continue;
+                return true;
             }
 
             else if (typed == ')') {
@@ -314,7 +314,7 @@ namespace CBLT {
 
                 f.Auto().Close();
 
-                continue;
+                return true;
             }
 
             // Openers/closers
@@ -940,12 +940,16 @@ namespace CBLT {
     }
 
     UT::b Controller::HandleSelectEntry(Cursor& c) {
-        if (keyboard.m.shift) {
-            c.StartSelection(); // Start
+        if (keyboard.m.shift && (
+            IsKeyPressed(KEY_LEFT)  || IsKeyPressedRepeat(KEY_LEFT)  ||
+            IsKeyPressed(KEY_RIGHT) || IsKeyPressedRepeat(KEY_RIGHT) ||
+            IsKeyPressed(KEY_UP)    || IsKeyPressedRepeat(KEY_UP)    ||
+            IsKeyPressed(KEY_DOWN)  || IsKeyPressedRepeat(KEY_DOWN)
+        )) {
+            c.StartSelection();
             return true;
         }
-    
-        return false;    
+        return false;
     }
 
     UT::b Controller::HandleSelectExit(UT::b insertion) {
@@ -1200,15 +1204,21 @@ namespace CBLT {
                     if (Q.Size() == 0) return; // Nothing is safe to call after the shortcuts, possibility the last NQ'ed file was DQ'ed, Q.Active() won't shut the fuck up 
 
                     HandleSpecials(c);
-                    
-                    // Shortcuts include ctrl + arrow key presses so we need to omit movement
-                    if (!handledShort) HandleMovement(c, false);
-                    
+
                     // Shortcuts include letters so it makes sense that we need to omit any leftover I/O's
                     // so they won't spill over to the insert function
                     if (!handledShort) {
-                        HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
+                        handledInsert = HandleInsert(c, keyQueue);     // Shortcut was handled, do not insert
                     }
+                    
+                    // Select entry, before movement handle since we want to capture the current cursor position
+                    // BEFORE moving the cursor
+                    if (!handledInsert && HandleSelectEntry(c)) {
+                        c.SetMode(CBLT::CursorMode::SELECT); // Change mode enter selection
+                    }
+
+                    // Shortcuts include ctrl + arrow key presses so we need to omit movement
+                    if (!handledShort) HandleMovement(c, false);
 
                     // Clamp if we didn't switch files.
                     if (Q.Index() == previousIndex) {
@@ -1216,11 +1226,6 @@ namespace CBLT {
 
                         f.ClampCursor(c); // Clamp cursor inside file bounds
                         c.ClampToCamera(f.Cam(), f.GetCurrentLine(c.Line()), f.Offs());
-                    }
-                    
-                    // Select entry
-                    if (HandleSelectEntry(c)) {
-                        c.SetMode(CBLT::CursorMode::SELECT); // Change mode enter selection
                     }
 
                     break;
