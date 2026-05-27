@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CBLT_Sys.hpp"
 
 #include "CBLT_Dialog.hpp"

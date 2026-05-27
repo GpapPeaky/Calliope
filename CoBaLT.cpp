@@ -1,9 +1,7 @@
-#include "CoBaLT_INCLUDES.hpp"
+#include "CBLT_Include.hpp"
 
 // TODO: Add the animator to the console cursor as well
 // TODO: Add animators to the filequeue and console resizing and contents movement
-
-// FIXME: Fix issues with selection pasting cursor position
 
 // FIXME: Multi-cursor indentation is problematic
 // FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
