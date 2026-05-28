@@ -17,7 +17,6 @@
         %end
 
         %storageClass:
-            auto
             register
             static
             extern
@@ -35,6 +34,7 @@
         %end
         
         %utility:
+            inline
             sizeof
             return
             goto
