@@ -9,15 +9,12 @@
         %end
 
         %storageClass:
-            ; registers
             al ah bl bh cl ch dl dh
             ax bx cx dx si di bp sp
             eax ebx ecx edx esi edi ebp esp
             rax rbx rcx rdx rsi rdi rbp rsp rip
             r8 r9 r10 r11 r12 r13 r14 r15
-
             cs ds es fs gs ss
-
             xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7
             xmm8 xmm9 xmm10 xmm11 xmm12 xmm13 xmm14 xmm15
         %end
@@ -27,7 +24,6 @@
         %end
 
         %userDefinedClass:
-            ; instructions (main highlight group)
             mov lea push pop xchg
             add sub mul imul div idiv inc dec neg
             and or xor not test cmp
@@ -38,12 +34,11 @@
         %end
         
         %utility:
-            ; assembler directives / meta
             db dw dd dq equ org section global extern align bits
         %end
         
         %dataTypes:
-            ; optional extras (can be used for emphasis if your engine supports it)
+
         %end
     %end
 
