@@ -26,7 +26,6 @@
         
         %utility:
             new this super instanceof
-            import package
         %end
         
         %dataTypes:
@@ -61,7 +60,6 @@
         " "
     %end
 
-    > Add annotation colours in palette
     %annotations:
         @
     %end
@@ -72,6 +70,8 @@
 
 
     %macros:
+        import
+        package
     %end
 
     %settings:
