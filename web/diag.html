@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CoBaLT — Architecture Diagram</title>
+<style>
+  /* ── Fonts ── */
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght=400;500;600&family=IBM+Plex+Sans:wght=300;400;500&display=swap');
+
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0d0f14;
+    --bg2:       #13161d;
+    --bg3:       #1a1e28;
+    --border:    #2a2f3d;
+    --border2:   #3a4057;
+    --text:      #c8ccd8;
+    --text2:     #7a8099;
+    --text3:     #454d66;
+
+    /* Module colour palette */
+    --c-entry:   #e8b84b;   /* amber   – entry / main loop */
+    --c-ctrl:    #7c6af5;   /* purple  – controller */
+    --c-file:    #4a9eff;   /* blue    – file subsystem */
+    --c-console: #f06060;   /* coral   – console subsystem */
+    --c-init:    #3fbf8a;   /* teal    – init / globals */
+    --c-render:  #8888aa;   /* slate   – render helpers */
+    --c-plat:    #aaa;      /* gray    – platform layer */
+    --c-raylib:  #555;      /* dim     – raylib */
+
+    --arrow:     #3a4057;
+  }
+
+  html { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; overflow-x: hidden; }
+
+  body {
+    min-height: 100vh;
+    padding: 40px;
+    display: flex;
+    gap: 40px;
+  }
+
+  /* Main layout splits visualization map and detail inspector */
+  .main-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    display: flex; align-items: baseline; gap: 20px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+  .page-header h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px; font-weight: 600;
+    color: #fff; letter-spacing: -0.5px;
+  }
+  .page-header .sub {
+    font-size: 13px; color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 16px;
+    margin-bottom: 36px;
+    padding: 14px 18px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text2); }
+  .legend-dot  { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── Diagram canvas ── */
+  .diagram-canvas {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* Space between rows */
+  }
+
+  /* ── SVG connector layer ── */
+  .connector-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 1;
+  }
+
+  /* ── Structural Tiers ── */
+  .tier {
+    position: relative;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: start;
+    border-bottom: 1px dashed rgba(42, 47, 61, 0.4);
+    padding-bottom: 40px;
+    z-index: 2;
+  }
+  
+  .tier:last-child {
+    border-bottom: none;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding-top: 14px;
+  }
+
+  .nodes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  /* ── Node card ── */
+  .node {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px 12px;
+    width: 310px;
+    min-height: 120px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+    position: relative;
+  }
+  .node:hover {
+    border-color: var(--border2);
+    box-shadow: 0 0 10px rgba(58, 64, 87, 0.2);
+    z-index: 5;
+  }
+  .node.selected {
+    border-color: #ffcd57 !important;
+    box-shadow: 0 0 14px rgba(255, 205, 87, 0.25);
+    transform: translateY(-2px);
+    z-index: 10;
+  }
+  .node::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    border-radius: 8px 0 0 8px;
+    background: var(--accent, var(--border));
+  }
+
+  /* colour accents */
+  .n-entry   { --accent: var(--c-entry);   }
+  .n-ctrl    { --accent: var(--c-ctrl);    }
+  .n-file    { --accent: var(--c-file);    }
+  .n-console { --accent: var(--c-console); }
+  .n-init    { --accent: var(--c-init);    }
+  .n-render  { --accent: var(--c-render);  }
+  .n-plat    { --accent: var(--c-plat);    }
+  .n-raylib  { --accent: var(--c-raylib);  }
+
+  /* node internals */
+  .node-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .node-file {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text3);
+    margin-bottom: 8px;
+  }
+  
+  /* Hidden fields inside layout canvas — displayed cleanly in right side panel details inspector */
+  .node-desc, .fn-list, .calls-badge {
+    display: none;
+  }
+
+  /* ── Side Panel Inspector ── */
+  .side-inspector {
+    width: 380px;
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    position: sticky;
+    top: 40px;
+    height: calc(100vh - 80px);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .inspector-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text3);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .inspector-content {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .inspector-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .inspector-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: var(--panel-accent, var(--border));
+  }
+  .inspector-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .inspector-file {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .inspector-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .inspector-section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(42, 47, 61, 0.5);
+    padding-bottom: 6px;
+  }
+
+  .inspector-desc {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Dynamic rendering classes for functions lists cloned in panel layout */
+  .inspector-body .fn-list {
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+  .inspector-body .fn-list li {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    padding: 5px 8px;
+    background: var(--bg3);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .inspector-body .fn-list li .fn-name { color: #ffcd57; font-weight: 600; }
+  .inspector-body .fn-list li .fn-desc { color: var(--text2); font-size: 10.5px; }
+
+  .inspector-body .calls-badge {
+    display: block;
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.6;
+    background: rgba(26, 30, 40, 0.5);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px dashed var(--border);
+  }
+  .inspector-body .calls-badge span {
+    display: inline-block;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 6px;
+    margin: 2px 3px;
+    color: #fff;
+    font-size: 10px;
+  }
+  .inspector-body .calls-badge br {
+    display: block;
+    content: "";
+    margin-top: 6px;
+  }
+
+  .panel-labels-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .panel-labels-list li {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .panel-labels-list .lbl-caller {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .panel-labels-list .lbl-caller::before {
+    content: '→';
+    color: #ffcd57;
+  }
+  .panel-labels-list .lbl-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    padding-left: 14px;
+  }
+
+  /* ── Arrow / connector styles ── */
+  .arr-line {
+    stroke: var(--arrow);
+    stroke-width: 1.5;
+    fill: none;
+    transition: stroke 0.2s, stroke-width 0.2s;
+  }
+  .arr-dashed {
+    stroke: #3a4057;
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    fill: none;
+    transition: stroke 0.2s, stroke-width 0.2s, stroke-dasharray 0.2s;
+  }
+
+  /* Highlight state for selected tracking pathways */
+  .arrow-group.active-path .arr-line {
+    stroke: #ffcd57 !important;
+    stroke-width: 2.5px !important;
+  }
+  .arrow-group.active-path .arr-dashed {
+    stroke: #ffcd57 !important;
+    stroke-width: 2px !important;
+    stroke-dasharray: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="main-content">
+  <div class="page-header">
+    <h1>CoBaLT — Architecture</h1>
+    <span class="sub">v2.1.1 · dynamic module &amp; function map · clean layout</span>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-entry)"></div>Entry / main loop</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-ctrl)"></div>Controller &amp; input</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-file)"></div>File subsystem</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-console)"></div>Console subsystem</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-init)"></div>Init / globals</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-render)"></div>Render helpers</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-plat)"></div>Platform layer</div>
+    <div class="legend-item">
+      <svg width="28" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="20" y2="5" stroke="#ffcd57" stroke-width="1.5"/></svg>
+      Selected Pathway (Converging)
+    </div>
+  </div>
+
+  <div class="diagram-canvas" id="canvas">
+    <svg class="connector-svg" id="connectors">
+      <defs>
+        <marker id="arr-head" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#3a4057" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arr-head-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#2a2f3d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arr-head-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#ffcd57" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+    </svg>
+
+    <div class="tier">
+      <div class="section-label">Entry</div>
+      <div class="nodes-container">
+        <div class="node n-entry" id="n-main">
+          <div class="node-title">CoBaLT.cpp</div>
+          <div class="node-file">CoBaLT.cpp</div>
+          <div class="node-desc">Program entry point. Initialises all subsystems, loads assets, then runs the BeginDrawing/EndDrawing main loop until WindowShouldClose().</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">main(argc, argv)</span><span class="fn-desc">init → loop → destroy</span></li>
+          </ul>
+          <div class="calls-badge">
+            calls init: <span>Win::Init()</span><span>gFont.Load()</span><span>gSound.Load()</span><span>gSettings.ReadSettings()</span><span>gPalette.ReadPaletteFile()</span>
+            <br>each frame: <span>ctrl.Update()</span><span>f.RetokenizeDirtyLines()</span><span>cm.DrawCursors()</span><span>f.Draw()</span><span>cnsl.Draw()</span><span>fq.Draw()</span><span>DrawInfo()</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Init / Globals</div>
+      <div class="nodes-container">
+        <div class="node n-init" id="n-win">
+          <div class="node-title">Win</div>
+          <div class="node-file">CBLT_Win.hpp / .cpp</div>
+          <div class="node-desc">Window lifecycle. Creates the raylib window, sets icon, target FPS, disables ESC exit key.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Win::Init()</span><span class="fn-desc">InitWindow, SetTargetFPS</span></li>
+            <li><span class="fn-name">Win::Destroy()</span><span class="fn-desc">CloseWindow</span></li>
+          </ul>
+          <div class="calls-badge">global: <span>std::string Version</span></div>
+        </div>
+        <div class="node n-init" id="n-settings">
+          <div class="node-title">EditorSettings</div>
+          <div class="node-file">CBLT_Settings.hpp / .cpp</div>
+          <div class="node-desc">Parses <code>options/settings.cbltconf</code>. Holds tab size, terminal strings, palette name, cursor symbol, and five AnimationProfile structs.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">ReadSettings()</span><span class="fn-desc">reads %settings block</span></li>
+          </ul>
+          <div class="calls-badge">
+            calls: <span>ReadAnimationFile(path)</span> for each ANIM_* option<br>
+            global: <span>gSettings</span>
+          </div>
+        </div>
+        <div class="node n-init" id="n-font">
+          <div class="node-title">EditorFont</div>
+          <div class="node-file">CBLT_Font.hpp / .cpp</div>
+          <div class="node-desc">Loads a TTF with an extended glyph set (ASCII + box-drawing + block elements). Builds an advanceMap for fast per-glyph width lookup. Four instances: gFont, gConsoleFont, gTopBarFont, gFileQueueFont.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Load(fontName)</span><span class="fn-desc">LoadFontEx, TEXTURE_FILTER_BILINEAR</span></li>
+            <li><span class="fn-name">Config()</span><span class="fn-desc">builds advanceMap[]</span></li>
+            <li><span class="fn-name">BuildGlyphSet()</span><span class="fn-desc">ASCII + U+2500–U+259F</span></li>
+            <li><span class="fn-name">Utf8ToCodepoints(str)</span><span class="fn-desc">UTF-8 → i32 codepoints</span></li>
+          </ul>
+          <div class="calls-badge">globals: <span>gFont</span><span>gConsoleFont</span><span>gTopBarFont</span><span>gFileQueueFont</span></div>
+        </div>
+        <div class="node n-init" id="n-sound">
+          <div class="node-title">SoundSystem</div>
+          <div class="node-file">CBLT_Sound.hpp / .cpp</div>
+          <div class="node-desc">Owns a fixed Sound[EDITOR_SOUNDS_COUNT] array. Plays with a random pitch variation (0.67–1.45×) to avoid monotony.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">SoundSystem()</span><span class="fn-desc">InitAudioDevice()</span></li>
+            <li><span class="fn-name">Load(path)</span><span class="fn-desc">LoadSound for all 16 slots</span></li>
+            <li><span class="fn-name">Play(SoundClass)</span><span class="fn-desc">SetSoundPitch + PlaySound</span></li>
+            <li><span class="fn-name">~SoundSystem()</span><span class="fn-desc">UnloadSound × 16, CloseAudioDevice</span></li>
+          </ul>
+          <div class="calls-badge">enum: <span>SoundClass</span> (INSERT, DELETE, NAV, RETURN, SPACE, console × 7, FQ × 2, EXIT)<br>global: <span>gSound</span></div>
+        </div>
+        <div class="node n-init" id="n-palette">
+          <div class="node-title">Palette</div>
+          <div class="node-file">CBLT_Palette.hpp / .cpp</div>
+          <div class="node-desc">Holds ~35 named Color fields. Reads a <code>.pal</code> file (key:[r,g,b] pairs inside %pal block). Falls back to hardcoded defaults.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">ReadPaletteFile(path)</span><span class="fn-desc">parses %pal block → Color fields</span></li>
+          </ul>
+          <div class="calls-badge">helper: <span>toCol(cblt_color)</span> avoids WIN32 Color collision<br>global: <span>gPalette</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Animation</div>
+      <div class="nodes-container">
+        <div class="node n-init" id="n-anim">
+          <div class="node-title">Animator</div>
+          <div class="node-file">CBLT_Animation.hpp / .cpp</div>
+          <div class="node-desc">Each cursor and the console cursor owns an Animator. AnimationProfile (loaded from .cbltconf) selects ease type, speed, overshoot, stiffness, damping. Update() runs every frame.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">MoveTo(x, y)</span><span class="fn-desc">starts Interpolator if position changed</span></li>
+            <li><span class="fn-name">Update()</span><span class="fn-desc">advances Interpolator, applies ease formula</span></li>
+            <li><span class="fn-name">Snap(x, y)</span><span class="fn-desc">instant reposition, no animation</span></li>
+            <li><span class="fn-name">SetProfile(profile*)</span><span class="fn-desc">points to gSettings AnimationProfile</span></li>
+            <li><span class="fn-name">IsMoving()</span><span class="fn-desc">delegates to Interpolator::IsActive()</span></li>
+            <li><span class="fn-name">ReadAnimationFile(path)</span><span class="fn-desc">parses .cbltconf → AnimationProfile</span></li>
+          </ul>
+          <div class="calls-badge">eases: <span>NONE</span><span>LINEAR</span><span>EASE_IN</span><span>EASE_OUT</span><span>ELASTIC</span><span>BOUNCE</span></div>
+        </div>
+        <div class="node n-init" id="n-interp">
+          <div class="node-title">Interpolator</div>
+          <div class="node-file">CBLT_Interpolator.hpp / .cpp</div>
+          <div class="node-desc">Low-level linear interpolator. Progress goes 0→1 at speedPerFrame. Animator owns one; it reads SourceX/Y and TargetX/Y to apply its own ease on top.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Start(fx,fy,tx,ty,speed)</span><span class="fn-desc">resets progress → 0, sets active</span></li>
+            <li><span class="fn-name">Update()</span><span class="fn-desc">progress += speed; returns {x,y}</span></li>
+            <li><span class="fn-name">Stop()</span><span class="fn-desc">active=false, progress=1</span></li>
+            <li><span class="fn-name">IsActive() / Progress()</span><span class="fn-desc">state queries</span></li>
+            <li><span class="fn-name">SourceX/Y(), TargetX/Y()</span><span class="fn-desc">read AnimationLine struct</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Controller</div>
+      <div class="nodes-container">
+        <div class="node n-ctrl" id="n-ctrl">
+          <div class="node-title">Controller</div>
+          <div class="node-file">CBLT_Controller.hpp / .cpp</div>
+          <div class="node-desc">Central input dispatch. Called once per frame via Update(). Owns Keyboard, FileQueue (Q), Console, and cwd string. Routes keys to the correct handler based on console open/closed state and cursor mode (INSERT / SELECT).</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Update()</span><span class="fn-desc">modifiers → console or file input dispatch</span></li>
+            <li><span class="fn-name">HandleMovement(cursor, inConsole)</span><span class="fn-desc">arrow keys, word boundary jump</span></li>
+            <li><span class="fn-name">HandleSpecialMovement(cursor)</span><span class="fn-desc">Ctrl+← / → word jumps</span></li>
+            <li><span class="fn-name">HandleSpecials(cursor)</span><span class="fn-desc">Backspace, Enter, Tab, Escape</span></li>
+            <li><span class="fn-name">HandleInsert(cursor, keyQueue)</span><span class="fn-desc">typed chars, bracket pairing</span></li>
+            <li><span class="fn-name">HandleConsole()</span><span class="fn-desc">console char input, history nav</span></li>
+            <li><span class="fn-name">HandleShorcuts(cursor)</span><span class="fn-desc">Ctrl/Alt combos → save, nav, etc.</span></li>
+            <li><span class="fn-name">HandleSelectEntry/Exit(cursor)</span><span class="fn-desc">SELECT mode transitions</span></li>
+            <li><span class="fn-name">HandleSelectionSpecials(cursor)</span><span class="fn-desc">Backspace/Enter in SELECT</span></li>
+            <li><span class="fn-name">DeleteSelected(cursor)</span><span class="fn-desc">normalises selection, erases lines</span></li>
+            <li><span class="fn-name">GetKeyQueue()</span><span class="fn-desc">drains GetCharPressed() → vector&lt;char&gt;</span></li>
+            <li><span class="fn-name">GetIndentation(line)</span><span class="fn-desc">counts unmatched '{' for auto-indent</span></li>
+            <li><span class="fn-name">HandleMouseWheel/Click()</span><span class="fn-desc">scroll lines, click-to-position cursor</span></li>
+            <li><span class="fn-name">HandleConsoleMouseWheel/Click()</span><span class="fn-desc">CWD entry hover + click-to-NQ</span></li>
+            <li><span class="fn-name">InitCWD(path)</span><span class="fn-desc">sets cwd string from argv[1]</span></li>
+          </ul>
+          <div class="calls-badge">
+            calls each frame: <span>keyboard.UpdateModifiers()</span><span>console.Update()</span><span>console.Execute(Q,cwd)</span>
+            <span>Q.Active().Auto()</span><span>f.RetokenizeDirtyLines()</span><span>gSound.Play()</span>
+          </div>
+        </div>
+        <div class="node n-ctrl" id="n-kb">
+          <div class="node-title">Keyboard</div>
+          <div class="node-file">CBLT_Keyboard.hpp / .cpp</div>
+          <div class="node-desc">Wraps raylib input. Tracks Ctrl/Shift/Alt modifier state. Constructs the tab-stop string from settings.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">GetKey()</span><span class="fn-desc">GetCharPressed() → i32</span></li>
+            <li><span class="fn-name">UpdateModifiers()</span><span class="fn-desc">IsKeyDown for L-Ctrl, L-Shift, L-Alt</span></li>
+            <li><span class="fn-name">AssignTabSize(size*)</span><span class="fn-desc">rebuilds tab string (spaces)</span></li>
+            <li><span class="fn-name">CtrlActive/AltActive/ShiftActive()</span><span class="fn-desc">modifier queries</span></li>
+          </ul>
+          <div class="calls-badge">struct: <span>Modifiers {ctrl, shift, alt}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Console</div>
+      <div class="nodes-container">
+        <div class="node n-console" id="n-console">
+          <div class="node-title">Console</div>
+          <div class="node-file">CBLT_Console.hpp / .cpp</div>
+          <div class="node-desc">Right-side panel. Toggled via Ctrl+`. Holds a Directive (single-line File), CWD content list, its own CursorManager, Camera, and history list. Execute() parses the directive line and dispatches to ~40 commands.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Toggle()</span><span class="fn-desc">toggled = !toggled</span></li>
+            <li><span class="fn-name">Execute(Q, cwd)</span><span class="fn-desc">parse ':' or file-switch context, dispatch command</span></li>
+            <li><span class="fn-name">GetCWDContents(cwd)</span><span class="fn-desc">filesystem::directory_iterator → cwdContents[]</span></li>
+            <li><span class="fn-name">Draw(Q, rect)</span><span class="fn-desc">background, directive bar, scissor-clipped CWD list, hover rect</span></li>
+            <li><span class="fn-name">DrawMessage()</span><span class="fn-desc">DIRECTIVE_ERROR / INFO / GUIDE / FILE_MARKS overlays</span></li>
+            <li><span class="fn-name">DrawGuide()</span><span class="fn-desc">renders gGuideMessage when no file open</span></li>
+            <li><span class="fn-name">Autocomplete()</span><span class="fn-desc">prefix match on cwdContents for Tab completion</span></li>
+            <li><span class="fn-name">Move(offset)</span><span class="fn-desc">resize width, clamped to [20, 0.5×screenWidth]</span></li>
+            <li><span class="fn-name">Scroll(dy)</span><span class="fn-desc">clamps cameraOffset.y to content height</span></li>
+          </ul>
+          <div class="calls-badge">
+            commands (subset): <span>:w :wq :wqa :q :qa :qas</span><span>:cd :up :o</span><span>:g :gs :ge :gm :gml</span>
+            <span>:mat :umat :uml :uma :im</span><span>:f :c :r :m :d</span>
+            <span>:pal :sh :h :i :e :we :msg :rst :set :log</span>
+            <br>owns: <span>Directive directive</span><span>vector&lt;CWDContentToken&gt; cwdContents</span>
+            <span>CursorManager cursor</span><span>Camera camera</span><span>list&lt;string&gt; directiveHistory</span>
+          </div>
+        </div>
+        <div class="node n-console" id="n-directive">
+          <div class="node-title">Directive</div>
+          <div class="node-file">CBLT_Directive.hpp / .cpp</div>
+          <div class="node-desc">Thin wrapper around a File used as a single-line input buffer. Index 0 = the typed command. gGuideMessage is the help text rendered by DrawGuide().</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Clear()</span><span class="fn-desc">GetCurrentLine(0).clear()</span></li>
+            <li><span class="fn-name">Becomes(src)</span><span class="fn-desc">clear + append — used by autocomplete and history</span></li>
+            <li><span class="fn-name">Draw(x, y)</span><span class="fn-desc">DrawTextEx with gConsoleFont</span></li>
+            <li><span class="fn-name">DirectiveFile()</span><span class="fn-desc">returns File& for cursor ops</span></li>
+          </ul>
+          <div class="calls-badge">global: <span>std::string gGuideMessage</span> (help text)<br>const: <span>DIRECTIVE_FILE_LINE = 0</span></div>
+        </div>
+        <div class="node n-console" id="n-ctoken">
+          <div class="node-title">CWDContentToken</div>
+          <div class="node-file">CBLT_CWDContentToken.hpp / .cpp</div>
+          <div class="node-desc">Simple value type produced by GetCWDContents(). Colour-codes dirs vs files. Consumed entirely by Console::Draw() and Console::Autocomplete().</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">CWDContentToken(clr, name, isDir)</span><span class="fn-desc">direct field init</span></li>
+          </ul>
+          <div class="calls-badge">fields: <span>Color c</span><span>string n</span><span>bool isDir</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">File Queue</div>
+      <div class="nodes-container">
+        <div class="node n-file" id="n-fq">
+          <div class="node-title">FileQueue</div>
+          <div class="node-file">CBLT_FileQueue.hpp / .cpp</div>
+          <div class="node-desc">Holds up to 32 File objects (MAX_FILE_Q_NODES). Tracks activeIndex. Renders the bottom file-tab bar with separators and camera offset for horizontal scrolling.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">LoadFileToQueue(name, cwd)</span><span class="fn-desc">emplace_back + File::Load</span></li>
+            <li><span class="fn-name">CloseFile(idx)</span><span class="fn-desc">erase + clamp activeIndex</span></li>
+            <li><span class="fn-name">SetActiveNext/Prev()</span><span class="fn-desc">wraps around queue bounds</span></li>
+            <li><span class="fn-name">Active()</span><span class="fn-desc">loadedFiles[activeIndex] ref</span></li>
+            <li><span class="fn-name">Draw()</span><span class="fn-desc">renders tab bar with camOffset.x scroll</span></li>
+            <li><span class="fn-name">Scroll(dx)</span><span class="fn-desc">camOffset.x ± clamped to ±screenWidth</span></li>
+          </ul>
+          <div class="calls-badge">owns: <span>vector&lt;File&gt;</span><span>Camera cam</span><span>Offset camOffset</span></div>
+        </div>
+        <div class="node n-file" id="n-file">
+          <div class="node-title">File</div>
+          <div class="node-file">CBLT_File.hpp / .cpp</div>
+          <div class="node-desc">Core document abstraction. Stores lines[], token table, lexer states, dirty-line set, language, autocomplete, marks, cursors, camera, and offsets. All mutation goes through File methods to keep dirty-tracking consistent.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Load(fpath, cwd)</span><span class="fn-desc">ifstream → lines[], AssignExtension → Language, Tokenize(), LoadMarks()</span></li>
+            <li><span class="fn-name">Save()</span><span class="fn-desc">ofstream, writes lines joined by '\n', SaveMarks()</span></li>
+            <li><span class="fn-name">InsertChar(col, line, c)</span><span class="fn-desc">string::insert, InsertDirtyLine()</span></li>
+            <li><span class="fn-name">DeleteLine(line)</span><span class="fn-desc">erase lines/tokens/lineStates, InsertDirtyLine</span></li>
+            <li><span class="fn-name">CreateLine(line [,content])</span><span class="fn-desc">emplace + inherit LexerState</span></li>
+            <li><span class="fn-name">SplitLine(line, col)</span><span class="fn-desc">splits string, returns right fragment</span></li>
+            <li><span class="fn-name">PushBackLineFragment(src, dst)</span><span class="fn-desc">appends src line to dst (backspace at col 0)</span></li>
+            <li><span class="fn-name">Tokenize()</span><span class="fn-desc">full re-lex of all lines via LexLine()</span></li>
+            <li><span class="fn-name">InsertDirtyLine(line)</span><span class="fn-desc">adds to dirtyLines unordered_set</span></li>
+            <li><span class="fn-name">RetokenizeDirtyLines()</span><span class="fn-desc">re-lex from min dirty line, stabilise on state match</span></li>
+            <li><span class="fn-name">Draw(cursorX, cursorY, consoleOpen, cW)</span><span class="fn-desc">scissor-clipped token render, line numbers, marks, autocomplete popup</span></li>
+            <li><span class="fn-name">ClampCursor(cursor)</span><span class="fn-desc">clamps col/line to actual content bounds</span></li>
+            <li><span class="fn-name">AddMark/RemoveMark(line)</span><span class="fn-desc">vector&lt;InfileMark&gt; + ReIndex factory</span></li>
+            <li><span class="fn-name">SaveMarks() / LoadMarks()</span><span class="fn-desc">hex-encoded sidecar .marks file</span></li>
+            <li><span class="fn-name">Info()</span><span class="fn-desc">returns metadata string for :i directive</span></li>
+            <li><span class="fn-name">GetMarksAndNearbyLinesMessageString()</span><span class="fn-desc">context lines around each mark</span></li>
+          </ul>
+          <div class="calls-badge">
+            owns: <span>vector&lt;string&gt; lines</span><span>vector&lt;vector&lt;Token&gt;&gt; tokens</span>
+            <span>unordered_set&lt;ui32&gt; dirtyLines</span><span>vector&lt;LexerState&gt; lineStates</span>
+            <span>Language lang</span><span>InfileAutocomplete autocomplete</span>
+            <span>vector&lt;InfileMark&gt; marks</span><span>CursorManager cursors</span>
+            <span>Camera cam</span><span>Offset off</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Language &amp; Lex</div>
+      <div class="nodes-container">
+        <div class="node n-file" id="n-lang">
+          <div class="node-title">Language</div>
+          <div class="node-file">CBLT_Language.hpp / .cpp</div>
+          <div class="node-desc">Reads a <code>.cbltconf</code> lang file (60+ languages mapped in gLangFiles). Populates keyword sets, operator set, comment/string delimiters, macros, annotations, and language settings flags.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Language(FileExtension)</span><span class="fn-desc">looks up gLangFiles, calls ReadLangFile</span></li>
+            <li><span class="fn-name">ReadLangFile(fname)</span><span class="fn-desc">parses %keywords:, %operators:, %commentBlock:, %settings: sections</span></li>
+            <li><span class="fn-name">IsKeyword(string)</span><span class="fn-desc">checks all 6 keyword unordered_sets</span></li>
+            <li><span class="fn-name">IsOp(string)</span><span class="fn-desc">checks operators set</span></li>
+          </ul>
+          <div class="calls-badge">
+            struct: <span>LanguageKeywords</span><span>LanguageSettings</span>
+            global: <span>gLangFiles (unordered_map&lt;FileExtension, string&gt;)</span>
+          </div>
+        </div>
+        <div class="node n-file" id="n-lex">
+          <div class="node-title">Lexer — LexLine()</div>
+          <div class="node-file">CBLT_Lex.hpp / .cpp</div>
+          <div class="node-desc">Stateless function. Takes a line string + previous LexerState, produces a vector of Tokens, returns new state. Handles block comments across lines via LexerState::INBLOCK.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">LexLine(s, line, state, lang, tokens)</span><span class="fn-desc">full single-line lex pass</span></li>
+          </ul>
+          <div class="calls-badge">
+            order: <span>INBLOCK cont.</span><span>block comment open</span><span>line comment</span><span>macro/annotation</span><span>string</span><span>operator</span><span>punctuation</span><span>identifier/keyword</span><span>number</span><span>misc fallthrough</span>
+            <br>enum: <span>LexerState {NONE, INBLOCK, INCOMMENT, INMACRO, INANNOTATION, INSTRING}</span>
+          </div>
+        </div>
+        <div class="node n-file" id="n-token">
+          <div class="node-title">Token</div>
+          <div class="node-file">CBLT_Token.hpp / .cpp</div>
+          <div class="node-desc">POD-like: type, line, col, len. TokenColor() maps type → gPalette colour. GetCursorX() accumulates glyph advance widths up to a column for pixel-accurate rendering.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Token(tc, line, col, len)</span><span class="fn-desc">direct field init</span></li>
+            <li><span class="fn-name">TokenColor()</span><span class="fn-desc">switch(type) → gPalette.lex_*</span></li>
+            <li><span class="fn-name">GetCursorX(lineText, fontSize, column)</span><span class="fn-desc">UTF-8 codepoint advance sum</span></li>
+          </ul>
+          <div class="calls-badge">enum: <span>TokenClass {ID, KEYWORD, NUM, STRING, COMMENT, OPERATOR, WHITESPACE, PUNCTUATION, MISC, UNKNOWN, FUNCTION}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Cursor System</div>
+      <div class="nodes-container">
+        <div class="node n-file" id="n-cm">
+          <div class="node-title">CursorManager</div>
+          <div class="node-file">CBLT_Cursor.hpp / .cpp</div>
+          <div class="node-desc">Holds vector&lt;Cursor&gt; activeCursors. Manages multi-cursor add/remove and pending requests (lead/trail/reset) resolved each frame via HandlePendingRequests().</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">AddCursorAt(col, line)</span><span class="fn-desc">emplace_back</span></li>
+            <li><span class="fn-name">RemoveCursorAt(col, line)</span><span class="fn-desc">find + erase</span></li>
+            <li><span class="fn-name">RemoveSecondaries()</span><span class="fn-desc">erase [1..end]</span></li>
+            <li><span class="fn-name">HandlePendingRequests(lineCount)</span><span class="fn-desc">processes requestReset, requestLead, requestTrail</span></li>
+            <li><span class="fn-name">DrawCursors(font, xOff, yOff, off)</span><span class="fn-desc">calls Cursor::Draw on each</span></li>
+            <li><span class="fn-name">Primary()</span><span class="fn-desc">activeCursors[0] ref</span></li>
+            <li><span class="fn-name">RequestReset/Lead/Trail()</span><span class="fn-desc">set boolean flags</span></li>
+          </ul>
+        </div>
+        <div class="node n-file" id="n-cursor">
+          <div class="node-title">Cursor</div>
+          <div class="node-file">CBLT_Cursor.hpp / .cpp</div>
+          <div class="node-desc">Holds column, line, select start/end fields, mode (INSERT/SELECT), fragment string. Owns an Animator for smooth movement. Draw() uses BeginScissorMode to clip below the topbar.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">SetAt(col, line, targetLine)</span><span class="fn-desc">clamps col, calls animator.MoveTo()</span></li>
+            <li><span class="fn-name">Up/Down/Left/Right(targetLine)</span><span class="fn-desc">delegates to SetAt</span></li>
+            <li><span class="fn-name">Draw(font, xOff, yOff, off)</span><span class="fn-desc">animator.Update(), DrawSelection if SELECT, draws symbol</span></li>
+            <li><span class="fn-name">DrawSelection(font, xOff, yOff, off)</span><span class="fn-desc">multi-line selection rects</span></li>
+            <li><span class="fn-name">GetCursorX(lineText, fontSize)</span><span class="fn-desc">UTF-8 glyph advance sum to column</span></li>
+            <li><span class="fn-name">AcquireFragment(col, line)</span><span class="fn-desc">walk left/right to word boundary → fragment</span></li>
+            <li><span class="fn-name">SetToWordBoundary(text, dir, lineCount)</span><span class="fn-desc">Ctrl+←/→ word jump logic</span></li>
+            <li><span class="fn-name">ClampToCamera(cam, line, off)</span><span class="fn-desc">adjusts off.x/y to keep cursor in view margin</span></li>
+            <li><span class="fn-name">StartSelection/StopSelection()</span><span class="fn-desc">captures start/final col+line</span></li>
+            <li><span class="fn-name">Classify(c)</span><span class="fn-desc">INWORD / WHITESPACE / SYMBOL</span></li>
+          </ul>
+          <div class="calls-badge">owns: <span>Animator animator</span><span>CursorSymbol* cursorSymbol</span></div>
+        </div>
+        <div class="node n-file" id="n-auto">
+          <div class="node-title">InfileAutocomplete</div>
+          <div class="node-file">CBLT_InfileAutocomplete.hpp / .cpp</div>
+          <div class="node-desc">Token-indexed suggestion engine. Maintains per-line token sets and a global set. Merges language keywords. Renders a scrollable popup box that flips above cursor if near screen bottom.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">LoadTokens(fileTokens, fileText, lang)</span><span class="fn-desc">builds lineTokens[] + allTokens from full lex pass, merges lang keywords</span></li>
+            <li><span class="fn-name">UpdateLine(line, tokens, text)</span><span class="fn-desc">evicts old line tokens, inserts new ones</span></li>
+            <li><span class="fn-name">GetSuggestions(fragment)</span><span class="fn-desc">prefix scan over tokens vector (max 27 results)</span></li>
+            <li><span class="fn-name">DrawSuggestions(cursorX, cursorY)</span><span class="fn-desc">sliding window of 6, highlights current, flips if near bottom</span></li>
+            <li><span class="fn-name">Up/Down()</span><span class="fn-desc">navigate current index</span></li>
+            <li><span class="fn-name">Open/Close/Dismiss/Valid()</span><span class="fn-desc">state machine: open, dismissed, closed</span></li>
+            <li><span class="fn-name">GetCurrentSuggestion()</span><span class="fn-desc">returns suggestions[current]</span></li>
+          </ul>
+          <div class="calls-badge">state: <span>open bool</span><span>dismissed bool</span> — dismissed prevents reopen until Valid() called</div>
+        </div>
+        <div class="node n-file" id="n-mark">
+          <div class="node-title">InfileMark</div>
+          <div class="node-file">CBLT_InfileMark.hpp / .cpp</div>
+          <div class="node-desc">A line bookmark with a sequential id. Persisted to a hex-encoded sidecar file under meta/marks/. Drawn as a coloured rect + id number on the right margin of the file view.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">InfileMark(line)</span><span class="fn-desc">sets id=0, line=l</span></li>
+            <li><span class="fn-name">Draw(renderX, renderY, width)</span><span class="fn-desc">DrawRectangle + DrawTextEx id</span></li>
+            <li><span class="fn-name">ReIndex(i)</span><span class="fn-desc">called after any mark add/remove</span></li>
+            <li><span class="fn-name">Line() / Id()</span><span class="fn-desc">getters</span></li>
+          </ul>
+          <div class="calls-badge">persistence: <span>MarkFileEncode(path)</span> hex-encodes full path → sidecar filename</div>
+        </div>
+        <div class="node n-file" id="n-cam">
+          <div class="node-title">Camera + Offset</div>
+          <div class="node-file">CBLT_Camera.hpp / .cpp</div>
+          <div class="node-desc">Axis-aligned 2D viewport. Each File and FileQueue has its own Camera. Console has one too. Offset (x,y) is the scroll position. ClampToCamera in Cursor adjusts Offset to keep cursor inside the margin.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Set(x, y, off)</span><span class="fn-desc">sets off.x/y directly</span></li>
+            <li><span class="fn-name">Move(dx, dy, off)</span><span class="fn-desc">off.x/y += delta</span></li>
+            <li><span class="fn-name">Contains(x, y, w, h)</span><span class="fn-desc">AABB check vs origin+width/height</span></li>
+            <li><span class="fn-name">SetOrigin/SetWidth/SetHeight()</span><span class="fn-desc">resize after window resize</span></li>
+            <li><span class="fn-name">MarginX/Y()</span><span class="fn-desc">scroll trigger zone (90px / 60px)</span></li>
+          </ul>
+          <div class="calls-badge">struct: <span>Offset {f32 x, y}</span><span>CameraOrigin {i32 x, y}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Platform Layer</div>
+      <div class="nodes-container">
+        <div class="node n-plat" id="n-dialog">
+          <div class="node-title">Dialog</div>
+          <div class="node-file">CBLT_Dialog.hpp</div>
+          <div class="node-desc">Native folder picker. Three separate TU implementations selected by preprocessor. Linux cascades: zenity → kdialog → yad → dialog → whiptail → xdg-open.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">OpenFolderPicker()</span><span class="fn-desc">returns selected path string</span></li>
+            <li><span class="fn-name">RunCommand(cmd)</span><span class="fn-desc">popen (POSIX) / IFileDialog COM (Win32)</span></li>
+            <li><span class="fn-name">OpenFolderPickerPortal()</span><span class="fn-desc">Linux: xdg-desktop-portal variant</span></li>
+          </ul>
+          <div class="calls-badge">Win32: <span>CoCreateInstance(CLSID_FileOpenDialog)</span><span>FOS_PICKFOLDERS</span><span>WideCharToMultiByte</span><br>global: <span>gDialog</span></div>
+        </div>
+        <div class="node n-plat" id="n-shell">
+          <div class="node-title">ShellBridge</div>
+          <div class="node-file">CBLT_ShellBridge.hpp</div>
+          <div class="node-desc">Spawns a native terminal in the current cwd. POSIX forks and execlp with a bash --init-file command that sources .bashrc. Win32 builds a command string for cmd/powershell/wt and calls CreateProcessA.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Execute(cmd, cwd)</span><span class="fn-desc">spawn terminal; returns cwd string</span></li>
+          </ul>
+          <div class="calls-badge">
+            POSIX: <span>fork()</span><span>chdir(cwd)</span><span>execlp(term, "-e", "bash", "-c", cmd)</span>
+            <br>Win32: <span>CreateProcessA()</span><span>CREATE_NEW_CONSOLE</span>
+            <br>global: <span>gShellBridge</span>
+          </div>
+        </div>
+        <div class="node n-plat" id="n-sys">
+          <div class="node-title">Sys</div>
+          <div class="node-file">CBLT_Sys.hpp / .cpp</div>
+          <div class="node-desc">Two thin free functions. ResourcePath reads CBLT_RESOURCES env var on Linux, returns "." on other platforms. WorkingDirectory returns argv[1] on Linux, getcwd on macOS, "C:/" on Win32.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">Sys::ResourcePath()</span><span class="fn-desc">getenv("CBLT_RESOURCES") or "."</span></li>
+            <li><span class="fn-name">Sys::WorkingDirectory(argc, argv)</span><span class="fn-desc">argv[1] / getcwd / "C:/"</span></li>
+          </ul>
+        </div>
+        <div class="node n-plat" id="n-util">
+          <div class="node-title">Util / Types</div>
+          <div class="node-file">CBLT_Util.hpp</div>
+          <div class="node-desc">Typedefs under UT namespace. Error log (append to log/dir.log). Utility functions. FileMargins layout constants used by File::Draw and Cursor::ClampToCamera.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">UE::Log(msg)</span><span class="fn-desc">gLogFile &lt;&lt; "CBLT_LOG: " &lt;&lt; msg</span></li>
+            <li><span class="fn-name">UE::Init()</span><span class="fn-desc">opens log/dir.log in append mode</span></li>
+            <li><span class="fn-name">UF::Trim(str)</span><span class="fn-desc">strips whitespace both ends</span></li>
+            <li><span class="fn-name">UF::TrimLeadingColon(str)</span><span class="fn-desc">strips ':' prefix from directive</span></li>
+            <li><span class="fn-name">UF::C(r,g,b)</span><span class="fn-desc">cblt_color constructor (avoids WIN32 collision)</span></li>
+            <li><span class="fn-name">UF::MarkFileEncode(path)</span><span class="fn-desc">hex-encodes path string → sidecar filename</span></li>
+          </ul>
+          <div class="calls-badge">macros: <span>UT</span> = Types  <span>UE</span> = Err  <span>UF</span> = Func  <span>UDef</span> = Def</div>
+        </div>
+        <div class="node n-plat" id="n-ext">
+          <div class="node-title">FileExtension</div>
+          <div class="node-file">CBLT_FileExtension.hpp</div>
+          <div class="node-desc">Enum of 60+ extension types. AssignExtension() maps a file path's extension string to the enum value used to select a language conf.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">AssignExtension(path)</span><span class="fn-desc">find_last_of('.'), string match → FileExtension enum</span></li>
+          </ul>
+          <div class="calls-badge">called by: <span>File::Load()</span> to pick Language</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="section-label">Render &amp; Base</div>
+      <div class="nodes-container">
+        <div class="node n-render" id="n-topbar">
+          <div class="node-title">DrawInfo (TopBar)</div>
+          <div class="node-file">CBLT_TopBar.hpp / .cpp</div>
+          <div class="node-desc">Free function called each frame from main loop. Draws the top status bar: col/line, line count, dirty state, cursor mode, filename, lang conf name, cursor fragment, CWD. Two vertical separators.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">DrawInfo(cursor, lineCount, dirty, fname, cwd, conf)</span><span class="fn-desc">MeasureTextEx → positions, DrawTextEx × 8, DrawLine × 2</span></li>
+          </ul>
+          <div class="calls-badge">reads: <span>gTopBarFont</span><span>gPalette</span><span>cursor.Col/Line/Fragment/GetMode()</span></div>
+        </div>
+        <div class="node n-render" id="n-cursor-sym">
+          <div class="node-title">CursorSymbol</div>
+          <div class="node-file">CBLT_CursorSymbol.hpp</div>
+          <div class="node-desc">Enum controlling cursor glyph style. Stored in gSettings, pointed to by each Cursor. Cursor::Draw() switches on this to render underscore, box, hollow box, or line cursor.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">NON_ASCII_UNDERSCORE</span><span class="fn-desc">1px rect at baseline</span></li>
+            <li><span class="fn-name">NON_ASCII_BOX</span><span class="fn-desc">filled rect glyph-width × font-height</span></li>
+            <li><span class="fn-name">NON_ASCII_HOLLOW_BOX</span><span class="fn-desc">outline rect</span></li>
+            <li><span class="fn-name">NON_ASCII_LINE</span><span class="fn-desc">1px wide vertical bar</span></li>
+          </ul>
+        </div>
+        <div class="node n-raylib" id="n-raylib">
+          <div class="node-title">raylib (CBLT_raylib.hpp)</div>
+          <div class="node-file">platform-specific include path</div>
+          <div class="node-desc">The only external dependency. Platform include path selected by preprocessor. Provides window management, font loading, 2D drawing, audio, input, scissor mode, and clipboard.</div>
+          <ul class="fn-list">
+            <li><span class="fn-name">InitWindow / CloseWindow / WindowShouldClose</span><span class="fn-desc">Win lifecycle</span></li>
+            <li><span class="fn-name">BeginDrawing / EndDrawing / ClearBackground</span><span class="fn-desc">frame fence</span></li>
+            <li><span class="fn-name">LoadFontEx / DrawTextEx / MeasureTextEx</span><span class="fn-desc">font + text</span></li>
+            <li><span class="fn-name">DrawRectangle / DrawRectangleLines / DrawLine / DrawLineV</span><span class="fn-desc">primitives</span></li>
+            <li><span class="fn-name">BeginScissorMode / EndScissorMode</span><span class="fn-desc">clipping</span></li>
+            <li><span class="fn-name">InitAudioDevice / LoadSound / PlaySound / SetSoundPitch</span><span class="fn-desc">audio</span></li>
+            <li><span class="fn-name">GetCharPressed / IsKeyPressed / IsKeyPressedRepeat / IsKeyDown</span><span class="fn-desc">input</span></li>
+            <li><span class="fn-name">GetMousePosition / IsMouseButtonPressed / GetMouseWheelMove</span><span class="fn-desc">mouse</span></li>
+            <li><span class="fn-name">GetClipboardText / SetClipboardText</span><span class="fn-desc">clipboard</span></li>
+            <li><span class="fn-name">GetScreenWidth / GetScreenHeight</span><span class="fn-desc">layout queries</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="side-inspector" id="inspector">
+  <div class="inspector-placeholder" id="inspector-placeholder">
+    <span>Click any node in the architecture diagram to inspect its parameters, functions, and incoming dependencies.</span>
+  </div>
+  <div class="inspector-content" id="inspector-content">
+    <div class="inspector-header" id="ins-header">
+      <div class="inspector-title" id="ins-title">Module Title</div>
+      <div class="inspector-file" id="ins-file">Filename.cpp</div>
+    </div>
+    <div class="inspector-body">
+      <div>
+        <div class="inspector-section-title">Description</div>
+        <div class="inspector-desc" id="ins-desc">Description details go here...</div>
+      </div>
+      <div id="ins-functions-wrapper">
+        <div class="inspector-section-title">Internal Context &amp; Interfaces</div>
+        <div id="ins-functions"></div>
+      </div>
+      <div>
+        <div class="inspector-section-title">Incoming Connections &amp; Labels</div>
+        <ul class="panel-labels-list" id="ins-incoming-labels">
+          </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CONNECTIONS = [
+  ['n-main',     'n-win',        'Initializes UI context window parameters',   false],
+  ['n-main',     'n-settings',   'Parses configuration core variables file',   false],
+  ['n-main',     'n-font',       'Pre-renders font engine glyph metrics map',  false],
+  ['n-main',     'n-sound',      'Loads hardware device audio sample buffers', false],
+  ['n-main',     'n-palette',    'Loads active document syntax color arrays',  false],
+  ['n-main',     'n-ctrl',       'ctrl.Update() hardware execution stream',   false],
+  ['n-settings', 'n-anim',       'ReadAnimationFile() properties profile',     false],
+  ['n-anim',     'n-interp',     'Resolves active spring translation curves',   false],
+  ['n-ctrl',     'n-kb',         'Evaluates mod hardware bit flags keys',      false],
+  ['n-ctrl',     'n-fq',         'Passes active focus context view swaps',      false],
+  ['n-ctrl',     'n-console',    'Intercepts right overlay panel toggle hook',  false],
+  ['n-fq',       'n-file',       'Active() operational document instance lookup',false],
+  ['n-file',     'n-lang',       'Load() active structural language context',  false],
+  ['n-file',     'n-lex',        'LexLine() text token processing engine',     false],
+  ['n-file',     'n-token',      'Generates structural render positioning maps',false],
+  ['n-file',     'n-cm',         'Monitors document multi-caret arrays layout',false],
+  ['n-file',     'n-auto',       'Pushes text context keys to visual filter',  false],
+  ['n-file',     'n-mark',       'Commits line bookmarks persistence metadata',false],
+  ['n-file',     'n-cam',        'Updates viewport transformation boundaries', false],
+  ['n-lang',     'n-lex',        'Injects comment symbols delimiters limits',   true],
+  ['n-lex',      'n-token',      'Maps raw text offset slices to safe enums',  false],
+  ['n-cm',       'n-cursor',     'Instantiates document context carets traces',false],
+  ['n-cursor',   'n-anim',       'MoveTo() smooth displacement targets hooks',  true],
+  ['n-console',  'n-directive',  'Forwards query parameters buffer lines',     false],
+  ['n-console',  'n-ctoken',     'GetCWDContents filesystem directory lists',  false],
+  ['n-console',  'n-dialog',     ':o directive native folder dialog wizard',   true],
+  ['n-console',  'n-shell',      ':sh terminal sub-process interactive stream',true],
+  ['n-console',  'n-fq',         'Execute(Q,cwd) background task allocation',  true],
+  ['n-file',     'n-ext',        'AssignExtension string signature evaluation',true],
+  ['n-ext',      'n-lang',       'Determines appropriate target conf mapping',  true],
+  ['n-settings', 'n-sys',        'ResourcePath() directory lookup configurations',true],
+  ['n-main',     'n-sys',        'WorkingDir() environment fallback metrics',  true],
+  ['n-file',     'n-util',       'UE::Log() centralized status execution stream',true],
+  ['n-main',     'n-topbar',     'DrawInfo() workspace parameters visualization',false],
+  ['n-cursor',   'n-cursor-sym', 'Infers visual carets display graphics metrics',true],
+  ['n-file',     'n-raylib',     'DrawTextEx() screen matrix layout commands',  true],
+  ['n-console',  'n-raylib',     'DrawRectangle() background clip masks print', true],
+  ['n-win',      'n-raylib',     'InitWindow() application framework handle',  false],
+  ['n-sound',    'n-raylib',     'InitAudioDevice() setup streaming context',   false],
+  ['n-font',     'n-raylib',     'LoadFontEx() glyph metrics loading target',  false]
+];
+
+let selectedNodeId = null;
+
+function drawArrows() {
+  const canvas  = document.getElementById('canvas');
+  const svg     = document.getElementById('connectors');
+  const canvR   = canvas.getBoundingClientRect();
+
+  svg.innerHTML = svg.innerHTML.split('</defs>')[0] + '</defs>';
+
+  CONNECTIONS.forEach(([fromId, toId, label, dashed]) => {
+    const fromEl = document.getElementById(fromId);
+    const toEl   = document.getElementById(toId);
+    if (!fromEl || !toEl) return;
+
+    const fR = fromEl.getBoundingClientRect();
+    const tR = toEl.getBoundingClientRect();
+
+    const fx = fR.left - canvR.left;
+    const fy = fR.top  - canvR.top;
+    const tx = tR.left - canvR.left;
+    const ty = tR.top  - canvR.top;
+
+    const x1 = fx + fR.width / 2;
+    const y1 = fy + fR.height;
+    const x2 = tx + tR.width / 2;
+    const y2 = ty;
+
+    const mx = x1; 
+    const my = y1 + (y2 - y1) / 2;
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('data-to', toId);
+    g.setAttribute('data-from', fromId);
+    
+    let isPathActive = (selectedNodeId !== null && toId === selectedNodeId);
+    g.setAttribute('class', 'arrow-group' + (isPathActive ? ' active-path' : ''));
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`);
+    path.setAttribute('class', dashed ? 'arr-dashed' : 'arr-line');
+    
+    path.setAttribute('marker-end', isPathActive ? 'url(#arr-head-active)' : (dashed ? 'url(#arr-head-dim)' : 'url(#arr-head)'));
+    
+    g.appendChild(path);
+    svg.appendChild(g);
+  });
+}
+
+function handleNodeClick(nodeEl) {
+  const nodeId = nodeEl.id;
+
+  if (selectedNodeId === nodeId) {
+    selectedNodeId = null;
+    nodeEl.classList.remove('selected');
+    document.getElementById('inspector-placeholder').style.display = 'flex';
+    document.getElementById('inspector-content').style.display = 'none';
+  } else {
+    document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+    selectedNodeId = nodeId;
+    nodeEl.classList.add('selected');
+    populateInspector(nodeEl);
+  }
+
+  drawArrows();
+}
+
+function populateInspector(nodeEl) {
+  const title = nodeEl.querySelector('.node-title').textContent;
+  const file = nodeEl.querySelector('.node-file').textContent;
+  const desc = nodeEl.querySelector('.node-desc').textContent;
+  const fnList = nodeEl.querySelector('.fn-list');
+  const callsBadge = nodeEl.querySelector('.calls-badge');
+
+  const accentColor = window.getComputedStyle(nodeEl).getPropertyValue('--accent');
+  document.getElementById('inspector').style.setProperty('--panel-accent', accentColor);
+
+  document.getElementById('ins-title').textContent = title;
+  document.getElementById('ins-file').textContent = file;
+  document.getElementById('ins-desc').textContent = desc;
+
+  const fnContainer = document.getElementById('ins-functions');
+  fnContainer.innerHTML = '';
+  
+  if (fnList || callsBadge) {
+    document.getElementById('ins-functions-wrapper').style.display = 'block';
+    if (fnList) {
+      const cloneList = fnList.cloneNode(true);
+      fnContainer.appendChild(cloneList);
+    }
+    if (callsBadge) {
+      const cloneBadge = callsBadge.cloneNode(true);
+      fnContainer.appendChild(cloneBadge);
+    }
+  } else {
+    document.getElementById('ins-functions-wrapper').style.display = 'none';
+  }
+
+  const incomingLabelsList = document.getElementById('ins-incoming-labels');
+  incomingLabelsList.innerHTML = '';
+
+  const incomingConnections = CONNECTIONS.filter(([_, toId]) => toId === nodeEl.id);
+
+  if (incomingConnections.length === 0) {
+    const emptyLi = document.createElement('li');
+    emptyLi.style.color = 'var(--text3)';
+    emptyLi.style.fontSize = '11px';
+    emptyLi.style.fontFamily = 'IBM Plex Mono, monospace';
+    emptyLi.textContent = 'No incoming execution paths map directly to this module.';
+    incomingLabelsList.appendChild(emptyLi);
+  } else {
+    incomingConnections.forEach(([fromId, _, labelText]) => {
+      const callerNode = document.getElementById(fromId);
+      const callerName = callerNode ? callerNode.querySelector('.node-title').textContent : fromId;
+      
+      const li = document.createElement('li');
+      
+      const callerDiv = document.createElement('div');
+      callerDiv.className = 'lbl-caller';
+      callerDiv.textContent = callerName;
+      
+      const textDiv = document.createElement('div');
+      textDiv.className = 'lbl-text';
+      textDiv.textContent = labelText || 'Implicit reference dependency';
+      
+      li.appendChild(callerDiv);
+      li.appendChild(textDiv);
+      incomingLabelsList.appendChild(li);
+    });
+  }
+
+  document.getElementById('inspector-placeholder').style.display = 'none';
+  document.getElementById('inspector-content').style.display = 'flex';
+}
+
+function setupClickListeners() {
+  document.querySelectorAll('.node').forEach(node => {
+    node.addEventListener('click', (e) => {
+      handleNodeClick(e.currentTarget);
+    });
+  });
+}
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    drawArrows();
+    setupClickListeners();
+  }, 150);
+  window.addEventListener('resize', drawArrows);
+});
+</script>
+</body>
+</html>

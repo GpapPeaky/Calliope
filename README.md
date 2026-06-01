@@ -1,4 +1,4 @@
-# CoBaLT (v2.1.0 Svedberg)
+# CoBaLT (v2.1.1 Svedberg)
 
 **The Console-Oriented Basic Line Transformer** is a lightweight, keyboard-driven text editor built on [raylib](https://www.raylib.com/). The philosophy behind CoBaLT is simple: modern editors are bloated, and Vim takes years to master. CoBaLT aims to capture the **lightweightness, customization, and visual simplicity** of modal editors like Vim, while remaining immediately approachable — no learning curve, no plugin ecosystem to maintain, no LSP daemon eating your RAM.
 

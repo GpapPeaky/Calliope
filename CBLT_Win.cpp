@@ -1,7 +1,7 @@
 #include "CBLT_Win.hpp"
 
 namespace CBLT {
-    std::string Version = std::string("CoBaLT v2.1.0");
+    std::string Version = std::string("CoBaLT v2.1.1");
     
     namespace Win {
 
