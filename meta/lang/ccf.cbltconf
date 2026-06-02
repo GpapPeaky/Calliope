@@ -1,7 +1,4 @@
-! CoBaLT Config File
-
 %lang DATA
-
     %keywords:
         %controlFlow:
         %end
@@ -26,7 +23,7 @@
     %end
 
     %commentBlock:
-        
+        !* *!
     %end
 
     %commentLine:

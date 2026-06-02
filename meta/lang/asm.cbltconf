@@ -1,5 +1,4 @@
 %lang CLASS_SCRIPT
-
     %keywords:
         %controlFlow:
             jmp je jne jz jnz ja jae jb jbe jg jge jl jle

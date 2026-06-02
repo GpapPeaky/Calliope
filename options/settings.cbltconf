@@ -8,6 +8,8 @@
 !   by GpapPeaky                                                                  !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!* Multiline comments work like this *!
+
 %settings
     USER_TERMINAL_POSIX : kitty
     USER_TERMINAL_WIN32 : pwsh.exe
@@ -55,10 +57,10 @@
 ! assets/font/ folder.                 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    TEXT_FONT            : TerminessNerdFontMono-Regular 
-    CONSOLE_FONT         : TerminessNerdFontMono-Regular
-    TOPBAR_FONT          : TerminessNerdFontMono-Regular
-    FQ_FONT              : TerminessNerdFontMono-Regular
+!*    TEXT_FONT            : TerminessNerdFontMono-Regular *! 
+!*    CONSOLE_FONT         : TerminessNerdFontMono-Regular *!
+!*    TOPBAR_FONT          : TerminessNerdFontMono-Regular *!
+!*    FQ_FONT              : TerminessNerdFontMono-Regular *!
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! FROM options/anim/                    !

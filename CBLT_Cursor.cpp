@@ -79,7 +79,7 @@ namespace CBLT {
         this->column = col;
         this->line = line;
 
-        // Animation trigger here
+        // Animation trigger here, might need some tinkering later specifically with cursor x calculation
         UT::f32 targetX = GetCursorX(targetLine, gFont.size);
         UT::f32 targetY = line * gFont.size;
 

@@ -1,5 +1,4 @@
 %lang CLASS_CLIKE
-
     %keywords:
         %controlFlow:
             if else switch case default

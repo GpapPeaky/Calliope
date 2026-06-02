@@ -28,7 +28,7 @@ void Language::ReadLangFile(std::string fname) {
     while (std::getline(file, line)) {
         line = UF::Trim(line);
 
-        if (line.empty() || line[0] == '!') continue;
+        if (line.empty()) continue; // if it is '!' it won't find it 
 
         if (line == "%keywords:")            { current = LanguageLoaderSection::KEYWORDS; continue; }
         if (line == "%controlFlow:")         { current = LanguageLoaderSection::CONTROL_FLOW; continue; }
