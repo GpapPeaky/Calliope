@@ -55,18 +55,15 @@
 ! in the config file needs to be       !
 ! exactly the same as in the           !
 ! assets/font/ folder.                 !
+!                                      !
+! The number next to the font name     !
+! is it's initial TAB_SIZE             !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-!*
-    TEXT_FONT            : DG_One
-    TEXT_FONT_SIZE       : 17 
-    CONSOLE_FONT         : DG_One
-    CONSOLE_FONT_SIZE    : 15
-    TOPBAR_FONT          : DG_One
-    TOPBAR_FONT_SIZE     : 15
-    FQ_FONT              : DG_One
-    FQ_FONT_SIZE         : 15
-*!
+    TEXT_FONT            : DG_One 17
+    CONSOLE_FONT         : DG_One 15
+    TOPBAR_FONT          : DG_One 15
+    FQ_FONT              : DG_One 15
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! FROM options/anim/                    !

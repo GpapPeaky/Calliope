@@ -158,6 +158,18 @@ namespace CBLT {
                     std::cerr << ("\t    Overshoot: " + std::to_string(this->OPTION_ANIM_ConsoleContent.overshoot) + "\n");
                     std::cerr << ("\t    Stiffness: " + std::to_string(this->OPTION_ANIM_ConsoleContent.stiffness) + "\n");
                 }
+                else if (token == "TEXT_FONT") {
+
+                }
+                else if (token == "CONSOLE_FONT") {
+
+                }
+                else if (token == "FQ_FONT") {
+
+                }
+                else if (token == "TOPBAR_FONT") {
+
+                }
                 else {
                     std::cerr <<  ("INVALID SETTINGS TOKEN AT LINE: " + line + "\n");
                 } 
@@ -167,8 +179,6 @@ namespace CBLT {
             
             if (!inBlock) continue;
         }
-
-
     }
 
     EditorSettings gSettings;
