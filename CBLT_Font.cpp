@@ -12,20 +12,22 @@ namespace CBLT {
         std::vector<UT::i32> glyphs;
     
         // Basic ASCII
-        for (int i = 32; i < 127; i++)
+        for (int i = 32; i < 127; i++) {
             glyphs.push_back(i);
+        }
     
         // Box Drawing ─ │ ┌ ┐ └ ┘ etc.
-        for (int i = 0x2500; i <= 0x257F; i++)
+        for (int i = 0x2500; i <= 0x257F; i++) {
             glyphs.push_back(i);
+        }
     
         // Block Elements ░ ▒ ▓ █
-        for (int i = 0x2580; i <= 0x259F; i++)
+        for (int i = 0x2580; i <= 0x259F; i++) {
             glyphs.push_back(i);
+        }
     
         return glyphs;
     }
-
 
     void EditorFont::Load(std::string fontName) {
         auto glyphs = BuildGlyphSet();

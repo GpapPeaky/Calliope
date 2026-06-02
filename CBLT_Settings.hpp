@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "CBLT_Animation.hpp"    // For animation profiles
+#include "CBLT_Font.hpp"         // For all font configurations
 #include "CBLT_CursorSymbol.hpp" // For cursor symbol enum
 
 namespace CBLT {
