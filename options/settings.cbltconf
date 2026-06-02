@@ -57,10 +57,14 @@
 ! assets/font/ folder.                 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-!*    TEXT_FONT            : TerminessNerdFontMono-Regular *! 
-!*    CONSOLE_FONT         : TerminessNerdFontMono-Regular *!
-!*    TOPBAR_FONT          : TerminessNerdFontMono-Regular *!
-!*    FQ_FONT              : TerminessNerdFontMono-Regular *!
+!*    TEXT_FONT            : DG_one *! 
+!*    TEXT_FONT_SIZE       : 17 *! 
+!*    CONSOLE_FONT         : DG_one *!
+!*    CONSOLE_FONT_SIZE    : 15 *!
+!*    TOPBAR_FONT          : DG_one *!
+!*    TOPBAR_FONT_SIZE     : 15 *!
+!*    FQ_FONT              : DG_one *!
+!*    FQ_FONT_SIZE         : 15 *!
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! FROM options/anim/                    !

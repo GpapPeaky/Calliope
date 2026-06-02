@@ -518,11 +518,11 @@ namespace CBLT {
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_MINUS))) {
             if (gFont.size - 2 <= 7) return true; // No effect
             
-            const char* resource_path = getenv("CBLT_RESOURCES");
-            std::string resourceDir = resource_path ? std::string(resource_path) : ".";
+            // No need it has already saved the path to the font, with the first Load(...) call
+            // std::string resourceDir = Sys::ResourcePath();
 
             gFont.size -= 2; // Update size, reload font
-            gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+            gFont.Load(gFont.name);
             gFont.Config();
 
             cursor.charWidth = MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x;
@@ -534,11 +534,10 @@ namespace CBLT {
         if (keyboard.m.ctrl && (IsKeyPressed(KEY_EQUAL))) {
             if (gFont.size + 2 >= 45) return true; // No effect
 
-            const char* resource_path = getenv("CBLT_RESOURCES");
-            std::string resourceDir = resource_path ? std::string(resource_path) : ".";
+            // std::string resourceDir = Sys::ResourcePath();
 
             gFont.size += 2; // Update size, reload font
-            gFont.Load(resourceDir + "/assets/font/IBMPlexMono-Regular.ttf");
+            gFont.Load(gFont.name);
             gFont.Config();
         
             cursor.charWidth = MeasureTextEx(gFont.f, "A", gFont.size, 0.0f).x;

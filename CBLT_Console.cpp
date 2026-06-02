@@ -1363,11 +1363,11 @@ namespace CBLT {
         // Draw any console messages if any
         if (dirRes.messageType == ConsoleMessage::NONE) return;
         
-        const UT::ui32 directiveFontSize = 20;
+        const UT::ui32 directiveFontSize = gConsoleFont.size;
 
         const UT::i32 messageTextHorizontalMargins = 10;
         const UT::i32 messageTextVerticalMargins = 10;
-        const UT::i32 messageWidth = MeasureText(dirRes.message.c_str(), directiveFontSize);
+        const UT::i32 messageWidth = (UT::i32)MeasureTextEx(gConsoleFont.f, dirRes.message.c_str(), directiveFontSize, 0.0f).x;
 
         const UT::i32 msgX = (GetScreenWidth() / 2) - (messageWidth / 2);
         const UT::i32 msgY = (GetScreenHeight() / 2) - (directiveFontSize / 2);
@@ -1526,7 +1526,7 @@ namespace CBLT {
     }
 
     void Console::DrawGuide(void) {
-        const UT::ui32 directiveFontSize = 20;
+        const UT::ui32 directiveFontSize = gFont.size;
 
         UT::f32 textX;
         UT::f32 textY;

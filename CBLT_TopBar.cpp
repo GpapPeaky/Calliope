@@ -1,141 +1,246 @@
 #include "CBLT_TopBar.hpp"
 
 void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd, std::string conf) {
-    const UT::ui32 topBarFontSize = 25;
     const UT::ui32 topBarSeperatorY = (UT::ui32)CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y;
+
     const UT::ui32 topBarInfoVerticalShift = 12;
     const UT::ui32 topBarInfoHorizontalShift = 4;
-    const UT::ui32 topBarSecondColumnX = 100;
-    const UT::ui32 topBarCWDFilePathSeperatorX = 210;
-    const UT::ui32 topBarThirdColumnX = 220;
 
-    const std::string fnameAndConf = fname + " " + conf;
-    // We also render the file's lang .cbltconf name
-    const UT::ui32 filenameLen = MeasureTextEx(gTopBarFont.f, fnameAndConf.c_str(), topBarFontSize, 0.0f).x;
-    // const UT::ui32 CWDLen = MeasureTextEx(gTopBarFont.f, cwd.c_str(), topBarFontSize, 0.0f).x;
-
+    const UT::ui32 columnGap = 20;
+    const UT::ui32 sectionGap = 40;
     const UT::ui32 filenameToModeMargin = 10;
-    const UT::ui32 modePosition = filenameLen + filenameToModeMargin; 
+    const UT::ui32 fragmentMarginFromMode = 10;
 
-    const UT::i32 mode = (UT::i32)c.GetMode();
+    // Lambda to measure text width for the top bar font
+    auto TextWidth = [&](const std::string& str) -> UT::ui32 {
+        return static_cast<UT::ui32>(
+            MeasureTextEx(
+                gTopBarFont.f,
+                str.c_str(),
+                static_cast<float>(gTopBarFont.size),
+                0.0f
+            ).x
+        );
+    };
+
+    const UT::i32 mode = static_cast<UT::i32>(c.GetMode());
+
     const UT::ui32 col = c.Col();
     const UT::ui32 line = c.Line();
-    const std::string cursorFragment = c.Fragment();
-    const UT::ui32 fragmentMarginFromMode = 5;
 
-    // String to notify the user if the file is dirty (modified/unsaved) or clean (saved)    
+    const std::string cursorFragment = c.Fragment();
+
+    // Calculate after deciding font-relative strings and measurements
+    CBLT::FileMargins::UI::TOP_BAR_HEIGHT = topBarSeperatorY + topBarInfoVerticalShift;
+
+    // Dirty state
+
     std::string dirtyFile;
     Color dirtyColour;
+
     if (dirty) {
-        dirtyFile = std::string("dirty");
+        dirtyFile = "dirty";
         dirtyColour = gPalette.dirty;
     } else {
-        dirtyFile = std::string("clean");
+        dirtyFile = "clean";
         dirtyColour = gPalette.clean;
     }
 
+    // Mode string
+
     std::string modeString;
+
     if (mode == 0) {
-        modeString = std::string("INSERT");
+        modeString = "INSERT";
     } else if (mode == 1) {
-        modeString = std::string("SELECT");
+        modeString = "SELECT";
+    } else {
+        modeString = "UNKNOWN";
     }
 
-    const UT::ui32 modeAndFilenameWidth = modePosition + MeasureTextEx(gTopBarFont.f, modeString.c_str(), topBarFontSize, 0.0f).x;
-    
-    // Seperators
+    // Strings
 
-    // Draw top bar seperator
+    const std::string colStr =
+        "c: " + std::to_string(col);
+
+    const std::string lineStr =
+        "l: " + std::to_string(line);
+
+    const std::string lcStr =
+        "lc: " + std::to_string(lineCount);
+
+    const std::string dirtyStr =
+        "d: " + dirtyFile;
+
+    const std::string fnameAndConf =
+        fname + " " + conf;
+
+    // Measurements
+
+    const UT::ui32 colWidth   = TextWidth(colStr);
+    const UT::ui32 lineWidth  = TextWidth(lineStr);
+
+    const UT::ui32 lcWidth    = TextWidth(lcStr);
+    const UT::ui32 dirtyWidth = TextWidth(dirtyStr);
+
+    const UT::ui32 fileWidth =
+        TextWidth(fnameAndConf);
+
+    const UT::ui32 modeWidth =
+        TextWidth(modeString);
+
+    const UT::ui32 fragmentWidth =
+        TextWidth(cursorFragment);
+
+    // Column widths
+
+    const UT::ui32 firstColumnWidth =
+        std::max(colWidth, lineWidth);
+
+    const UT::ui32 secondColumnWidth =
+        std::max(lcWidth, dirtyWidth);
+
+    // Dynamic positions
+
+    const UT::ui32 secondColumnX =
+        topBarInfoHorizontalShift +
+        firstColumnWidth +
+        columnGap;
+
+    const UT::ui32 fileSectionX =
+        secondColumnX +
+        secondColumnWidth +
+        sectionGap;
+
+    const UT::ui32 modeX =
+        fileSectionX +
+        fileWidth +
+        filenameToModeMargin;
+
+    const UT::ui32 fragmentX =
+        modeX +
+        modeWidth +
+        fragmentMarginFromMode;
+
+    // Vertical separator after left information columns
+
+    const UT::ui32 cwdSeparatorX =
+        fileSectionX - (sectionGap / 2);
+
+    // Separators
+
     DrawLine(
         0,
         CBLT::FileMargins::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
-        static_cast<UT::f32>(GetScreenWidth()),
-        CBLT::FileMargins::UI::TOP_BAR_HEIGHT + topBarSeperatorY, 
-        gPalette.textSeperators
-    );
-
-    // Draw vertical seperator for cwd and filepath
-    DrawLine(
-        topBarCWDFilePathSeperatorX,
-        0,
-        topBarCWDFilePathSeperatorX,
+        static_cast<float>(GetScreenWidth()),
         CBLT::FileMargins::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
         gPalette.textSeperators
     );
 
-    // Draw cursor column and line data
-    DrawTextEx(
-        gTopBarFont.f,
-        (std::string("c: ") + std::to_string(col)).c_str(),
-        {topBarInfoHorizontalShift, 0},
-        topBarFontSize,
-        0.0f,
-        gPalette.lineInfo
+    DrawLine(
+        cwdSeparatorX,
+        0,
+        cwdSeparatorX,
+        CBLT::FileMargins::UI::TOP_BAR_HEIGHT + topBarSeperatorY,
+        gPalette.textSeperators
     );
-    
+
+    // Left information columns
+
     DrawTextEx(
         gTopBarFont.f,
-        (std::string("l: ") + std::to_string(line)).c_str(),
-        {topBarInfoHorizontalShift, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
-        topBarFontSize,
-        0.0f,
-        gPalette.lineInfo
-    );
-    
-    DrawTextEx(
-        gTopBarFont.f,
-        (std::string("lc: ") + std::to_string(lineCount)).c_str(),
-        {topBarInfoHorizontalShift + topBarSecondColumnX, 0},
-        topBarFontSize,
+        colStr.c_str(),
+        {
+            static_cast<float>(topBarInfoHorizontalShift),
+            0.0f
+        },
+        gTopBarFont.size,
         0.0f,
         gPalette.lineInfo
     );
 
     DrawTextEx(
         gTopBarFont.f,
-        (std::string("d: ") + dirtyFile).c_str(),
-        {topBarInfoHorizontalShift + topBarSecondColumnX, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
-        topBarFontSize,
+        lineStr.c_str(),
+        {
+            static_cast<float>(topBarInfoHorizontalShift),
+            static_cast<float>(gTopBarFont.size + topBarInfoVerticalShift)
+        },
+        gTopBarFont.size,
+        0.0f,
+        gPalette.lineInfo
+    );
+
+    DrawTextEx(
+        gTopBarFont.f,
+        lcStr.c_str(),
+        {
+            static_cast<float>(secondColumnX),
+            0.0f
+        },
+        gTopBarFont.size,
+        0.0f,
+        gPalette.lineInfo
+    );
+
+    DrawTextEx(
+        gTopBarFont.f,
+        dirtyStr.c_str(),
+        {
+            static_cast<float>(secondColumnX),
+            static_cast<float>(gTopBarFont.size + topBarInfoVerticalShift)
+        },
+        gTopBarFont.size,
         0.0f,
         dirtyColour
     );
 
-    // Draw current mode
-    DrawTextEx(
-        gTopBarFont.f,
-        modeString.c_str(),
-        {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX + modePosition), 0.0f},
-        topBarFontSize,
-        0.0f,
-        gPalette.cursorMode
-    );
+    // File information
 
-    // Current file
     DrawTextEx(
         gTopBarFont.f,
-        (fnameAndConf).c_str(),
-        {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX), 0},
-        topBarFontSize,
+        fnameAndConf.c_str(),
+        {
+            static_cast<float>(fileSectionX),
+            0.0f
+        },
+        gTopBarFont.size,
         0.0f,
         gPalette.file
     );
 
-    // Cursor fragment
+    DrawTextEx(
+        gTopBarFont.f,
+        modeString.c_str(),
+        {
+            static_cast<float>(modeX),
+            0.0f
+        },
+        gTopBarFont.size,
+        0.0f,
+        gPalette.cursorMode
+    );
+
     DrawTextEx(
         gTopBarFont.f,
         cursorFragment.c_str(),
-        {(UT::f32)(topBarInfoHorizontalShift + topBarThirdColumnX + modeAndFilenameWidth + fragmentMarginFromMode), 0},
-        topBarFontSize,
+        {
+            static_cast<float>(fragmentX),
+            0.0f
+        },
+        gTopBarFont.size,
         0.0f,
         gPalette.frag
     );
 
-    // CWD
     DrawTextEx(
         gTopBarFont.f,
         cwd.c_str(),
-        {topBarInfoHorizontalShift + topBarThirdColumnX, static_cast<UT::f32>(topBarFontSize) + topBarInfoVerticalShift},
-        topBarFontSize,
+        {
+            static_cast<float>(fileSectionX),
+            static_cast<float>(gTopBarFont.size + topBarInfoVerticalShift)
+        },
+        gTopBarFont.size,
         0.0f,
         gPalette.cwd
     );

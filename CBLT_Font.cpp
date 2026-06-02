@@ -38,6 +38,8 @@ namespace CBLT {
         );
     
         SetTextureFilter(f.texture, TEXTURE_FILTER_BILINEAR);
+
+        name = fontName; // Saved for resizing
     }
 
     void EditorFont::Config(void) {

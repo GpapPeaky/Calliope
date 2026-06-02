@@ -23,6 +23,9 @@ namespace CBLT {
             // Advances map
             std::unordered_map<UT::i32, UT::i32> advanceMap;
 
+            // Font name
+            std::string name;
+
             // Constructor
             EditorFont(void);
 

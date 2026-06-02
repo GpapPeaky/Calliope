@@ -66,4 +66,6 @@ namespace CBLT {
             }
         } // Func
     } // Utils
+
+    CBLT::Utils::Types::f32 CBLT::FileMargins::UI::TOP_BAR_HEIGHT = 0.0F;
 } // CBLT

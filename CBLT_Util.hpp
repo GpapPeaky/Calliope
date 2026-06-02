@@ -95,7 +95,7 @@ namespace CBLT {
             const CBLT::Utils::Types::f32 LEFT_FROM_FILE_LINES = 50.0f;
 
             // Top margin from the top bar
-            const CBLT::Utils::Types::f32 TOP_BAR_HEIGHT = 50.0f;
+            extern CBLT::Utils::Types::f32 TOP_BAR_HEIGHT;
     
             // Top bar seperator Y from height
             const CBLT::Utils::Types::f32 TOP_BAR_SEPERATOR_Y = 17.0f;

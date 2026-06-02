@@ -73,7 +73,7 @@ namespace CBLT {
 
     void FileQueue::Draw(void) {
         UT::ui32 index = 0;
-        const UT::i32 fontSize = 21;
+        const UT::i32 fontSize = gFileQueueFont.size;
        
         // Background
         DrawRectangle(
