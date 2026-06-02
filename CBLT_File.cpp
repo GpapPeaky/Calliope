@@ -151,9 +151,9 @@ namespace CBLT {
             // THIS JUST FUCKING CLIPS, DOESN'T REDUCE THE DRAW CALL, LEARNT IT THE HARD WAY, FUCK.
             BeginScissorMode(
                 cam.Origin().x + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI,
-                cam.Origin().y,
+                cam.Origin().y + FileMargins::UI::TOP_BAR_HEIGHT,
                 cam.Width(),
-                cam.Height() + FileMargins::UI::TOP_BAR_HEIGHT
+                cam.Height()
             );
                 // File text
                 // DrawTextEx(
@@ -203,7 +203,7 @@ namespace CBLT {
             
             BeginScissorMode(
                 cam.Origin().x,
-                cam.Origin().y,
+                cam.Origin().y + FileMargins::UI::TOP_BAR_HEIGHT,
                 cam.Width(),
                 cam.Height() + FileMargins::UI::TOP_BAR_HEIGHT
             );
@@ -222,9 +222,9 @@ namespace CBLT {
         // Limit
         BeginScissorMode(
             cam.Origin().x,
-            cam.Origin().y,
+            cam.Origin().y + FileMargins::UI::TOP_BAR_HEIGHT,
             cam.Width(),
-            cam.Height() + FileMargins::UI::TOP_BAR_HEIGHT
+            cam.Height()
         );
             // Draw infile marks
             for (auto& im : marks) {

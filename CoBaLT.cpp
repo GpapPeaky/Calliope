@@ -1,7 +1,6 @@
 #include "CBLT_Include.hpp"
 
 // TODO: Add font and font sizes settings reading.
-// TODO: Fix file rendering Y
 
 // TODO: Add the animator to the console cursor as well
 // TODO: Add animators to the filequeue and console resizing and contents movement

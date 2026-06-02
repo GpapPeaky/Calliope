@@ -179,9 +179,9 @@ namespace CBLT {
         // Limit from topbar
         BeginScissorMode(
             0,
-            66.0f,                          // TOP_BAR_HEIGHT + someMargin
+            CBLT::FileMargins::UI::TOP_BAR_HEIGHT,                                          // TOP_BAR_HEIGHT + someMargin
             GetScreenWidth(),
-            GetScreenHeight() - 66.0f       // TOP_BAR_HEIGHT + someMargin
+            GetScreenHeight() - CBLT::FileMargins::UI::TOP_BAR_HEIGHT                       // TOP_BAR_HEIGHT + someMargin
         );
 
         if (GetMode() == CursorMode::SELECT) DrawSelection(font, xOff, yOff, off);

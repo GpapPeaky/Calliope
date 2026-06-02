@@ -8,12 +8,12 @@
 
 namespace CBLT {
     enum class AnimationEase : UT::i32 {
-        NONE,         // Instant, no interpolation
-        LINEAR,       // Constant speed
-        EASE_OUT,     // Fast start, slow finish
-        EASE_IN,      // Slow start, fast finish  
-        ELASTIC,      // Overshoot and bounce back
-        BOUNCE        // Snappy with a little pop
+        NONE,                       // Instant, no interpolation
+        LINEAR,                     // Constant speed
+        EASE_OUT,                   // Fast start, slow finish
+        EASE_IN,                    // Slow start, fast finish  
+        ELASTIC,                    // Overshoot and bounce back
+        BOUNCE                      // Snappy with a little pop
     }; // Animation eases
 
     typedef struct AnimationProfile {
