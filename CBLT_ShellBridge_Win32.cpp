@@ -13,7 +13,7 @@
     #include <stdexcept>
     #include <array>
 
-    #include "CBLT_Settings.hpp"
+    #include "CBLT_Settings.hpp" // FIXME: raylib inclusion leak here
 
     namespace CBLT {
         std::string ShellBridge::Execute(const std::string& com, std::string& cwd) {
