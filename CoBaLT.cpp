@@ -1,6 +1,7 @@
 #include "CBLT_Include.hpp"
 
-// TODO: Add font and font sizes settings reading.
+// TODO: Add a TODO, FIXME, todo, fixme, bug, BUG word highlighting in comments
+// TODO: Add function call highlighting.
 
 // TODO: Add the animator to the console cursor as well
 // TODO: Add animators to the filequeue and console resizing and contents movement
