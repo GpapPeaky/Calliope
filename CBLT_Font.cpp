@@ -98,10 +98,104 @@ namespace CBLT {
     }
 
     EditorFont gFont;
-
     EditorFont gConsoleFont;
-
     EditorFont gTopBarFont;
-
     EditorFont gFileQueueFont;
+
+    void LoadFonts(std::string rp) {
+        namespace fs = std::filesystem;
+
+        fs::path configPath = fs::path(rp) / "options" / "fonts.cbltconf";
+        fs::path assetPath  = fs::path(rp) / "assets"  / "font";             // Load assets
+
+        std::ifstream in(configPath);
+
+        if (!in.is_open()) {
+            UE::Log("FAILED TO OPEN FONT CONFIG: " + configPath.string() + "\n");
+            return;
+        }
+
+        std::string line;
+        bool inBlock = false;
+
+        while (std::getline(in, line)) {
+            line = UF::Trim(line);
+
+            if (line.empty())
+                continue;
+
+            if (line[0] == '!')
+                continue;
+
+            // Block seperator
+            if (line == "%fonts") {
+                if (!inBlock) {
+                    inBlock = true;
+                } else {
+                    break;
+                }
+                
+                continue;
+            }
+
+            size_t delimPos = line.find(':');
+
+            if (delimPos == std::string::npos) {
+                UE::Log("INVALID FONT CONFIG LINE: " + line + "\n");
+                continue;
+            }
+
+            std::string token = UF::Trim(line.substr(0, delimPos));
+            std::string value = UF::Trim(line.substr(delimPos + 1));
+
+            std::stringstream ss(value);
+
+            std::string fontName;
+            int fontSize = 0;
+
+            if (!(ss >> fontName >> fontSize)) {
+                UE::Log("INVALID FONT ENTRY: " + line + "\n");
+                continue;
+            }
+
+            fs::path fontPath = assetPath / (fontName + ".ttf");
+
+            if (token == "TEXT_FONT") {
+                gFont.size = fontSize;
+                gFont.Load(fontPath.string());
+
+                std::cout << fontPath.string() << std::endl;
+            }
+            else if (token == "CONSOLE_FONT") {
+                gConsoleFont.size = fontSize;
+                gConsoleFont.Load(fontPath.string());
+
+                std::cout << fontPath.string() << std::endl;
+            }
+            else if (token == "TOPBAR_FONT") {
+                gTopBarFont.size = fontSize;
+                gTopBarFont.Load(fontPath.string());
+
+                std::cout << fontPath.string() << std::endl;
+            }
+            else if (token == "FQ_FONT") {
+                gFileQueueFont.size = fontSize;
+                gFileQueueFont.Load(fontPath.string());
+
+                std::cout << fontPath.string() << std::endl;
+            } 
+            else {
+                UE::Log("UNKNOWN FONT TOKEN: " + token + "\n");
+            }
+
+
+            // Load configs
+            gFont.Config();
+            gConsoleFont.Config();
+            gTopBarFont.Config();
+            gFileQueueFont.Config();
+
+            UE::Log("LOADED " + fontName + " " + std::to_string(fontSize));
+        }
+    }
 } // CBLT

@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include "CBLT_Animation.hpp"    // For animation profiles
-#include "CBLT_Font.hpp"         // For all font configurations
 #include "CBLT_CursorSymbol.hpp" // For cursor symbol enum
 
 namespace CBLT {
@@ -25,11 +24,6 @@ namespace CBLT {
             AnimationProfile OPTION_ANIM_Console;                                  // Animation profile for console movement
             AnimationProfile OPTION_ANIM_ConsoleCursor;                            // Animation profile for console cursor
             AnimationProfile OPTION_ANIM_ConsoleContent;                           // Animation profile for console content panning
-
-            EditorFont OPTION_FONT_FileFont;                                       // Font for files
-            EditorFont OPTION_FONT_ConsoleFont;                                    // Font for console text
-            EditorFont OPTION_FONT_FQFont;                                         // Font for file queue entry
-            EditorFont OPTION_FONT_TopbarFont;                                     // Font for top bar content
 
             // Read options/settings.cbltconf
             void ReadSettings(void);

@@ -1062,6 +1062,7 @@ namespace CBLT {
             // Reload settings to globals
             else if (dir == "rst") {
                 CBLT::gSettings.ReadSettings();
+                CBLT::LoadFonts(CBLT::Sys::ResourcePath());              // Reload font
 
                 // if (Q.Size() > 0) {
 

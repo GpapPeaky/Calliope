@@ -15,21 +15,23 @@ UT::i32 main(int argc, char** argv) {
     std::string resourceDir = CBLT::Sys::ResourcePath();
 
     ////// Fonts //////
-    CBLT::gFont.Load(resourceDir + "/assets/font/DG_One.ttf");
-    CBLT::gFont.size = 17;
-    CBLT::gFont.Config();
+    CBLT::LoadFonts(resourceDir);
 
-    CBLT::gConsoleFont.Load(resourceDir + "/assets/font/DG_One.ttf");
-    CBLT::gConsoleFont.size = 15;
-    CBLT::gConsoleFont.Config();
+    // CBLT::gFont.Load(resourceDir + "/assets/font/DG_One.ttf");
+    // CBLT::gFont.size = 17;
+    // CBLT::gFont.Config();
 
-    CBLT::gTopBarFont.Load(resourceDir + "/assets/font/DG_One.ttf");
-    CBLT::gTopBarFont.size = 15;
-    CBLT::gTopBarFont.Config();
+    // CBLT::gConsoleFont.Load(resourceDir + "/assets/font/DG_One.ttf");
+    // CBLT::gConsoleFont.size = 15;
+    // CBLT::gConsoleFont.Config();
 
-    CBLT::gFileQueueFont.Load(resourceDir + "/assets/font/DG_One.ttf");
-    CBLT::gFileQueueFont.size = 15;
-    CBLT::gFileQueueFont.Config();
+    // CBLT::gTopBarFont.Load(resourceDir + "/assets/font/DG_One.ttf");
+    // CBLT::gTopBarFont.size = 15;
+    // CBLT::gTopBarFont.Config();
+
+    // CBLT::gFileQueueFont.Load(resourceDir + "/assets/font/DG_One.ttf");
+    // CBLT::gFileQueueFont.size = 15;
+    // CBLT::gFileQueueFont.Config();
     ////// //////
 
     CBLT::gSound.Load(resourceDir + "/assets/audio/");

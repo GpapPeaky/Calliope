@@ -1,0 +1,26 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! LOAD FONT FROM assets/font/XXX.tff   !
+!                                      !
+! Keep in mind all fonts need to be    !
+!.ttf, mono and the name provided      !
+! in the config file needs to be       !
+! exactly the same as in the           !
+! assets/font/ folder.                 !
+!                                      !
+! The number next to the font name     !
+! is it's initial TAB_SIZE             !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+%fonts
+    !* Text font *!
+    TEXT_FONT            : DG_One 17
+    !* Console font *!
+    CONSOLE_FONT         : DG_One 15
+    
+    !* Topbar info font *!
+    TOPBAR_FONT          : DG_One 15
+    
+    !* Filequeue entries font *!
+    FQ_FONT              : DG_One 15
+
+%fonts

@@ -47,24 +47,6 @@
 
     TAB_SIZE                 : 4
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! LOAD FONT FROM assets/font/XXX.tff   !
-!                                      !
-! Keep in mind all fonts need to be    !
-!.ttf, mono and the name provided      !
-! in the config file needs to be       !
-! exactly the same as in the           !
-! assets/font/ folder.                 !
-!                                      !
-! The number next to the font name     !
-! is it's initial TAB_SIZE             !
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    TEXT_FONT            : DG_One 17
-    CONSOLE_FONT         : DG_One 15
-    TOPBAR_FONT          : DG_One 15
-    FQ_FONT              : DG_One 15
-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! FROM options/anim/                    !
 !                                       !

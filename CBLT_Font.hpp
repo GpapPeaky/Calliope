@@ -56,4 +56,7 @@ namespace CBLT {
 
     // Seperate file queue font
     extern EditorFont gFileQueueFont;
+
+    // Load fonts from file options/fonts.cbltconf
+    void LoadFonts(std::string rp);
 } // CBLT
