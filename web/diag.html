@@ -475,7 +475,10 @@
             <li><span class="fn-name">BuildGlyphSet()</span><span class="fn-desc">ASCII + U+2500–U+259F</span></li>
             <li><span class="fn-name">Utf8ToCodepoints(str)</span><span class="fn-desc">UTF-8 → i32 codepoints</span></li>
           </ul>
-          <div class="calls-badge">globals: <span>gFont</span><span>gConsoleFont</span><span>gTopBarFont</span><span>gFileQueueFont</span></div>
+          <div class="calls-badge">
+            calls: <span>LoadFonts(path)</span> Parses the font names and sizes from <code>options/font.cbltconf</code> and loads them to the globals <br>
+            globals: <span>gFont</span><span>gConsoleFont</span><span>gTopBarFont</span><span>gFileQueueFont</span>
+        </div>
         </div>
         <div class="node n-init" id="n-sound">
           <div class="node-title">SoundSystem</div>
@@ -938,7 +941,7 @@
 const CONNECTIONS = [
   ['n-main',     'n-win',        'Initializes UI context window parameters',   false],
   ['n-main',     'n-settings',   'Parses configuration core variables file',   false],
-  ['n-main',     'n-font',       'Pre-renders font engine glyph metrics map',  false],
+  ['n-main',     'n-font',       'Pre-renders font engine glyph metrics map, initializes all font globals',  false],
   ['n-main',     'n-sound',      'Loads hardware device audio sample buffers', false],
   ['n-main',     'n-palette',    'Loads active document syntax color arrays',  false],
   ['n-main',     'n-ctrl',       'ctrl.Update() hardware execution stream',   false],
