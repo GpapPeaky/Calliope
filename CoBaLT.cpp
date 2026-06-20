@@ -1,5 +1,7 @@
 #include "CBLT_Include.hpp"
 
+// FIXME: Add a font loading fail fallback
+
 // TODO: Add a TODO, FIXME, todo, fixme, bug, BUG word highlighting in comments
 // TODO: Add function call highlighting.
 
