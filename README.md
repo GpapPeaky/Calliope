@@ -387,11 +387,11 @@ CURSOR_SYMBOL         : UNDERSCORE        ! BOX | LINE | HOLLOW | UNDERSCORE
 PALETTE               : default
 USER_TERMINAL_POSIX   : xterm
 USER_TERMINAL_WIN32   : powershell.exe
-ANIM_FILE_CURSOR_PROFILE    : smooth
-ANIM_CONSOLE_CURSOR_PROFILE : smooth
-ANIM_FQ_PROFILE             : snappy
-ANIM_CONSOLE_PROFILE        : smooth
-ANIM_CONSOLE_CONTENT_PROFILE: smooth
+ANIM_FILE_CURSOR_PROFILE     : cursor/ease
+ANIM_CONSOLE_CURSOR_PROFILE  : console_cursor/ease
+ANIM_CONSOLE_CONTENT_PROFILE : console_content/ease
+ANIM_CONSOLE_PROFILE         : console/ease
+ANIM_FQ_PROFILE              : fq/ease
 %settings
 ```
 
@@ -403,7 +403,7 @@ Palette files live in `options/palettes/<name>.pal`. Switch at runtime with `:pa
 
 ### 4.3 Animation Profiles
 
-Profile files live in `options/anim/<name>.cbltconf`. Each file exposes:
+Profile files live in `options/anim/<type>/<name>.cbltconf`. Each file exposes:
 
 ```
 %anim
@@ -415,9 +415,24 @@ damping    : 1.0
 %anim
 ```
 
+as well as these ease types:
+
+```
+NONE
+LINEAR
+EASE_OUT
+EASE_IN
+ELASTIC
+BOUNCE
+```
+
 ### 4.4 Language Definitions
 
 Language files live in `meta/lang/<ext>.cbltconf`. To add a new language, create a file following the existing format and add a mapping to `gLangFiles` in `CBLT_Language.cpp` alongside a `FileExtension` enumerator in `CBLT_FileExtension.hpp`.
+
+### 4.5 Fonts
+
+Font names and sizes live in `options/fonts.cbltconf`. To change one of the fonts, the name in the config file must match exactly the name of the `<name>.tff` file inside the `assets/font/` folder. Currently the editor uses `DG_One` as it's default font.
 
 ---
 
