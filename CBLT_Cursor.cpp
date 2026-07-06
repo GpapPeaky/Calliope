@@ -126,11 +126,13 @@ namespace CBLT {
             std::swap(startColumn, endColumn);
         }
     
-        UT::i32 baseY = off.y + yOff;
+        // UT::i32 baseY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT + off.y;
+        UT::i32 baseY = off.y + CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2;
         UT::i32 baseX = xOff + off.x;
     
         for (UT::ui32 line = startLine; line <= endLine; ++line) {
-            UT::i32 y = baseY + line * font.size + font.size;
+            // UT::i32 y = baseY + line * font.size + font.size;
+            UT::i32 y = baseY;
     
             if (line == startLine && line == endLine) {
                 // Single line selection
@@ -179,17 +181,25 @@ namespace CBLT {
         // Limit from topbar
         BeginScissorMode(
             0,
-            CBLT::FileMargins::UI::TOP_BAR_HEIGHT,                                          // TOP_BAR_HEIGHT + someMargin
+            CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2,                                                  // TOP_BAR_HEIGHT * 2, since we have 2 lines
             GetScreenWidth(),
-            GetScreenHeight() - CBLT::FileMargins::UI::TOP_BAR_HEIGHT                       // TOP_BAR_HEIGHT + someMargin
+            GetScreenHeight()
         );
+
+        // DrawRectangle(
+        //     0,
+        //     CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2, 
+        //     GetScreenWidth(),
+        //     GetScreenHeight(),
+        //     RED
+        // );
 
         if (GetMode() == CursorMode::SELECT) DrawSelection(font, xOff, yOff, off);
 
         animator.Update();
     
         UT::i32 x = static_cast<UT::i32>(animator.tx) + off.x;
-        UT::i32 y = static_cast<UT::i32>(animator.ty) + off.y + yOff;
+        UT::i32 y = static_cast<UT::i32>(animator.ty) + off.y + CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2;
     
         // Get the base from the offset
         const UT::i32 base = xOff;
@@ -198,19 +208,19 @@ namespace CBLT {
         renderX = x;
         renderY = y;
     
-        DrawRectangle(0, y + font.size, GetScreenWidth(), font.size, gPalette.cursorPosHighlight);
+        DrawRectangle(0, y, GetScreenWidth(), font.size, gPalette.cursorPosHighlight);
     
         switch (*cursorSymbol) {
             case CursorSymbol::NON_ASCII_BOX:
-                DrawRectangle(x + base, y + font.size, charWidth, font.size, gPalette.cursor);
+                DrawRectangle(x + base, y, charWidth, font.size, gPalette.cursor);
                 EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_HOLLOW_BOX:
-                DrawRectangleLines(x + base, y + font.size, charWidth, font.size, gPalette.cursor);
+                DrawRectangleLines(x + base, y, charWidth, font.size, gPalette.cursor);
                 EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_LINE:
-                DrawRectangle(x + base - 2, y + font.size, 1, font.size, gPalette.cursor);
+                DrawRectangle(x + base - 2, y, 1, font.size, gPalette.cursor);
                 EndScissorMode();
                 return;
             case CursorSymbol::NON_ASCII_UNDERSCORE:
@@ -369,10 +379,10 @@ namespace CBLT {
                                 CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES
                                 + 31.0f;
 
-        const UT::i32 textBaseY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT;
+        const UT::i32 textBaseY = CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2;
         
         UT::i32 cursorWorldX = textBaseX + GetCursorX(currentLine, gFont.size);
-        UT::i32 cursorWorldY = textBaseY + line * lineHeight + lineHeight;
+        UT::i32 cursorWorldY = textBaseY + line * lineHeight;
         
         UT::i32 cursorScreenX = cursorWorldX + off.x;
         UT::i32 cursorScreenY = cursorWorldY + off.y;
@@ -386,6 +396,9 @@ namespace CBLT {
         else if (cursorScreenY + charHeight > camBottom) {
             off.y -= (cursorScreenY + charHeight) - camBottom;
         }
+
+        // Never let the top-of-file scroll below its natural resting position
+        if (off.y > 0) off.y = 0;
         
         if (cursorScreenX < camLeft) {
             off.x += camLeft - cursorScreenX;

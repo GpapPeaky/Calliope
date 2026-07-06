@@ -193,6 +193,9 @@ namespace CBLT {
             gFont.Config();
             gConsoleFont.Config();
             gTopBarFont.Config();
+
+            CBLT::FileMargins::UI::TOP_BAR_HEIGHT = gTopBarFont.size;
+
             gFileQueueFont.Config();
 
             UE::Log("LOADED " + fontName + " " + std::to_string(fontSize));

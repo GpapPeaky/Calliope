@@ -119,7 +119,7 @@ namespace CBLT {
         const UT::f32 textBaseX = CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI + 
                                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
                                 CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES;
-        const UT::f32 textBaseY = 0.0f;
+        const UT::f32 textBaseY = off.y + CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2; // Need this here, for correct vertical offsets
 
         // cam.Draw();
 
@@ -127,7 +127,7 @@ namespace CBLT {
         DrawLineV(
             { 
                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
-                CBLT::FileMargins::UI::TOP_BAR_HEIGHT + gConsoleFont.size
+                CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2
             },{ 
                 CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
                 static_cast<UT::f32>(GetScreenHeight())
@@ -138,7 +138,7 @@ namespace CBLT {
         for(UT::llui32 i = 0 ; i < lines.size() ; i++) {
             Vector2 pos = {
                 textBaseX + off.x,
-                textBaseY + i * lineHeight + lineHeight + off.y
+                textBaseY + i * lineHeight
             };
 
             if (!cam.Contains(
@@ -150,8 +150,8 @@ namespace CBLT {
 
             // THIS JUST FUCKING CLIPS, DOESN'T REDUCE THE DRAW CALL, LEARNT IT THE HARD WAY, FUCK.
             BeginScissorMode(
-                cam.Origin().x + CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES + CBLT::FileMargins::Text::LEFT_FROM_FILE_LINES_UI,
-                cam.Origin().y + FileMargins::UI::TOP_BAR_HEIGHT,
+                cam.Origin().x,
+                FileMargins::UI::TOP_BAR_HEIGHT * 2,
                 cam.Width(),
                 cam.Height()
             );
@@ -196,17 +196,10 @@ namespace CBLT {
                         col
                     );
                 }
-            EndScissorMode();   
             
-            pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
-            pos.y = textBaseY + i * lineHeight + lineHeight + off.y;
-            
-            BeginScissorMode(
-                cam.Origin().x,
-                cam.Origin().y + FileMargins::UI::TOP_BAR_HEIGHT,
-                cam.Width(),
-                cam.Height() + FileMargins::UI::TOP_BAR_HEIGHT
-            );
+                pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
+                pos.y = textBaseY + i * lineHeight;
+
                 // line num
                 DrawTextEx(
                     gFont.f,
@@ -222,7 +215,7 @@ namespace CBLT {
         // Limit
         BeginScissorMode(
             cam.Origin().x,
-            cam.Origin().y + FileMargins::UI::TOP_BAR_HEIGHT,
+            FileMargins::UI::TOP_BAR_HEIGHT * 2,
             cam.Width(),
             cam.Height()
         );
@@ -230,7 +223,7 @@ namespace CBLT {
             for (auto& im : marks) {
                 Vector2 pos = {
                     GetScreenWidth() - 40.0f,
-                    textBaseY + im.Line() * lineHeight + lineHeight + off.y
+                    textBaseY + im.Line() * lineHeight
                 };
 
                 if (consoleOpen) {

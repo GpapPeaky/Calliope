@@ -1,9 +1,10 @@
 #include "CBLT_TopBar.hpp"
 
 void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::string fname, std::string cwd, std::string conf) {
-    const UT::ui32 topBarSeperatorY = (UT::ui32)CBLT::FileMargins::UI::TOP_BAR_SEPERATOR_Y;
+    const UT::ui32 topBarSeperatorY = (UT::ui32)gTopBarFont.size; // 2 lines of info
 
-    const UT::ui32 topBarInfoVerticalShift = 12;
+    // const UT::ui32 topBarInfoVerticalShift = 12;
+    const UT::ui32 topBarInfoVerticalShift = 0;
     const UT::ui32 topBarInfoHorizontalShift = 4;
 
     const UT::ui32 columnGap = 20;
@@ -31,7 +32,7 @@ void CBLT::DrawInfo(CBLT::Cursor& c, UT::ui32 lineCount, UT::b dirty, std::strin
     const std::string cursorFragment = c.Fragment();
 
     // Calculate after deciding font-relative strings and measurements
-    CBLT::FileMargins::UI::TOP_BAR_HEIGHT = topBarSeperatorY + topBarInfoVerticalShift;
+    // CBLT::FileMargins::UI::TOP_BAR_HEIGHT = topBarSeperatorY + topBarInfoVerticalShift;
 
     // Dirty state
 

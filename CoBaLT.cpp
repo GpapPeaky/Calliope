@@ -1,6 +1,8 @@
 #include "CBLT_Include.hpp"
 
-// FIXME: Add a font loading fail fallback
+// FIXME: l:130 CBLT_Cursor.cpp Bad one, selection stays at line 0 always?
+// FIXME: text dissapears after column 194
+// FIXME: text not clipping correctly, overlaps with file line num
 
 // TODO: Add a TODO, FIXME, todo, fixme, bug, BUG word highlighting in comments
 // TODO: Add function call highlighting.

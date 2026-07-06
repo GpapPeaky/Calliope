@@ -18,7 +18,7 @@
     CONSOLE_FONT         : DG_One 15
     
     !* Topbar info font *!
-    TOPBAR_FONT          : DG_One 15
+    TOPBAR_FONT          : DG_One 20
     
     !* Filequeue entries font *!
     FQ_FONT              : DG_One 15
