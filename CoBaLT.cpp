@@ -1,18 +1,5 @@
 #include "CBLT_Include.hpp"
 
-// FIXME: l:130 CBLT_Cursor.cpp Bad one, selection stays at line 0 always?
-// FIXME: text dissapears after column 194
-// FIXME: text not clipping correctly, overlaps with file line num
-
-// TODO: Add a TODO, FIXME, todo, fixme, bug, BUG word highlighting in comments
-// TODO: Add function call highlighting.
-
-// TODO: Add the animator to the console cursor as well
-// TODO: Add animators to the filequeue and console resizing and contents movement
-
-// FIXME: Multi-cursor indentation is problematic
-// FIXME: Multi-cursor delete at the end of the file, crashes | deletes too many lines
-
 UT::i32 main(int argc, char** argv) {
     CBLT::Win::Init();
     CBLT::Utils::Err::Init();
