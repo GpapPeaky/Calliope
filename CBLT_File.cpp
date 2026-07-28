@@ -148,93 +148,112 @@ namespace CBLT {
                 lineHeight + FileMargins::UI::TOP_BAR_HEIGHT
             )) continue; // Skip non visible lines
 
+            // File text
+            // DrawTextEx(
+            //     gFont.f,
+            //     lines.at(i).c_str(),
+            //     pos,
+            //     gFont.size,
+            //     0.0f,
+            //     gPalette.textBase
+            // );
+
             // THIS JUST FUCKING CLIPS, DOESN'T REDUCE THE DRAW CALL, LEARNT IT THE HARD WAY, FUCK.
+            //
+            // CLIPPING TEXT
+            BeginScissorMode(
+                textBaseX,
+                FileMargins::UI::TOP_BAR_HEIGHT * 2,
+                cam.Width(),
+                cam.Height()
+            );
+            
+            // Draw colored tokens
+            for (Token& t : tokens.at(i)) {
+                Color col = t.TokenColor();
+
+                // skips whitespaces
+                if (col.a == 0) continue;
+            
+                const std::string& lineStr = lines[i];
+            
+                if (t.col >= lineStr.size())
+                    continue;
+            
+                UT::ui32 maxLen = lineStr.size() - t.col;
+                UT::ui32 len = std::min(t.len, maxLen);
+            
+                if (len == 0)
+                    continue;
+            
+                std::string_view tokenText(lineStr.data() + t.col, len);
+            
+                UT::f32 tokX = pos.x + t.GetCursorX(std::string_view(lines[i]), gFont.size, t.col);
+            
+                DrawTextEx(
+                    gFont.f,
+                    std::string(tokenText).c_str(),
+                    { tokX, pos.y },
+                    gFont.size,
+                    0.0f,
+                    col
+                );
+            }
+        
+            pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
+            pos.y = textBaseY + i * lineHeight;
+
+            // CLIPPING TEXT
+            EndScissorMode();
+
+            // CLIPPING LINENUM
             BeginScissorMode(
                 cam.Origin().x,
                 FileMargins::UI::TOP_BAR_HEIGHT * 2,
                 cam.Width(),
                 cam.Height()
             );
-                // File text
-                // DrawTextEx(
-                //     gFont.f,
-                //     lines.at(i).c_str(),
-                //     pos,
-                //     gFont.size,
-                //     0.0f,
-                //     gPalette.textBase
-                // );
-                
-                // Draw colored tokens
-                for (Token& t : tokens.at(i)) {
-                    Color col = t.TokenColor();
 
-                    // skips whitespaces
-                    if (col.a == 0) continue;
-                
-                    const std::string& lineStr = lines[i];
-                
-                    if (t.col >= lineStr.size())
-                        continue;
-                
-                    UT::ui32 maxLen = lineStr.size() - t.col;
-                    UT::ui32 len = std::min(t.len, maxLen);
-                
-                    if (len == 0)
-                        continue;
-                
-                    std::string_view tokenText(lineStr.data() + t.col, len);
-                
-                    UT::f32 tokX = pos.x + t.GetCursorX(std::string_view(lines[i]), gFont.size, t.col);
-                
-                    DrawTextEx(
-                        gFont.f,
-                        std::string(tokenText).c_str(),
-                        { tokX, pos.y },
-                        gFont.size,
-                        0.0f,
-                        col
-                    );
-                }
-            
-                pos.x = CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y;
-                pos.y = textBaseY + i * lineHeight;
+            // line num
+            DrawTextEx(
+                gFont.f,
+                std::to_string(i).c_str(),
+                pos,
+                gFont.size,
+                0.0f,
+                gPalette.textLines         
+            );
 
-                // line num
-                DrawTextEx(
-                    gFont.f,
-                    std::to_string(i).c_str(),
-                    pos,
-                    gFont.size,
-                    0.0f,
-                    gPalette.textLines         
-                );
+            // CLIPPING LINENUM
             EndScissorMode();
         }
 
-        // Limit
+        // CLIPPING INFILE MARKS
         BeginScissorMode(
             cam.Origin().x,
             FileMargins::UI::TOP_BAR_HEIGHT * 2,
             cam.Width(),
             cam.Height()
         );
-            // Draw infile marks
-            for (auto& im : marks) {
-                Vector2 pos = {
-                    GetScreenWidth() - 40.0f,
-                    textBaseY + im.Line() * lineHeight
-                };
+        
+        // Draw infile marks
+        for (auto& im : marks) {
+            Vector2 pos = {
+                GetScreenWidth() - 40.0f,
+                textBaseY + im.Line() * lineHeight
+            };
 
-                if (consoleOpen) {
-                    pos.x -= consoleWidth;
-                }
-
-                if (!cam.Contains(pos.x, pos.y, (UT::f32)gFont.size, lineHeight))
-                continue;
-
-                im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, 40); // Kind of shit, might be better for files to OWN their cursors?
+            if (consoleOpen) {
+                pos.x -= consoleWidth;
             }
+
+            if (!cam.Contains(pos.x, pos.y, (UT::f32)gFont.size, lineHeight))
+            continue;
+
+            im.Draw((UT::ui32)pos.x, (UT::ui32)pos.y, 40); // Kind of shit, might be better for files to OWN their cursors?
+        }
+
+        // CLIPPING INFILE MARKS
         EndScissorMode();
 
         autocomplete.DrawSuggestions(cursorX, cursorY);
