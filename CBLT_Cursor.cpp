@@ -132,7 +132,7 @@ namespace CBLT {
     
         for (UT::ui32 line = startLine; line <= endLine; ++line) {
             // UT::i32 y = baseY + line * font.size + font.size;
-            UT::i32 y = baseY;
+            UT::i32 y = baseY + line * gFont.size;
     
             if (line == startLine && line == endLine) {
                 // Single line selection
