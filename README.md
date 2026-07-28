@@ -432,7 +432,7 @@ Language files live in `meta/lang/<ext>.cbltconf`. To add a new language, create
 
 ### 4.5 Fonts
 
-Font names and sizes live in `options/fonts.cbltconf`. To change one of the fonts, the name in the config file must match exactly the name of the `<name>.tff` file inside the `assets/font/` folder. Currently the editor uses `DG_One` as it's default font.
+Font names and sizes live in `options/fonts.cbltconf`. To change one of the fonts, the name in the config file must match exactly the name of the `<name>.tff` file inside the `assets/font/` folder. Currently the editor uses `IBMPlexMono-Regular` as it's default font.
 
 ---
 

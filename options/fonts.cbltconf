@@ -13,13 +13,13 @@
 
 %fonts
     !* Text font *!
-    TEXT_FONT            : DG_One 17
+    TEXT_FONT            : IBMPlexMono-Regular 23
     !* Console font *!
-    CONSOLE_FONT         : DG_One 15
+    CONSOLE_FONT         : IBMPlexMono-Regular 20
     
     !* Topbar info font *!
-    TOPBAR_FONT          : DG_One 20
+    TOPBAR_FONT          : IBMPlexMono-Regular 24
     
     !* Filequeue entries font *!
-    FQ_FONT              : DG_One 15
+    FQ_FONT              : IBMPlexMono-Regular 20
 %fonts
