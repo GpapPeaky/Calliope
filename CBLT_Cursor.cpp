@@ -180,7 +180,8 @@ namespace CBLT {
     void Cursor::Draw(EditorFont& font, UT::ui32 xOff, UT::ui32 yOff, Offset& off) {
         // Limit from topbar
         BeginScissorMode(
-            0,
+                CBLT::FileMargins::Lines::LEFT_FROM_WINDOW_Y + 
+                CBLT::FileMargins::UI::LEFT_FROM_FILE_LINES,
             CBLT::FileMargins::UI::TOP_BAR_HEIGHT * 2,                                                  // TOP_BAR_HEIGHT * 2, since we have 2 lines
             GetScreenWidth(),
             GetScreenHeight()
