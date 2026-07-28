@@ -141,13 +141,6 @@ namespace CBLT {
                 textBaseY + i * lineHeight
             };
 
-            if (!cam.Contains(
-                pos.x,
-                pos.y,
-                (UT::f32)cam.Width(),
-                lineHeight + FileMargins::UI::TOP_BAR_HEIGHT
-            )) continue; // Skip non visible lines
-
             // File text
             // DrawTextEx(
             //     gFont.f,
@@ -189,6 +182,18 @@ namespace CBLT {
                 std::string_view tokenText(lineStr.data() + t.col, len);
             
                 UT::f32 tokX = pos.x + t.GetCursorX(std::string_view(lines[i]), gFont.size, t.col);
+
+                /* Produced the no rendering after column 194 issue. since it was checking the line itself and NOT the token positions
+                since the line whole starts at a specific X coordinate, it will not render the line in its entirety if it wanders too far.
+                we check the token X coord now instead of pos.x.
+                
+                It is still problematic if the entire line is one token. */
+                if (!cam.Contains(
+                    tokX,
+                    pos.y,
+                    (UT::f32)cam.Width(),
+                    lineHeight + FileMargins::UI::TOP_BAR_HEIGHT
+                )) continue; // Skip non visible lines
             
                 DrawTextEx(
                     gFont.f,
@@ -235,7 +240,7 @@ namespace CBLT {
             cam.Width(),
             cam.Height()
         );
-        
+
         // Draw infile marks
         for (auto& im : marks) {
             Vector2 pos = {
