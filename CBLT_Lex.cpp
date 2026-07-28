@@ -26,7 +26,24 @@ CBLT::LexerState CBLT::LexLine(const std::string& s, UT::ui32 line, LexerState l
                 bool atClose = false;
                 for (const auto& [bstart, bend] : block) {
                     if (s.compare(j, bend.size(), bend) == 0) {
-                        push(TokenClass::COMMENT, i, j + bend.size());
+                        UT::llui32 end = j + bend.size();
+                        UT::llui32 notePos = std::string::npos;
+
+                        for (const auto& note : lang.commentNotes) {
+                            auto p = s.find(note, i);
+                            if (p != std::string::npos &&
+                                p < end &&
+                                (notePos == std::string::npos || p < notePos))
+                                notePos = p;
+                        }
+
+                        if (notePos == std::string::npos) {
+                            push(TokenClass::COMMENT, i, end);
+                        } else {
+                            push(TokenClass::COMMENT, i, notePos);
+                            push(TokenClass::MISC, notePos, end);
+                        }
+
                         i = j + bend.size();
                         state = LexerState::NONE;
                         closed = true;
@@ -37,8 +54,27 @@ CBLT::LexerState CBLT::LexLine(const std::string& s, UT::ui32 line, LexerState l
                 if (atClose) break;
                 ++j;
             }
+
             if (!closed) {
-                push(TokenClass::COMMENT, i, s.size());
+                UT::llui32 pos = std::string::npos;
+
+                for (const auto& note : lang.commentNotes) {
+                    auto p = s.find(note, i);
+                    if (p != std::string::npos) {
+                        pos = p;
+                        break;
+                    }
+                }
+
+                if (pos != std::string::npos) {
+                    if (pos > i)
+                        push(TokenClass::COMMENT, i, pos);
+
+                    push(TokenClass::MISC, pos, s.size());
+                } else {
+                    push(TokenClass::COMMENT, i, s.size());
+                }
+                
                 return state;
             }
             continue;
@@ -51,15 +87,53 @@ CBLT::LexerState CBLT::LexLine(const std::string& s, UT::ui32 line, LexerState l
                 bool closed = false;
                 while (j < s.size()) {
                     if (s.compare(j, bend.size(), bend) == 0) {
-                        push(TokenClass::COMMENT, i, j + bend.size());
+                        UT::llui32 end = j + bend.size();
+                        UT::llui32 pos = std::string::npos;
+
+                        for (const auto& note : lang.commentNotes) {
+                            auto p = s.find(note, i);
+                            if (p != std::string::npos && p < end) {
+                                pos = p;
+                                break;
+                            }
+                        }
+
+                        if (pos != std::string::npos) {
+                            if (pos > i)
+                                push(TokenClass::COMMENT, i, pos);
+
+                            push(TokenClass::MISC, pos, end);
+                        } else {
+                            push(TokenClass::COMMENT, i, end);
+                        }
+
                         i = j + bend.size();
                         closed = true;
                         break;
                     }
                     ++j;
                 }
+
                 if (!closed) {
-                    push(TokenClass::COMMENT, i, s.size());
+                    UT::llui32 pos = std::string::npos;
+
+                    for (const auto& note : lang.commentNotes) {
+                        auto p = s.find(note, i);
+                        if (p != std::string::npos) {
+                            pos = p;
+                            break;
+                        }
+                    }
+
+                    if (pos != std::string::npos) {
+                        if (pos > i)
+                            push(TokenClass::COMMENT, i, pos);
+
+                        push(TokenClass::MISC, pos, s.size());
+                    } else {
+                        push(TokenClass::COMMENT, i, s.size());
+                    }
+
                     state = LexerState::INBLOCK;
                     return state;
                 }
@@ -72,7 +146,23 @@ CBLT::LexerState CBLT::LexLine(const std::string& s, UT::ui32 line, LexerState l
         // Line comment
         for (const auto& lc : lineC) {
             if (s.compare(i, lc.size(), lc) == 0) {
-                push(TokenClass::COMMENT, i, s.size());
+                UT::llui32 notePos = std::string::npos;
+
+                for (const auto& note : lang.commentNotes) {
+                    auto p = s.find(note, i + lc.size());
+
+                    if (p != std::string::npos &&
+                        (notePos == std::string::npos || p < notePos))
+                        notePos = p;
+                }
+
+                if (notePos == std::string::npos) {
+                    push(TokenClass::COMMENT, i, s.size());
+                } else {
+                    push(TokenClass::COMMENT, i, notePos);
+                    push(TokenClass::MISC, notePos, s.size());
+                }
+
                 return state;
             }
         }
@@ -122,7 +212,7 @@ CBLT::LexerState CBLT::LexLine(const std::string& s, UT::ui32 line, LexerState l
         }
         if (matched) continue;
 
-        // Operator
+        // Punctuation
         for (const auto& pun : puns) {
             if (s.compare(i, pun.size(), pun) == 0) {
                 push(TokenClass::PUNCTUATION, i, i + pun.size());

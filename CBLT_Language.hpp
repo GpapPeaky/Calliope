@@ -24,6 +24,7 @@ namespace CBLT {
         OPERATORS,
         COMMENT_BLOCK,
         COMMENT_LINE,
+        COMMENT_NOTES,
         STRING_DELIM,
         ANNOTATIONS,
         PUNCTUATION,
@@ -60,6 +61,7 @@ namespace CBLT {
             std::unordered_set<std::string>                             operators;                    // Language operators
             std::vector<std::pair<std::string, std::string>>            commentBlock;                 // Comment block creation
             std::vector<std::string>                                    commentLine;                  // Comment line creation 
+            std::vector<std::string>                                    commentNotes;                 // Comment notes
             std::vector<std::pair<std::string, std::string>>            stringDelim;                  // String block creation
             std::vector<std::string>                                    annotations;                  // annotations highlighting entry
             std::vector<std::string>                                    macros;                       // Macro highlighting entry 

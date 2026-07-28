@@ -11,7 +11,8 @@ namespace CBLT {
         INCOMMENT,          // Line comment
         INMACRO,
         INANNOTATION,
-        INSTRING
+        INSTRING,
+        COMMENT_NOTE
     }; // Lexer current state
 
     // Run the lexer through the line, returns if the line is in a comment block

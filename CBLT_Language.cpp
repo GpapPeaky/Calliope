@@ -42,6 +42,7 @@ void Language::ReadLangFile(std::string fname) {
         if (line == "%punctuation:")         { current = LanguageLoaderSection::PUNCTUATION; continue; }
         if (line == "%commentBlock:")        { current = LanguageLoaderSection::COMMENT_BLOCK; continue; }
         if (line == "%commentLine:")         { current = LanguageLoaderSection::COMMENT_LINE; continue; }
+        if (line == "%commentNotes:")        { current = LanguageLoaderSection::COMMENT_NOTES; continue; }
         if (line == "%stringDelim:")         { current = LanguageLoaderSection::STRING_DELIM; continue; }
         if (line == "%annotations:")         { current = LanguageLoaderSection::ANNOTATIONS; continue; }
         if (line == "%macros:")              { current = LanguageLoaderSection::MACROS; continue; }
@@ -139,6 +140,11 @@ void Language::ReadLangFile(std::string fname) {
                 while (ss >> cl) {
                     commentLine.emplace_back(cl);
                 }
+                break;
+            }
+
+            case LanguageLoaderSection::COMMENT_NOTES: {
+                commentNotes.push_back(line);
                 break;
             }
 

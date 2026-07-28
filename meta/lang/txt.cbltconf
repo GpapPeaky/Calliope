@@ -29,6 +29,9 @@
     %commentLine:
     %end  
 
+    %commentNotes:
+    %end:
+
     %stringDelim:
     %end
 

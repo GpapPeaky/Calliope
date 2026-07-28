@@ -46,6 +46,11 @@
         //
     %end  
 
+    %commentNotes:
+        TODO:
+        FIXME:
+    %end:
+
     %stringDelim:
         ' '
         " "
