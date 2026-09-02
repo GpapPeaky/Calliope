@@ -2,7 +2,7 @@
 set -e
 
 # ---------------- CONFIG ----------------
-PROJECT_ROOT="$HOME/Desktop/GpapPeaky/dev/Co.Ba.L.T"  # adjust to your project path
+PROJECT_ROOT="$HOME/Desktop/GpapPeaky/dev/git/Co.Ba.L.T"  # adjust project path
 RELEASE_BASE="$PROJECT_ROOT/release"
 RELEASE_NAME="cblt-linux-x86_64"
 RELEASE_DIR="$RELEASE_BASE/$RELEASE_NAME"

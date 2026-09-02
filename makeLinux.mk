@@ -2,15 +2,13 @@
 CXX = g++
 TARGET = cblt
 
-# FIXME: Add docker for compiling against other linux distros
-
 # Release shared library
 RELEASE_DIR = release
 DLL_TARGET  = libCoBaLT.so
 DLL_LDFLAGS = -shared -Wl,--export-dynamic
 
 # Raylib path
-RAYLIB_PATH = /home/peaky/Desktop/GpapPeaky/dev/raylib/src/
+RAYLIB_PATH = /home/peaky/Desktop/GpapPeaky/dev/lib/raylib/src/
 
 # Compiler flags
 CXXFLAGS = -std=c++23 -fPIC -Wall -Wextra -O3 -I$(RAYLIB_PATH)
